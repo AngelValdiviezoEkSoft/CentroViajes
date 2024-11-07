@@ -89,26 +89,31 @@ class AuthService extends ChangeNotifier {
   //#region Registro Dispositivo
   doneRegister(RegisterMobileRequestModel objRegister) async {
     final ruta = '${env.apiEndpoint}done/register';
+
+    final Map<String, dynamic> body = {
+    "jsonrpc": "2.0",
+    "params": {
+      "server": objRegister.server,
+          "key": objRegister.key,
+          "imei": objRegister.imei,
+          "lat": objRegister.lat,
+          "lon": objRegister.lon,
+          "so": objRegister.so
+    }
+  };
     
     final response = await http.post(
       Uri.parse(ruta),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(
-        <String, String>
-        {
-          "server": objRegister.server,
-          "key": objRegister.key,
-          "imei": objRegister.imei,
-          "lat": objRegister.lat,
-          "lon": objRegister.lon,
-          "so": objRegister.so
-        }
-      ),
+      body: jsonEncode(body),
     );
     
     var reponseRs = response.body;
+    final data = json.encode(reponseRs);
+    await storage.write(key: 'RespuestaRegistro', value: data);
+
     return RegisterDeviceResponseModel.fromJson(reponseRs);
     
   }
@@ -190,9 +195,6 @@ class AuthService extends ChangeNotifier {
       );
 
       final oResp = AuthResponseModel.fromJson(response.body);
-
-      final data = json.encode(oResp);
-      await storage.write(key: 'RespuestaLog', value: data);
 
       return oResp;
     } catch (e) {

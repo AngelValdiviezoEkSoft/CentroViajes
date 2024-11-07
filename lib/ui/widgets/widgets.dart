@@ -25,3 +25,5 @@ export 'package:cvs_ec_app/ui/widgets/cvs_ec/cvs_ec.dart';
 export 'package:cvs_ec_app/ui/widgets/buttons/buttons.dart';
 
 export 'package:cvs_ec_app/ui/widgets/items_listas/items_listas.dart';
+
+export 'package:cvs_ec_app/ui/widgets/modals/modals.dart';

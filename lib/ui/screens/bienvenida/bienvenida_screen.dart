@@ -1,8 +1,14 @@
 import 'package:cvs_ec_app/config/environments/environments.dart';
+import 'package:cvs_ec_app/domain/domain.dart';
+import 'package:cvs_ec_app/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../infraestructure/services/services.dart';
+
 Rutas objRutasGen = Rutas();
+TextEditingController serverTxt = TextEditingController();
+TextEditingController keyTxt = TextEditingController();
 
 class WelcomeScreen extends StatelessWidget {
 
@@ -70,12 +76,13 @@ class WelcomeScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Container(
-                  padding: EdgeInsets.all(16),  // Espaciado interno
+                  padding: const EdgeInsets.all(16),  // Espaciado interno
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50), // Bordes redondeados
                     color: Colors.white                  
                   ),                
                   child: TextField(
+                    controller: serverTxt,
                     decoration: InputDecoration(                  
                       labelText: 'Servidor',
                       suffixIcon: const Icon(Icons.qr_code_scanner_outlined),
@@ -97,6 +104,7 @@ class WelcomeScreen extends StatelessWidget {
                     color: Colors.white                  
                   ),                
                   child: TextField(
+                    controller: keyTxt,
                     decoration: InputDecoration(                  
                       labelText: 'Key',
                       suffixIcon: const Icon(Icons.qr_code_scanner_outlined),
@@ -119,19 +127,74 @@ class WelcomeScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: GestureDetector(
-              onTap: () {
-                context.push(objRutasGen.rutaDefault);
+              onTap: () async {
+
+                showDialog(
+                  context: context,
+                  barrierDismissible:
+                      false,
+                  builder: (context) =>
+                      SimpleDialog(
+                          alignment:
+                              Alignment
+                                  .center,
+                          children: [
+                        SimpleDialogCargando(
+                          mensajeMostrar: 'Estamos registrando',
+                          mensajeMostrarDialogCargando: 'tu dispositivo',
+                        ),
+                      ]),
+                );
+
+                RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(
+                  server: serverTxt.text,
+                  key: keyTxt.text,
+                  imei: '823456798',
+                  lat: '-74.45445',
+                  lon: '72.74548487',
+                  so: 'Android'
+                );
+
+                RegisterDeviceResponseModel respuesta = await AuthService().doneRegister(objRegisterMobileRequestModel);
+
+                if(respuesta.result.estado == 200){
+                  context.pop();
+                  context.push(objRutasGen.rutaDefault);
+                }
+                else{
+                  context.pop();
+                   showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Problemas al registrar móvil'),
+                        
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              // Acción para solicitar revisión
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFF536DFE), // Color del botón
+                  color: const Color(0xFF536DFE), // Color del botón
                   borderRadius: BorderRadius.circular(20.0), // Bordes redondeados
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.2),
                       spreadRadius: 1,
                       blurRadius: 5,
-                      offset: Offset(0, 3), // Sombra bajo el botón
+                      offset: const Offset(0, 3), // Sombra bajo el botón
                     ),
                   ],
                 ),

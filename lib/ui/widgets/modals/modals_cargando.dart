@@ -24,7 +24,7 @@ class SimpleDialogCargando extends StatelessWidget {
       onPressed: (){},
       child: Container(
         width: size.width * 0.9,
-        height: size.height * 0.2,
+        height: size.height * 0.3,
         color: Colors.transparent,
         child: Column(
           children: [

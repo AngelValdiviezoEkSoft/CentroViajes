@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:cvs_ec_app/config/environments/environments.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../infraestructure/services/services.dart';
+
+import 'package:geolocator/geolocator.dart';
 
 Rutas objRutasGen = Rutas();
 TextEditingController serverTxt = TextEditingController();
@@ -37,7 +42,7 @@ class WelcomeScreen extends StatelessWidget {
                   height: size.height * 0.04,
                 ),
                 // Icono central
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.white,
                   child: Icon(
@@ -50,7 +55,7 @@ class WelcomeScreen extends StatelessWidget {
                   height: size.height * 0.03,
                 ),
                 // Texto de bienvenida
-                Text(
+                const Text(
                   '¡Bienvenido!',
                   style: TextStyle(
                     fontSize: 30,
@@ -61,8 +66,8 @@ class WelcomeScreen extends StatelessWidget {
                   height: size.height * 0.02,
                 ),
                 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30.0),
                   child: Text(
                     '¡Gracias por unirte a la comunidad de D-One! ¡Acceda o cree su cuenta a continuación y comience su viaje!',
                     textAlign: TextAlign.center,
@@ -98,7 +103,7 @@ class WelcomeScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Container(
-                  padding: EdgeInsets.all(16),  // Espaciado interno
+                  padding: const EdgeInsets.all(16),  // Espaciado interno
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50), // Bordes redondeados
                     color: Colors.white                  
@@ -117,73 +122,152 @@ class WelcomeScreen extends StatelessWidget {
               ),
               SizedBox(height: size.height * 0.02),
             
-              Spacer(),
+              const Spacer(),
             
-                Divider(color: Colors.red,),
-                SizedBox(
-                  height: size.height * 0.04,
-                ),
-                // Botón de Comenzar
-                Padding(
+              const Divider(color: Colors.red,),
+                
+              SizedBox(
+                height: size.height * 0.04,
+              ),
+
+              // Botón de Comenzar
+              Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: GestureDetector(
               onTap: () async {
 
+                /*
+                
+TextEditingController serverTxt = TextEditingController();
+TextEditingController keyTxt = TextEditingController();
+                 */
+
+                if(serverTxt.text.isEmpty || keyTxt.text.isEmpty){
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ContentAlertDialog(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        tipoAlerta: TipoAlerta().alertAccion,
+                        numLineasTitulo: 2,
+                        numLineasMensaje: 2,
+                        titulo: 'Error',
+                        mensajeAlerta: 'Ingrese los datos del formulario.'
+                      );
+                    },
+                  );
+
+                  return;
+                }
+
                 showDialog(
                   context: context,
-                  barrierDismissible:
-                      false,
+                  barrierDismissible: false,
                   builder: (context) =>
-                      SimpleDialog(
-                          alignment:
-                              Alignment
-                                  .center,
-                          children: [
+                    SimpleDialog(
+                      alignment: Alignment.center,
+                      children: [
                         SimpleDialogCargando(
                           mensajeMostrar: 'Estamos registrando',
                           mensajeMostrarDialogCargando: 'tu dispositivo',
                         ),
-                      ]),
-                );
-
-                RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(
-                  server: serverTxt.text,
-                  key: keyTxt.text,
-                  imei: '823456798',
-                  lat: '-74.45445',
-                  lon: '72.74548487',
-                  so: 'Android'
-                );
-
-                RegisterDeviceResponseModel respuesta = await AuthService().doneRegister(objRegisterMobileRequestModel);
-
-                if(respuesta.result.estado == 200){
-                  context.pop();
-                  context.push(objRutasGen.rutaDefault);
-                }
-                else{
-                  context.pop();
-                   showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Problemas al registrar móvil'),
-                        
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              // Acción para solicitar revisión
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
-                          ),
-                        ],
-                      );
-                    },
+                      ]
+                    ),
                   );
-                }
 
+                /*
+                const imeiMovile = MethodChannel('com.ekuasoft.cvs_ec_app/imei');
+                final String? imei = await imeiMovile.invokeMethod('getImei');
+                */
+/*
+                const imeiMovile = MethodChannel('device/info');
+                final String? imei = await imeiMovile.invokeMethod('deviceId');    
+*/
+                try{
+                  String imeiCod = '';
+                  var plataforma = '';
+
+                  final deviceInfo = DeviceInfoPlugin();
+                  
+                  if (Platform.isAndroid) {
+                    plataforma = 'Android';
+                    final androidInfo = await deviceInfo.androidInfo;
+                    imeiCod = androidInfo.id;
+                  } else if (Platform.isIOS) {
+                    plataforma = 'iOS';
+                    //final iOSInfo = await deviceInfo.iosInfo;
+                    //imeiCod = iOSInfo.;
+                  } else {
+                    plataforma = 'Desconocido';
+                  }
+
+                  Position position = await getLocation();
+
+                  RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(
+                    server: serverTxt.text,
+                    key: keyTxt.text,
+                    //imei: imeiCod,
+                    imei: '823456004',
+                    lat: position.latitude.toString(),//'-74.45445',
+                    lon: position.longitude.toString(),//'72.74548487',
+                    so: plataforma//'Android'
+                  );
+
+                  RegisterDeviceResponseModel respuesta = await AuthService().doneRegister(objRegisterMobileRequestModel);
+
+                  if(respuesta.result.estado == 200){
+                    context.pop();
+                    context.push(objRutasGen.rutaDefault);
+                  }
+                  else{
+                    context.pop();
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Problemas al registrar móvil'),
+                          
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                // Acción para solicitar revisión
+                                Navigator.of(context).pop();
+                                //Navigator.of(context).pop();
+                              },
+                              child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                }
+                catch(ex){
+                    context.pop();
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(ex.toString()),
+                          
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                // Acción para solicitar revisión
+                                Navigator.of(context).pop();
+                                //Navigator.of(context).pop();
+                              },
+                              child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  
+                }
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -236,4 +320,61 @@ class WelcomeScreen extends StatelessWidget {
       ),
     );
   }
+
+   Future<Position> getCurrentLocation() async 
+   {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Los servicios de ubicación están desactivados.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Los permisos de ubicación fueron denegados');
+      }
+    }
+    
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Los permisos de ubicación están denegados permanentemente.');
+    }
+
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
+  Future<Position> getLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Verifica si el servicio de ubicación está habilitado
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Si no está habilitado, puedes mostrar un mensaje o pedirle al usuario que lo active
+      return Future.error('Los servicios de ubicación están desactivados.');
+    }
+
+    // Verifica si la aplicación tiene permisos de ubicación
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Si el usuario niega el permiso, muestra un mensaje
+        return Future.error('Los permisos de ubicación fueron denegados');
+      }
+    }
+    
+    if (permission == LocationPermission.deniedForever) {
+      // Los permisos están denegados de forma permanente
+      return Future.error('Los permisos de ubicación están denegados permanentemente.');
+    }
+
+    // Si tienes los permisos necesarios, obtiene la posición actual
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
+
 }

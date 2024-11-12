@@ -5,8 +5,8 @@ import 'package:cvs_ec_app/app/app.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 
-
 void main() {
+
   setupServiceLocator();
 
   runApp( 
@@ -19,7 +19,7 @@ void main() {
         BlocProvider(create: (context) => getIt<SuscripcionBloc>()),
 
       ],
-      child: const ProviderScope(child: CentroViajesApp()),
+      child: ProviderScope(child: CentroViajesApp()),
     )
   );
 }

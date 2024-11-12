@@ -28,6 +28,9 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  device_info_plus: ^10.1.2
+  cron: ^0.6.1
+  geolocator: ^8.0.0
   avatar_glow: ^3.0.1
   flutter_spinkit: ^5.2.1
   font_awesome_flutter: ^10.7.0

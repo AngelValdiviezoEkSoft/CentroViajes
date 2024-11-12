@@ -28,16 +28,16 @@ class RegisterDeviceModel {
 
     factory RegisterDeviceModel.fromMap(Map<String, dynamic> json) 
     {
-      if(json["estado"] == "200"){
+      if(json["estado"] == 200){
         return RegisterDeviceModel(        
-          estado: json["estado"],
-          url: json["url"],
-          database: json["database"],
-          serverUrl: json["server_url"],
-          key: json["key"],
-          tocken: json["tocken"],
-          bearer: json["bearer"],
-          tockenValidDate: DateTime.parse(json["tocken_valid_date"]),
+          estado: json["estado"] ?? 0,
+          url: json["url"] ?? '',
+          database: json["database"] ?? '',
+          serverUrl: json["server_url"] ?? '',
+          key: json["key"] ?? '',
+          tocken: json["tocken"] ?? '',
+          bearer: json["bearer"] ?? '',
+          tockenValidDate: json["tocken_valid_date"] != null ? DateTime.parse(json["tocken_valid_date"]) : DateTime.now(),
         );
       }
       else {

@@ -94,13 +94,13 @@ class AuthService extends ChangeNotifier {
     "jsonrpc": "2.0",
     "params": {
       "server": objRegister.server,
-          "key": objRegister.key,
-          "imei": objRegister.imei,
-          "lat": objRegister.lat,
-          "lon": objRegister.lon,
-          "so": objRegister.so
-    }
-  };
+      "key": objRegister.key,
+      "imei": objRegister.imei,
+      "lat": objRegister.lat,
+      "lon": objRegister.lon,
+      "so": objRegister.so
+      }
+    };
     
     final response = await http.post(
       Uri.parse(ruta),
@@ -111,39 +111,42 @@ class AuthService extends ChangeNotifier {
     );
     
     var reponseRs = response.body;
-    final data = json.encode(reponseRs);
-    await storage.write(key: 'RespuestaRegistro', value: data);
 
-    return RegisterDeviceResponseModel.fromJson(reponseRs);
+    //print("Test: " + response.body);
+
+    var obj = RegisterDeviceResponseModel.fromJson(reponseRs);
+
+    //final data = json.encode(obj.result);
+    await storage.write(key: 'RespuestaRegistro', value: reponseRs);
+
+    return obj;//RegisterDeviceResponseModel.fromJson(reponseRs);
     
   }
   
   doneGetTocken(String imei, String key) async {
     final ruta = '${env.apiEndpoint}done/$imei/tocken/$key';
     
-     final response = await http.post(
+    final Map<String, dynamic> body = {
+      "jsonrpc": "2.0",
+      "params": {}
+    };
+    
+    final response = await http.post(
       Uri.parse(ruta),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      /*
-      body: jsonEncode(
-        <String, String>
-        {
-          "server": objRegister.server,
-          "key": objRegister.key,
-          "imei": objRegister.imei,
-          "lat": objRegister.lat,
-          "lon": objRegister.lon,
-          "so": objRegister.so
-        }
-      ),
-      */
+      body: jsonEncode(body),
     );
     
     var reponseRs = response.body;
-    return RegisterDeviceResponseModel.fromJson(reponseRs);
-    
+
+    var obj = RegisterDeviceResponseModel.fromJson(reponseRs);
+
+    await storage.write(key: 'RespuestaRegistro', value: '');
+    await storage.write(key: 'RespuestaRegistro', value: reponseRs);
+
+    return obj;    
   }
   
   doneValidateTocken(String imei, String key) async {

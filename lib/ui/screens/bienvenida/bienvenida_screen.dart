@@ -166,17 +166,16 @@ TextEditingController keyTxt = TextEditingController();
                 showDialog(
                   context: context,
                   barrierDismissible: false,
-                  builder: (context) =>
-                    SimpleDialog(
-                      alignment: Alignment.center,
-                      children: [
-                        SimpleDialogCargando(
-                          mensajeMostrar: 'Estamos registrando',
-                          mensajeMostrarDialogCargando: 'tu dispositivo',
-                        ),
-                      ]
-                    ),
-                  );
+                  builder: (context) => SimpleDialog(
+                    alignment: Alignment.center,
+                    children: [
+                      SimpleDialogCargando(
+                        mensajeMostrar: 'Estamos registrando',
+                        mensajeMostrarDialogCargando: 'tu dispositivo',
+                      ),
+                    ]
+                  ),
+                );
 
                 /*
                 const imeiMovile = MethodChannel('com.ekuasoft.cvs_ec_app/imei');
@@ -210,20 +209,19 @@ TextEditingController keyTxt = TextEditingController();
                     server: serverTxt.text,
                     key: keyTxt.text,
                     //imei: imeiCod,
-                    imei: '823456004',
+                    imei: '823456010',
                     lat: position.latitude.toString(),//'-74.45445',
                     lon: position.longitude.toString(),//'72.74548487',
                     so: plataforma//'Android'
                   );
 
                   RegisterDeviceResponseModel respuesta = await AuthService().doneRegister(objRegisterMobileRequestModel);
+                  context.pop();
 
-                  if(respuesta.result.estado == 200){
-                    context.pop();
+                  if(respuesta.result.estado == 200){                    
                     context.push(objRutasGen.rutaDefault);
                   }
-                  else{
-                    context.pop();
+                  else{                    
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {

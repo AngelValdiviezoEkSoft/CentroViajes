@@ -1,4 +1,6 @@
 
+export 'package:cvs_ec_app/domain/models/error_login_response_model.dart';
+
 export 'package:cvs_ec_app/domain/models/consulta_datos_request_model.dart';
 
 export 'package:cvs_ec_app/domain/models/auth_response_model.dart';

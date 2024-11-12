@@ -152,36 +152,60 @@ class AuthService extends ChangeNotifier {
   doneValidateTocken(String imei, String key) async {
     final ruta = '${env.apiEndpoint}done/$imei/validate/tocken/$key';
     
-     final response = await http.post(
+    final Map<String, dynamic> body = {
+      "jsonrpc": "2.0",
+      "params": {
+        "tocken": key
+      }
+    };
+    
+    final response = await http.post(
       Uri.parse(ruta),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      /*
-      body: jsonEncode(
-        <String, String>
-        {
-          "server": objRegister.server,
-          "key": objRegister.key,
-          "imei": objRegister.imei,
-          "lat": objRegister.lat,
-          "lon": objRegister.lon,
-          "so": objRegister.so
-        }
-      ),
-      */
+      body: jsonEncode(body),
     );
     
     var reponseRs = response.body;
-    return RegisterDeviceResponseModel.fromJson(reponseRs);
+    return ValidationTokenResponseModel.fromJson(reponseRs);
     
   }
   
   //#endregion
 
-  login(AuthRequest authRequest, String ruta) async {
+  login(AuthRequest authRequest) async {
     try {
+      String ruta = '';
+      final objStr = await storage.read(key: 'RespuestaRegistro') ?? '';
+    
+      if(objStr.isNotEmpty)
+      {  
+        var obj = RegisterDeviceResponseModel.fromJson(objStr);
+        ruta = '${obj.result.serverUrl}/web/session/authenticate';
+      }
 
+      //final ruta = '${env.apiEndpoint}web/session/authenticate';
+    
+      final Map<String, dynamic> body = {
+        "jsonrpc": "2.0",
+        "params": {
+          "db": authRequest.db,
+          "login": authRequest.login,
+          "password": authRequest.password
+        },
+        "id": null
+      };
+      
+      final response = await http.post(
+        Uri.parse(ruta),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(body),
+      );
+
+      /*
       final response = await http.post(
         Uri.parse(ruta),
         headers: <String, String>{
@@ -196,6 +220,9 @@ class AuthService extends ChangeNotifier {
           }
         ),
       );
+      */
+
+      print('Test Login: ${response.body}');
 
       final oResp = AuthResponseModel.fromJson(response.body);
 
@@ -239,7 +266,7 @@ class AuthService extends ChangeNotifier {
     
   }
   
-    Future<dynamic> opcionesMenuPorPerfil(BuildContext context) async {
+  Future<dynamic> opcionesMenuPorPerfil(BuildContext context) async {
     lstOp = [
       OpcionesMenuModel(
         descMenu: 'Editar Perfil', 

@@ -55,19 +55,29 @@ class TokenManager {
     if(objStr.isNotEmpty)
     {  
       var obj = RegisterDeviceResponseModel.fromJson(objStr);
-      //var obj = RegisterDeviceModel.fromJson(objStr);
 
       final expiration = obj.result.tockenValidDate;
 
-      DateTime nuevaFecha = expiration.subtract(const Duration(days: 8));
+      imeiCod = '823456010'; //BORRAR LUEGO
 
-      //if (DateTime.now().isAfter(expiration)) {
-      if (DateTime.now().isAfter(nuevaFecha)) {
+      /*
+      //VALIDACIÓN DE TOKEN
+      
+      ValidationTokenResponseModel objRspValida = await AuthService().doneValidateTocken(imeiCod, obj.result.key);//'456200');//obj.result.key);
+
+      if(objRspValida.result.estado != 200){
+        return;
+      }
+      */
+
+      //DateTime nuevaFecha = expiration.subtract(const Duration(days: 8));
+
+      if (DateTime.now().isAfter(expiration)) {
+      //if (DateTime.now().isAfter(nuevaFecha)) {
         // Token expirado: realiza alguna acción (por ejemplo, redirigir a la pantalla de inicio de sesión)
         //print("Token expirado. Realizando acción.");
-        // Aquí puedes llamar a la función de logout o refrescar el token.
-        imeiCod = '823456004'; //BORRAR LUEGO
-        await AuthService().doneGetTocken(imeiCod, obj.result.key);
+        // Aquí puedes llamar a la función de logout o refrescar el token.        
+        await AuthService().doneGetTocken(imeiCod, obj.result.key);        
       }
       
     }

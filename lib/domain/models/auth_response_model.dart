@@ -1,14 +1,18 @@
 import 'dart:convert';
 
+import 'package:cvs_ec_app/domain/domain.dart';
+
 class AuthResponseModel {
     String jsonrpc;
     dynamic id;
     AuthModel result;
+    ErrorLoginResponseModel? error;
 
     AuthResponseModel({
         required this.jsonrpc,
         required this.id,
         required this.result,
+        this.error
     });
      
     factory AuthResponseModel.fromJson(String str) => AuthResponseModel.fromMap(json.decode(str));
@@ -19,6 +23,8 @@ class AuthResponseModel {
         jsonrpc: json["jsonrpc"],
         id: json["id"],
         result: AuthModel.fromJson(json["result"]),
+        error: json["error"] != null ? ErrorLoginResponseModel.fromJson(json["error"])
+                : null,
     );
 
     Map<String, dynamic> toMap() => {

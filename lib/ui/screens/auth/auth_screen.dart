@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cvs_ec_app/domain/models/models.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -6,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 //import 'package:cvs_ec_app/gen_l10n/app_localizations.dart';
+
+TextEditingController userTxt = TextEditingController();
+TextEditingController passWordTxt = TextEditingController();
 
 const storageAuth = FlutterSecureStorage();
 BuildContext? contextAuth;
@@ -85,7 +89,7 @@ class LoginScreen extends StatelessWidget {
                 color: Colors.transparent,
                 width: size.width * 0.9,
                 alignment: Alignment.centerLeft,
-                child: CircleAvatar(
+                child: const CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.white,
                   child: Icon(
@@ -116,7 +120,7 @@ class LoginScreen extends StatelessWidget {
                 color: Colors.transparent,
                 width: size.width * 0.9,
                 alignment: Alignment.centerLeft,
-                child: Text(
+                child: const Text(
                   'Utilice el siguiente formulario para acceder a su cuenta.',
                   //textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16),
@@ -130,7 +134,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),              
                 child: Container(
-                  padding: EdgeInsets.all(16),  // Espaciado interno
+                  padding: const EdgeInsets.all(16),  // Espaciado interno
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50), // Bordes redondeados
                     color: Colors.white
@@ -150,7 +154,8 @@ class LoginScreen extends StatelessWidget {
                     ],
                   */
                   ),
-                  child: TextField(                
+                  child: TextField(
+                    controller: userTxt,
                     decoration: InputDecoration(                  
                       labelText: 'Usuario',
                       suffixIcon: const Icon(Icons.person),
@@ -161,7 +166,9 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              
               SizedBox(height: size.height * 0.02),
+              
               // Campo de texto "Contraseña"
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -173,6 +180,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: TextField(
                     obscureText: authService.varIsOscured,
+                    controller: passWordTxt,
                     decoration: InputDecoration(
                       labelText: 'Contraseña',
                       suffixIcon: //Icon(Icons.visibility),
@@ -206,13 +214,72 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+
+              const SizedBox(height: 30),
+              
               // Botón de Acceder
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 115.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    context.push(objRutasGen.rutaHome);
+                  onPressed: () async {
+
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) => SimpleDialog(
+                        alignment: Alignment.center,
+                        children: [
+                          SimpleDialogCargando(
+                            mensajeMostrar: 'Estamos validando',
+                            mensajeMostrarDialogCargando: 'tus credenciales',
+                          ),
+                        ]
+                      ),
+                    );
+
+                    const storage = FlutterSecureStorage();
+                    final objStr = await storage.read(key: 'RespuestaRegistro') ?? '';
+    
+                    if(objStr.isNotEmpty){
+                      var obj = RegisterDeviceResponseModel.fromJson(objStr);
+
+                      AuthRequest objAuthRequest  = AuthRequest(
+                        db: obj.result.database,
+                        login: userTxt.text,
+                        password: passWordTxt.text
+                      );
+
+                      AuthResponseModel objAuthResponseModel = await AuthService().login(objAuthRequest);
+                      
+                      context.pop();
+
+                      if(objAuthResponseModel.error == null){
+                        
+                        context.push(objRutasGen.rutaHome);
+                      }
+                      else{                    
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Problemas al hacer login'),
+                              
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    // Acción para solicitar revisión
+                                    Navigator.of(context).pop();
+                                    //Navigator.of(context).pop();
+                                  },
+                                  child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    }
+                    
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,

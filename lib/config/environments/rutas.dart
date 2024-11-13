@@ -13,6 +13,8 @@ class Rutas{
   String rutaPlanificacionActividades = '/planAct';
   String rutaEditarPerfil = '/editPerfil';
   String rutaConstruccion = '/pageConst';
+  String rutaConexionInternet = '/conInternet';
+  String rutaCheckAuth = '/rutCheckAuth';
 
   //imágenes 
   String rutaImagenes = 'assets/images/';

@@ -228,6 +228,7 @@ class AuthService extends ChangeNotifier {
 
       return oResp;
     } catch (e) {
+      print('Test Error: $e');
       /*
       return RespuestaGenericaModel(
           code: 1,

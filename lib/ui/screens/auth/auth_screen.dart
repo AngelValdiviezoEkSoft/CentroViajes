@@ -249,12 +249,15 @@ class LoginScreen extends StatelessWidget {
                         password: passWordTxt.text
                       );
 
-                      AuthResponseModel objAuthResponseModel = await AuthService().login(objAuthRequest);
+                      //AuthResponseModel objAuthResponseModel = await AuthService().login(objAuthRequest);
+                      await AuthService().login(objAuthRequest);
                       
                       context.pop();
+                      context.push(objRutasGen.rutaHome);
 
-                      if(objAuthResponseModel.error == null){
-                        
+                      /*
+
+                      if(objAuthResponseModel.error == null){                        
                         context.push(objRutasGen.rutaHome);
                       }
                       else{                    
@@ -278,18 +281,19 @@ class LoginScreen extends StatelessWidget {
                           },
                         );
                       }
+                      */
                     }
                     
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
-                    padding: EdgeInsets.symmetric(vertical: 15),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    minimumSize: Size(double.infinity, 50),
+                    minimumSize: const Size(double.infinity, 50),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Acceder',
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),

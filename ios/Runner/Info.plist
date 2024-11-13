@@ -51,5 +51,12 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Necesitamos acceder a tu ubicación para mostrar tu posición actual</string>
 
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+
+
 </dict>
 </plist>

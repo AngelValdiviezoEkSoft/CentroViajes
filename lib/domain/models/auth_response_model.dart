@@ -5,13 +5,13 @@ import 'package:cvs_ec_app/domain/domain.dart';
 class AuthResponseModel {
     String jsonrpc;
     dynamic id;
-    AuthModel result;
+    AuthModel? result;
     ErrorLoginResponseModel? error;
 
     AuthResponseModel({
         required this.jsonrpc,
         required this.id,
-        required this.result,
+        this.result,
         this.error
     });
      
@@ -19,18 +19,43 @@ class AuthResponseModel {
 
     String toJson() => json.encode(toMap());
 
-    factory AuthResponseModel.fromMap(Map<String, dynamic> json) => AuthResponseModel(
-        jsonrpc: json["jsonrpc"],
-        id: json["id"],
-        result: AuthModel.fromJson(json["result"]),
-        error: json["error"] != null ? ErrorLoginResponseModel.fromJson(json["error"])
-                : null,
-    );
+//json.containsKey("result")
+
+    /*
+    factory AuthResponseModel.fromMap(Map<String, dynamic> json) {
+      if(json.containsKey("result")){
+        return AuthResponseModel(      
+          jsonrpc: json["jsonrpc"] ?? '',
+          id: json["id"] ?? null,
+          result: AuthModel.fromJson(json["result"]),
+          error: null,
+        );
+      }
+      else {
+        return AuthResponseModel(      
+          jsonrpc: json["jsonrpc"] ?? '',
+          id: json["id"]  ?? null,
+          result: null,
+          error: json["error"] != null ? ErrorLoginResponseModel.fromJson(json["error"])
+                  : null,
+        );
+      }
+    }
+    */
+
+      factory AuthResponseModel.fromMap(Map<String, dynamic> json) {
+        return AuthResponseModel(
+          jsonrpc: json['jsonrpc'] ?? '',
+          id: json['id'],
+          result: json['result'] != null ? AuthModel.fromJson(json['result']) : null,
+          error: json['error'] != null ? ErrorLoginResponseModel.fromJson(json['error']) : null,
+        );
+      }
 
     Map<String, dynamic> toMap() => {
         "jsonrpc": jsonrpc,
         "id": id,
-        "result": result.toJson(),
+        "result": result?.toJson(),
     };
 
 }
@@ -112,14 +137,38 @@ class AuthModel {
     String toJson() => json.encode(toMap());
 
     factory AuthModel.fromMap(Map<String, dynamic> json) => AuthModel(
-        uid: json["uid"],
+        uid: json["uid"] ?? 0,
         isSystem: json["is_system"],
         isAdmin: json["is_admin"],
         isPublic: json["is_public"],
         isInternalUser: json["is_internal_user"],
-        userContext: UserContextAuth.fromJson(json["user_context"]),
+        userContext: json["user_context"] != null ? 
+          UserContextAuth.fromJson(json["user_context"])
+          :
+          UserContextAuth(
+            lang: '',
+            tz: '',
+            uid: 0
+          ),
         db: json["db"],
-        userSettings: UserSettingsAuth.fromJson(json["user_settings"]),
+        userSettings: json["user_settings"] != null ? 
+          UserSettingsAuth.fromJson(json["user_settings"])
+          :
+          UserSettingsAuth(
+            homemenuConfig: false,
+            id: 0,
+            isDiscussSidebarCategoryChannelOpen: false,
+            isDiscussSidebarCategoryChatOpen: false,
+            isDiscussSidebarCategoryLivechatOpen: false,
+            isDiscussSidebarCategoryWhatsappOpen: false,
+            livechatLangIds: [],
+            livechatUsername: false,
+            pushToTalkKey: false,
+            usePushToTalk: false,
+            userId: UserIdAuth (id: 0),
+            voiceActiveDuration: 0,
+            volumeSettingsIds: []
+          ),
         serverVersion: json["server_version"],
         serverVersionInfo: List<dynamic>.from(json["server_version_info"].map((x) => x)),
         supportUrl: json["support_url"],
@@ -134,15 +183,45 @@ class AuthModel {
         profileParams: json["profile_params"],
         maxFileUploadSize: json["max_file_upload_size"],
         homeActionId: json["home_action_id"],
-        cacheHashes: CacheHashesAuth.fromJson(json["cache_hashes"]),
-        currencies: CurrenciesAuth.fromJson(json["currencies"]),
-        bundleParams: BundleParamsAuth.fromJson(json["bundle_params"]),
+        cacheHashes: json["cache_hashes"] != null ?
+          CacheHashesAuth.fromJson(json["cache_hashes"])
+          :
+          CacheHashesAuth(
+            translations: ''
+          ),
+        currencies: json["currencies"] != null ?
+          CurrenciesAuth.fromJson(json["currencies"])
+          :
+          CurrenciesAuth(the1: The1Auth(digits: [], position: '', symbol: '')),
+        bundleParams: json["bundle_params"] != null ? 
+          BundleParamsAuth.fromJson(json["bundle_params"])
+          :
+          BundleParamsAuth(
+            lang: ''
+          ),
         userId: List<int>.from(json["user_id"].map((x) => x)),
         websocketWorkerVersion: json["websocket_worker_version"],
         isQuickEditModeEnabled: json["is_quick_edit_mode_enabled"],
         currentCompany: json["current_company"],
         allowedCompanies: Map.from(json["allowed_companies"]).map((k, v) => MapEntry<String, CompanyAuth>(k, CompanyAuth.fromJson(v))),
-        donePermissions: DonePermissionsAuth.fromJson(json["done_permissions"]),
+        donePermissions: json["done_permissions"] != null ? 
+          DonePermissionsAuth.fromJson(json["done_permissions"])
+          :
+          DonePermissionsAuth(
+            buttons: ButtonsAuth(btnCreateLead: false, btnProgressOfTheDay: false),
+            mainMenu: MainMenuAuth(
+              cardCollection: false,
+              cardSales: false,
+              itemListCatalog: false,
+              itemListDistribution: false,
+              itemListInventory: false,
+              itemListLeads: false,
+              itemListPartners: false,
+              itemListPriceList: false,
+              itemListPromotions: false,
+              itemScheduledVisits: false
+            )
+          ),
         doneSupportUrl: json["done_support_url"],
         doneTermsOfUseUrl: json["done_terms_of_use_url"],
     );

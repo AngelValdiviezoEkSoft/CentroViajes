@@ -13,8 +13,29 @@ final class AuthInitial extends AuthState {}
 
 
 abstract class AuthState extends Equatable {
+  
   @override
   List<Object> get props => [];
+  
+  Future<String> readToken() async {
+    try {
+      //const storage = FlutterSecureStorage();
+
+      var connectivityResult = await (Connectivity().checkConnectivity());
+    
+      if (!connectivityResult.contains(ConnectivityResult.mobile) && !connectivityResult.contains(ConnectivityResult.wifi)) {
+        return 'NI';
+      }
+
+      //return await storage.read(key: 'jwtEnrolApp') ?? ''; 
+      return ''; 
+    }
+    catch(ex) {
+      return '';
+    }
+    
+  }
+
 }
 
 class AuthInitial extends AuthState {}
@@ -49,3 +70,5 @@ class AuthError extends AuthState {
   @override
   List<Object> get props => [message];
 }
+
+

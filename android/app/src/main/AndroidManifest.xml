@@ -8,6 +8,8 @@ package="com.ekuasoft.cvs_ec_app">
     <!-- PARA SENSAR TOKEN-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:label="D-One"
         android:name="${applicationName}"

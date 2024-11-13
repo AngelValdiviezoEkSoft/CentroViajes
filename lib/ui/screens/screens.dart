@@ -1,3 +1,5 @@
+export 'package:cvs_ec_app/ui/screens/carga/carga.dart';
+
 export 'package:cvs_ec_app/ui/screens/page_construction_screen.dart';
 
 export 'package:cvs_ec_app/ui/screens/home_screen.dart';

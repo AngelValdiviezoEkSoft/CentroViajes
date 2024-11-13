@@ -1,7 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
+import 'package:go_router/go_router.dart';
 
 class ConexionInternetScreen extends StatefulWidget {
 
@@ -108,8 +109,34 @@ class ConexionInternetScreenState extends State<ConexionInternetScreen>{
                                       )
                                     );
                                     */
-                                    context.read<AuthBloc>().add(AppStarted());
-                                  },  
+                                    //context.read<AuthBloc>().add(AppStarted());objRutas.
+                                    context.push(objRutasGen.rutaCheckAuth);
+
+                                    /*
+                                    BlocBuilder<AuthBloc, AuthState>(
+                                      builder: (context, state) {
+                                        
+                                        return FutureBuilder(
+                                          future: state.readToken(),
+                                          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                            if(!snapshot.hasData) {
+                                              return const CargaScreen(null);
+                                            } else {
+                                              if(snapshot.data != '') {
+                                                if(snapshot.data == 'NI') {
+
+                                                  return const ConexionInternetScreen(null);
+
+                                                }
+                                              }
+                                            }
+                                            return WelcomeScreen();
+                                          }
+                                        );
+                                      },
+                                    );
+                                  */
+                                  },
                         
                                 ),
                             

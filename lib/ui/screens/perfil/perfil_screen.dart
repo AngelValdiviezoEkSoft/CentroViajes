@@ -3,8 +3,12 @@ import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/services/services.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter/material.dart';
+//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+//const storagePerf = FlutterSecureStorage();
 
 class PerfilScreen extends StatelessWidget {
 
@@ -249,7 +253,7 @@ class PerfilScreen extends StatelessWidget {
                   return Center(
                     child: Container(
                       color: Colors.transparent,
-                      child: Image.asset('assets/loadingEnrolApp.gif'),
+                      child: Image.asset('assets/gifs/gif_carga.gif'),
                     ),
                   );
                 }
@@ -319,7 +323,9 @@ class PerfilScreen extends StatelessWidget {
                               
                               actions: [
                                 TextButton(
-                                  onPressed: () {
+                                  onPressed: () async {
+
+                                    await AuthService().logOut();
 
                                     Navigator.of(context).pop();
 
@@ -366,6 +372,7 @@ class PerfilScreen extends StatelessWidget {
             ],
           ),
         ),
+      
       ),
     );
   }

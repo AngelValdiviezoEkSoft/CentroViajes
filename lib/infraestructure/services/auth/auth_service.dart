@@ -289,8 +289,8 @@ class AuthService extends ChangeNotifier {
   }
 
   Future logOut() async {
+    await storage.write(key: 'RespuestaLogin', value: '');
     await storage.deleteAll();
-    //await cleanPreferences();
     return;
   }
 

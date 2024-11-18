@@ -208,8 +208,8 @@ TextEditingController keyTxt = TextEditingController();
                   RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(
                     server: serverTxt.text,
                     key: keyTxt.text,
-                    imei: imeiCod,
-                    //imei: '823456040',
+                    //imei: imeiCod,
+                    imei: '823456041',
                     lat: position.latitude.toString(),//'-74.45445',
                     lon: position.longitude.toString(),//'72.74548487',
                     so: plataforma//'Android'
@@ -226,8 +226,24 @@ TextEditingController keyTxt = TextEditingController();
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text('Problemas al registrar móvil'),
-                          
+                          title: Container(
+                            color: Colors.transparent,
+                            height: size.height * 0.14,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                
+                                //const Text('Error al registrar el móvil:', style: TextStyle(color: Colors.red,)),
+                                Container(
+                                  color: Colors.transparent,
+                                  height: size.height * 0.1,
+                                  child: Image.asset('assets/gifs/gifErrorBlanco.gif'),
+                                ),
+
+                                Text(respuesta.result.msmError)
+                              ],
+                            )
+                          ),
                           actions: [
                             TextButton(
                               onPressed: () {

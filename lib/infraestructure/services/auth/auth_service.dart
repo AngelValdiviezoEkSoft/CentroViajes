@@ -116,8 +116,9 @@ class AuthService extends ChangeNotifier {
 
     var obj = RegisterDeviceResponseModel.fromJson(reponseRs);
 
-    //final data = json.encode(obj.result);
-    await storage.write(key: 'RespuestaRegistro', value: reponseRs);
+    if(obj.result.estado == 200){
+      await storage.write(key: 'RespuestaRegistro', value: reponseRs);
+    }
 
     return obj;//RegisterDeviceResponseModel.fromJson(reponseRs);
     
@@ -149,13 +150,13 @@ class AuthService extends ChangeNotifier {
     return obj;    
   }
   
-  doneValidateTocken(String imei, String key) async {
+  doneValidateTocken(String imei, String key, String tocken) async {
     final ruta = '${env.apiEndpoint}done/$imei/validate/tocken/$key';
     
     final Map<String, dynamic> body = {
       "jsonrpc": "2.0",
       "params": {
-        "tocken": key
+        "tocken": tocken
       }
     };
     
@@ -168,8 +169,8 @@ class AuthService extends ChangeNotifier {
     );
     
     var reponseRs = response.body;
-    return ValidationTokenResponseModel.fromJson(reponseRs);
-    
+    //return ValidationTokenResponseModel.fromJson(reponseRs);
+    return reponseRs;
   }
   
   //#endregion
@@ -224,18 +225,17 @@ class AuthService extends ChangeNotifier {
 
       print('Test Login: ${response.body}');
 
-      final oResp = AuthResponseModel.fromJson(response.body);
+      //final oResp = AuthResponseModel.fromJson(response.body);
 
-      return oResp;
+      //return oResp;
+      await storage.write(key: 'RespuestaLogin', value: response.body);
+
+      //final data = json.decode(resp);
+      //final accessToken = data['detail']['accessToken'];
+
+      return response.body;
     } catch (e) {
       print('Test Error: $e');
-      /*
-      return RespuestaGenericaModel(
-          code: 1,
-          description: 'Failed',
-          detail: RespuestaGenericaDetailModel(response: 'Error interno'),
-          status: '');
-          */
     }
   }
 

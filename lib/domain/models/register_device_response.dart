@@ -70,7 +70,8 @@ class RegisterDeviceResponseModel {
     factory RegisterDeviceResponseModel.fromMap(Map<String, dynamic> json) => RegisterDeviceResponseModel(
         jsonrpc: json["jsonrpc"],
         id: json["id"],
-        result: json["result"] != null ? RegisterDeviceModel.fromMap(json["result"]) : RegisterDeviceModel(bearer: '', database: '', estado: 0, key: '', serverUrl: '', tocken: '', tockenValidDate: DateTime.now(), url: ''),
+        result: json["result"] != null ? RegisterDeviceModel.fromMap(json["result"]) 
+          : RegisterDeviceModel(bearer: '', database: '', estado: 0, key: '', serverUrl: '', tocken: '', tockenValidDate: DateTime.now(), url: '', msmError: ''),
     );
 
     Map<String, dynamic> toMap() => {

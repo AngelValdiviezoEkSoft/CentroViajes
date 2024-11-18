@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:animate_do/animate_do.dart';
 //import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
@@ -8,14 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
+String compSelect = '';
 String rutaFotoPerfil = '';
 String numeroIdentificacion = '';
 final FeatureApp objFeaturesNotificaciones = FeatureApp();
 bool permiteConsulta = false;
 bool permiteGestion = false;
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   
+  /*
   HomeScreen(Key? key, String numIdent) : super (key: key) {
     numeroIdentificacion = numIdent;
   }
@@ -27,15 +31,28 @@ class HomeScreen extends StatelessWidget {
       child: FrmHomeScreen(),
     );
   }
+  */
+
+  
+  const HomeScreen({Key? key}) : super (key: key);
+
+  @override
+  HomeScreenState createState() => HomeScreenState();
+
 }
 
 //ignore: must_be_immutable
-class FrmHomeScreen extends StatelessWidget {
+class HomeScreenState extends State<HomeScreen> {
 
   int varPosicionMostrar = 0;
   //List<NotificacionesModels> varLstNotificaciones = [];
 
-  FrmHomeScreen({Key? key}) : super (key: key);
+  //HomeScreenState({Key? key}) : super (key: key);
+
+  @override
+  void initState(){
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,169 +102,257 @@ class FrmHomeScreen extends StatelessWidget {
       )
     ).toList();
 
+    List<String> lstComp = [];
+
     return SafeArea(
       child: WillPopScope(
         onWillPop: () async => false,
-        child: BlocBuilder<AuthBloc, AuthState>(
+        child: BlocBuilder<GenericBloc, GenericState>(
             builder: (context,state) { 
-              return Scaffold(
-                backgroundColor: Colors.white,
-                /*
-                appBar: AppBar(
-                  automaticallyImplyLeading: false,
-                  //title: const Image(image: AssetImage('assets/LogoBlanco.png'),width: 150,),
-                  title: Text('Avance del día'),
-                  elevation: 0,
-                ),
-                */
-                 appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: GestureDetector(
-            onTap: () {
-              context.push(objRutasGen.rutaPerfil);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://via.placeholder.com/150'), // Reemplaza con la URL de la imagen del avatar
-              ),
-            ),
-          ),
-          title: Text(
-            'Dashboard',
-            style: TextStyle(color: Colors.black),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.flip_camera_android_rounded, color: Colors.black),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.cloud_sync_outlined, color: Colors.black),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.notifications_active, color: Colors.black),
-              onPressed: () {},
-            ),
-          ],
-        ),
-                
-                body: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Scaffold(
-                        backgroundColor: Colors.white,
-                        body: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Container(
-                                color: Colors.transparent,
-                                width: size.width * 0.99,
-                                child: _buildCard(
-                                  title: 'Ventas',
-                                  meta: '\$970.20 / Meta',
-                                  amount: '\$500.20',
-                                  progress: 0.55,
-                                  backgroundColor: Colors.blue.shade800,
-                                  progressColor: const Color.fromARGB(255, 4, 48, 126),
-                                  tamanio: size
-                                ),
-                              ),
-                                        
-                              const SizedBox(height: 16.0),
-                
-                              Container(
-                                color: Colors.transparent,
-                                width: size.width * 0.99,
-                                child: _buildCard(
-                                  title: 'Cobranza',
-                                  meta: '\$970.20 / Meta',
-                                  amount: '\$500.20',
-                                  progress: 0.55,
-                                  backgroundColor: Colors.white,
-                                  //progressColor: Colors.blueAccent,
-                                  progressColor: const Color.fromARGB(255, 4, 48, 126),
-                                  textColor: Colors.black,
-                                  tamanio: size
-                                ),
-                              ),
 
-                          const SizedBox(height: 16.0),
-                                    
+              //lstComp = state.readCompanias().tol;
+
+              return FutureBuilder(
+                future: state.readCompanias(),
+                builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  
+                  if(!snapshot.hasData) {
+                  return Scaffold(
+                      backgroundColor: Colors.white,
+                    body: Center(
+                      child: Image.asset(
+                        "assets/gifs/gif_carga.gif",
+                        height: 150.0,
+                        width: 150.0,
+                      ),
+                    ),
+                  );
+                }
+                else {
+                  if(snapshot.data != null && snapshot.data!.isNotEmpty) {
+
+                    String lstTmp = snapshot.data as String;
+
+                    List<String> lstNames = List<String>.from(json.decode(lstTmp));
+                    
+                    lstComp = lstNames;
+                    
+                    if(compSelect.isEmpty){
+                      /*
+                      setState(() {
+                        compSelect = lstComp.first;
+                      });
+                      */
+                      compSelect = lstComp.first;
+                    }
+                    
+                    return Scaffold(
+                      backgroundColor: Colors.white,
+                      appBar: AppBar(
+                        backgroundColor: Colors.white,
+                        elevation: 0,
+                        leading: GestureDetector(
+                          onTap: () {
+                            context.push(objRutasGen.rutaPerfil);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  'https://via.placeholder.com/150'), // Reemplaza con la URL de la imagen del avatar
+                            ),
+                          ),
+                        ),
+                        title: Text(
+                          'Dashboard',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        actions: [
+                              /*
+                              IconButton(
+                  icon: const Icon(Icons.flip_camera_android_rounded, color: Colors.black),
+                  onPressed: () {
+                  
+                  },
+                              ),
+                              */
+                              
                               Container(
-                                color: Colors.transparent,
-                                width: size.width * 0.99,
-                                height: size.height * 0.55,
-                                child: Stack(
-                                  children: <Widget>[
-                                    
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.35,
-                                            child: const Text('Operaciones', style: TextStyle(fontSize: 12),)
-                                          ),
-                                          Container(
-                                            width: size.width * 0.35,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey.shade700,
-                                              borderRadius: BorderRadius.circular(8.0),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.white,
-                                                  spreadRadius: 2,
-                                                  blurRadius: 5,
-                                                  offset: const Offset(0, 3),
-                                                ),
-                                              ],
-                                            ),
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Icon(Icons.grid_view_outlined, color: Colors.white,),
-                                                SizedBox(
-                                                  width: size.width * 0.02,
-                                                ),
-                                                const Text('Avance del día', style: TextStyle(fontSize: 12, color: Colors.white),),
-                                              ],
-                                            )
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                
-                                    Container(
-                                      margin: const EdgeInsets.only( top: 25 ),
-                                      width: size.width * 0.99,
-                                      height: size.height * 0.45,
-                                      child: ListView(
-                                        physics: const BouncingScrollPhysics(),
-                                        children: <Widget>[
-                                          const SizedBox( height: 3, ),
-                                          ...itemMap,
-                                        ],
-                                      ),
-                                    ),
-                                
-                                    //_Encabezado()
-                                
-                                  ],
-                                ),
+                  color: Colors.transparent,
+                  width: size.width * 0.65,
+                  height: size.height * 0.055,
+                  child:   DropdownButton<String>(
+                      hint: const Icon(Icons.flip_camera_android_rounded), // Ícono del ComboBox
+                      value: compSelect,
+                      onChanged: (String? newValue) {
+                        //compSelect = newValue ?? '';
+                        setState(() {
+                          compSelect = newValue ?? '';
+                        });
+                      },
+                      items: lstComp
+                      .map((activityPrsp) =>
+                          DropdownMenuItem(
+                            value: activityPrsp,
+                            child: Text(activityPrsp),
+                          ))
+                      .toList(),
+                      /*
+                      items: [
+                        'Compañía 1',
+                        'Compañía 2',
+                        'Compañía 3'
+                      ]
+                      .map((activityPrsp) =>
+                          DropdownMenuItem(
+                            value: activityPrsp,
+                            child: Text(activityPrsp),
+                          ))
+                      .toList(),
+                      */
+                      /*
+                      options.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      */
+                    ),
+                              ),
+                              /*
+                              IconButton(
+                  icon: const Icon(Icons.cloud_sync_outlined, color: Colors.black),
+                  onPressed: () {},
+                              ),
+                              */
+                              IconButton(
+                  icon: const Icon(Icons.notifications_active, color: Colors.black),
+                  onPressed: () {},
                               ),
                             ],
                           ),
-                        )
-                      ),
-                )
+                    
+                    body: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Scaffold(
+                            backgroundColor: Colors.white,
+                            body: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    color: Colors.transparent,
+                                    width: size.width * 0.99,
+                                    child: _buildCard(
+                                      title: 'Ventas',
+                                      meta: '\$970.20 / Meta',
+                                      amount: '\$500.20',
+                                      progress: 0.55,
+                                      backgroundColor: Colors.blue.shade800,
+                                      progressColor: const Color.fromARGB(255, 4, 48, 126),
+                                      tamanio: size
+                                    ),
+                                  ),
+                                            
+                                  const SizedBox(height: 16.0),
+                    
+                                  Container(
+                                    color: Colors.transparent,
+                                    width: size.width * 0.99,
+                                    child: _buildCard(
+                                      title: 'Cobranza',
+                                      meta: '\$970.20 / Meta',
+                                      amount: '\$500.20',
+                                      progress: 0.55,
+                                      backgroundColor: Colors.white,
+                                      //progressColor: Colors.blueAccent,
+                                      progressColor: const Color.fromARGB(255, 4, 48, 126),
+                                      textColor: Colors.black,
+                                      tamanio: size
+                                    ),
+                                  ),
+                  
+                              const SizedBox(height: 16.0),
+                                        
+                                  Container(
+                                    color: Colors.transparent,
+                                    width: size.width * 0.99,
+                                    height: size.height * 0.55,
+                                    child: Stack(
+                                      children: <Widget>[
+                                        
+                                        Container(
+                                          color: Colors.transparent,
+                                          width: size.width,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                color: Colors.transparent,
+                                                width: size.width * 0.35,
+                                                child: const Text('Operaciones', style: TextStyle(fontSize: 12),)
+                                              ),
+                                              Container(
+                                                width: size.width * 0.35,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade700,
+                                                  borderRadius: BorderRadius.circular(8.0),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.white,
+                                                      spreadRadius: 2,
+                                                      blurRadius: 5,
+                                                      offset: const Offset(0, 3),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.grid_view_outlined, color: Colors.white,),
+                                                    SizedBox(
+                                                      width: size.width * 0.02,
+                                                    ),
+                                                    const Text('Avance del día', style: TextStyle(fontSize: 12, color: Colors.white),),
+                                                  ],
+                                                )
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                    
+                                        Container(
+                                          margin: const EdgeInsets.only( top: 25 ),
+                                          width: size.width * 0.99,
+                                          height: size.height * 0.45,
+                                          child: ListView(
+                                            physics: const BouncingScrollPhysics(),
+                                            children: <Widget>[
+                                              const SizedBox( height: 3, ),
+                                              ...itemMap,
+                                            ],
+                                          ),
+                                        ),
+                                    
+                                        //_Encabezado()
+                                    
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ),
+                    )
+                    
+                  );
                 
+                  }
+                }
+
+                  return Container();
+                }
               );
             
               

@@ -10,6 +10,7 @@ class RegisterDeviceModel {
     String tocken;
     String bearer;
     DateTime tockenValidDate;
+    String msmError;
 
     RegisterDeviceModel({
         required this.estado,
@@ -20,6 +21,7 @@ class RegisterDeviceModel {
         required this.tocken,
         required this.bearer,
         required this.tockenValidDate,
+        required this.msmError
     });
 
     factory RegisterDeviceModel.fromJson(String str) => RegisterDeviceModel.fromMap(json.decode(str));
@@ -38,6 +40,7 @@ class RegisterDeviceModel {
           tocken: json["tocken"] ?? '',
           bearer: json["bearer"] ?? '',
           tockenValidDate: json["tocken_valid_date"] != null ? DateTime.parse(json["tocken_valid_date"]) : DateTime.now(),
+          msmError: ''
         );
       }
       else {
@@ -50,6 +53,7 @@ class RegisterDeviceModel {
           tocken: "",
           bearer: "",
           tockenValidDate: DateTime.now(),
+          msmError: json["mensaje"]
         );
       }
     }

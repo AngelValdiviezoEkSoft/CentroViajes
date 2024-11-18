@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
@@ -58,17 +59,18 @@ class TokenManager {
 
       final expiration = obj.result.tockenValidDate;
 
-      imeiCod = '823456016'; //BORRAR LUEGO
+      //imeiCod = '823456040'; //BORRAR LUEGO
 
-      /*
       //VALIDACIÓN DE TOKEN
       
-      ValidationTokenResponseModel objRspValida = await AuthService().doneValidateTocken(imeiCod, obj.result.key);//'456200');//obj.result.key);
+      final objRspValida = await AuthService().doneValidateTocken(imeiCod, obj.result.key, obj.result.tocken);//'456200');//obj.result.key);
 
-      if(objRspValida.result.estado != 200){
+      final data = json.decode(objRspValida);
+      final codEstado = data['result']['estado'];
+
+      if(codEstado != 200){
         return;
       }
-      */
 
       //DateTime nuevaFecha = expiration.subtract(const Duration(days: 8));
 

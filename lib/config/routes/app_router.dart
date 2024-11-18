@@ -44,7 +44,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: objRutas.rutaHome,
-      builder: (context, state) => HomeScreen(null, ''),      
+      builder: (context, state) => const HomeScreen(),      
     ),
     GoRoute(
       path: objRutas.rutaLstAct,
@@ -79,7 +79,9 @@ final GoRouter appRouter = GoRouter(
                   if(snapshot.data == 'NI') {
 
                     return const ConexionInternetScreen(null);
-
+                  }
+                  else{
+                    return const HomeScreen();
                   }
                 }
               }
@@ -95,7 +97,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: objRutas.rutaPerfil,
-      builder: (context, state) => PerfilScreen(),      
+      builder: (context, state) => const PerfilScreen(null),      
     ),
     GoRoute(
       path: objRutas.rutaRegistroPrsp,

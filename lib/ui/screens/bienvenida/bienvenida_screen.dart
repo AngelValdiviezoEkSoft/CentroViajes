@@ -208,8 +208,8 @@ TextEditingController keyTxt = TextEditingController();
                   RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(
                     server: serverTxt.text,
                     key: keyTxt.text,
-                    //imei: imeiCod,
-                    imei: '823456016',
+                    imei: imeiCod,
+                    //imei: '823456040',
                     lat: position.latitude.toString(),//'-74.45445',
                     lon: position.longitude.toString(),//'72.74548487',
                     so: plataforma//'Android'
@@ -244,8 +244,8 @@ TextEditingController keyTxt = TextEditingController();
                   }
                 }
                 catch(ex){
-                    context.pop();
-                    showDialog(
+                  context.pop();
+                  showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
@@ -264,7 +264,6 @@ TextEditingController keyTxt = TextEditingController();
                         );
                       },
                     );
-                  
                 }
               },
               child: Container(

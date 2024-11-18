@@ -250,10 +250,37 @@ class LoginScreen extends StatelessWidget {
                       );
 
                       //AuthResponseModel objAuthResponseModel = await AuthService().login(objAuthRequest);
-                      await AuthService().login(objAuthRequest);
+                      var resp = await AuthService().login(objAuthRequest);
                       
+                      //context.push(objRutasGen.rutaHome);
+
+                      final data = json.decode(resp);
+                      final msmError = data['error'];//['message'];
+
                       context.pop();
-                      context.push(objRutasGen.rutaHome);
+
+                      if(msmError == null) {
+                        context.push(objRutasGen.rutaHome);
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Problemas al hacer login'),                              
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    // Acción para solicitar revisión
+                                    Navigator.of(context).pop();
+                                    //Navigator.of(context).pop();
+                                  },
+                                  child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
 
                       /*
 

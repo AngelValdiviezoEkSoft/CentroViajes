@@ -14,6 +14,8 @@ final class AuthInitial extends AuthState {}
 
 abstract class AuthState extends Equatable {
   
+  final storage = const FlutterSecureStorage();
+
   @override
   List<Object> get props => [];
   
@@ -27,8 +29,9 @@ abstract class AuthState extends Equatable {
         return 'NI';
       }
 
-      //return await storage.read(key: 'jwtEnrolApp') ?? ''; 
-      return ''; 
+      var objSt = await storage.read(key: 'RespuestaLogin') ?? '';
+
+      return objSt; 
     }
     catch(ex) {
       return '';

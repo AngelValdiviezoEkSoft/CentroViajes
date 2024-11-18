@@ -42,6 +42,10 @@ bool tieneMayuscula = false;
 Color coloresTextoRepuesta = Colors.transparent;
 Color coloresFondoRepuesta = Colors.transparent;
 
+late TextEditingController passwordAntTxt;
+late TextEditingController passwordTxt;
+late TextEditingController passwordConfTxt;
+
 class FrmEditPerfilScreen extends StatefulWidget {
   const FrmEditPerfilScreen({super.key});
 
@@ -56,6 +60,10 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
   @override
   void initState() {
     super.initState();
+
+    passwordAntTxt = TextEditingController();
+    passwordTxt = TextEditingController();
+    passwordConfTxt = TextEditingController();
 
     montoN_Txt = TextEditingController();
     nombreT_Txt = TextEditingController();
@@ -701,42 +709,112 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                               validator: (value) {
                                               },
                                             ),
+                                            
                                                                               ),
                                                                               */
+
+                                          Container(
+                                            width: size.width * 0.97,
+                                            padding: const EdgeInsets.all(10),  // Espaciado interno
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(50), // Bordes redondeados
+                                              color: Colors.white
+                                            ),
+                                            child: TextField(
+                                              controller: passwordAntTxt,
+                                              obscureText: authService.varIsOscured,
+                                              decoration: InputDecoration(
+                                                labelText: 'Contraseña Actual',
+                                                suffixIcon: //Icon(Icons.visibility),
+                                                !authService.varIsOscured
+                                                  ? IconButton(
+                                                      onPressed: () {
+                                                        authService.varIsOscured =
+                                                            !authService.varIsOscured;
+                                                      },
+                                                      icon: Icon(Icons.visibility,
+                                                          size: 24,
+                                                          color: AppLightColors()
+                                                              .gray900PrimaryText),
+                                                    )
+                                                  : IconButton(
+                                                      onPressed: () {
+                                                        authService.varIsOscured =
+                                                            !authService.varIsOscured;
+                                                      },
+                                                      icon: Icon(
+                                                          size: 24,
+                                                          Icons.visibility_off,
+                                                          color: AppLightColors()
+                                                              .gray900PrimaryText),
+                                                    ),
+                                                          
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                ),
+                                              ),
+                                              onChanged: (value) {
+                                                /*
+                                                setState(() {
+                                                    verValidaciones = true;
+                                                    
+                                                  });
+                                                onPassWordChanged(value.toString());
+                                                */
+                                              },
+                                              onTap: () {
+                                                
+                                              },
+                                              onTapOutside: (event) {
+                                                FocusScope.of(context).unfocus();
+                    
+                                                setState(() {
+                                                    //verValidaciones = true;
+                                                    
+                                                  });
+                                              },
+                                            ),
+                                          ),
+                    
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
                     
                                           Container(
+                                            width: size.width * 0.97,
                                             padding: const EdgeInsets.all(16),  // Espaciado interno
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(50), // Bordes redondeados
                                               color: Colors.white
                                             ),
                                             child: TextField(
-                                              obscureText: authService.varIsOscured,
+                                              controller: passwordTxt,
+                                              obscureText: authService.varIsOscuredConfNew,
                                               decoration: InputDecoration(
-                                                labelText: 'Contraseña',
+                                                labelText: 'Contraseña Nueva',
                                                 suffixIcon: //Icon(Icons.visibility),
-                                                !authService.varIsOscured
-                                                                ? IconButton(
-                                                                    onPressed: () {
-                                                                      authService.varIsOscured =
-                                                                          !authService.varIsOscured;
-                                                                    },
-                                                                    icon: Icon(Icons.visibility,
-                                                                        size: 24,
-                                                                        color: AppLightColors()
-                                                                            .gray900PrimaryText),
-                                                                  )
-                                                                : IconButton(
-                                                                    onPressed: () {
-                                                                      authService.varIsOscured =
-                                                                          !authService.varIsOscured;
-                                                                    },
-                                                                    icon: Icon(
-                                                                        size: 24,
-                                                                        Icons.visibility_off,
-                                                                        color: AppLightColors()
-                                                                            .gray900PrimaryText),
-                                                                  ),
+                                                !authService.varIsOscuredConfNew
+                                                  ? IconButton(
+                                                      onPressed: () {
+                                                        authService.varIsOscuredConfNew =
+                                                            !authService.varIsOscuredConfNew;
+                                                      },
+                                                      icon: Icon(Icons.visibility,
+                                                          size: 24,
+                                                          color: AppLightColors()
+                                                              .gray900PrimaryText),
+                                                    )
+                                                  : IconButton(
+                                                      onPressed: () {
+                                                        authService.varIsOscuredConfNew =
+                                                            !authService.varIsOscuredConfNew;
+                                                      },
+                                                      icon: Icon(
+                                                          size: 24,
+                                                          Icons.visibility_off,
+                                                          color: AppLightColors()
+                                                              .gray900PrimaryText),
+                                                    ),
                                                           
                                                 border: OutlineInputBorder(
                                                   borderRadius: BorderRadius.circular(30),
@@ -767,11 +845,11 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                           ),
                     
                                           SizedBox(
-                                            height: size.height * 0.01,
+                                            height: size.height * 0.02,
                                           ),
                     
                                            if (verValidaciones)
-                                              Container(
+                                            Container(
                                                 color: Colors.transparent,
                                                 width: size.width * 0.8,
                                                 //height: size.height * 0.21,
@@ -1070,10 +1148,79 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                                 ),
                                               ),
                                             
+                                            if (verValidaciones)
                                             SizedBox(
                                               height: size.height * 0.02,
                                             ),
+
+                                            Container(
+                                              width: size.width * 0.97,
+                                            padding: const EdgeInsets.all(16),  // Espaciado interno
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(50), // Bordes redondeados
+                                              color: Colors.white
+                                            ),
+                                            child: TextField(
+                                              controller: passwordConfTxt,
+                                              obscureText: authService.isOscuredConf,
+                                              decoration: InputDecoration(
+                                                labelText: 'Confirme su Contraseña',
+                                                suffixIcon: //Icon(Icons.visibility),
+                                                !authService.isOscuredConf
+                                                  ? IconButton(
+                                                      onPressed: () {
+                                                        authService.isOscuredConf =
+                                                            !authService.isOscuredConf;
+                                                      },
+                                                      icon: Icon(Icons.visibility,
+                                                          size: 24,
+                                                          color: AppLightColors()
+                                                              .gray900PrimaryText),
+                                                    )
+                                                  : IconButton(
+                                                      onPressed: () {
+                                                        authService.isOscuredConf =
+                                                            !authService.isOscuredConf;
+                                                      },
+                                                      icon: Icon(
+                                                          size: 24,
+                                                          Icons.visibility_off,
+                                                          color: AppLightColors()
+                                                              .gray900PrimaryText),
+                                                    ),
+                                                          
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                ),
+                                              ),
+                                              onChanged: (value) {
+                                                /*
+                                                setState(() {
+                                                    verValidaciones = true;
+                                                    
+                                                  });
+                                                onPassWordChanged(value.toString());
+                                                */
+                                              },
+                                              onTap: () {
+
+                                              },
+                                              onTapOutside: (event) {
+                                                FocusScope.of(context).unfocus();
                     
+                                                setState(() {
+                                                    //verValidaciones = true;
+                                                    
+                                                  });
+                                              },
+                                            ),
+                                          ),
+                    
+                                          SizedBox(
+                                            height: size.height * 0.01,
+                                          ),
+                    
+                                          /*
                                           Container(
                                                   color: Colors.transparent,
                                                   width: size.width * 0.92,
@@ -1104,6 +1251,7 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                           SizedBox(
                                             height: size.height * 0.01,
                                           ),
+                                          */
                                                                               
                                           Container(
                                             color: Colors.transparent,
@@ -1202,11 +1350,60 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                   color: Colors.transparent,
                                   child: GestureDetector(
                                   onTap: () async {
+
+                                    if(passwordAntTxt.text.isEmpty){
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Ingrese su contraseña actual'),
+                                            
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  // Acción para solicitar revisión
+                                                  //Navigator.of(context).pop();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+
+                                      return;
+                                    }
+
+                                    if(passwordTxt.text != passwordConfTxt.text){
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Las contraseñas deben coincidir'),
+                                            
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  // Acción para solicitar revisión
+                                                  //Navigator.of(context).pop();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+
+                                      return;
+                                    }
+
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title: Text('Datos actualizados correctamente'),
+                                          title: const Text('Datos actualizados correctamente'),
                                           
                                           actions: [
                                             TextButton(
@@ -1223,7 +1420,8 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                     );
                                   },
                                   child: ButtonCvsWidget(                            
-                                    text: 'Guardar Cambios',
+                                    //text: 'Guardar Cambios',
+                                    text: 'Actualizar',
                                     textStyle: AppTextStyles.h3Bold(
                                         width: size.width,
                                         color: AppLightColors().white),

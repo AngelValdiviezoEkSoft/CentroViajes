@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/config/environments/environments.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/ui/widgets/widgets.dart';
@@ -151,6 +152,9 @@ TextEditingController keyTxt = TextEditingController();
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
+                        onPressedCont: () {
+                          Navigator.of(context).pop();
+                        },
                         tipoAlerta: TipoAlerta().alertAccion,
                         numLineasTitulo: 2,
                         numLineasMensaje: 2,
@@ -208,8 +212,8 @@ TextEditingController keyTxt = TextEditingController();
                   RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(
                     server: serverTxt.text,
                     key: keyTxt.text,
-                    imei: imeiCod,
-                    //imei: '823456041',
+                    //imei: imeiCod,
+                    imei: '823456044',
                     lat: position.latitude.toString(),//'-74.45445',
                     lon: position.longitude.toString(),//'72.74548487',
                     so: plataforma//'Android'
@@ -228,7 +232,7 @@ TextEditingController keyTxt = TextEditingController();
                         return AlertDialog(
                           title: Container(
                             color: Colors.transparent,
-                            height: size.height * 0.14,
+                            height: size.height * 0.17,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -236,11 +240,21 @@ TextEditingController keyTxt = TextEditingController();
                                 //const Text('Error al registrar el móvil:', style: TextStyle(color: Colors.red,)),
                                 Container(
                                   color: Colors.transparent,
-                                  height: size.height * 0.1,
+                                  height: size.height * 0.09,
                                   child: Image.asset('assets/gifs/gifErrorBlanco.gif'),
                                 ),
 
-                                Text(respuesta.result.msmError)
+                                Container(
+                                  color: Colors.transparent,
+                                  width: size.width * 0.95,
+                                  height: size.height * 0.08,
+                                  alignment: Alignment.center,
+                                  child: AutoSizeText(
+                                    respuesta.result.msmError,
+                                    maxLines: 2,
+                                    minFontSize: 2,
+                                  ),
+                                )
                               ],
                             )
                           ),

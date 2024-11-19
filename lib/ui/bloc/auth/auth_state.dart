@@ -21,6 +21,7 @@ abstract class AuthState extends Equatable {
   
   Future<String> readToken() async {
     try {
+      String rspFinal = 'home';
       //const storage = FlutterSecureStorage();
 
       var connectivityResult = await (Connectivity().checkConnectivity());
@@ -29,9 +30,19 @@ abstract class AuthState extends Equatable {
         return 'NI';
       }
 
-      var objSt = await storage.read(key: 'RespuestaLogin') ?? '';
+      var rspReg = await storage.read(key: 'RespuestaRegistro') ?? '';
+      var rspLog = await storage.read(key: 'RespuestaLogin') ?? '';
 
-      return objSt; 
+      if(rspReg.isEmpty && rspLog.isEmpty){
+        rspFinal = '';
+      }
+      else {
+        if(rspLog.isEmpty){
+          rspFinal = 'log';
+        }        
+      }
+
+      return rspFinal; 
     }
     catch(ex) {
       return '';

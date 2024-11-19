@@ -41,45 +41,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
     
-    /*
-    final isLicenseSet = await userPreferences.isLicenseSet();
-    
-    final isUsernameSet = await userPreferences.isUsernameSet();
-    //String tieneToken = await storageAuthBloc.read(key: environmentAuthBloc.tokenApp) ?? '';
-
-    if (isLicenseSet && isUsernameSet) { //&& tieneToken.isNotEmpty) {
-      emit(AuthAuthenticated());
-    } else {
-      emit(AuthUnauthenticated());
-    }
-    */
-
     var connectivityResult = await (Connectivity().checkConnectivity());
     
     if (!connectivityResult.contains(ConnectivityResult.mobile) && !connectivityResult.contains(ConnectivityResult.wifi)) {
       emit(AuthNoInternet());
     }
     else {
-      emit(AuthAuthenticated());
-      /*
-      bool isMockLocation = true;
-      
-      TrustLocation.onChange.listen((values) {
-
-        isMockLocation = values.isMockLocation ?? false;
-
-        if(isMockLocation){
-          emit(AuthGpsFake());
-        } else {
-          emit(AuthAuthenticated());
-        }
-
-      }
-      
-       
-      
-      );
-      */
+      emit(AuthAuthenticated());      
     }
     
   }

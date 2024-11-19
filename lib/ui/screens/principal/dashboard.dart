@@ -1,8 +1,5 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 //import 'package:marcacion_facial_ekuasoft_app/app/app.dart';
 import 'package:cvs_ec_app/domain/domain.dart';

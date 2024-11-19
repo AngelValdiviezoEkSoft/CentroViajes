@@ -33,6 +33,7 @@ class ListaActividades extends StatelessWidget {
                       duration: const Duration( milliseconds: 250 ),
                       child: 
                         ItemsListasWidget(
+                          null,
                           varIdPosicionMostrar: varPosicionMostrar,
                           varEsRelevante: item.esRelevante,
                           varIdNotificacion: item.ordenNot,

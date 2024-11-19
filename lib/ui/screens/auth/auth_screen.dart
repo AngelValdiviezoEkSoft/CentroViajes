@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/domain/models/models.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
@@ -105,7 +106,7 @@ class LoginScreen extends StatelessWidget {
                 color: Colors.transparent,
                 width: size.width * 0.9,
                 alignment: Alignment.centerLeft,
-                child: Text(
+                child: const Text(
                   '¡Bienvenido de nuevo!',
                   style: TextStyle(
                     fontSize: 30,
@@ -222,6 +223,24 @@ class LoginScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 115.0),
                 child: ElevatedButton(
                   onPressed: () async {
+                    
+                    if(userTxt.text.isEmpty || passWordTxt.text.isEmpty){
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) => SimpleDialog(
+                          alignment: Alignment.center,
+                          children: [
+                            SimpleDialogCargando(
+                              mensajeMostrar: 'Error',
+                              mensajeMostrarDialogCargando: 'Ingrese sus credenciales',
+                            ),
+                          ]
+                        ),
+                      );
+
+                      return;
+                    }
 
                     showDialog(
                       context: context,
@@ -241,6 +260,7 @@ class LoginScreen extends StatelessWidget {
                     final objStr = await storage.read(key: 'RespuestaRegistro') ?? '';
     
                     if(objStr.isNotEmpty){
+
                       var obj = RegisterDeviceResponseModel.fromJson(objStr);
 
                       AuthRequest objAuthRequest  = AuthRequest(
@@ -255,18 +275,47 @@ class LoginScreen extends StatelessWidget {
                       //context.push(objRutasGen.rutaHome);
 
                       final data = json.decode(resp);
-                      final msmError = data['error'];//['message'];
-
+                      final objError = data['error'];
+                      
                       context.pop();
 
-                      if(msmError == null) {
+                      if(objError == null) {
                         context.push(objRutasGen.rutaHome);
                       } else {
+                        final msmError = data['error']['message'];
+
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Text('Problemas al hacer login'),                              
+                              title: Container(
+                                color: Colors.transparent,
+                                height: size.height * 0.22,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    
+                                    Container(
+                                      color: Colors.transparent,
+                                      height: size.height * 0.1,
+                                      child: Image.asset('assets/gifs/gifErrorBlanco.gif'),
+                                    ),
+
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.95,
+                                      height: size.height * 0.11,
+                                      alignment: Alignment.center,
+                                      child: AutoSizeText(
+                                        msmError,
+                                        maxLines: 2,
+                                        minFontSize: 4,
+                                      ),
+                                    ),
+                                    
+                                  ],
+                                )
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: () {

@@ -10,6 +10,7 @@ class ContentAlertDialog extends StatelessWidget {
       required this.tipoAlerta,
       this.numLineasTitulo,
       this.onPressed,
+      this.onPressedCont,
       this.numLineasMensaje});
 
   final String titulo;
@@ -18,6 +19,7 @@ class ContentAlertDialog extends StatelessWidget {
   final int? numLineasTitulo;
   final int? numLineasMensaje;
   final VoidCallback? onPressed;
+  final VoidCallback? onPressedCont;
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +185,7 @@ class ContentAlertDialog extends StatelessWidget {
                       colorBoton: null,
                       textStyle: TextStyle(color: oColors.blanco0Opacidad),
                       onPressed: () {
-                        
+                        onPressedCont!();
                       },                      
                     ),
                   ),

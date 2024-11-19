@@ -1,9 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:cvs_ec_app/domain/domain.dart';
+import 'package:cvs_ec_app/infraestructure/services/generic/generic_service.dart';
+import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 const storageClient = FlutterSecureStorage();
+MensajesAlertas objMensajesClienteService = MensajesAlertas();
 
 class ClienteService extends ChangeNotifier {
   //final String endPoint = CadenaConexion().apiEndPointEcommerce;
@@ -81,6 +87,49 @@ class ClienteService extends ChangeNotifier {
     );
 
     return lstClientes;
+  }
+
+  getClientes() async {
+    try{
+
+      var codImei = await storage.read(key: 'codImei') ?? '';
+
+      var objReg = await storage.read(key: 'RespuestaRegistro') ?? '';
+      var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+      var objLog = await storage.read(key: 'RespuestaLogin') ?? '';
+      var objLogDecode = json.decode(objLog);
+
+      List<MultiModel> lstMultiModel = [];
+
+      lstMultiModel.add(
+        MultiModel(model: 'res.partner')
+      );
+
+      ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
+        jsonrpc: '2.0',
+        params: ParamsMultiModels(
+          bearer: obj.result.bearer,
+          company: objLogDecode['result']['current_company'],
+          imei: codImei,
+          key: obj.result.key,
+          tocken: obj.result.tocken,
+          tockenValidDate: obj.result.tockenValidDate,
+          uid: objLogDecode['result']['uid'],
+          models: lstMultiModel
+        )
+      );
+
+      var objRsp = await GenericService().getMultiModelos(objReq, "res.partner");
+
+      return json.encode(objRsp);
+      
+      //notifyListeners();
+    }
+    catch(ex){
+      print('Error: $ex');
+    }
+    
   }
 
 }

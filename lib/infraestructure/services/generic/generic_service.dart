@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 //import '../../config/routes/routes.dart';
 
@@ -50,19 +51,16 @@ class GenericService extends ChangeNotifier {
     
     var reponseRs = response.body;
 
-    //print("Test: " + response.body);
-
     var obj = RegisterDeviceResponseModel.fromJson(reponseRs);
 
-    //final data = json.encode(obj.result);
     await storage.write(key: 'RespuestaRegistro', value: reponseRs);
 
     return obj;//RegisterDeviceResponseModel.fromJson(reponseRs);
     
   }
   
-  getMultiModelos(ConsultaMultiModelRequestModel objReq) async {
-    final ruta = '${env.apiEndpoint}done/data/multi/models';
+  getMultiModelos(ConsultaMultiModelRequestModel objReq, String modelo) async {
+    final ruta = '${env.apiEndpoint}${objReq.params.imei}/done/data/multi/models';
     //https://<tu_dominio_odoo>/api/v1/<imei>/done/data/multi/models
 
     List<MultiModel> lstMultiModel = [];
@@ -71,6 +69,9 @@ class GenericService extends ChangeNotifier {
       lstMultiModel.add(objReq.params.models[i]);
     }
 
+    String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
+
+    /*
     final Map<String, dynamic> body = 
     {
       "jsonrpc": "2.0",
@@ -81,21 +82,9 @@ class GenericService extends ChangeNotifier {
       "uid": objReq.params.uid,//5,
       "company": objReq.params.company,//5,
       "bearer": objReq.params.bearer,//"RUt6YnZweW9RSmhyZXNuclNDTjFQek1mQWM1MjM0NTY3ODlMS01aMWc4M1dDR3dIQ3kzYlhIZTJicmVMZXNUQUNrQm1RRHFCS2plbEo5UG94UXMyMDI0LTExLTA3IDE5OjQ0OjQx",                           
-      "tocken_valid_date": objReq.params.tockenValidDate,//"2024-11-07 19:44:41",
+      "tocken_valid_date": tockenValidDate,//"2024-11-07 19:44:41",
       "models": jsonEncode(lstMultiModel),
-      /*
-      [
-        {
-          "model": "res.partner",
-          //"filters": [["is_company", "=", True]]
-        },
-        {
-          "model": "product.template",
-          //"filters": [["sale_ok", "=", True]]
-        }
-
-        ]
-        */
+      
       }
     };
     
@@ -106,17 +95,50 @@ class GenericService extends ChangeNotifier {
       },
       body: jsonEncode(body),
     );
+    */
+
+    /////////
     
-    var reponseRs = response.body;
+    final requestBody = {
+      "jsonrpc": "2.0",
+      "params": {
+        "key": objReq.params.key,
+        "tocken": objReq.params.tocken,
+        "imei": objReq.params.imei,
+        "uid": objReq.params.uid,
+        "company": objReq.params.company,
+        "bearer": objReq.params.bearer,
+        "tocken_valid_date": tockenValidDate,
+        "models": [
+          {
+            "model": modelo//"crm.lead",
+          }
+        ],
+      }
+    };
 
-    //print("Test: " + response.body);
+    // Headers del request
+    final headers = {
+      "Content-Type": "application/json",
+    };
 
-    var obj = RegisterDeviceResponseModel.fromJson(reponseRs);
+    // Enviar la solicitud POST
+    final response = await http.post(
+      Uri.parse(ruta),
+      headers: headers,
+      body: jsonEncode(requestBody), // Convertir el cuerpo del request a JSON
+    );
+    
+    //var reponseRs = response.body;
+
+    //print("Test Clientes: " + response.body);
+
+    
 
     //final data = json.encode(obj.result);
-    await storage.write(key: 'RespuestaRegistro', value: reponseRs);
+    //await storage.write(key: 'RespuestaRegistro', value: reponseRs);
 
-    return obj;//RegisterDeviceResponseModel.fromJson(reponseRs);
+    return response.body;//RegisterDeviceResponseModel.fromJson(reponseRs);
     
   }
   

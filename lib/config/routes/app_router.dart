@@ -22,7 +22,7 @@ final GoRouter appRouter = GoRouter(
           }
           */
           
-          return AuthScreen();//const ListaClientesScreen();
+          return AuthScreen();//const ();
         },
       ),
     ),
@@ -33,6 +33,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: objRutas.rutaListaClientes,
       builder: (context, state) => const ListaClientesScreen(),      
+    ),
+    GoRoute(
+      path: objRutas.rutaListaProspectos,
+      builder: (context, state) => const ListaProspectosScreen(),      
     ),
     GoRoute(
       path: objRutas.rutaReasignaCliente,
@@ -81,7 +85,12 @@ final GoRouter appRouter = GoRouter(
                     return const ConexionInternetScreen(null);
                   }
                   else{
-                    return const HomeScreen();
+                    if(snapshot.data == 'log') {
+                      return AuthScreen();
+                    }
+                    if(snapshot.data == 'home') {
+                      return const HomeScreen();
+                    }
                   }
                 }
               }

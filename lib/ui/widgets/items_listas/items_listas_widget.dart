@@ -26,6 +26,7 @@ bool muestraListaInformativo = false;
 
 //ignore: must_be_immutable
 class ItemsListasWidget extends StatelessWidget {
+
   @required String? varIconoNot;
   @required String? varIconoNotTrans;
   @required int? varContadorNotificacion;
@@ -47,8 +48,8 @@ class ItemsListasWidget extends StatelessWidget {
   @required final bool? permiteGestion;
 
   ItemsListasWidget(
-    {
-      Key? key,
+    Key? key,
+    {      
       this.varIconoNot,
       this.varContadorNotificacion,
       this.varIdPosicionMostrar,
@@ -79,13 +80,14 @@ class ItemsListasWidget extends StatelessWidget {
 
     return Center(
       child: ListaNotificaciones(
+        null,
         varIdPosicionMostrarLst: varIdPosicionMostrar,
         varIdNotificacionLst: varIdNotificacion,
         varNumIdentifLst: varNumIdenti,
         color1: color1,
         color2: color2,
         icon: icon,
-        onPress: onPress,
+        onPress2: onPress,
         texto: texto,
         texto2: texto2,
         esRelevante: varEsRelevante,
@@ -105,6 +107,7 @@ class ItemsListasWidget extends StatelessWidget {
 
 //ignore: must_be_immutable
 class ListaNotificaciones extends StatelessWidget {
+
   @required String? varIconoNot;
   @required String? varIconoNotTransLstNot;
   @required int? varContadorNotificacionLst;
@@ -117,7 +120,7 @@ class ListaNotificaciones extends StatelessWidget {
   @required final String? texto2;
   Color color1;
   final Color color2;
-  @required final VoidCallback? onPress;
+  @required final VoidCallback? onPress2;
 
   @required final int? varMuestraNotificacionesTrApLst;
   @required final int? varMuestraNotificacionesTrProcLst;
@@ -125,8 +128,9 @@ class ListaNotificaciones extends StatelessWidget {
   @required final int? varMuestraNotificacionesTrInfoLst;
   //@required final UsuarioType? objUserSolicVacLst;
 
-  ListaNotificaciones({
+  ListaNotificaciones(
     Key? key,
+    {
     this.varIconoNot,
     this.varContadorNotificacionLst,
     this.varIdPosicionMostrarLst,
@@ -138,7 +142,7 @@ class ListaNotificaciones extends StatelessWidget {
     this.texto2,
     this.color1 = Colors.grey,
     this.color2 = Colors.blueGrey,
-    this.onPress,
+    this.onPress2,
     this.varMuestraNotificacionesTrApLst,
     this.varMuestraNotificacionesTrProcLst,
     this.varMuestraNotificacionesTrCompLst,
@@ -210,7 +214,13 @@ class ListaNotificaciones extends StatelessWidget {
       builder: (context,state) { 
         return GestureDetector(
           onTap: () {
+            //context.push(Rutas().rutaListaProspectos);
             context.push(Rutas().rutaListaClientes);
+            //onPress2!();
+            if (onPress2 != null) {
+              // Si se proporciona onPressed, úsalo
+              onPress2!();
+            }
           },
           child: Column(
             children: [

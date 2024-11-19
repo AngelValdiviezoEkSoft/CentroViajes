@@ -64,10 +64,27 @@ class HomeScreenState extends State<HomeScreen> {
 
     final size = MediaQuery.of(context).size;
 
+    /* 
+    onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        onPressedCont: () {
+                          Navigator.of(context).pop();
+                        },
+    */
+
     final items = <ItemBoton>[
-      ItemBoton('','','',1, Icons.groups, 'Clientes', 'Listado de todos los clientes asignados','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrAp > 0,'','','icTramApr.png','icTramAprTrans.png','','', () => context.push(Rutas().rutaListaClientes),),
-      ItemBoton('','','',2, Icons.calendar_month, 'Visitas Agendadas', 'Listado de clientes programados para el día','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrProc > 0,'','','icTramProc.png','icTramProcTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      ItemBoton('','','',3, Icons.group_add, 'Prospectos', 'Seguimiento y control de prospectos','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
+      ItemBoton('','','',1, Icons.group_add, 'Prospectos', 'Seguimiento y control de prospectos','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','','', 
+        () {
+          context.push(Rutas().rutaListaProspectos);
+        }
+      ),
+      ItemBoton('','','',2, Icons.groups, 'Clientes', 'Listado de todos los clientes asignados','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrAp > 0,'','','icTramApr.png','icTramAprTrans.png','','', 
+        () {
+          context.push(Rutas().rutaListaClientes);
+        }
+      ),
+      ItemBoton('','','',3, Icons.calendar_month, 'Visitas Agendadas', 'Listado de clientes programados para el día','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrProc > 0,'','','icTramProc.png','icTramProcTrans.png','','', () => context.push(Rutas().rutaListaClientes)),      
       ItemBoton('','','',4, Icons.auto_stories_sharp, 'Catálogo', 'Catálogo de productos con imágenes','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
       ItemBoton('','','',5, Icons.dashboard_customize_outlined, 'Inventario', 'Inventario general de productos con stock','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrAp > 0,'','','icTramApr.png','icTramAprTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
       ItemBoton('','','',6, Icons.format_list_bulleted_add, 'Listas de precio', 'Lista de precios generales para ventas','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrProc > 0,'','','icTramProc.png','icTramProcTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
@@ -80,6 +97,7 @@ class HomeScreenState extends State<HomeScreen> {
       duration: const Duration( milliseconds: 250 ),
       child: 
         ItemsListasWidget(
+          null,
           varIdPosicionMostrar: varPosicionMostrar,
           varEsRelevante: item.esRelevante,
           varIdNotificacion: item.ordenNot,

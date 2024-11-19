@@ -2,6 +2,7 @@ class Rutas{
   String rutaDefault = '/';
   String rutaRegistroCliente = '/registroCliente';
   String rutaListaClientes = '/listaClientes';
+  String rutaListaProspectos = '/listaProspectos';
   String rutaReasignaCliente = '/reasignaCliente';
   String rutaPlanActCliente = '/planActCliente';
   String rutaHome = '/home';

@@ -1,4 +1,6 @@
 
+export 'package:cvs_ec_app/domain/models/clientes_request_model.dart';
+
 export 'package:cvs_ec_app/domain/models/consulta_models_request_model.dart';
 
 export 'package:cvs_ec_app/domain/models/consulta_multi_models_request_model.dart';

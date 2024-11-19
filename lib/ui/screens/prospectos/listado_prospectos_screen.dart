@@ -1,6 +1,4 @@
 
-import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
@@ -11,18 +9,15 @@ import 'package:local_auth/local_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 
-late TextEditingController montoNuevo_Txt;
-late TextEditingController nombreTrx_Txt;
-
-class ListaClientesScreen extends StatefulWidget {
-  const ListaClientesScreen({super.key});
+class ListaProspectosScreen extends StatefulWidget {
+  const ListaProspectosScreen({super.key});
 
   @override
-  State<ListaClientesScreen> createState() => _ListaClientesScreenState();
+  State<ListaProspectosScreen> createState() => _ListaProspectosScreenState();
 }
 
 //class MarcacionScreen extends StatelessWidget {
-class _ListaClientesScreenState extends State<ListaClientesScreen> {
+class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
 
   final LocalAuthentication auth = LocalAuthentication();
   //_SupportState _supportState = _SupportState.unknown;
@@ -54,7 +49,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
               context.pop();
             },
           ),
-          title: const Text('Clientes'),
+          title: const Text('Prospectos'),
           actions: [
             IconButton(
               icon: const Icon(Icons.calendar_month, color: Colors.black),
@@ -68,7 +63,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
         builder: (context,state) {
 
           return FutureBuilder(
-            future: ClienteService().getClientes(),
+            future: ProspectoTypeService().getProspectos(),
             builder: (context, snapshot) {
 
               if (snapshot.hasError) {
@@ -82,19 +77,11 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
 
               if (snapshot.hasData) {
 
-                String objRsp = snapshot.data as String;
-
-                var objLogDecode = json.decode(objRsp);
-                var objLogDecode2 = json.decode(objLogDecode);
-
-                var tstLength = objLogDecode2["result"]["data"]["res.partner"]["length"];
-
-                String contStr = '$tstLength';
-
-                int contLst = int.parse(contStr);
+                List<ClientModelResponse> lstCLientes = [];//snapshot.data as List<ClientModelResponse>;
 
                 return SingleChildScrollView(
                   child: Column(
+                    //mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
                         height: size.height * 0.02,
@@ -120,10 +107,10 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                         height: size.height * 0.65,
                         child: ListView.builder(
                           controller: scrollListaClt,
-                          itemCount: contLst,//lstCLientes.length,
+                          itemCount: lstCLientes.length,//carrito.detalles.length,
                           itemBuilder: ( _, int index ) {
                             return Slidable(
-                              key: ValueKey(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["id"]),
+                              key: ValueKey(lstCLientes[index].id),
                               startActionPane: ActionPane(
                                 motion: const ScrollMotion(),
                                   children: [
@@ -165,7 +152,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                       borderRadius: const BorderRadius.all(Radius.circular(10))
                                     ),
                                   width: size.width * 0.98,
-                                  height: size.height * 0.16,
+                                  height: size.height * 0.13,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -192,42 +179,40 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                             Container(
                                               color: Colors.transparent,
                                         width: size.width * 0.55,
-                                        height: size.height * 0.25,
+                                        height: size.height * 0.15,
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Container(
                                                     color: Colors.transparent,
-                                                    width: size.width * 0.54,
-                                                    height: size.height * 0.04,
+                                                    width: size.width * 0.45,
+                                                    height: size.height * 0.025,
                                                     child: AutoSizeText(
-                                                          //'${lstCLientes[index].primerNombre} ${lstCLientes[index].primerApellido}',
-                                                          '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["name"]}',
+                                                          '${lstCLientes[index].primerNombre} ${lstCLientes[index].primerApellido}',
                                                           style: const TextStyle(
                                                             fontWeight: FontWeight.bold,
-                                                            //fontSize: 10,
+                                                            fontSize: 10,
                                                             color: Colors.black
                                                           ),
-                                                          minFontSize: 5,
                                                           maxLines: 2,
                                                           textAlign: TextAlign.left,
                                                           ),
                                                 ),
                                                 Container(
                                               color: Colors.transparent,
-                                              width: size.width * 0.54,
-                                              height: size.height * 0.035,
+                                              width: size.width * 0.45,
+                                              height: size.height * 0.025,
                                               child: RichText(
                                                 text: TextSpan(
                                                   children: [
                                                     const TextSpan(
-                                                      text: 'Correo: ',
+                                                      text: 'RUC/CI: ',
                                                       style: TextStyle(color: Colors.black)
                                                     ),
                                                     TextSpan(
-                                                      text: '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["email"]}',//lstCLientes[index].email,
-                                                      style: const TextStyle(color: Colors.blue)
+                                                      text: lstCLientes[index].numIdentificacion,
+                                                      style: TextStyle(color: Colors.blue)
                                                     ),
                                                   ]
                                                 ),
@@ -236,51 +221,30 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                             ),
                                             Container(
                                                 color: Colors.transparent,
-                                                width: size.width * 0.54,
-                                                height: size.height * 0.035,
+                                                width: size.width * 0.45,
+                                                height: size.height * 0.025,
                                                 child: 
                                                 RichText(
                                                   text: TextSpan(
                                                     children: [
                                                       const TextSpan(
-                                                        text: 'Celular: ',
+                                                        text: 'COD: ',
                                                         style: TextStyle(color: Colors.black)
                                                       ),
                                                       TextSpan(
-                                                        text: '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["mobile"]}',//lstCLientes[index].mobile,
+                                                        text: lstCLientes[index].codigoCli,
                                                         style: const TextStyle(color: Colors.blue)
                                                       ),
                                                     ]
                                                   ),
                                                 )
                                             ),
-                                            Container(
-                                                color: Colors.transparent,
-                                                width: size.width * 0.54,
-                                                height: size.height * 0.035,
-                                                child: 
-                                                RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      const TextSpan(
-                                                        text: 'Crédito: ',
-                                                        style: TextStyle(color: Colors.black)
-                                                      ),
-                                                      TextSpan(
-                                                        text: '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["credit"]}',//'${lstCLientes[index].credit}',
-                                                        style: const TextStyle(color: Colors.blue)
-                                                      ),
-                                                    ]
-                                                  ),
-                                                )
-                                            ),
-                                            /*
                                             Container(
                                                 color: Colors.transparent,
                                                 width: size.width * 0.45,
                                                 height: size.height * 0.025,
                                                 child: AutoSizeText(
-                                                      '${lstCLientes[index].credit}',
+                                                      lstCLientes[index].estado,
                                                       style: const TextStyle(
                                                         fontWeight: FontWeight.bold,
                                                         fontSize: 10,
@@ -289,7 +253,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                       maxLines: 2,
                                                       textAlign: TextAlign.left,),
                                             ),
-                                          */
+                                          
                                                 ],
                                               ),
                                             ),
@@ -300,7 +264,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                       ),
                                       Container(
                                         width: size.width * 0.11,
-                                        height: size.height * 0.145,
+                                        height: size.height * 0.11,
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
                                           color: Colors.black12, // Color del óvalo
@@ -359,7 +323,6 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
               return Center(
                 child: Container(
                   color: Colors.transparent,
-                  //child: Image.asset('assets/loadingEnrolApp.gif'),
                   child: Image.asset('assets/gifs/gif_carga.gif'),
                 ),
               );
@@ -367,19 +330,18 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
           );
         }
       ),
-      /*
       floatingActionButton: 
       
       FloatingActionButton(                
           onPressed: () {
-            context.push(objRutasGen.rutaRegistroPrsp);
+            context.push(objRutasGen.rutaRegistroPrsp);          
           },
           backgroundColor: const Color.fromRGBO(75, 57, 239, 1.0), // Color del botón
           child: const Icon(Icons.person_add_alt, color: Colors.white,), // Icono dentro del botón
         ),
-        */
+        
     );
   }
 }
 
-void doNothing(BuildContext context) {}
+//void doNothing(BuildContext context) {}

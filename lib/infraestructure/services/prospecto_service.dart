@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -117,6 +118,56 @@ class ProspectoTypeService extends ChangeNotifier{
       varMensajeValidacion = ' Las contraseñas deben coincidir';
     }
     return varMensajeValidacion;
+  }
+
+  getProspectos() async {
+    try{
+
+      var codImei = await storage.read(key: 'codImei') ?? '';
+
+      var objReg = await storage.read(key: 'RespuestaRegistro') ?? '';
+      var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+      var objLog = await storage.read(key: 'RespuestaLogin') ?? '';
+      var objLogDecode = json.decode(objLog);
+
+      List<MultiModel> lstMultiModel = [];
+
+      lstMultiModel.add(
+        MultiModel(model: 'crm.lead')
+      );
+
+      ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
+        jsonrpc: '2.0',
+        params: ParamsMultiModels(
+          bearer: obj.result.bearer,
+          company: objLogDecode['result']['current_company'],
+          imei: codImei,
+          key: obj.result.key,
+          tocken: obj.result.tocken,
+          tockenValidDate: obj.result.tockenValidDate,
+          uid: objLogDecode['result']['uid'],
+          models: lstMultiModel
+        )
+      );
+
+      await GenericService().getMultiModelos(objReq, "crm.lead");
+      
+      notifyListeners();
+    }
+    
+    on SocketException catch (_) {
+      Fluttertoast.showToast(
+        msg: objMensajesProspectoService.mensajeFallaInternet,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+      );  
+    }
+    
   }
 
 

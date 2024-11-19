@@ -117,6 +117,7 @@ class AuthService extends ChangeNotifier {
     var obj = RegisterDeviceResponseModel.fromJson(reponseRs);
 
     if(obj.result.estado == 200){
+      await storage.write(key: 'codImei', value: objRegister.imei);
       await storage.write(key: 'RespuestaRegistro', value: reponseRs);
     }
 
@@ -206,36 +207,11 @@ class AuthService extends ChangeNotifier {
         body: jsonEncode(body),
       );
 
-      /*
-      final response = await http.post(
-        Uri.parse(ruta),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
-          <String, String>
-          {
-            "db": authRequest.db,
-            "login": authRequest.login,
-            "password": authRequest.password
-          }
-        ),
-      );
-      */
-
-      print('Test Login: ${response.body}');
-
-      //final oResp = AuthResponseModel.fromJson(response.body);
-
-      //return oResp;
       await storage.write(key: 'RespuestaLogin', value: response.body);
-
-      //final data = json.decode(resp);
-      //final accessToken = data['detail']['accessToken'];
 
       return response.body;
     } catch (e) {
-      print('Test Error: $e');
+      //print('Test Error: $e');
     }
   }
 
@@ -290,7 +266,7 @@ class AuthService extends ChangeNotifier {
 
   Future logOut() async {
     await storage.write(key: 'RespuestaLogin', value: '');
-    await storage.deleteAll();
+    
     return;
   }
 

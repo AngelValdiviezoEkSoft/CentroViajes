@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
@@ -79,6 +81,19 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
 
                 List<ClientModelResponse> lstCLientes = [];//snapshot.data as List<ClientModelResponse>;
 
+                String objRsp = snapshot.data as String;
+
+                var objLogDecode = json.decode(objRsp);
+                var objLogDecode2 = json.decode(objLogDecode);
+
+                var tstLength = objLogDecode2["result"]["data"]["crm.lead"]["length"];
+
+                String contStr = '$tstLength';
+
+                int contLst = int.parse(contStr);
+
+                String estadoPrsp = '';
+
                 return SingleChildScrollView(
                   child: Column(
                     //mainAxisAlignment: MainAxisAlignment.center,
@@ -107,10 +122,22 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                         height: size.height * 0.65,
                         child: ListView.builder(
                           controller: scrollListaClt,
-                          itemCount: lstCLientes.length,//carrito.detalles.length,
+                          itemCount: contLst,//lstCLientes.length,//carrito.detalles.length,
                           itemBuilder: ( _, int index ) {
+
+                            try{
+                              if(objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["stage_id"] != null){
+                                estadoPrsp = '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["stage_id"]["name"]}';
+                              }
+                            }
+                            catch(ex){
+                              print(ex);
+                              estadoPrsp = '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["stage_id"]}';
+                            }
+
                             return Slidable(
-                              key: ValueKey(lstCLientes[index].id),
+                              //key: ValueKey(lstCLientes[index].id),
+                              key: ValueKey(objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["id"]),
                               startActionPane: ActionPane(
                                 motion: const ScrollMotion(),
                                   children: [
@@ -152,7 +179,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                       borderRadius: const BorderRadius.all(Radius.circular(10))
                                     ),
                                   width: size.width * 0.98,
-                                  height: size.height * 0.13,
+                                  height: size.height * 0.195,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,40 +206,57 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                             Container(
                                               color: Colors.transparent,
                                         width: size.width * 0.55,
-                                        height: size.height * 0.15,
+                                        height: size.height * 0.25,
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Container(
-                                                    color: Colors.transparent,
-                                                    width: size.width * 0.45,
-                                                    height: size.height * 0.025,
-                                                    child: AutoSizeText(
-                                                          '${lstCLientes[index].primerNombre} ${lstCLientes[index].primerApellido}',
-                                                          style: const TextStyle(
-                                                            fontWeight: FontWeight.bold,
-                                                            fontSize: 10,
-                                                            color: Colors.black
-                                                          ),
-                                                          maxLines: 2,
-                                                          textAlign: TextAlign.left,
-                                                          ),
+                                                  color: Colors.transparent,
+                                                  width: size.width * 0.54,
+                                                  height: size.height * 0.04,
+                                                  child: AutoSizeText(
+                                                    //'${lstCLientes[index].primerNombre} ${lstCLientes[index].primerApellido}',
+                                                    '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["name"]}',
+                                                    style: const TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 10,
+                                                      color: Colors.black
+                                                    ),
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.left,
+                                                    ),
+                                                ),
+                                                Container(
+                                                  color: Colors.transparent,
+                                                  width: size.width * 0.54,
+                                                  height: size.height * 0.04,
+                                                  child: AutoSizeText(
+                                                    //'${lstCLientes[index].primerNombre} ${lstCLientes[index].primerApellido}',
+                                                    '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["contact_name"]}',
+                                                    style: const TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 10,
+                                                      color: Colors.black
+                                                    ),
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.left,
+                                                    ),
                                                 ),
                                                 Container(
                                               color: Colors.transparent,
-                                              width: size.width * 0.45,
-                                              height: size.height * 0.025,
+                                              width: size.width * 0.54,
+                                              height: size.height * 0.035,
                                               child: RichText(
                                                 text: TextSpan(
                                                   children: [
                                                     const TextSpan(
-                                                      text: 'RUC/CI: ',
+                                                      text: 'Email: ',
                                                       style: TextStyle(color: Colors.black)
                                                     ),
                                                     TextSpan(
-                                                      text: lstCLientes[index].numIdentificacion,
-                                                      style: TextStyle(color: Colors.blue)
+                                                      text: '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["email_from"]}',
+                                                      style: const TextStyle(color: Colors.blue)
                                                     ),
                                                   ]
                                                 ),
@@ -221,18 +265,18 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                             ),
                                             Container(
                                                 color: Colors.transparent,
-                                                width: size.width * 0.45,
-                                                height: size.height * 0.025,
+                                                width: size.width * 0.54,
+                                              height: size.height * 0.035,
                                                 child: 
                                                 RichText(
                                                   text: TextSpan(
                                                     children: [
                                                       const TextSpan(
-                                                        text: 'COD: ',
+                                                        text: 'Teléfono: ',
                                                         style: TextStyle(color: Colors.black)
                                                       ),
                                                       TextSpan(
-                                                        text: lstCLientes[index].codigoCli,
+                                                        text: '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["phone"]}',
                                                         style: const TextStyle(color: Colors.blue)
                                                       ),
                                                     ]
@@ -241,10 +285,11 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                             ),
                                             Container(
                                                 color: Colors.transparent,
-                                                width: size.width * 0.45,
-                                                height: size.height * 0.025,
+                                                width: size.width * 0.54,
+                                              height: size.height * 0.035,
                                                 child: AutoSizeText(
-                                                      lstCLientes[index].estado,
+                                                      estadoPrsp,
+                                                      //lstCLientes[index].estado,//ESTADO
                                                       style: const TextStyle(
                                                         fontWeight: FontWeight.bold,
                                                         fontSize: 10,
@@ -264,7 +309,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                       ),
                                       Container(
                                         width: size.width * 0.11,
-                                        height: size.height * 0.11,
+                                        height: size.height * 0.17,
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
                                           color: Colors.black12, // Color del óvalo

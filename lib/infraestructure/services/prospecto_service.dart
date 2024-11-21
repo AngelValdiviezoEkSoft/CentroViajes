@@ -151,9 +151,10 @@ class ProspectoTypeService extends ChangeNotifier{
         )
       );
 
-      await GenericService().getMultiModelos(objReq, "crm.lead");
-      
-      notifyListeners();
+      var objRsp = await GenericService().getMultiModelos(objReq, "crm.lead");
+
+      return json.encode(objRsp);
+      //notifyListeners();
     }
     
     on SocketException catch (_) {
@@ -293,7 +294,7 @@ class ProspectoTypeService extends ChangeNotifier{
             "fechaNacimiento": fechaNacimientoProsp,
             "correo": objLlenoProsp.email,
             "password": varPassWord,
-            "dispositivoId": deviceId ?? '',
+            "dispositivoId": deviceId,
             "imagenPerfil": {
               "base64": objLlenoProsp.imagenPerfil?.base64 ?? '',
               "nombre": objLlenoProsp.imagenPerfil?.nombre ?? '',

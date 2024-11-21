@@ -105,7 +105,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                         width: size.width * 0.98,
                         child: const TextField(
                           decoration: InputDecoration(
-                            hintText: 'Buscar prospectos, códigos, nombres...',
+                            hintText: 'Buscar clientes, códigos, nombres...',
                             border: InputBorder.none,
                             prefixIcon: Icon(Icons.search, color: Colors.grey),
                           ),
@@ -122,6 +122,14 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                           controller: scrollListaClt,
                           itemCount: contLst,//lstCLientes.length,
                           itemBuilder: ( _, int index ) {
+
+                            String? email = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["email"];
+                            String? pais = '';
+
+                            if(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"] != null){
+                              pais = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"]["name"];
+                            }
+
                             return Slidable(
                               key: ValueKey(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["id"]),
                               startActionPane: ActionPane(
@@ -165,7 +173,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                       borderRadius: const BorderRadius.all(Radius.circular(10))
                                     ),
                                   width: size.width * 0.98,
-                                  height: size.height * 0.16,
+                                  height: size.height * 0.15,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -214,26 +222,50 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                           textAlign: TextAlign.left,
                                                           ),
                                                 ),
+
+                                                if(email != null)
                                                 Container(
-                                              color: Colors.transparent,
-                                              width: size.width * 0.54,
-                                              height: size.height * 0.035,
-                                              child: RichText(
-                                                text: TextSpan(
-                                                  children: [
-                                                    const TextSpan(
-                                                      text: 'Correo: ',
-                                                      style: TextStyle(color: Colors.black)
+                                                  color: Colors.transparent,
+                                                  width: size.width * 0.54,
+                                                  height: size.height * 0.035,
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        const TextSpan(
+                                                          text: 'Correo: ',
+                                                          style: TextStyle(color: Colors.black)
+                                                        ),
+                                                        TextSpan(
+                                                          text: email,//lstCLientes[index].email,
+                                                          style: const TextStyle(color: Colors.blue)
+                                                        ),
+                                                      ]
                                                     ),
-                                                    TextSpan(
-                                                      text: '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["email"]}',//lstCLientes[index].email,
-                                                      style: const TextStyle(color: Colors.blue)
-                                                    ),
-                                                  ]
+                                                  )
                                                 ),
-                                              )
-                                          
-                                            ),
+
+                                                if(pais != null)
+                                                Container(
+                                                  color: Colors.transparent,
+                                                  width: size.width * 0.54,
+                                                  height: size.height * 0.035,
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        const TextSpan(
+                                                          text: 'País: ',
+                                                          style: TextStyle(color: Colors.black)
+                                                        ),
+                                                        TextSpan(
+                                                          text: pais,//lstCLientes[index].email,
+                                                          style: const TextStyle(color: Colors.blue)
+                                                        ),
+                                                      ]
+                                                    ),
+                                                  )
+                                                ),
+                                                
+
                                             Container(
                                                 color: Colors.transparent,
                                                 width: size.width * 0.54,
@@ -243,7 +275,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                   text: TextSpan(
                                                     children: [
                                                       const TextSpan(
-                                                        text: 'Celular: ',
+                                                        text: 'Teléfono: ',
                                                         style: TextStyle(color: Colors.black)
                                                       ),
                                                       TextSpan(
@@ -254,42 +286,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                   ),
                                                 )
                                             ),
-                                            Container(
-                                                color: Colors.transparent,
-                                                width: size.width * 0.54,
-                                                height: size.height * 0.035,
-                                                child: 
-                                                RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      const TextSpan(
-                                                        text: 'Crédito: ',
-                                                        style: TextStyle(color: Colors.black)
-                                                      ),
-                                                      TextSpan(
-                                                        text: '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["credit"]}',//'${lstCLientes[index].credit}',
-                                                        style: const TextStyle(color: Colors.blue)
-                                                      ),
-                                                    ]
-                                                  ),
-                                                )
-                                            ),
-                                            /*
-                                            Container(
-                                                color: Colors.transparent,
-                                                width: size.width * 0.45,
-                                                height: size.height * 0.025,
-                                                child: AutoSizeText(
-                                                      '${lstCLientes[index].credit}',
-                                                      style: const TextStyle(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 10,
-                                                        color: Colors.green
-                                                      ),
-                                                      maxLines: 2,
-                                                      textAlign: TextAlign.left,),
-                                            ),
-                                          */
+                                            
                                                 ],
                                               ),
                                             ),
@@ -300,7 +297,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                       ),
                                       Container(
                                         width: size.width * 0.11,
-                                        height: size.height * 0.145,
+                                        height: size.height * 0.14,
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
                                           color: Colors.black12, // Color del óvalo

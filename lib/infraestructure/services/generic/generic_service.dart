@@ -61,8 +61,7 @@ class GenericService extends ChangeNotifier {
   
   getMultiModelos(ConsultaMultiModelRequestModel objReq, String modelo) async {
     final ruta = '${env.apiEndpoint}${objReq.params.imei}/done/data/multi/models';
-    //https://<tu_dominio_odoo>/api/v1/<imei>/done/data/multi/models
-
+    
     List<MultiModel> lstMultiModel = [];
 
     for(int i = 0; i < objReq.params.models.length; i++){

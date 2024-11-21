@@ -19,8 +19,8 @@ class ItemBoton {
   final String iconoNotificacion;
   final String rutaImagen;
   final String idTransaccion;
-  final String idPuntoOperacion;
+  final String rutaNavegacion;
   @required final VoidCallback? onPress;
 
-  ItemBoton(this.tipoNotificacion,this.idSolicitud,this.idNotificacionGen,this.ordenNot, this.icon, this.mensajeNotificacion, this.mensaje2, this.fechaNotificacion,this.tiempoDesde, this.color1, this.color2, this.requiereAccion, this.esRelevante, this.estadoLeido, this.numIdenti, this.iconoNotificacion, this.rutaImagen, this.idTransaccion, this.idPuntoOperacion, this.onPress );
+  ItemBoton(this.tipoNotificacion,this.idSolicitud,this.idNotificacionGen,this.ordenNot, this.icon, this.mensajeNotificacion, this.mensaje2, this.fechaNotificacion,this.tiempoDesde, this.color1, this.color2, this.requiereAccion, this.esRelevante, this.estadoLeido, this.numIdenti, this.iconoNotificacion, this.rutaImagen, this.idTransaccion, this.rutaNavegacion, this.onPress );
 }

@@ -1,4 +1,8 @@
 
+export 'package:cvs_ec_app/domain/models/prospecto_combos_model.dart';
+
+export 'package:cvs_ec_app/domain/models/campania_response_model.dart';
+
 export 'package:cvs_ec_app/domain/models/clientes_request_model.dart';
 
 export 'package:cvs_ec_app/domain/models/consulta_models_request_model.dart';

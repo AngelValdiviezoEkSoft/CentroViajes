@@ -75,7 +75,7 @@ class GenericState extends Equatable {
       return json.encode(lstRsp);
     }
     catch(ex){
-      print('Error: ' + ex.toString());
+      //print('Error: ' + ex.toString());
       return '';
     }
   }
@@ -87,5 +87,45 @@ class GenericState extends Equatable {
         () => 'ok'
       ); 
   }
+
+  Future<dynamic> readCombosCreateProspectos() async {
+
+    try{
+      final resp = await storage.read(key: 'RespuestaLogin') ?? '';
+
+      final data = json.decode(resp);
+      final objTmp = data['result'];
+      final lstFinal = objTmp['allowed_companies'];
+
+      Map<String, dynamic> dataTmp = json.decode(json.encode(lstFinal));
+
+      // Extrae los valores de 'name' y crea la lista de String
+      List<String> lstRsp = dataTmp.values.map((item) => item['name'].toString()).toList();
+
+      var objCamp = await CampaniaService().getCompanias();
+      var objOrigen = await OrigenService().getOrigenes();
+      var objMedias = await MediaService().getMedias();
+      var objActividades = await ActivitiesService().getActivities();
+
+      //final rslCamp = CampaniaResponseModel.fromJson(objCamp); 
+
+      return ProspectoCombosModel(
+        campanias: json.encode(objCamp),
+        origen: json.encode(objOrigen),
+        medias: json.encode(objMedias),
+        actividades: json.encode(objActividades)
+      );
+    }
+    catch(ex){
+      //print('Error: ' + ex.toString());
+      return ProspectoCombosModel(
+        campanias: '',
+        medias: '',
+        origen: '',
+        actividades: ''
+      );
+    }
+  }
+
 }
 

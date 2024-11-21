@@ -74,22 +74,42 @@ class HomeScreenState extends State<HomeScreen> {
     */
 
     final items = <ItemBoton>[
-      ItemBoton('','','',1, Icons.group_add, 'Prospectos', 'Seguimiento y control de prospectos','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','','', 
+      ItemBoton('','','',1, Icons.group_add, 'Prospectos', 'Seguimiento y control de prospectos','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','',
+        Rutas().rutaListaProspectos, 
         () {
           context.push(Rutas().rutaListaProspectos);
         }
       ),
-      ItemBoton('','','',2, Icons.groups, 'Clientes', 'Listado de todos los clientes asignados','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrAp > 0,'','','icTramApr.png','icTramAprTrans.png','','', 
+      ItemBoton('','','',2, Icons.groups, 'Clientes', 'Listado de todos los clientes asignados','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrAp > 0,'','','icTramApr.png','icTramAprTrans.png','',
+        Rutas().rutaListaClientes, 
         () {
           context.push(Rutas().rutaListaClientes);
         }
       ),
-      ItemBoton('','','',3, Icons.calendar_month, 'Visitas Agendadas', 'Listado de clientes programados para el día','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrProc > 0,'','','icTramProc.png','icTramProcTrans.png','','', () => context.push(Rutas().rutaListaClientes)),      
-      ItemBoton('','','',4, Icons.auto_stories_sharp, 'Catálogo', 'Catálogo de productos con imágenes','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      ItemBoton('','','',5, Icons.dashboard_customize_outlined, 'Inventario', 'Inventario general de productos con stock','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrAp > 0,'','','icTramApr.png','icTramAprTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      ItemBoton('','','',6, Icons.format_list_bulleted_add, 'Listas de precio', 'Lista de precios generales para ventas','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrProc > 0,'','','icTramProc.png','icTramProcTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      ItemBoton('','','',7, Icons.percent, 'Promociones Vigentes', 'Listado de Promociones Vigentes','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      ItemBoton('','','',8, Icons.inventory_rounded, 'Distribución en Rutas', 'Permite realizar el control de vehículos para reparto de ruta','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
+      ItemBoton('','','',3, Icons.calendar_month, 'Visitas Agendadas', 'Listado de clientes programados para el día','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrProc > 0,'','','icTramProc.png','icTramProcTrans.png','',
+        Rutas().rutaConstruccion, 
+        () => context.push(Rutas().rutaListaClientes)
+      ),
+      ItemBoton('','','',4, Icons.auto_stories_sharp, 'Catálogo', 'Catálogo de productos con imágenes','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','',
+        Rutas().rutaConstruccion, 
+        () => context.push(Rutas().rutaListaClientes)
+      ),
+      ItemBoton('','','',5, Icons.dashboard_customize_outlined, 'Inventario', 'Inventario general de productos con stock','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrAp > 0,'','','icTramApr.png','icTramAprTrans.png','',
+        Rutas().rutaConstruccion, 
+        () => context.push(Rutas().rutaListaClientes)
+      ),
+      ItemBoton('','','',6, Icons.format_list_bulleted_add, 'Listas de precio', 'Lista de precios generales para ventas','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrProc > 0,'','','icTramProc.png','icTramProcTrans.png','',
+        Rutas().rutaConstruccion, 
+        () => context.push(Rutas().rutaListaClientes)
+      ),
+      ItemBoton('','','',7, Icons.percent, 'Promociones Vigentes', 'Listado de Promociones Vigentes','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','',
+        Rutas().rutaConstruccion, 
+        () => context.push(Rutas().rutaListaClientes)
+      ),
+      ItemBoton('','','',8, Icons.inventory_rounded, 'Distribución en Rutas', 'Permite realizar el control de vehículos para reparto de ruta','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','',
+        Rutas().rutaConstruccion, 
+        () => context.push(Rutas().rutaListaClientes)
+      ),
     ]; 
 
     List<Widget> itemMap = items.map(
@@ -116,6 +136,7 @@ class HomeScreenState extends State<HomeScreen> {
           //objUserSolicVac: objUserSolicNotificacion, 
           varIconoNotTrans: item.rutaImagen,
           permiteGestion: permiteGestion,
+          rutaNavegacion: item.rutaNavegacion,
         ),
       )
     ).toList();
@@ -135,19 +156,19 @@ class HomeScreenState extends State<HomeScreen> {
                 builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                   
                   if(!snapshot.hasData) {
-                  return Scaffold(
-                      backgroundColor: Colors.white,
-                    body: Center(
-                      child: Image.asset(
-                        "assets/gifs/gif_carga.gif",
-                        height: 150.0,
-                        width: 150.0,
+                    return Scaffold(
+                        backgroundColor: Colors.white,
+                      body: Center(
+                        child: Image.asset(
+                          "assets/gifs/gif_carga.gif",
+                          height: 150.0,
+                          width: 150.0,
+                        ),
                       ),
-                    ),
-                  );
-                }
-                else {
-                  if(snapshot.data != null && snapshot.data!.isNotEmpty) {
+                    );
+                  }
+                  else {
+                    if(snapshot.data != null && snapshot.data!.isNotEmpty) {
 
                     String lstTmp = snapshot.data as String;
 
@@ -155,12 +176,7 @@ class HomeScreenState extends State<HomeScreen> {
                     
                     lstComp = lstNames;
                     
-                    if(compSelect.isEmpty){
-                      /*
-                      setState(() {
-                        compSelect = lstComp.first;
-                      });
-                      */
+                    if(compSelect.isEmpty){                      
                       compSelect = lstComp.first;
                     }
                     
@@ -367,7 +383,7 @@ class HomeScreenState extends State<HomeScreen> {
                   );
                 
                   }
-                }
+                  }
 
                   return Container();
                 }

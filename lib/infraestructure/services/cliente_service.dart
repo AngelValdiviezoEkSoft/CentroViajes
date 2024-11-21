@@ -128,6 +128,7 @@ class ClienteService extends ChangeNotifier {
     }
     catch(ex){
       print('Error: $ex');
+      return null;
     }
     
   }

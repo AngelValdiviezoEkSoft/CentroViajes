@@ -46,6 +46,7 @@ class ItemsListasWidget extends StatelessWidget {
   @required final int? varMuestraNotificacionesTrComp;
   @required final int? varMuestraNotificacionesTrInfo;
   @required final bool? permiteGestion;
+  @required final String? rutaNavegacion;
 
   ItemsListasWidget(
     Key? key,
@@ -69,6 +70,7 @@ class ItemsListasWidget extends StatelessWidget {
       //this.objUserSolicVac,
       this.varIconoNotTrans,
       this.permiteGestion,
+      this.rutaNavegacion
     }
   ): super(key: key);
   
@@ -99,6 +101,7 @@ class ItemsListasWidget extends StatelessWidget {
         varIconoNot: varIconoNot,
         //objUserSolicVacLst: objUserSolicVac,
         varIconoNotTransLstNot: varIconoNotTrans,
+        rutaNavegacionFin: rutaNavegacion,
       ),
       );
   
@@ -127,6 +130,8 @@ class ListaNotificaciones extends StatelessWidget {
   @required final int? varMuestraNotificacionesTrCompLst;
   @required final int? varMuestraNotificacionesTrInfoLst;
   //@required final UsuarioType? objUserSolicVacLst;
+  @required final String? rutaNavegacionFin;
+
 
   ListaNotificaciones(
     Key? key,
@@ -148,7 +153,8 @@ class ListaNotificaciones extends StatelessWidget {
     this.varMuestraNotificacionesTrCompLst,
     this.varMuestraNotificacionesTrInfoLst,
     //this.objUserSolicVacLst,
-    this.varIconoNotTransLstNot
+    this.varIconoNotTransLstNot,
+    this.rutaNavegacionFin
   }) : super (key: key);
   
   @override
@@ -215,12 +221,16 @@ class ListaNotificaciones extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             //context.push(Rutas().rutaListaProspectos);
-            context.push(Rutas().rutaListaClientes);
+            
+            context.push(rutaNavegacionFin!);
+            
             //onPress2!();
+            /*
             if (onPress2 != null) {
               // Si se proporciona onPressed, úsalo
               onPress2!();
             }
+            */
           },
           child: Column(
             children: [

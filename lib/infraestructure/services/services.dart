@@ -1,3 +1,12 @@
+
+export 'package:cvs_ec_app/infraestructure/services/activities_service.dart';
+
+export 'package:cvs_ec_app/infraestructure/services/origen_service.dart';
+
+export 'package:cvs_ec_app/infraestructure/services/media_service.dart';
+
+export 'package:cvs_ec_app/infraestructure/services/campania_service.dart';
+
 export 'package:cvs_ec_app/infraestructure/services/user_form_service.dart';
 
 export 'package:cvs_ec_app/infraestructure/services/auth/auth_service.dart';

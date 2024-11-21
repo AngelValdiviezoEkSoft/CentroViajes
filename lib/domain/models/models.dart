@@ -1,4 +1,6 @@
 
+export 'package:cvs_ec_app/domain/models/cliente_response_model.dart';
+
 export 'package:cvs_ec_app/domain/models/prospecto_combos_model.dart';
 
 export 'package:cvs_ec_app/domain/models/campania_response_model.dart';
@@ -12,8 +14,6 @@ export 'package:cvs_ec_app/domain/models/consulta_multi_models_request_model.dar
 export 'package:cvs_ec_app/domain/models/error_login_response_model.dart';
 
 export 'package:cvs_ec_app/domain/models/consulta_datos_request_model.dart';
-
-export 'package:cvs_ec_app/domain/models/auth_response_model.dart';
 
 export 'package:cvs_ec_app/domain/models/register_mobile_request_model.dart';
 

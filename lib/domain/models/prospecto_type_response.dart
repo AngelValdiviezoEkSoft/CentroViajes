@@ -1,37 +1,412 @@
 import 'dart:convert';
-import 'package:cvs_ec_app/domain/models/models.dart';
 
-class ProspectoTypeResponse {
-    ProspectoTypeResponse({
-        required this.succeeded,
-        this.message,
-        required this.statusCode,
-        required this.errors,
-        this.data,
+
+    /*
+      factory SolicitudesTypeResponse.fromJson(String str) => SolicitudesTypeResponse.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory SolicitudesTypeResponse.fromMap(Map<String, dynamic> json) => SolicitudesTypeResponse(
+    */
+
+class ProspectoResponseModel {
+    String jsonrpc;
+    dynamic id;
+    ProspectoModel result;
+
+    ProspectoResponseModel({
+        required this.jsonrpc,
+        required this.id,
+        required this.result,
     });
 
-    bool succeeded;
-    dynamic message;
-    String statusCode;
-    Errors errors;
-    ProspectoType? data;
+    factory ProspectoResponseModel.fromJson(String str) => ProspectoResponseModel.fromMap(json.decode(str));
 
-    factory ProspectoTypeResponse.fromJson(String str) => ProspectoTypeResponse.fromMap(json.decode(str));
+    String toJson() => json.encode(toMap());
 
-    factory ProspectoTypeResponse.fromMap(Map<String, dynamic> json) => ProspectoTypeResponse(
-        succeeded: json["succeeded"],
-        message: json["message"],
-        statusCode: json["statusCode"].toString(),
-        errors: Errors.fromMap(json["errors"]),
-        data: json["data"] != null ? ProspectoType.fromMap(json["data"]) : null,
+    factory ProspectoResponseModel.fromMap(Map<String, dynamic> json) => ProspectoResponseModel(
+        jsonrpc: json["jsonrpc"],
+        id: json["id"],
+        result: ProspectoModel.fromMap(json["result"]),
     );
-/*
+
     Map<String, dynamic> toMap() => {
-        "succeeded": succeeded,
-        "message": message,
-        "statusCode": statusCode,
-        "errors": errors.toMap(),
-        "data": data.toMap(),
+        "jsonrpc": jsonrpc,
+        "id": id,
+        "result": result.toJson(),
     };
-    */
+}
+
+class ProspectoModel {
+    int estado;
+    ProspectoDataModel data;
+
+    ProspectoModel({
+        required this.estado,
+        required this.data,
+    });
+
+    factory ProspectoModel.fromJson(String str) => ProspectoModel.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory ProspectoModel.fromMap(Map<String, dynamic> json) => ProspectoModel(
+        estado: json["estado"],
+        data: ProspectoDataModel.fromMap(json["data"]),
+    );
+
+    Map<String, dynamic> toMap() => {
+        "estado": estado,
+        "data": data.toJson(),
+    };
+}
+
+class ProspectoDataModel {
+    CrmLead crmLead;
+
+    ProspectoDataModel({
+        required this.crmLead,
+    });
+
+    factory ProspectoDataModel.fromJson(String str) => ProspectoDataModel.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory ProspectoDataModel.fromMap(Map<String, dynamic> json) => ProspectoDataModel(
+        crmLead: CrmLead.fromMap(json["crm.lead"]),
+    );
+
+    Map<String, dynamic> toMap() => {
+        "crm.lead": crmLead.toJson(),
+    };
+}
+
+class CrmLead {
+    int length;
+    FieldsCrmLead fields;
+    List<DatumCrmLead> data;
+
+    CrmLead({
+        required this.length,
+        required this.fields,
+        required this.data,
+    });
+
+    factory CrmLead.fromJson(String str) => CrmLead.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory CrmLead.fromMap(Map<String, dynamic> json) => CrmLead(
+        length: json["length"],
+        fields: FieldsCrmLead.fromMap(json["fields"]),
+        data: List<DatumCrmLead>.from(json["data"].map((x) => DatumCrmLead.fromMap(x))),
+    );
+
+    Map<String, dynamic> toMap() => {
+        "length": length,
+        "fields": fields.toJson(),
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    };
+}
+
+class DatumCrmLead {
+    int id;
+    List<StructCombos> activityIds;
+    CampaignId campaignId;
+    String? contactName;
+    StructCombos countryId;
+    DateTime? dateOpen;
+    double dayClose;
+    String? description;
+    String? emailFrom;
+    CampaignId lostReasonId;
+    StructCombos mediumId;
+    String name;
+    StructCombos partnerId;
+    String? partnerName;
+    String? phone;
+    String priority;
+    StructCombos sourceId;
+    StructCombos stageId;
+    StructCombos stateId;
+    List<dynamic> tagIds;
+    CampaignId title;
+    String type;
+    String? city;
+    String? emailCc;
+    String? mobile;
+    String? street;
+    DateTime? dateDeadline;
+
+    DatumCrmLead({
+        required this.id,
+        required this.activityIds,
+        required this.campaignId,
+        this.contactName,
+        required this.countryId,
+        this.dateOpen,
+        required this.dayClose,
+        this.description,
+        this.emailFrom,
+        required this.lostReasonId,
+        required this.mediumId,
+        required this.name,
+        required this.partnerId,
+        this.partnerName,
+        this.phone,
+        required this.priority,
+        required this.sourceId,
+        required this.stageId,
+        required this.stateId,
+        required this.tagIds,
+        required this.title,
+        required this.type,
+        this.city,
+        this.emailCc,
+        this.mobile,
+        this.street,
+        this.dateDeadline,
+    });
+
+    factory DatumCrmLead.fromJson(String str) => DatumCrmLead.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory DatumCrmLead.fromMap(Map<String, dynamic> json) => DatumCrmLead(
+        id: json["id"],
+        activityIds: List<StructCombos>.from(json["activity_ids"].map((x) => StructCombos.fromMap(x))),
+        campaignId: CampaignId.fromMap(json["campaign_id"]),
+        contactName: json["contact_name"],
+        countryId: StructCombos.fromMap(json["country_id"]),
+        dateOpen: json["date_open"] == null ? null : DateTime.parse(json["date_open"]),
+        dayClose: json["day_close"],
+        description: json["description"],
+        emailFrom: json["email_from"],
+        lostReasonId: CampaignId.fromMap(json["lost_reason_id"]),
+        mediumId: StructCombos.fromMap(json["medium_id"]),
+        name: json["name"],
+        partnerId: StructCombos.fromMap(json["partner_id"]),
+        partnerName: json["partner_name"],
+        phone: json["phone"],
+        priority: json["priority"],
+        sourceId: StructCombos.fromMap(json["source_id"]),
+        stageId: StructCombos.fromMap(json["stage_id"]),
+        stateId: StructCombos.fromMap(json["state_id"]),
+        tagIds: List<dynamic>.from(json["tag_ids"].map((x) => x)),
+        title: CampaignId.fromMap(json["title"]),
+        type: json["type"],
+        city: json["city"],
+        emailCc: json["email_cc"],
+        mobile: json["mobile"],
+        street: json["street"],
+        dateDeadline: json["date_deadline"] == null ? null : DateTime.parse(json["date_deadline"]),
+    );
+
+    Map<String, dynamic> toMap() => {
+        "id": id,
+        "activity_ids": List<dynamic>.from(activityIds.map((x) => x.toJson())),
+        "campaign_id": campaignId.toJson(),
+        "contact_name": contactName,
+        "country_id": countryId.toJson(),
+        "date_open": dateOpen?.toIso8601String(),
+        "day_close": dayClose,
+        "description": description,
+        "email_from": emailFrom,
+        "lost_reason_id": lostReasonId.toJson(),
+        "medium_id": mediumId.toJson(),
+        "name": name,
+        "partner_id": partnerId.toJson(),
+        "partner_name": partnerName,
+        "phone": phone,
+        "priority": priority,
+        "source_id": sourceId.toJson(),
+        "stage_id": stageId.toJson(),
+        "state_id": stateId.toJson(),
+        "tag_ids": List<dynamic>.from(tagIds.map((x) => x)),
+        "title": title.toJson(),
+        "type": type,
+        "city": city,
+        "email_cc": emailCc,
+        "mobile": mobile,
+        "street": street,
+        "date_deadline": "${dateDeadline!.year.toString().padLeft(4, '0')}-${dateDeadline!.month.toString().padLeft(2, '0')}-${dateDeadline!.day.toString().padLeft(2, '0')}",
+    };
+}
+
+class CampaignId {
+    CampaignId();
+
+    factory CampaignId.fromJson(String str) => CampaignId.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory CampaignId.fromMap(Map<String, dynamic> json) => CampaignId(
+    );
+
+    Map<String, dynamic> toMap() => {
+    };
+}
+
+class FieldsCrmLead {
+    String activityIds;
+    String campaignId;
+    String city;
+    String contactName;
+    String countryId;
+    String dateClosed;
+    String dateDeadline;
+    String dateOpen;
+    String dayClose;
+    String description;
+    String emailCc;
+    String emailFrom;
+    String function;
+    String lostReasonId;
+    String mediumId;
+    String mobile;
+    String name;
+    String partnerId;
+    String partnerName;
+    String phone;
+    String priority;
+    String sourceId;
+    String stageId;
+    String stateId;
+    String street;
+    String tagIds;
+    String title;
+    String type;
+
+    FieldsCrmLead({
+        required this.activityIds,
+        required this.campaignId,
+        required this.city,
+        required this.contactName,
+        required this.countryId,
+        required this.dateClosed,
+        required this.dateDeadline,
+        required this.dateOpen,
+        required this.dayClose,
+        required this.description,
+        required this.emailCc,
+        required this.emailFrom,
+        required this.function,
+        required this.lostReasonId,
+        required this.mediumId,
+        required this.mobile,
+        required this.name,
+        required this.partnerId,
+        required this.partnerName,
+        required this.phone,
+        required this.priority,
+        required this.sourceId,
+        required this.stageId,
+        required this.stateId,
+        required this.street,
+        required this.tagIds,
+        required this.title,
+        required this.type,
+    });
+
+    factory FieldsCrmLead.fromJson(String str) => FieldsCrmLead.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory FieldsCrmLead.fromMap(Map<String, dynamic> json) => FieldsCrmLead(
+        activityIds: json["activity_ids"],
+        campaignId: json["campaign_id"],
+        city: json["city"],
+        contactName: json["contact_name"],
+        countryId: json["country_id"],
+        dateClosed: json["date_closed"],
+        dateDeadline: json["date_deadline"],
+        dateOpen: json["date_open"],
+        dayClose: json["day_close"],
+        description: json["description"],
+        emailCc: json["email_cc"],
+        emailFrom: json["email_from"],
+        function: json["function"],
+        lostReasonId: json["lost_reason_id"],
+        mediumId: json["medium_id"],
+        mobile: json["mobile"],
+        name: json["name"],
+        partnerId: json["partner_id"],
+        partnerName: json["partner_name"],
+        phone: json["phone"],
+        priority: json["priority"],
+        sourceId: json["source_id"],
+        stageId: json["stage_id"],
+        stateId: json["state_id"],
+        street: json["street"],
+        tagIds: json["tag_ids"],
+        title: json["title"],
+        type: json["type"],
+    );
+
+    Map<String, dynamic> toMap() => {
+        "activity_ids": activityIds,
+        "campaign_id": campaignId,
+        "city": city,
+        "contact_name": contactName,
+        "country_id": countryId,
+        "date_closed": dateClosed,
+        "date_deadline": dateDeadline,
+        "date_open": dateOpen,
+        "day_close": dayClose,
+        "description": description,
+        "email_cc": emailCc,
+        "email_from": emailFrom,
+        "function": function,
+        "lost_reason_id": lostReasonId,
+        "medium_id": mediumId,
+        "mobile": mobile,
+        "name": name,
+        "partner_id": partnerId,
+        "partner_name": partnerName,
+        "phone": phone,
+        "priority": priority,
+        "source_id": sourceId,
+        "stage_id": stageId,
+        "state_id": stateId,
+        "street": street,
+        "tag_ids": tagIds,
+        "title": title,
+        "type": type,
+    };
+}
+
+class EnumValues<T> {
+    Map<String, T> map;
+    late Map<T, String> reverseMap;
+
+    EnumValues(this.map);
+
+    Map<T, String> get reverse {
+            reverseMap = map.map((k, v) => MapEntry(v, k));
+            return reverseMap;
+    }
+}
+
+class StructCombos {
+    int id;
+    String name;
+
+    StructCombos({
+        required this.id,
+        required this.name
+    });
+
+    factory StructCombos.fromJson(String str) => StructCombos.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory StructCombos.fromMap(Map<String, dynamic> json) => StructCombos(
+        id: json["id"] ?? 0,
+        name: json["name"] ?? ''
+    );
+
+    Map<String, dynamic> toMap() => {
+        "id": id,
+        "name": name
+    };
 }

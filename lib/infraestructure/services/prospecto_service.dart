@@ -22,7 +22,7 @@ class ProspectoTypeService extends ChangeNotifier{
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   ProspectoType? objRspProsp;
-  ProspectoTypeResponse? varObjTipoRsp;
+  //ProspectoTypeResponse? varObjTipoRsp;
   ClientTypeResponse? varObjRspRegistro;
   String varPassWordActual = '';
   String varPassWord = '';
@@ -181,6 +181,7 @@ class ProspectoTypeService extends ChangeNotifier{
       final varResponse = await http.get(Uri.parse(baseURL));
       if(varResponse.statusCode != 200) return null;
 
+      /*
       final prospRsp = ProspectoTypeResponse.fromJson(varResponse.body);
       varObjTipoRsp = prospRsp;
       if(prospRsp.succeeded && varObjTipoRsp!.data != null) {
@@ -194,6 +195,7 @@ class ProspectoTypeService extends ChangeNotifier{
         prospRsp.succeeded = false;
         varObjTipoRsp!.succeeded = false;
       }
+      */
 
       
       notifyListeners();

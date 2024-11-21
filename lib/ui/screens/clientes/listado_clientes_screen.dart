@@ -13,6 +13,7 @@ import 'package:cvs_ec_app/ui/ui.dart';
 
 late TextEditingController montoNuevo_Txt;
 late TextEditingController nombreTrx_Txt;
+String terminoBusquedaClient= '';
 
 class ListaClientesScreen extends StatefulWidget {
   const ListaClientesScreen({super.key});
@@ -93,6 +94,21 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
 
                 int contLst = int.parse(contStr);
 
+                ClienteResponseModel apiResponse = ClienteResponseModel.fromJson(objLogDecode);
+
+                List<DatumClienteModelData> productosFiltrados = [];
+
+                if(terminoBusquedaClient.isNotEmpty){
+                  productosFiltrados = apiResponse.result.data.resPartner.data
+                  .where((producto) =>
+                      producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase()))
+                  .toList();
+
+                  contLst = productosFiltrados.length;
+                } else{
+                  productosFiltrados = apiResponse.result.data.resPartner.data;
+                }
+
                 return SingleChildScrollView(
                   child: Column(
                     children: [
@@ -103,12 +119,18 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                       Container(
                         color: Colors.white,
                         width: size.width * 0.98,
-                        child: const TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Buscar clientes, códigos, nombres...',
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Buscar clientes por nombres...',
                             border: InputBorder.none,
                             prefixIcon: Icon(Icons.search, color: Colors.grey),
                           ),
+                          onChanged: (value) {
+                            // Actualizar el estado con el término de búsqueda
+                            setState(() {
+                              terminoBusquedaClient = value;
+                            });
+                          },
                         ),
                       ),
                               
@@ -120,7 +142,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                         height: size.height * 0.65,
                         child: ListView.builder(
                           controller: scrollListaClt,
-                          itemCount: contLst,//lstCLientes.length,
+                          itemCount: productosFiltrados.length,
                           itemBuilder: ( _, int index ) {
 
                             String? email = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["email"];
@@ -131,7 +153,8 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                             }
 
                             return Slidable(
-                              key: ValueKey(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["id"]),
+                              //key: ValueKey(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["id"]),
+                              key: ValueKey(productosFiltrados[index].id),
                               startActionPane: ActionPane(
                                 motion: const ScrollMotion(),
                                   children: [
@@ -210,8 +233,9 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                     width: size.width * 0.54,
                                                     height: size.height * 0.04,
                                                     child: AutoSizeText(
-                                                          //'${lstCLientes[index].primerNombre} ${lstCLientes[index].primerApellido}',
-                                                          '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["name"]}',
+                                                          //
+                                                          //'${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["name"]}',
+                                                          productosFiltrados[index].name,
                                                           style: const TextStyle(
                                                             fontWeight: FontWeight.bold,
                                                             //fontSize: 10,
@@ -236,7 +260,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                           style: TextStyle(color: Colors.black)
                                                         ),
                                                         TextSpan(
-                                                          text: email,//lstCLientes[index].email,
+                                                          text: productosFiltrados[index].email,
                                                           style: const TextStyle(color: Colors.blue)
                                                         ),
                                                       ]
@@ -257,7 +281,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                           style: TextStyle(color: Colors.black)
                                                         ),
                                                         TextSpan(
-                                                          text: pais,//lstCLientes[index].email,
+                                                          text: productosFiltrados[index].countryId.name,
                                                           style: const TextStyle(color: Colors.blue)
                                                         ),
                                                       ]
@@ -278,8 +302,9 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                         text: 'Teléfono: ',
                                                         style: TextStyle(color: Colors.black)
                                                       ),
-                                                      TextSpan(
-                                                        text: '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["mobile"]}',//lstCLientes[index].mobile,
+                                                      TextSpan(//
+                                                        //text: '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["mobile"]}',//lstCLientes[index].mobile,
+                                                        text: productosFiltrados[index].mobile,
                                                         style: const TextStyle(color: Colors.blue)
                                                       ),
                                                     ]

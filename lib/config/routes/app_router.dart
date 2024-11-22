@@ -58,16 +58,10 @@ final GoRouter appRouter = GoRouter(
       path: objRutas.rutaConexionInternet,
       builder: (context, state) => const ConexionInternetScreen(null),
     ),
-    /*
     GoRoute(
-      path: objRutas.rutaBienvenida,
-      builder: (context, state) => FutureBuilder(
-        builder: (context) {
-          return WelcomeScreen();
-        }
-      ),      
+      path: objRutas.rutaConsultaVacia,
+      builder: (context, state) => ConsultaVaciaScreen(null),
     ),
-    */
     GoRoute(
       path: objRutas.rutaBienvenida,
       builder: (context, state) => BlocBuilder<AuthBloc, AuthState>(

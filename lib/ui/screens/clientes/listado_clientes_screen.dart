@@ -88,25 +88,23 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                 var objLogDecode = json.decode(objRsp);
                 var objLogDecode2 = json.decode(objLogDecode);
 
-                var tstLength = objLogDecode2["result"]["data"]["res.partner"]["length"];
+                //var tstLength = objLogDecode2["result"]["data"]["res.partner"]["length"];
 
-                String contStr = '$tstLength';
+                //String contStr = '$tstLength';
 
-                int contLst = int.parse(contStr);
+                //int contLst = int.parse(contStr);
 
                 ClienteResponseModel apiResponse = ClienteResponseModel.fromJson(objLogDecode);
 
-                List<DatumClienteModelData> productosFiltrados = [];
+                List<DatumClienteModelData> clientesFiltrados = [];
 
                 if(terminoBusquedaClient.isNotEmpty){
-                  productosFiltrados = apiResponse.result.data.resPartner.data
+                  clientesFiltrados = apiResponse.result.data.resPartner.data
                   .where((producto) =>
                       producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase()))
                   .toList();
-
-                  contLst = productosFiltrados.length;
                 } else{
-                  productosFiltrados = apiResponse.result.data.resPartner.data;
+                  clientesFiltrados = apiResponse.result.data.resPartner.data;
                 }
 
                 return SingleChildScrollView(
@@ -133,16 +131,18 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                           },
                         ),
                       ),
-                              
+
+                      if(clientesFiltrados.isNotEmpty)        
                       SizedBox(height: size.height * 0.02,),
-                                  
+
+                      if(clientesFiltrados.isNotEmpty)
                       Container(
                         color: Colors.transparent,
                         width: size.width,
                         height: size.height * 0.65,
                         child: ListView.builder(
                           controller: scrollListaClt,
-                          itemCount: productosFiltrados.length,
+                          itemCount: clientesFiltrados.length,
                           itemBuilder: ( _, int index ) {
 
                             String? email = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["email"];
@@ -154,7 +154,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
 
                             return Slidable(
                               //key: ValueKey(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["id"]),
-                              key: ValueKey(productosFiltrados[index].id),
+                              key: ValueKey(clientesFiltrados[index].id),
                               startActionPane: ActionPane(
                                 motion: const ScrollMotion(),
                                   children: [
@@ -235,7 +235,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                     child: AutoSizeText(
                                                           //
                                                           //'${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["name"]}',
-                                                          productosFiltrados[index].name,
+                                                          clientesFiltrados[index].name,
                                                           style: const TextStyle(
                                                             fontWeight: FontWeight.bold,
                                                             //fontSize: 10,
@@ -260,7 +260,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                           style: TextStyle(color: Colors.black)
                                                         ),
                                                         TextSpan(
-                                                          text: productosFiltrados[index].email,
+                                                          text: clientesFiltrados[index].email,
                                                           style: const TextStyle(color: Colors.blue)
                                                         ),
                                                       ]
@@ -281,7 +281,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                           style: TextStyle(color: Colors.black)
                                                         ),
                                                         TextSpan(
-                                                          text: productosFiltrados[index].countryId.name,
+                                                          text: clientesFiltrados[index].countryId.name,
                                                           style: const TextStyle(color: Colors.blue)
                                                         ),
                                                       ]
@@ -304,7 +304,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                       ),
                                                       TextSpan(//
                                                         //text: '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["mobile"]}',//lstCLientes[index].mobile,
-                                                        text: productosFiltrados[index].mobile,
+                                                        text: clientesFiltrados[index].mobile,
                                                         style: const TextStyle(color: Colors.blue)
                                                       ),
                                                     ]
@@ -373,6 +373,13 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                         ),
                       ),
                               
+                      if(clientesFiltrados.isEmpty)
+                      Container(
+                        width: size.width * 0.75,
+                        height: size.height * 0.75,
+                        color: Colors.transparent,
+                        child: ConsultaVaciaScreen(null, msmCabBand: 'Atención', msmBand: 'No existe el cliente buscado', imgCabBand: 'gifs/consulta_vacia.gif',)
+                      )
                     ],
                   ),
                 );

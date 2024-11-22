@@ -97,18 +97,19 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                 //String estadoPrsp = '';
                 ProspectoResponseModel apiResponse = ProspectoResponseModel.fromJson(objLogDecode);
 
-                List<DatumCrmLead> productosFiltrados = [];
+                List<DatumCrmLead> prospectosFiltrados = [];
 
                 if(terminoBusqueda.isNotEmpty){
-                  productosFiltrados = apiResponse.result.data.crmLead.data
-                  .where((producto) =>
-                      producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
+                  prospectosFiltrados = apiResponse.result.data.crmLead.data
+                  .where(
+                    (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
                   .toList();
 
-                  contLst = productosFiltrados.length;
+                  contLst = prospectosFiltrados.length;
                 } else{
-                  productosFiltrados = apiResponse.result.data.crmLead.data;
+                  prospectosFiltrados = apiResponse.result.data.crmLead.data;
                 }
+                //
 
                 return SingleChildScrollView(
                   child: Column(
@@ -135,9 +136,11 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                           },
                         ),
                       ),
-                              
+
+                      if(prospectosFiltrados.isNotEmpty)         
                       SizedBox(height: size.height * 0.02,),
-                                  
+
+                      if(prospectosFiltrados.isNotEmpty) 
                       Container(
                         color: Colors.transparent,
                         width: size.width,
@@ -162,7 +165,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                             return Slidable(
                               //key: ValueKey(lstCLientes[index].id),
                               //key: ValueKey(objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["id"]),
-                              key: ValueKey(productosFiltrados[index].id),
+                              key: ValueKey(prospectosFiltrados[index].id),
                               startActionPane: ActionPane(
                                 motion: const ScrollMotion(),
                                   children: [
@@ -243,7 +246,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                   child: AutoSizeText(
                                                     //
                                                     //'${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["name"]}',
-                                                    productosFiltrados[index].name,
+                                                    prospectosFiltrados[index].name,
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
                                                       fontSize: 10,
@@ -258,9 +261,9 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                   width: size.width * 0.54,
                                                   height: size.height * 0.04,
                                                   child: AutoSizeText(
-                                                    //productosFiltrados[index]
+                                                    //prospectosFiltrados[index]
                                                     //'${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["contact_name"]}',
-                                                    productosFiltrados[index].contactName ?? '',
+                                                    prospectosFiltrados[index].contactName ?? '',
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
                                                       fontSize: 10,
@@ -284,7 +287,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                     TextSpan(
                                                       //
                                                       //text: '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["email_from"]}',
-                                                      text: productosFiltrados[index].emailFrom,
+                                                      text: prospectosFiltrados[index].emailFrom,
                                                       style: const TextStyle(color: Colors.blue)
                                                     ),
                                                   ]
@@ -307,7 +310,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                       TextSpan(
                                                         //
                                                         //text: '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["phone"]}',
-                                                        text: productosFiltrados[index].phone,
+                                                        text: prospectosFiltrados[index].phone,
                                                         style: const TextStyle(color: Colors.blue)
                                                       ),
                                                     ]
@@ -319,7 +322,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                 width: size.width * 0.54,
                                               height: size.height * 0.035,
                                                 child: AutoSizeText(
-                                                    productosFiltrados[index].stageId.name,
+                                                    prospectosFiltrados[index].stageId.name,
                                                       //estadoPrsp,
                                                       //lstCLientes[index].estado,//ESTADO
                                                       style: const TextStyle(
@@ -391,10 +394,19 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                           },
                         ),
                       ),
-                              
+
+                      if(prospectosFiltrados.isEmpty)
+                      Container(
+                        width: size.width * 0.75,
+                        height: size.height * 0.75,
+                        color: Colors.transparent,
+                        alignment: Alignment.topCenter,
+                        child: ConsultaVaciaScreen(null, msmCabBand: 'Atención', msmBand: 'No existe el prospecto buscado', imgCabBand: 'gifs/consulta_vacia.gif',)
+                      )
                     ],
                   ),
                 );
+                
               }
 
               return Center(

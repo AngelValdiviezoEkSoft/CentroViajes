@@ -184,7 +184,7 @@ class AuthService extends ChangeNotifier {
       if(objStr.isNotEmpty)
       {  
         var obj = RegisterDeviceResponseModel.fromJson(objStr);
-        ruta = '${obj.result.serverUrl}/web/session/authenticate';
+        ruta = '${obj.result.url}/web/session/authenticate';
       }
 
       //final ruta = '${env.apiEndpoint}web/session/authenticate';

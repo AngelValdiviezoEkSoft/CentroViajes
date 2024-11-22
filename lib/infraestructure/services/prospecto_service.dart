@@ -169,7 +169,7 @@ class ProspectoTypeService extends ChangeNotifier{
     return frmValido;
   }
 
-  getProspectoRegistrado() async {
+  getProspectoRegistrado(String phoneProsp) async {
     try{
       
       var codImei = await storage.read(key: 'codImei') ?? '';
@@ -186,6 +186,7 @@ class ProspectoTypeService extends ChangeNotifier{
         MultiModel(model: 'crm.lead')
       );
 
+      
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
         jsonrpc: '2.0',
         params: ParamsMultiModels(
@@ -200,11 +201,46 @@ class ProspectoTypeService extends ChangeNotifier{
         )
       );
 
-      final ruta = '${envPrsp.apiEndpoint}$codImei/done/crm/lead/status';
+      String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 
-      var objRsp = await GenericService().getMultiModelos(objReq, "crm.lead");
+      final headers = {
+        "Content-Type": "application/json",
+      };
 
-      return json.encode(objRsp);
+      //final ruta = '${envPrsp.apiEndpoint}$codImei/done/crm/lead/status';
+
+      String ruta = '';
+      final objStr = await storage.read(key: 'RespuestaRegistro') ?? '';
+      
+      if(objStr.isNotEmpty)
+      {  
+        var obj = RegisterDeviceResponseModel.fromJson(objStr);
+        ruta = '${obj.result.url}/${objReq.params.imei}/done/create/crm.lead/model';
+      }
+
+      final requestBody = {
+        "jsonrpc": "2.0",
+        "params": {
+          "key": objReq.params.key,
+          "tocken": objReq.params.tocken,
+          "imei": objReq.params.imei,
+          "uid": objReq.params.uid,
+          "company": objReq.params.company,
+          "bearer": objReq.params.bearer,
+          "tocken_valid_date": tockenValidDate,
+          "phone": phoneProsp
+        }
+      };
+
+      final response = await http.post(
+        Uri.parse(ruta),
+        headers: headers,
+        body: jsonEncode(requestBody), 
+      );
+
+      print("Consulta celular: ${response.body}");
+
+      //return json.encode(objRsp);
       
     }    
     on SocketException catch (_) {
@@ -220,7 +256,6 @@ class ProspectoTypeService extends ChangeNotifier{
     }
     
   }
-
 
   registraProspecto(DatumCrmLead objProspecto) async {
     try{
@@ -309,7 +344,16 @@ class ProspectoTypeService extends ChangeNotifier{
     };
 
     //final ruta = '${envPrsp.apiEndpoint}${objReq.params.imei}/done/create/crm.lead/model';
-    final ruta = 'https://ekuasoft-taller-16347134.dev.odoo.com/api/v1/${objReq.params.imei}/done/create/crm.lead/model';
+    //final ruta = 'https://ekuasoft-taller-16347134.dev.odoo.com/api/v1/${objReq.params.imei}/done/create/crm.lead/model';
+
+    String ruta = '';
+    final objStr = await storage.read(key: 'RespuestaRegistro') ?? '';
+    
+    if(objStr.isNotEmpty)
+    {  
+      var obj = RegisterDeviceResponseModel.fromJson(objStr);
+      ruta = '${obj.result.url}${objReq.params.imei}/done/create/crm.lead/model';
+    }
 
     final response = await http.post(
       Uri.parse(ruta),

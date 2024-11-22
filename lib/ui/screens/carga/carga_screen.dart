@@ -26,6 +26,8 @@ class FrmCargaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final size = MediaQuery.of(context).size;
+
     return SafeArea(
       child: WillPopScope(
         onWillPop: () async => false,
@@ -37,10 +39,12 @@ class FrmCargaScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: Scaffold(
                     backgroundColor: Colors.white,
-                    body: Image.asset(
-                      "assets/gifs/gif_carga.gif",
-                      height: 150.0,
-                      width: 150.0,
+                    body: Center(
+                      child: Image.asset(
+                        "assets/gifs/gif_carga.gif",
+                        height: size.width * 0.85,//150.0,
+                        width: size.width * 0.85,//150.0,
+                      ),
                     )
                   ),
                 )

@@ -1,4 +1,8 @@
 
+export 'package:cvs_ec_app/infraestructure/services/paises_service.dart';
+
+export 'package:cvs_ec_app/infraestructure/services/data_inicial_service.dart';
+
 export 'package:cvs_ec_app/infraestructure/services/activities_service.dart';
 
 export 'package:cvs_ec_app/infraestructure/services/origen_service.dart';

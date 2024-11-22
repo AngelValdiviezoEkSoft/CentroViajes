@@ -42,6 +42,8 @@ abstract class AuthState extends Equatable {
         }        
       }
 
+      await DataInicialService().readCombosProspectos();
+
       return rspFinal; 
     }
     catch(ex) {

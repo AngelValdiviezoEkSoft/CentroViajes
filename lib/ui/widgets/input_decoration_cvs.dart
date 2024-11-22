@@ -121,7 +121,7 @@ class InputDecorationCvs {
           width: size.width, color: AppLightColors().gray800SecondaryText),
       floatingLabelBehavior: FloatingLabelBehavior.auto,
       prefixText: prefixText ?? '',
-      suffixIcon: prefixIcon      
+      suffixIcon: prefixIcon
     );
   }
 }

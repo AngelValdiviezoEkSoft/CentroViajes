@@ -1,4 +1,6 @@
 
+export 'package:cvs_ec_app/domain/models/pais_response_model.dart';
+
 export 'package:cvs_ec_app/domain/models/prospecto_registro_response_model.dart';
 
 export 'package:cvs_ec_app/domain/models/cliente_response_model.dart';

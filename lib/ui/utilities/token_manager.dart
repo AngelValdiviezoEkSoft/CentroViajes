@@ -59,7 +59,7 @@ class TokenManager {
 
       final expiration = obj.result.tockenValidDate;
 
-      //imeiCod = '823456046'; //BORRAR LUEGO
+      imeiCod = '823456047'; //BORRAR LUEGO
 
       //VALIDACIÓN DE TOKEN
       
@@ -69,16 +69,14 @@ class TokenManager {
       final codEstado = data['result']['estado'];
 
       if(codEstado != 200){
-        return;
+        await AuthService().doneGetTocken(imeiCod, obj.result.key);
+        return;        
       }
 
       //DateTime nuevaFecha = expiration.subtract(const Duration(days: 8));
 
       if (DateTime.now().isAfter(expiration)) {
-      //if (DateTime.now().isAfter(nuevaFecha)) {
-        // Token expirado: realiza alguna acción (por ejemplo, redirigir a la pantalla de inicio de sesión)
-        //print("Token expirado. Realizando acción.");
-        // Aquí puedes llamar a la función de logout o refrescar el token.        
+      //if (DateTime.now().isAfter(nuevaFecha)) {        
         await AuthService().doneGetTocken(imeiCod, obj.result.key);        
       }
       

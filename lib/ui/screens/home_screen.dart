@@ -161,8 +161,9 @@ class HomeScreenState extends State<HomeScreen> {
                       body: Center(
                         child: Image.asset(
                           "assets/gifs/gif_carga.gif",
-                          height: 150.0,
-                          width: 150.0,
+                          height: size.width * 0.85,//150.0,
+                          width: size.width * 0.85,//150.0,
+                          
                         ),
                       ),
                     );

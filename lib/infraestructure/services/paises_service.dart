@@ -8,29 +8,29 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cvs_ec_app/config/config.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 
-const storageAct = FlutterSecureStorage();
+const storagePais = FlutterSecureStorage();
 
-class ActivitiesService extends ChangeNotifier{
+class PaisService extends ChangeNotifier{
 
   final String endPoint = CadenaConexion().apiEndpoint;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   
-  getActivities() async {
+  getPaises() async {
     try{
 
-      var codImei = await storageCamp.read(key: 'codImei') ?? '';
+      var codImei = await storagePais.read(key: 'codImei') ?? '';
 
-      var objReg = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
+      var objReg = await storagePais.read(key: 'RespuestaRegistro') ?? '';
       var obj = RegisterDeviceResponseModel.fromJson(objReg);
 
-      var objLog = await storageCamp.read(key: 'RespuestaLogin') ?? '';
+      var objLog = await storagePais.read(key: 'RespuestaLogin') ?? '';
       var objLogDecode = json.decode(objLog);
 
       List<MultiModel> lstMultiModel = [];
 
       lstMultiModel.add(
-        MultiModel(model: 'crm.lead')
+        MultiModel(model: 'res.country')
       );
 
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
@@ -47,7 +47,7 @@ class ActivitiesService extends ChangeNotifier{
         )
       );
 
-      var rsp = await GenericService().getMultiModelos(objReq, "mail.activity.type");
+      var rsp = await GenericService().getMultiModelos(objReq, "res.country");
       
       return rsp;
     }

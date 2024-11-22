@@ -6,118 +6,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:cvs_ec_app/config/config.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
-//import 'package:platform_device_id/platform_device_id.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 const storageProspecto = FlutterSecureStorage();
 MensajesAlertas objMensajesProspectoService = MensajesAlertas();
 ResponseValidation objResponseValidationService = ResponseValidation();
+final envPrsp = CadenaConexion();
 
 class ProspectoTypeService extends ChangeNotifier{
 
   final String endPoint = CadenaConexion().apiEndpoint;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  ProspectoType? objRspProsp;
-  //ProspectoTypeResponse? varObjTipoRsp;
-  ClientTypeResponse? varObjRspRegistro;
-  String varPassWordActual = '';
-  String varPassWord = '';
-  String varPassWordConfirm = '';
-
-  bool isOscuredConfirm = true;
-  bool get varIsOscuredConfirm => isOscuredConfirm;
-  set varIsOscuredConfirm (bool value){
-    isOscuredConfirm = value;
-    notifyListeners();
-  }
-
-  bool tieneUbicacion = false;
-  bool get varTieneUbicacion => tieneUbicacion;
-  set varTieneUbicacion(bool value){
-    tieneUbicacion = value;
-    notifyListeners();
-  }
-  
-  String varDireccion = '';
-  String varCorreo = '';
-  String varUbicacionLat = '';
-  String varUbicacionLong = '';
-
-  String cedulaSelect = 'assets/BtnCedula_Gris.png';
-  String pasaporteSelect = 'assets/BtnPasaporte_Blanco.png';
-
-  String get varCedulaSelect => cedulaSelect;
-  set varCedulaSelect (String value){
-    cedulaSelect = value;
-    notifyListeners();
-  }
-
-  String get varPasaporteSelect => pasaporteSelect;
-  set varPasaporteSelect (String value){
-    pasaporteSelect = value;
-    notifyListeners();
-  }
-
-  String varCedula = '';
-  String varPasaporte = '';
-
-  bool isOscuredAntigua = true;
-  bool get varIsOscuredAntigua => isOscuredAntigua;
-  set varIsOscuredAntigua (bool value){
-    isOscuredAntigua = value;
-    notifyListeners();
-  }
-
-  bool isOscured = true;
-  bool get varIsOscured => isOscured;
-  set varIsOscured (bool value){
-    isOscured = value;
-    notifyListeners();
-  }
 
   //ProspectoTypeService(String tipoIdent, String numIdent){
   ProspectoTypeService(){
     //getProspecto(tipoIdent, numIdent);
   }
 
-
-  bool isValidFormPasword(){
-    if(varPassWord == '' || varPassWordConfirm == ''){
-      return false;
-    }
-    else{
-      if(varPassWord != varPassWordConfirm){
-        return false;
-      }
-      else {
-        return true;
-      }
-    }
-  }
-
   bool isValidForm(){
     return formKey.currentState?.validate() ?? false;
-  }
-
-  bool isParamsForm(){
-    String pattern = r'^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{10,20}$';
-    RegExp regExp  = RegExp(pattern);
-    return regExp.hasMatch(varPassWord) ? true : false;
-  }
-
-  String mensajeError(){
-    String pattern = r'^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{10,20}$';
-    RegExp regExp  = RegExp(pattern);
-    String varMensajeValidacion = regExp.hasMatch(varPassWord) ? '' : 'Clave no cumple con los parámetros solicitados';
-    
-    if(varPassWord != varPassWordConfirm){
-      varMensajeValidacion = ' Las contraseñas deben coincidir';
-    }
-    return varMensajeValidacion;
   }
 
   getProspectos() async {
@@ -154,9 +64,8 @@ class ProspectoTypeService extends ChangeNotifier{
       var objRsp = await GenericService().getMultiModelos(objReq, "crm.lead");
 
       return json.encode(objRsp);
-      //notifyListeners();
-    }
-    
+      
+    }    
     on SocketException catch (_) {
       Fluttertoast.showToast(
         msg: objMensajesProspectoService.mensajeFallaInternet,
@@ -171,8 +80,7 @@ class ProspectoTypeService extends ChangeNotifier{
     
   }
 
-
- getProspecto(String tipoIdent,String numIdent) async {
+  getProspecto(String tipoIdent,String numIdent) async {
     try{
 
       String tipoProspecto = await storageProspecto.read(key: 'tipoCliente') ?? '';
@@ -261,56 +169,171 @@ class ProspectoTypeService extends ChangeNotifier{
     return frmValido;
   }
 
-  registraProspecto(ProspectoType objLlenoProsp) async {
-    String fechaNacimientoProsp = DateFormat('yyyy-MM-dd').format(objLlenoProsp.fechaNacDate);
+  getProspectoRegistrado() async {
+    try{
+      
+      var codImei = await storage.read(key: 'codImei') ?? '';
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final coordElegidas = prefs.getString("coordenadasIngreso");
-    List<String> latLng = coordElegidas!.split(',');
+      var objReg = await storage.read(key: 'RespuestaRegistro') ?? '';
+      var obj = RegisterDeviceResponseModel.fromJson(objReg);
 
-    double latitude = double.parse(latLng[0]);
-    double longitude = double.parse(latLng[1]);
+      var objLog = await storage.read(key: 'RespuestaLogin') ?? '';
+      var objLogDecode = json.decode(objLog);
 
-    objLlenoProsp.latitud = latitude;
-    objLlenoProsp.longitud = longitude;
+      List<MultiModel> lstMultiModel = [];
 
-    String? deviceId = '';//await PlatformDeviceId.getDeviceId;
-    final baseURL = '${endPoint}Clientes/CreateCliente';
-
-    String latitudString = objLlenoProsp.latitud.toString();
-    String longitudString = objLlenoProsp.longitud.toString();
-
-    final response = await http.post(
-        Uri.parse(baseURL),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, dynamic>
-          {
-            "tipoidentificacion": objLlenoProsp.tipoIdentificacion,
-            "identificacion": objLlenoProsp.identificacion,
-            "genero": objLlenoProsp.genero,
-            "latitud": latitudString,
-            "longitud": longitudString,
-            "direccion": objLlenoProsp.direccion,
-            "fechaNacimiento": fechaNacimientoProsp,
-            "correo": objLlenoProsp.email,
-            "password": varPassWord,
-            "dispositivoId": deviceId,
-            "imagenPerfil": {
-              "base64": objLlenoProsp.imagenPerfil?.base64 ?? '',
-              "nombre": objLlenoProsp.imagenPerfil?.nombre ?? '',
-              "extension": objLlenoProsp.imagenPerfil?.extension ?? '',
-            },
-            "tipoCliente": objLlenoProsp.tipoCliente,
-          }
-        ),
+      lstMultiModel.add(
+        MultiModel(model: 'crm.lead')
       );
 
-      final prospRsp = ClientTypeResponse.fromJson(response.body);//aquí va a variar el objeto de respuesta cuando se cree el token por el api
-      varObjRspRegistro = prospRsp;
+      ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
+        jsonrpc: '2.0',
+        params: ParamsMultiModels(
+          bearer: obj.result.bearer,
+          company: objLogDecode['result']['current_company'],
+          imei: codImei,
+          key: obj.result.key,
+          tocken: obj.result.tocken,
+          tockenValidDate: obj.result.tockenValidDate,
+          uid: objLogDecode['result']['uid'],
+          models: lstMultiModel
+        )
+      );
+
+      final ruta = '${envPrsp.apiEndpoint}$codImei/done/crm/lead/status';
+
+      var objRsp = await GenericService().getMultiModelos(objReq, "crm.lead");
+
+      return json.encode(objRsp);
+      
+    }    
+    on SocketException catch (_) {
+      Fluttertoast.showToast(
+        msg: objMensajesProspectoService.mensajeFallaInternet,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+      );  
+    }
     
-    notifyListeners();
+  }
+
+
+  registraProspecto(DatumCrmLead objProspecto) async {
+    try{
+
+      var codImei = await storage.read(key: 'codImei') ?? '';
+
+      var objReg = await storage.read(key: 'RespuestaRegistro') ?? '';
+      var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+      var objLog = await storage.read(key: 'RespuestaLogin') ?? '';
+      var objLogDecode = json.decode(objLog);
+
+      List<MultiModel> lstMultiModel = [];
+
+      lstMultiModel.add(
+        MultiModel(model: 'crm.lead')
+      );
+
+      ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
+        jsonrpc: '2.0',
+        params: ParamsMultiModels(
+          bearer: obj.result.bearer,
+          company: objLogDecode['result']['current_company'],
+          imei: codImei,
+          key: obj.result.key,
+          tocken: obj.result.tocken,
+          tockenValidDate: obj.result.tockenValidDate,
+          uid: objLogDecode['result']['uid'],
+          models: lstMultiModel
+        )
+      );
+
+      String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
+
+      /*
+      final requestBody = {
+        "jsonrpc": "2.0",
+        "params": {
+          "name": objProspecto.name,
+          "campaignId": objProspecto.campaignId.id,
+          "countryId": objProspecto.countryId.id,
+          "city": objProspecto.city,
+          "mediumId": objProspecto.mediumId.id,
+          "street": objProspecto.street,
+          "description": objProspecto.description,
+          "emailFrom": objProspecto.emailFrom,
+          "partnerId": objProspecto.partnerId.id,
+          "dayClose": objProspecto.dayClose,
+        }
+      };
+
+      final headers = {
+        "Content-Type": "application/json",
+      };
+
+      final ruta = '${envPrsp.apiEndpoint}${objReq.params.imei}/done/create/${jsonEncode(requestBody)}/model';
+
+      final response = await http.post(
+        Uri.parse(ruta),
+        headers: headers,
+        //body: jsonEncode(requestBody), 
+      );
+      */
+
+      ////***//// */ ME FALTA LA OBSERVACIÓN
+      
+      final requestBody = {
+      "jsonrpc": "2.0",
+      "params": {
+        "key": objReq.params.key,
+        "tocken": objReq.params.tocken,
+        "imei": objReq.params.imei,
+        "uid": objReq.params.uid,
+        "company": objReq.params.company,
+        "bearer": objReq.params.bearer,
+        "tocken_valid_date": tockenValidDate,
+        "create": {
+          "name": objProspecto.name,
+          "phone": objProspecto.phone
+        },
+      }
+    };
+
+    final headers = {
+      "Content-Type": "application/json",
+    };
+
+    //final ruta = '${envPrsp.apiEndpoint}${objReq.params.imei}/done/create/crm.lead/model';
+    final ruta = 'https://ekuasoft-taller-16347134.dev.odoo.com/api/v1/${objReq.params.imei}/done/create/crm.lead/model';
+
+    final response = await http.post(
+      Uri.parse(ruta),
+      headers: headers,
+      body: jsonEncode(requestBody), 
+    );
+    
+    //print(response.body);
+
+      return ProspectoRegistroResponseModel.fromJson(response.body);
+      //String tst = '';
+    }    
+    on SocketException catch (_) {
+      Fluttertoast.showToast(
+        msg: objMensajesProspectoService.mensajeFallaInternet,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+      );  
+    }
+    
   }
 
 }

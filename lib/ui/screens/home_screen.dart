@@ -189,15 +189,15 @@ class HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             context.push(objRutasGen.rutaPerfil);
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
                             child: CircleAvatar(
                               backgroundImage: NetworkImage(
                                   'https://via.placeholder.com/150'), // Reemplaza con la URL de la imagen del avatar
                             ),
                           ),
                         ),
-                        title: Text(
+                        title: const Text(
                           'Dashboard',
                           style: TextStyle(color: Colors.black),
                         ),

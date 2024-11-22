@@ -137,6 +137,7 @@ class DatumCrmLead {
     String? mobile;
     String? street;
     DateTime? dateDeadline;
+    double? probability;
 
     DatumCrmLead({
         required this.id,
@@ -166,6 +167,7 @@ class DatumCrmLead {
         this.mobile,
         this.street,
         this.dateDeadline,
+        this.probability
     });
 
     factory DatumCrmLead.fromJson(String str) => DatumCrmLead.fromMap(json.decode(str));
@@ -200,6 +202,7 @@ class DatumCrmLead {
         mobile: json["mobile"],
         street: json["street"],
         dateDeadline: json["date_deadline"] == null ? null : DateTime.parse(json["date_deadline"]),
+        probability: 0
     );
 
     Map<String, dynamic> toMap() => {
@@ -230,17 +233,29 @@ class DatumCrmLead {
         "mobile": mobile,
         "street": street,
         "date_deadline": "${dateDeadline!.year.toString().padLeft(4, '0')}-${dateDeadline!.month.toString().padLeft(2, '0')}-${dateDeadline!.day.toString().padLeft(2, '0')}",
+        "probability": 0
     };
 }
 
+//ESTA ESTRUCTURA NO LLEGABA DESDE EL API Y TUVE QUE IMPROVISAR LOS CAMPOS
 class CampaignId {
-    CampaignId();
+  int id;
+  String name;
+  
+  CampaignId(
+    {
+      required this.id,
+      required this.name
+    }
+  );
 
     factory CampaignId.fromJson(String str) => CampaignId.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
     factory CampaignId.fromMap(Map<String, dynamic> json) => CampaignId(
+      id: json["id"] ?? 0,
+      name: json["name"] ?? '',
     );
 
     Map<String, dynamic> toMap() => {

@@ -61,43 +61,9 @@ class GenericService extends ChangeNotifier {
   
   getMultiModelos(ConsultaMultiModelRequestModel objReq, String modelo) async {
     final ruta = '${env.apiEndpoint}${objReq.params.imei}/done/data/multi/models';
-    
-    List<MultiModel> lstMultiModel = [];
-
-    for(int i = 0; i < objReq.params.models.length; i++){
-      lstMultiModel.add(objReq.params.models[i]);
-    }
 
     String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 
-    /*
-    final Map<String, dynamic> body = 
-    {
-      "jsonrpc": "2.0",
-      "params": {
-      "key": objReq.params.key,//"EKzbvpyoQJhresnrSCN1PzMfAc", 
-      "tocken": objReq.params.tocken,//"LKMZ1g83WCGwHCy3bXHe2breLesTACkBmQDqBKjelJ9PoxQs", 
-      "imei": objReq.params.imei,//"523456789",
-      "uid": objReq.params.uid,//5,
-      "company": objReq.params.company,//5,
-      "bearer": objReq.params.bearer,//"RUt6YnZweW9RSmhyZXNuclNDTjFQek1mQWM1MjM0NTY3ODlMS01aMWc4M1dDR3dIQ3kzYlhIZTJicmVMZXNUQUNrQm1RRHFCS2plbEo5UG94UXMyMDI0LTExLTA3IDE5OjQ0OjQx",                           
-      "tocken_valid_date": tockenValidDate,//"2024-11-07 19:44:41",
-      "models": jsonEncode(lstMultiModel),
-      
-      }
-    };
-    
-    final response = await http.post(
-      Uri.parse(ruta),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(body),
-    );
-    */
-
-    /////////
-    
     final requestBody = {
       "jsonrpc": "2.0",
       "params": {
@@ -110,34 +76,23 @@ class GenericService extends ChangeNotifier {
         "tocken_valid_date": tockenValidDate,
         "models": [
           {
-            "model": modelo//"crm.lead",
+            "model": modelo
           }
         ],
       }
     };
 
-    // Headers del request
     final headers = {
       "Content-Type": "application/json",
     };
 
-    // Enviar la solicitud POST
     final response = await http.post(
       Uri.parse(ruta),
       headers: headers,
-      body: jsonEncode(requestBody), // Convertir el cuerpo del request a JSON
+      body: jsonEncode(requestBody), 
     );
     
-    //var reponseRs = response.body;
-
-    //print("Test Clientes: " + response.body);
-
-    
-
-    //final data = json.encode(obj.result);
-    //await storage.write(key: 'RespuestaRegistro', value: reponseRs);
-
-    return response.body;//RegisterDeviceResponseModel.fromJson(reponseRs);
+    return response.body;
     
   }
   

@@ -304,7 +304,7 @@ class ListaNotificaciones extends StatelessWidget {
                         if(texto2 != null && texto2!.isNotEmpty )
                         GestureDetector(
                           onTap: () {
-                            context.push(Rutas().rutaListaClientes);
+                            context.push(rutaNavegacionFin!);
                           },
                           child: Stack(
               alignment: Alignment.center,
@@ -313,9 +313,9 @@ class ListaNotificaciones extends StatelessWidget {
                 Container(
                   width: sizeLstNot.width * 0.15,  // Tamaño del círculo (ajusta según sea necesario)
                   height: sizeLstNot.height * 0.1,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: const Color.fromARGB(255, 224, 232, 235),  // Color de fondo
+                    color: Color.fromARGB(255, 224, 232, 235),  // Color de fondo
                   ),
                 ),
                 // El icono central (usamos un icono de grupo de personas)

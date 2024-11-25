@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 
@@ -21,9 +22,11 @@ late TextEditingController observacionesTxt;
 late TextEditingController paisTxt;
 late TextEditingController probabilityTxt;
 late TextEditingController telefonoTxt;
+late TextEditingController sectorTxt;
 
 DateTime dateRgPrsp = DateTime.now();
 
+String fecCierre = '';
 String campSelect = '';
 String mediaSelect = '';
 String originSelect = '';
@@ -51,7 +54,9 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
     observacionesTxt = TextEditingController();
     paisTxt = TextEditingController();
     probabilityTxt = TextEditingController();
+    fecCierre = DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp);
     telefonoTxt = TextEditingController();
+    sectorTxt = TextEditingController(text: 'Norte');
   }
 
   @override
@@ -494,60 +499,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       },
                                     ),
                                   ),
-                                  
-                                  /*
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: TextFormField(
-                                      //initialValue: 'Ecuador',
-                                      //initialValue: '',                                      
-                                      cursorColor: AppLightColors().primary,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      inputFormatters: [
-                                        //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                      ],
-                                      style: AppTextStyles.bodyRegular(width: size.width),
-                                      decoration: InputDecorationCvs.formsDecoration(
-                                        labelText: 'País',
-                                        hintTetx: 'Ej: Ecuador',
-                                        size: size
-                                      ),
-                                      controller: paisTxt,
-                                      autocorrect: false,
-                                      keyboardType: TextInputType.text,
-                                      minLines: 1,
-                                      maxLines: 2,
-                                      autofocus: false,
-                                      maxLength: 50,
-                                      textAlign: TextAlign.left,
-                                      onEditingComplete: () {
-                                        FocusScope.of(context).unfocus();
-                                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                      },
-                                      onChanged: (value) {
-                                        
-                                      },
-                                      onTapOutside: (event) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      validator: (value) {
-                                        /*
-                                        String pattern = regularExp.regexToEmail;
-                                        RegExp regExp = RegExp(pattern);
-                                        return regExp.hasMatch(value ?? '')
-                                            ? null
-                                            : '¡El valor ingresado no luce como un correo!';
-                                            */
-                                      },
-                                    ),
-                                  ),
-                                  */
-
+                                 
                                   SizedBox(
                                     height: size.height * 0.04,
                                   ),
@@ -565,7 +517,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             .map((activityPrsp) =>
                                                 DropdownMenuItem(
                                                   value: activityPrsp,
-                                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
                                                 ))
                                             .toList(),
                                         onChanged: (value) {
@@ -578,7 +530,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       ),
                                     ),
                                     
-                                  
+                                  /*
                                   SizedBox(
                                     height: size.height * 0.02,
                                   ),
@@ -588,7 +540,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     width: size.width * 0.92,
                                     child: TextFormField(
                                       initialValue: 'Guayaquil',
-                                      //initialValue: '',                                      
+                                      enabled: false,                               
                                       cursorColor: AppLightColors().primary,
                                       autovalidateMode: AutovalidateMode.onUserInteraction,
                                       inputFormatters: [
@@ -629,7 +581,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       },
                                     ),
                                                                       ),
-                                                                      
+                                        */    
+
                                   SizedBox(
                                     height: size.height * 0.03,
                                   ),
@@ -638,13 +591,11 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     color: Colors.transparent,
                                     width: size.width * 0.92,
                                     child: TextFormField(
-                                      initialValue: 'Norte',
-                                      //initialValue: '',
+                                      controller: sectorTxt,
+                                      //initialValue: 'Norte',
+                                      enabled: false,
                                       cursorColor: AppLightColors().primary,
                                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      inputFormatters: [
-                                        //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                      ],
                                       style: AppTextStyles.bodyRegular(width: size.width),
                                       decoration: InputDecorationCvs.formsDecoration(
                                         labelText: 'Sector',
@@ -701,6 +652,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     height: size.height * 0.01,
                                                                       ),
                                                                       
+                                                                      /*
                                                                       Container(
                                     color: Colors.transparent,
                                     width: size.width * 0.92,
@@ -752,6 +704,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                   SizedBox(
                                     height: size.height * 0.02,
                                   ),
+                                  */
 
                                   Container(
                                     color: Colors.transparent,
@@ -922,25 +875,38 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     width: size.width * 0.92,
                                     child: TextFormField(
                                       //initialValue: 'Mario Piguave',
-                                      //initialValue: '',
+                                      //initialValue: '',                                      
                                       cursorColor: AppLightColors().primary,
                                       autovalidateMode: AutovalidateMode.onUserInteraction,
                                       inputFormatters: [
                                         //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
                                       ],
                                       style: AppTextStyles.bodyRegular(width: size.width),
+                                      /*
                                       decoration: InputDecorationCvs.formsDecoration(
                                         labelText: 'Probabilidad',
                                         hintTetx: 'Ej: 50%',
                                         size: size
                                       ),
+                                      */
+                                      decoration: InputDecoration(
+                                        hintStyle: SafeGoogleFont(
+                                            GoogleFontsApp().fontMulish,
+                                            fontSize: size.width * 0.0025 * 18,
+                                            fontWeight: FontWeight.w700,
+                                            color:
+                                                AppLightColors().gray800SecondaryText,
+                                            letterSpacing: 0),
+                                        hintText: "100%",
+                                        suffixText: '%',
+                                      ),
                                       controller: probabilityTxt,
                                       autocorrect: false,
-                                      keyboardType: TextInputType.number,
+                                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                       minLines: 1,
-                                      maxLines: 2,
+                                      maxLines: 1,
                                       autofocus: false,
-                                      maxLength: 50,
+                                      maxLength: 5,
                                       textAlign: TextAlign.left,
                                       onEditingComplete: () {
                                         FocusScope.of(context).unfocus();
@@ -987,11 +953,11 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                     ),
                     //controller: emailAkiTxt,
                     autocorrect: false,
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     minLines: 1,
-                    maxLines: 2,
+                    maxLines: 1,
                     autofocus: false,
-                    maxLength: 50,
+                    maxLength: 7,
                     textAlign: TextAlign.left,
                     onEditingComplete: () {
                       FocusScope.of(context).unfocus();
@@ -1065,75 +1031,44 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                   
                   SizedBox(
                     height: size.height * 0.06,
-                                        ),
+                  ),
                                         
-                                        Container(
-                                          color: Colors.transparent,
-                                          width: size.width * 0.92,
-                                          child: TextFormField(
-                                            initialValue: dateRgPrsp.toString(),
-                                                      readOnly: true,
-                                                      decoration: const InputDecoration(
-                                                        labelText:
-                                                            'Cierre esperado',
-                                                        border: OutlineInputBorder(),
-                                                        suffixIcon: Icon(
-                                                            Icons.calendar_today),
-                                                      ),
-                                                      onTap: () async {
-                                                        DateTime? pickedDate =
-                                                            await showDatePicker(
-                                                          context: context,
-                                                          initialDate: DateTime.now(),
-                                                          firstDate: DateTime(2020),
-                                                          lastDate: DateTime(2100),
-                                                        );
-                                                        if (pickedDate != null) {
-                                                          
-                                                                setState(() {
-                                                                  dateRgPrsp = pickedDate;
-                                                                });
-                                                                
-                                                        }
-                                                      },
-                                                    ),
-                                                                                      
-                  ),
-                  
-                  SizedBox(
-                    height: size.height * 0.04,
-                  ),
-
                   Container(
                     color: Colors.transparent,
                     width: size.width * 0.92,
-                    child: DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Seleccione el tipo de actividad...',
-                        ),
-                        value: actSelect,
-                        items: lstActividades
-                            .map((activityPrsp) =>
-                                DropdownMenuItem(
-                                  value: activityPrsp,
-                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
+                    child: TextFormField(
+                      initialValue: fecCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp),
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Cierre esperado',
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.calendar_today),
+                      ),
+                      onTap: () async {
+                        DateTime? pickedDate =
+                            await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2020),
+                          lastDate: DateTime(2100),
+                        );
+                        if (pickedDate != null) {
                           
                           setState(() {
-                            actSelect = value ?? '';
+                            //dateRgPrsp = pickedDate;
+                            fecCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
                           });
-                                                  
-                        },
-                      ),
+                                
+                        }
+                      },
                     ),
-                                        
-                  SizedBox(
-                    height: size.height * 0.03,
+                                                                
                   ),
                   
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+
                   Container(
                     color: Colors.transparent,
                     width: size.width * 0.92,
@@ -1272,7 +1207,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                width: size.width * 0.45,
+                                width: size.width * 0.38,
                                 color: Colors.transparent,
                                 child: GestureDetector(
                                 onTap: () async {
@@ -1287,7 +1222,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                 )),
                               ),
                               Container(
-                                width: size.width * 0.45,
+                                width: size.width * 0.5,
                                 color: Colors.transparent,
                                 child: GestureDetector(
                                 onTap: () async {

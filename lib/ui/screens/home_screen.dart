@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 //import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
@@ -232,35 +233,8 @@ class HomeScreenState extends State<HomeScreen> {
                             child: Text(activityPrsp),
                           ))
                       .toList(),
-                      /*
-                      items: [
-                        'Compañía 1',
-                        'Compañía 2',
-                        'Compañía 3'
-                      ]
-                      .map((activityPrsp) =>
-                          DropdownMenuItem(
-                            value: activityPrsp,
-                            child: Text(activityPrsp),
-                          ))
-                      .toList(),
-                      */
-                      /*
-                      options.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      */
                     ),
                               ),
-                              /*
-                              IconButton(
-                  icon: const Icon(Icons.cloud_sync_outlined, color: Colors.black),
-                  onPressed: () {},
-                              ),
-                              */
                               IconButton(
                   icon: const Icon(Icons.notifications_active, color: Colors.black),
                   onPressed: () {},
@@ -332,12 +306,12 @@ class HomeScreenState extends State<HomeScreen> {
                                                 decoration: BoxDecoration(
                                                   color: Colors.grey.shade700,
                                                   borderRadius: BorderRadius.circular(8.0),
-                                                  boxShadow: [
+                                                  boxShadow: const [
                                                     BoxShadow(
                                                       color: Colors.white,
                                                       spreadRadius: 2,
                                                       blurRadius: 5,
-                                                      offset: const Offset(0, 3),
+                                                      offset: Offset(0, 3),
                                                     ),
                                                   ],
                                                 ),
@@ -345,7 +319,7 @@ class HomeScreenState extends State<HomeScreen> {
                                                   crossAxisAlignment: CrossAxisAlignment.center,
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
-                                                    Icon(Icons.grid_view_outlined, color: Colors.white,),
+                                                    const Icon(Icons.grid_view_outlined, color: Colors.white,),
                                                     SizedBox(
                                                       width: size.width * 0.02,
                                                     ),
@@ -409,6 +383,7 @@ class HomeScreenState extends State<HomeScreen> {
     Color textColor = Colors.white,
   }) {
     return Container(
+      height: tamanio.height * 0.21,
       padding: const EdgeInsets.all(0.5),
       decoration: BoxDecoration(
         color: backgroundColor,
@@ -429,7 +404,7 @@ class HomeScreenState extends State<HomeScreen> {
 
           Container(
             width: tamanio.width * 0.35,
-            height: tamanio.height * 0.15,
+            height: tamanio.height * 0.28,
             color: Colors.transparent,
             child: Column(
               children: [
@@ -460,10 +435,11 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          const SizedBox(height: 8.0),
+          const SizedBox(height: 6.0),
 
-          Text(
+          AutoSizeText(
             amount,
+            maxLines: 1,
             style: TextStyle(
               color: textColor,
               fontSize: 32.0,

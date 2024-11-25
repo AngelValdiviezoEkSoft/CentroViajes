@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/ui/theme/app_color_light.dart';
 import 'package:flutter/material.dart';
 
@@ -26,9 +27,11 @@ class ButtonCvsWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(size.width * 0.4),
                 color: colorBoton ?? AppLightColors().primary),
             child: Center(
-                child: Text(
+                child: AutoSizeText(
               text,
               style: textStyle,
+              maxLines: 1,
+              minFontSize: 6,
             )),
           )
         : GestureDetector(
@@ -44,9 +47,11 @@ class ButtonCvsWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(size.width * 0.4),
                   color: colorBoton ?? AppLightColors().primary),
               child: Center(
-                  child: Text(
+                  child: AutoSizeText(
                 text,
                 style: textStyle,
+                maxLines: 1,
+                minFontSize: 6,
               )),
             ),
           );

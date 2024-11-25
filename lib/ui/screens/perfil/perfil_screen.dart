@@ -300,7 +300,6 @@ class PerfilScreen extends StatelessWidget {
               Center(
                 child: OutlinedButton(
                   onPressed: () {
-                    // Acción de cerrar sesión
                     context.pop();
                   },
                   style: OutlinedButton.styleFrom(
@@ -311,7 +310,7 @@ class PerfilScreen extends StatelessWidget {
                   ),
                   child: Container(
                     color: Colors.transparent,
-                    width: size.width * 0.25,
+                    width: size.width * 0.35,
                     child: GestureDetector(
                       onTap: () {
 
@@ -355,9 +354,12 @@ class PerfilScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Icon(Icons.logout, color: Colors.black,),
-                          Text(
+                          AutoSizeText(
                             'Cerrar Sesión',
                             style: TextStyle(color: Colors.black),
+                            maxLines: 2,
+                            minFontSize: 2,
+                            presetFontSizes: [14,12,10,8,6,4],
                           ),
                         ],
                       ),

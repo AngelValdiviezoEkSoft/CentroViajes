@@ -8,8 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
-
-//import '../../config/routes/routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 late Timer _timer;
 
@@ -244,6 +243,11 @@ class AuthService extends ChangeNotifier {
   }
   
   Future<dynamic> opcionesMenuPorPerfil(BuildContext context) async {
+
+    var objLogin = await storage.read(key: 'RespuestaLogin') ?? '';
+
+    final data = json.decode(objLogin);
+
     lstOp = [
       OpcionesMenuModel(
         descMenu: 'Editar Perfil', 
@@ -253,12 +257,12 @@ class AuthService extends ChangeNotifier {
       OpcionesMenuModel(
         descMenu: 'Soporte', 
         icono: Icons.question_mark,
-        onPress: () => context.push(objRutas.rutaConstruccion),
+        onPress: () async =>  await launchUrl(Uri.parse(data["result"]["done_support_url"]), mode: LaunchMode.externalApplication),
       ),
       OpcionesMenuModel(
         descMenu: 'Terminos de uso',
         icono: Icons.info,
-        onPress: () => context.push(objRutas.rutaConstruccion),
+        onPress: () async =>  await launchUrl(Uri.parse(data["result"]["done_terms_of_use_url"]), mode: LaunchMode.externalApplication),
       ),
     ];
     return lstOp;

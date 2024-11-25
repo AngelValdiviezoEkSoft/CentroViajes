@@ -11,17 +11,17 @@ class UsuarioResponseModel {
         required this.resultUsuarioResponse,
     });
 
-    factory UsuarioResponseModel.fromRawJson(String str) => UsuarioResponseModel.fromJson(json.decode(str));
+    factory UsuarioResponseModel.fromJson(String str) => UsuarioResponseModel.fromMap(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+    String toJson() => json.encode(toMap());
 
-    factory UsuarioResponseModel.fromJson(Map<String, dynamic> json) => UsuarioResponseModel(
+    factory UsuarioResponseModel.fromMap(Map<String, dynamic> json) => UsuarioResponseModel(
         jsonrpc: json["jsonrpc"],
         id: json["id"],
         resultUsuarioResponse: ResultUsuarioResponse.fromJson(json["ResultUsuarioResponse"]),
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "jsonrpc": jsonrpc,
         "id": id,
         "ResultUsuarioResponse": resultUsuarioResponse.toJson(),
@@ -52,7 +52,7 @@ class ResultUsuarioResponse {
     int maxFileUploadSize;
     bool homeActionId;
     CacheHashes cacheHashes;
-    Currencies currencies;
+    //Currencies currencies;
     BundleParams bundleParams;
     List<int> userId;
     String websocketWorkerVersion;
@@ -87,7 +87,7 @@ class ResultUsuarioResponse {
         required this.maxFileUploadSize,
         required this.homeActionId,
         required this.cacheHashes,
-        required this.currencies,
+        //required this.currencies,
         required this.bundleParams,
         required this.userId,
         required this.websocketWorkerVersion,
@@ -99,11 +99,11 @@ class ResultUsuarioResponse {
         required this.doneTermsOfUseUrl,
     });
 
-    factory ResultUsuarioResponse.fromRawJson(String str) => ResultUsuarioResponse.fromJson(json.decode(str));
+    factory ResultUsuarioResponse.fromJson(String str) => ResultUsuarioResponse.fromMap(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+    String toJson() => json.encode(toMap());
 
-    factory ResultUsuarioResponse.fromJson(Map<String, dynamic> json) => ResultUsuarioResponse(
+    factory ResultUsuarioResponse.fromMap(Map<String, dynamic> json) => ResultUsuarioResponse(
         uid: json["uid"],
         isSystem: json["is_system"],
         isAdmin: json["is_admin"],
@@ -127,7 +127,7 @@ class ResultUsuarioResponse {
         maxFileUploadSize: json["max_file_upload_size"],
         homeActionId: json["home_action_id"],
         cacheHashes: CacheHashes.fromJson(json["cache_hashes"]),
-        currencies: Currencies.fromJson(json["currencies"]),
+        //currencies: Currencies.fromJson(json["currencies"]),
         bundleParams: BundleParams.fromJson(json["bundle_params"]),
         userId: List<int>.from(json["user_id"].map((x) => x)),
         websocketWorkerVersion: json["websocket_worker_version"],
@@ -139,7 +139,7 @@ class ResultUsuarioResponse {
         doneTermsOfUseUrl: json["done_terms_of_use_url"],
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "uid": uid,
         "is_system": isSystem,
         "is_admin": isAdmin,
@@ -163,7 +163,7 @@ class ResultUsuarioResponse {
         "max_file_upload_size": maxFileUploadSize,
         "home_action_id": homeActionId,
         "cache_hashes": cacheHashes.toJson(),
-        "currencies": currencies.toJson(),
+        //"currencies": currencies.toJson(),
         "bundle_params": bundleParams.toJson(),
         "user_id": List<dynamic>.from(userId.map((x) => x)),
         "websocket_worker_version": websocketWorkerVersion,
@@ -189,18 +189,18 @@ class AllowedCompany {
         required this.parentId,
     });
 
-    factory AllowedCompany.fromRawJson(String str) => AllowedCompany.fromJson(json.decode(str));
+    factory AllowedCompany.fromJson(String str) => AllowedCompany.fromMap(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+    String toJson() => json.encode(toMap());
 
-    factory AllowedCompany.fromJson(Map<String, dynamic> json) => AllowedCompany(
+    factory AllowedCompany.fromMap(Map<String, dynamic> json) => AllowedCompany(
         id: json["id"],
         name: json["name"],
         sequence: json["sequence"],
         parentId: json["parent_id"],
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "id": id,
         "name": name,
         "sequence": sequence,
@@ -215,15 +215,15 @@ class BundleParams {
         required this.lang,
     });
 
-    factory BundleParams.fromRawJson(String str) => BundleParams.fromJson(json.decode(str));
+    factory BundleParams.fromJson(String str) => BundleParams.fromMap(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+    String toJson() => json.encode(toMap());
 
-    factory BundleParams.fromJson(Map<String, dynamic> json) => BundleParams(
+    factory BundleParams.fromMap(Map<String, dynamic> json) => BundleParams(
         lang: json["lang"],
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "lang": lang,
     };
 }
@@ -235,19 +235,20 @@ class CacheHashes {
         required this.translations,
     });
 
-    factory CacheHashes.fromRawJson(String str) => CacheHashes.fromJson(json.decode(str));
+    factory CacheHashes.fromJson(String str) => CacheHashes.fromMap(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+    String toJson() => json.encode(toMap());
 
-    factory CacheHashes.fromJson(Map<String, dynamic> json) => CacheHashes(
+    factory CacheHashes.fromMap(Map<String, dynamic> json) => CacheHashes(
         translations: json["translations"],
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "translations": translations,
     };
 }
 
+/*
 class Currencies {
     The1 the1;
 
@@ -255,15 +256,17 @@ class Currencies {
         required this.the1,
     });
 
-    factory Currencies.fromRawJson(String str) => Currencies.fromJson(json.decode(str));
+    
 
-    String toRawJson() => json.encode(toJson());
+    factory Currencies.fromJson(String str) => Currencies.fromMap(json.decode(str));
 
-    factory Currencies.fromJson(Map<String, dynamic> json) => Currencies(
+    String toJson() => json.encode(toMap());
+
+    factory Currencies.fromMap(Map<String, dynamic> json) => Currencies(
         the1: The1.fromJson(json["1"]),
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "1": the1.toJson(),
     };
 }
@@ -295,6 +298,7 @@ class The1 {
         "digits": List<dynamic>.from(digits.map((x) => x)),
     };
 }
+*/
 
 class DonePermissions {
     MainMenu mainMenu;

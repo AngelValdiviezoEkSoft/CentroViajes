@@ -99,5 +99,12 @@ class GenericState extends Equatable {
     return "$cmbCamp---$cmbOrigen---$cmbMedia---$cmbAct---$cmbPais";
   }
 
+  readDatosPerfil() async {    
+    String objLogin = await storage.read(key: 'RespuestaLogin') ?? '';
+
+    return objLogin;
+  }
+
+
 }
 

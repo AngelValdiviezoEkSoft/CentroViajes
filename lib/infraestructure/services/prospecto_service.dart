@@ -215,7 +215,7 @@ class ProspectoTypeService extends ChangeNotifier{
       if(objStr.isNotEmpty)
       {  
         var obj = RegisterDeviceResponseModel.fromJson(objStr);
-        ruta = '${obj.result.url}/${objReq.params.imei}/done/create/crm.lead/model';
+        ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/crm/lead/status';
       }
 
       final requestBody = {

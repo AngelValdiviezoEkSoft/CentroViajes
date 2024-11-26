@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 
@@ -43,6 +44,9 @@ class FrmRegistroProspectoScreen extends StatefulWidget {
 class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen> {
 
   final LocalAuthentication auth = LocalAuthentication();  
+
+  String initialCountry = 'EC';
+  PhoneNumber number = PhoneNumber(isoCode: 'EC');
   
   @override
   void initState() {
@@ -57,6 +61,14 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
     fecCierre = DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp);
     telefonoTxt = TextEditingController();
     sectorTxt = TextEditingController(text: 'Norte');
+  }
+
+  void getPhoneNumber(String phoneNumber) async {
+    PhoneNumber number = await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'US');
+
+    setState(() {
+      this.number = number;
+    });
   }
 
   @override
@@ -195,298 +207,186 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
 
                   return Stack(
                     children: [
-                      Column(
-                        children: [                
-                          Container(
-                            color: Colors.transparent,
-                            width: size.width * 0.95, //- 100,
-                            height: size.height * 0.045, //40,
-                            alignment: Alignment.centerLeft,
-                            child: const AutoSizeText(
-                              'Registre nuevo prospecto',  
-                              presetFontSizes: [30,28,26,24,22,20,18,16,14,12,10],                          
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [                
+                            Container(
+                              color: Colors.transparent,
+                              width: size.width * 0.95, //- 100,
+                              height: size.height * 0.045, //40,
+                              alignment: Alignment.centerLeft,
+                              child: const AutoSizeText(
+                                'Registre nuevo prospecto',  
+                                presetFontSizes: [30,28,26,24,22,20,18,16,14,12,10],                          
+                              ),
                             ),
-                          ),
-                      
-                          Container(
-                            //color: const Color(0xffF6F6F6),
-                            color: Colors.transparent,
-                            width: size.width,
-                            height: size.height * 0.86,
-                            alignment: Alignment.topCenter,
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                            
-                                Container(
-                                  color: Colors.blue.shade800,
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              color: tabAccionesRegPrsp == 0
-                                                  ? Colors.white
-                                                  : Colors.blue.shade800,
-                                              child: Center(
-                                                child: TextButton(
-                                                  onPressed: () {
-                                                    tabAccionesRegPrsp = 0;
-                                                    setState(() {});
-                                                  },
-                                                  child: Column(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.info_outline,
-                                                        color: tabAccionesRegPrsp == 0
-                                                            ? Colors.blue.shade800
-                                                            : Colors.white,
-                                                      ),
-                                                      Text(
-                                                        'Inf. general',
-                                                        style: TextStyle(
-                                                          color: tabAccionesRegPrsp == 0
-                                                              ? Colors.blue.shade800
-                                                              : Colors.white,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              color: tabAccionesRegPrsp == 1
-                                                  ? Colors.white
-                                                  : Colors.blue.shade800,
-                                              child: Center(
-                                                child: TextButton(
-                                                  onPressed: () {
-                                                    tabAccionesRegPrsp = 1;
-                                                    setState(() {});
-                                                  },
-                                                  child: Column(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.grid_on_outlined,
-                                                        color: tabAccionesRegPrsp == 1
-                                                            ? Colors.blue.shade800
-                                                            : Colors.white,
-                                                      ),
-                                                      Text(
-                                                        'Inf. Adicional',
-                                                        style: TextStyle(
-                                                          //color: Colors.purple.shade700,
-                                                          color: tabAccionesRegPrsp == 1
-                                                              ? Colors.blue.shade800
-                                                              : Colors.white,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              color: tabAccionesRegPrsp == 2
-                                                  ? Colors.white
-                                                  : Colors.blue.shade800,
-                                              child: Center(
-                                                child: TextButton(
-                                                  onPressed: () {
-                                                    tabAccionesRegPrsp = 2;
-                                                    setState(() {});
-                                                  },
-                                                  child: Column(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.add_business_rounded,
-                                                        color: tabAccionesRegPrsp == 2
-                                                            ? Colors.blue.shade800
-                                                            : Colors.white,
-                                                      ),
-                                                      Text(
-                                                        'Notas Int.',
-                                                        style: TextStyle(
-                                                          //color: Colors.purple.shade700,
-                                                          color: tabAccionesRegPrsp == 2
-                                                              ? Colors.blue.shade800
-                                                              : Colors.white,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                
-                            
-                                Container(
-                                  color: Colors.transparent,
-                                  width: size.width * 0.92,
-                                  child: TextFormField(
-                                    cursorColor: AppLightColors().primary,
-                                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                    ],
-                                    style: AppTextStyles.bodyRegular(width: size.width),
-                                    decoration: InputDecorationCvs.formsDecoration(
-                                      labelText: 'Teléfono',
-                                      hintTetx: 'Ej: 09xxxxxxxx',
-                                      size: size,
-                                      prefixIcon: const Icon(Icons.search, color: Colors.blue,)                                      
-                                    ),                                  
-                                    controller: telefonoTxt,
-                                    autocorrect: false,
-                                    keyboardType: TextInputType.text,
-                                    minLines: 1,
-                                    maxLines: 2,
-                                    autofocus: false,
-                                    maxLength: 13,
-                                    textAlign: TextAlign.left,
-                                    onEditingComplete: () async {
-                                      FocusScope.of(context).unfocus();
-                                      await ProspectoTypeService().getProspectoRegistrado(telefonoTxt.text);
-                                    },
-                                    onChanged: (value) {
-                                      
-                                    },
-                                    onTapOutside: (event) {
-                                      FocusScope.of(context).unfocus();
-                                    },
-                                    validator: (value) {
-                                      /*
-                                      String pattern = regularExp.regexToEmail;
-                                      RegExp regExp = RegExp(pattern);
-                                      return regExp.hasMatch(value ?? '')
-                                          ? null
-                                          : '¡El valor ingresado no luce como un correo!';
-                                          */
-                                    },
-                                  ),
-                                ),
-                                
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                            
-                                if(tabAccionesRegPrsp == 0)
-                                Container(
-                                  color: Colors.transparent,
-                                  height: size.height * 0.55,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        
-                                                                      Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: TextFormField(
-                                      //initialValue: 'Mario Piguave',
-                                      //initialValue: '',
-                                      cursorColor: AppLightColors().primary,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      /*
-                                      inputFormatters: [
-                                        //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                      ],
-                                      */
-                                      style: AppTextStyles.bodyRegular(width: size.width),
-                                      decoration: InputDecorationCvs.formsDecoration(
-                                        labelText: 'Nombres',
-                                        hintTetx: 'Ej: Juan Valdez',
-                                        size: size
-                                      ),
-                                      enabled: false,
-                                      controller: nombresTxt,
-                                      autocorrect: false,
-                                      keyboardType: TextInputType.text,
-                                      minLines: 1,
-                                      maxLines: 2,
-                                      autofocus: false,
-                                      maxLength: 50,
-                                      textAlign: TextAlign.left,
-                                      onEditingComplete: () {
-                                        FocusScope.of(context).unfocus();
-                                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                      },
-                                      onChanged: (value) {
-                                        
-                                      },
-                                      onTapOutside: (event) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      validator: (value) {
-                                        /*
-                                        String pattern = regularExp.regexToEmail;
-                                        RegExp regExp = RegExp(pattern);
-                                        return regExp.hasMatch(value ?? '')
-                                            ? null
-                                            : '¡El valor ingresado no luce como un correo!';
-                                            */
-                                      },
-                                    ),
-                                  ),
-                                  
+                        
+                            Container(
+                              //color: const Color(0xffF6F6F6),
+                              color: Colors.transparent,
+                              width: size.width,
+                              height: size.height * 0.86,
+                              alignment: Alignment.topCenter,
+                              child: Column(
+                                children: [
                                   SizedBox(
                                     height: size.height * 0.02,
                                   ),
-                                  
+                              
+                                  Container(
+                                    color: Colors.blue.shade800,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                color: tabAccionesRegPrsp == 0
+                                                    ? Colors.white
+                                                    : Colors.blue.shade800,
+                                                child: Center(
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      tabAccionesRegPrsp = 0;
+                                                      setState(() {});
+                                                    },
+                                                    child: Column(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.info_outline,
+                                                          color: tabAccionesRegPrsp == 0
+                                                              ? Colors.blue.shade800
+                                                              : Colors.white,
+                                                        ),
+                                                        Text(
+                                                          'Inf. general',
+                                                          style: TextStyle(
+                                                            color: tabAccionesRegPrsp == 0
+                                                                ? Colors.blue.shade800
+                                                                : Colors.white,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                color: tabAccionesRegPrsp == 1
+                                                    ? Colors.white
+                                                    : Colors.blue.shade800,
+                                                child: Center(
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      tabAccionesRegPrsp = 1;
+                                                      setState(() {});
+                                                    },
+                                                    child: Column(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.grid_on_outlined,
+                                                          color: tabAccionesRegPrsp == 1
+                                                              ? Colors.blue.shade800
+                                                              : Colors.white,
+                                                        ),
+                                                        Text(
+                                                          'Inf. Adicional',
+                                                          style: TextStyle(
+                                                            //color: Colors.purple.shade700,
+                                                            color: tabAccionesRegPrsp == 1
+                                                                ? Colors.blue.shade800
+                                                                : Colors.white,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                color: tabAccionesRegPrsp == 2
+                                                    ? Colors.white
+                                                    : Colors.blue.shade800,
+                                                child: Center(
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      tabAccionesRegPrsp = 2;
+                                                      setState(() {});
+                                                    },
+                                                    child: Column(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.add_business_rounded,
+                                                          color: tabAccionesRegPrsp == 2
+                                                              ? Colors.blue.shade800
+                                                              : Colors.white,
+                                                        ),
+                                                        Text(
+                                                          'Notas Int.',
+                                                          style: TextStyle(
+                                                            //color: Colors.purple.shade700,
+                                                            color: tabAccionesRegPrsp == 2
+                                                                ? Colors.blue.shade800
+                                                                : Colors.white,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              
+                              /*
                                   Container(
                                     color: Colors.transparent,
                                     width: size.width * 0.92,
                                     child: TextFormField(
-                                      //initialValue: 'Terreno',
-                                      //initialValue: '',                                      
                                       cursorColor: AppLightColors().primary,
                                       autovalidateMode: AutovalidateMode.onUserInteraction,
                                       inputFormatters: [
                                         FilteringTextInputFormatter.deny(regexToRemoveEmoji)
                                       ],
-                                      enabled: false,
                                       style: AppTextStyles.bodyRegular(width: size.width),
                                       decoration: InputDecorationCvs.formsDecoration(
-                                        labelText: 'Producto de interés',
-                                        hintTetx: 'Ej: Terreno',
-                                        size: size
-                                      ),
-                                      //controller: emailAkiTxt,
+                                        labelText: 'Teléfono',
+                                        hintTetx: 'Ej: 09xxxxxxxx',
+                                        size: size,
+                                        prefixIcon: const Icon(Icons.search, color: Colors.blue,)                                      
+                                      ),                                  
+                                      controller: telefonoTxt,
                                       autocorrect: false,
                                       keyboardType: TextInputType.text,
                                       minLines: 1,
                                       maxLines: 2,
                                       autofocus: false,
-                                      maxLength: 50,
+                                      maxLength: 20,
                                       textAlign: TextAlign.left,
-                                      onEditingComplete: () {
+                                      onEditingComplete: () async {
                                         FocusScope.of(context).unfocus();
-                                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                        
                                       },
                                       onChanged: (value) {
                                         
                                       },
-                                      onTapOutside: (event) {
+                                      onTapOutside: (event) async {
                                         FocusScope.of(context).unfocus();
+                                        await ProspectoTypeService().getProspectoRegistrado(telefonoTxt.text);
                                       },
                                       validator: (value) {
                                         /*
@@ -499,702 +399,775 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       },
                                     ),
                                   ),
-                                 
+                                  */
+                        
                                   SizedBox(
-                                    height: size.height * 0.04,
+                                    height: size.height * 0.02,
                                   ),
-
+                        
                                   Container(
                                     color: Colors.transparent,
                                     width: size.width * 0.92,
-                                    child: DropdownButtonFormField<String>(
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'Seleccione el país...',
+                                    child: InternationalPhoneNumberInput(
+                                    onInputChanged: (PhoneNumber phoneNumber) async {
+                                      //print("Número cambiado: ${phoneNumber.phoneNumber}");
+                                      if(phoneNumber.phoneNumber != null && phoneNumber.phoneNumber!.length == 13){
+                                        await ProspectoTypeService().getProspectoRegistrado(phoneNumber.phoneNumber!);
+                                      }
+                                    },
+                                    onInputValidated: (bool isValid) async {
+                                      //print("¿Es válido?: $isValid");                                      
+                                    },
+                                    selectorConfig: const SelectorConfig(
+                                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET, // Tipo de selector
+                                    ),
+                                    ignoreBlank: false,
+                                    autoValidateMode: AutovalidateMode.onUserInteraction,
+                                    initialValue: number,
+                                    textFieldController: telefonoTxt,
+                                    formatInput: true,
+                                    keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                                    inputDecoration: InputDecoration(
+                                      hintText: "Ingrese su número",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    onSaved: (PhoneNumber phoneNumber) {
+                                      print('Número guardado: ${phoneNumber.phoneNumber}');
+                                    },
+                                    maxLength: 11,
+                                    errorMessage: 'Teléfono no válido',
+                                  ),
+                                  ),
+                                  
+                                  SizedBox(
+                                    height: size.height * 0.02,
+                                  ),
+                              
+                                  if(tabAccionesRegPrsp == 0)
+                                  Container(
+                                    color: Colors.transparent,
+                                    height: size.height * 0.55,
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          
+                                                                        Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.92,
+                                      child: TextFormField(
+                                        //initialValue: 'Mario Piguave',
+                                        //initialValue: '',
+                                        cursorColor: AppLightColors().primary,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        /*
+                                        inputFormatters: [
+                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                        ],
+                                        */
+                                        style: AppTextStyles.bodyRegular(width: size.width),
+                                        decoration: InputDecorationCvs.formsDecoration(
+                                          labelText: 'Nombres',
+                                          hintTetx: 'Ej: Juan Valdez',
+                                          size: size
                                         ),
-                                        value: paisSelect,
-                                        items: lstPaises
-                                            .map((activityPrsp) =>
-                                                DropdownMenuItem(
-                                                  value: activityPrsp,
-                                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
-                                                ))
-                                            .toList(),
+                                        enabled: false,
+                                        controller: nombresTxt,
+                                        autocorrect: false,
+                                        keyboardType: TextInputType.text,
+                                        minLines: 1,
+                                        maxLines: 2,
+                                        autofocus: false,
+                                        maxLength: 50,
+                                        textAlign: TextAlign.left,
+                                        onEditingComplete: () {
+                                          FocusScope.of(context).unfocus();
+                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                        },
                                         onChanged: (value) {
                                           
-                                          setState(() {
-                                            paisSelect = value ?? '';
-                                          });
-                                                                  
+                                        },
+                                        onTapOutside: (event) {
+                                          FocusScope.of(context).unfocus();
                                         },
                                       ),
                                     ),
                                     
-                                  /*
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                                  
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: TextFormField(
-                                      initialValue: 'Guayaquil',
-                                      enabled: false,                               
-                                      cursorColor: AppLightColors().primary,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      inputFormatters: [
-                                        //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                      ],
-                                      style: AppTextStyles.bodyRegular(width: size.width),
-                                      decoration: InputDecorationCvs.formsDecoration(
-                                        labelText: 'Ciudad',
-                                        hintTetx: 'Ej: Guayaquil',
-                                        size: size
+                                    SizedBox(
+                                      height: size.height * 0.02,
+                                    ),
+                                    
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.92,
+                                      child: TextFormField(
+                                        //initialValue: 'Terreno',
+                                        //initialValue: '',                                      
+                                        cursorColor: AppLightColors().primary,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                        ],
+                                        enabled: false,
+                                        style: AppTextStyles.bodyRegular(width: size.width),
+                                        decoration: InputDecorationCvs.formsDecoration(
+                                          labelText: 'Producto de interés',
+                                          hintTetx: 'Ej: Terreno',
+                                          size: size
+                                        ),
+                                        //controller: emailAkiTxt,
+                                        autocorrect: false,
+                                        keyboardType: TextInputType.text,
+                                        minLines: 1,
+                                        maxLines: 2,
+                                        autofocus: false,
+                                        maxLength: 50,
+                                        textAlign: TextAlign.left,
+                                        onEditingComplete: () {
+                                          FocusScope.of(context).unfocus();
+                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                        },
+                                        onChanged: (value) {
+                                          
+                                        },
+                                        onTapOutside: (event) {
+                                          FocusScope.of(context).unfocus();
+                                        },
                                       ),
-                                      //controller: emailAkiTxt,
-                                      autocorrect: false,
-                                      keyboardType: TextInputType.text,
-                                      minLines: 1,
-                                      maxLines: 2,
-                                      autofocus: false,
-                                      maxLength: 50,
-                                      textAlign: TextAlign.left,
-                                      onEditingComplete: () {
-                                        FocusScope.of(context).unfocus();
-                                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                      },
-                                      onChanged: (value) {
-                                        
-                                      },
-                                      onTapOutside: (event) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      validator: (value) {
-                                        /*
-                                        String pattern = regularExp.regexToEmail;
-                                        RegExp regExp = RegExp(pattern);
-                                        return regExp.hasMatch(value ?? '')
-                                            ? null
-                                            : '¡El valor ingresado no luce como un correo!';
-                                            */
-                                      },
                                     ),
-                                                                      ),
-                                        */    
-
-                                  SizedBox(
-                                    height: size.height * 0.03,
-                                  ),
-                                  
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: TextFormField(
-                                      controller: sectorTxt,
-                                      //initialValue: 'Norte',
-                                      enabled: false,
-                                      cursorColor: AppLightColors().primary,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      style: AppTextStyles.bodyRegular(width: size.width),
-                                      decoration: InputDecorationCvs.formsDecoration(
-                                        labelText: 'Sector',
-                                        hintTetx: 'Ej: Norte',
-                                        size: size
+                                   
+                                    SizedBox(
+                                      height: size.height * 0.04,
+                                    ),
+                        
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.92,
+                                      child: DropdownButtonFormField<String>(
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Seleccione el país...',
+                                          ),
+                                          value: paisSelect,
+                                          items: lstPaises
+                                              .map((activityPrsp) =>
+                                                  DropdownMenuItem(
+                                                    value: activityPrsp,
+                                                    child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
+                                                  ))
+                                              .toList(),
+                                          onChanged: (value) {
+                                            
+                                            setState(() {
+                                              paisSelect = value ?? '';
+                                            });
+                                                                    
+                                          },
+                                        ),
                                       ),
-                                      //controller: emailAkiTxt,
-                                      autocorrect: false,
-                                      keyboardType: TextInputType.text,
-                                      minLines: 1,
-                                      maxLines: 2,
-                                      autofocus: false,
-                                      maxLength: 50,
-                                      textAlign: TextAlign.left,
-                                      onEditingComplete: () {
-                                        FocusScope.of(context).unfocus();
-                                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                      },
-                                      onChanged: (value) {
-                                        
-                                      },
-                                      onTapOutside: (event) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      validator: (value) {
-                                        /*
-                                        String pattern = regularExp.regexToEmail;
-                                        RegExp regExp = RegExp(pattern);
-                                        return regExp.hasMatch(value ?? '')
-                                            ? null
-                                            : '¡El valor ingresado no luce como un correo!';
-                                            */
-                                      },
+                                      
+                                    SizedBox(
+                                      height: size.height * 0.03,
                                     ),
-                                  ),
-                                  
-                                  SizedBox(
-                                    height: size.height * 0.03,
-                                  ),
-                                  
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: const Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('Asignado', style: TextStyle(fontSize: 20),),
-                                        Icon(Icons.check_box_outlined),
-                                      ],
-                                    ),
-                                                                      ),
-                                                                      
-                                                                      SizedBox(
-                                    height: size.height * 0.01,
-                                                                      ),
-                                                                      
-                                                                      /*
-                                                                      Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: TextFormField(
-                                      initialValue: 'Yordani Oliva',
-                                      //initialValue: '',
-                                      cursorColor: AppLightColors().primary,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      inputFormatters: [
-                                        //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                      ],
-                                      style: AppTextStyles.bodyRegular(width: size.width),
-                                      decoration: InputDecorationCvs.formsDecoration(
-                                        labelText: 'Asesor Asignado',
-                                        hintTetx: '',
-                                        size: size
+                                    
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.92,
+                                      child: TextFormField(
+                                        controller: sectorTxt,
+                                        //initialValue: 'Norte',
+                                        enabled: false,
+                                        cursorColor: AppLightColors().primary,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        style: AppTextStyles.bodyRegular(width: size.width),
+                                        decoration: InputDecorationCvs.formsDecoration(
+                                          labelText: 'Sector',
+                                          hintTetx: 'Ej: Norte',
+                                          size: size
+                                        ),
+                                        //controller: emailAkiTxt,
+                                        autocorrect: false,
+                                        keyboardType: TextInputType.text,
+                                        minLines: 1,
+                                        maxLines: 2,
+                                        autofocus: false,
+                                        maxLength: 50,
+                                        textAlign: TextAlign.left,
+                                        onEditingComplete: () {
+                                          FocusScope.of(context).unfocus();
+                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                        },
+                                        onChanged: (value) {
+                                          
+                                        },
+                                        onTapOutside: (event) {
+                                          FocusScope.of(context).unfocus();
+                                        },
                                       ),
-                                      //controller: emailAkiTxt,
-                                      autocorrect: false,
-                                      keyboardType: TextInputType.text,
-                                      minLines: 1,
-                                      maxLines: 2,
-                                      autofocus: false,
-                                      maxLength: 50,
-                                      textAlign: TextAlign.left,
-                                      onEditingComplete: () {
-                                        FocusScope.of(context).unfocus();
-                                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                      },
-                                      onChanged: (value) {
-                                        
-                                      },
-                                      onTapOutside: (event) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      validator: (value) {
-                                        /*
-                                        String pattern = regularExp.regexToEmail;
-                                        RegExp regExp = RegExp(pattern);
-                                        return regExp.hasMatch(value ?? '')
-                                            ? null
-                                            : '¡El valor ingresado no luce como un correo!';
-                                            */
-                                      },
                                     ),
-                                                                      ),
-                                                                      
-                                                                      
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                                  */
-
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.94,
-                                    child: DropdownButtonFormField<String>(
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        labelText:
-                                            'Seleccione la campaña',
+                                    
+                                    SizedBox(
+                                      height: size.height * 0.03,
+                                    ),
+                                    
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.92,
+                                      child: const Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Asignado', style: TextStyle(fontSize: 20),),
+                                          Icon(Icons.check_box_outlined),
+                                        ],
                                       ),
-                                      value: campSelect,
-                                      //value: selectedActivityType,
-                                      items: lstCampanias.map((activityPrsp) =>
-                                              DropdownMenuItem(
-                                                value: activityPrsp,
-                                                //child: Text(activityPrsp),
-                                                child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
-                                              ))
-                                          .toList(),
-                                      onChanged: (String? newValue) {                        
-                                        setState(() {
-                                          campSelect = newValue ?? '';
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                                                  
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.94,
-                                    child: DropdownButtonFormField<String>(
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        labelText:
-                                            'Seleccione el origen',
+                                                                        ),
+                                                                        
+                                                                        SizedBox(
+                                      height: size.height * 0.01,
+                                                                        ),
+                                                                        
+                                                                        /*
+                                                                        Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.92,
+                                      child: TextFormField(
+                                        initialValue: 'Yordani Oliva',
+                                        //initialValue: '',
+                                        cursorColor: AppLightColors().primary,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        inputFormatters: [
+                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                        ],
+                                        style: AppTextStyles.bodyRegular(width: size.width),
+                                        decoration: InputDecorationCvs.formsDecoration(
+                                          labelText: 'Asesor Asignado',
+                                          hintTetx: '',
+                                          size: size
+                                        ),
+                                        //controller: emailAkiTxt,
+                                        autocorrect: false,
+                                        keyboardType: TextInputType.text,
+                                        minLines: 1,
+                                        maxLines: 2,
+                                        autofocus: false,
+                                        maxLength: 50,
+                                        textAlign: TextAlign.left,
+                                        onEditingComplete: () {
+                                          FocusScope.of(context).unfocus();
+                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                        },
+                                        onChanged: (value) {
+                                          
+                                        },
+                                        onTapOutside: (event) {
+                                          FocusScope.of(context).unfocus();
+                                        },
+                                        validator: (value) {
+                                          /*
+                                          String pattern = regularExp.regexToEmail;
+                                          RegExp regExp = RegExp(pattern);
+                                          return regExp.hasMatch(value ?? '')
+                                              ? null
+                                              : '¡El valor ingresado no luce como un correo!';
+                                              */
+                                        },
                                       ),
-                                      value: originSelect,
-                                      items: lstOrigenes
-                                          .map((activityPrsp) =>
-                                              DropdownMenuItem(
-                                                value: activityPrsp,
-                                                //child: Text(activityPrsp),
-                                                child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
-                                              ))
-                                          .toList(),
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          originSelect = newValue ?? '';
-                                        });
-                                      },
+                                                                        ),
+                                                                        
+                                                                        
+                                    SizedBox(
+                                      height: size.height * 0.02,
                                     ),
+                                    */
+                        
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.94,
+                                      child: DropdownButtonFormField<String>(
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText:
+                                              'Seleccione la campaña',
+                                        ),
+                                        value: campSelect,
+                                        //value: selectedActivityType,
+                                        items: lstCampanias.map((activityPrsp) =>
+                                                DropdownMenuItem(
+                                                  value: activityPrsp,
+                                                  //child: Text(activityPrsp),
+                                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                ))
+                                            .toList(),
+                                        onChanged: (String? newValue) {                        
+                                          setState(() {
+                                            campSelect = newValue ?? '';
+                                          });
+                                        },
+                                      ),
                                     ),
-                                                                      
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-
-                                  /*
-                                  String  = '';
-                                  String  = '';
-                                  String  = '';
-
-                                  List<String>  = List<String>.from(json.decode(objTmp.campanias));
-                  List<String>  = List<String>.from(json.decode(objTmp.medias));
-                  List<String>  = List<String>.from(json.decode(objTmp.origen));
-                                   */
-                  
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.94,
-                                    child: DropdownButtonFormField<String>(
-                                                  decoration: const InputDecoration(
-                                                    border: OutlineInputBorder(),
-                                                    labelText:
-                                                        'Seleccione la media',
+                                                                    
+                                    SizedBox(
+                                      height: size.height * 0.02,
+                                    ),
+                        
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.94,
+                                      child: DropdownButtonFormField<String>(
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText:
+                                              'Seleccione el origen',
+                                        ),
+                                        value: originSelect,
+                                        items: lstOrigenes
+                                            .map((activityPrsp) =>
+                                                DropdownMenuItem(
+                                                  value: activityPrsp,
+                                                  //child: Text(activityPrsp),
+                                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                ))
+                                            .toList(),
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            originSelect = newValue ?? '';
+                                          });
+                                        },
+                                      ),
+                                      ),
+                                                                        
+                                    SizedBox(
+                                      height: size.height * 0.02,
+                                    ),
+                        
+                                    /*
+                                    String  = '';
+                                    String  = '';
+                                    String  = '';
+                        
+                                    List<String>  = List<String>.from(json.decode(objTmp.campanias));
+                                          List<String>  = List<String>.from(json.decode(objTmp.medias));
+                                          List<String>  = List<String>.from(json.decode(objTmp.origen));
+                                     */
+                                          
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.94,
+                                      child: DropdownButtonFormField<String>(
+                                                    decoration: const InputDecoration(
+                                                      border: OutlineInputBorder(),
+                                                      labelText:
+                                                          'Seleccione la media',
+                                                    ),
+                                                    value: mediaSelect,
+                                                    items: lstMedias
+                                                        .map((activityPrsp) =>
+                                                            DropdownMenuItem(
+                                                              value: activityPrsp,
+                                                              //child: Text(activityPrsp),
+                                                              child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                            ))
+                                                        .toList(),
+                                                    onChanged: (newValue) {
+                                                      setState(() {
+                                            mediaSelect = newValue ?? '';
+                                          });
+                                                    },
                                                   ),
-                                                  value: mediaSelect,
-                                                  items: lstMedias
-                                                      .map((activityPrsp) =>
-                                                          DropdownMenuItem(
-                                                            value: activityPrsp,
-                                                            //child: Text(activityPrsp),
-                                                            child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
-                                                          ))
-                                                      .toList(),
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                          mediaSelect = newValue ?? '';
-                                        });
-                                                  },
-                                                ),
+                                    ),
+                                                                        
+                                    SizedBox(
+                                      height: size.height * 0.02,
+                                    ),
+                                                                        
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.92,
+                                      child: TextFormField(
+                                        initialValue: 'Maria José',
+                                        //initialValue: '',
+                                        cursorColor: AppLightColors().primary,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        inputFormatters: [
+                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                        ],
+                                        style: AppTextStyles.bodyRegular(width: size.width),
+                                        decoration: InputDecorationCvs.formsDecoration(
+                                          labelText: 'Recomendado por',
+                                          hintTetx: 'Ej: Norte',
+                                          size: size
+                                        ),
+                                        //controller: emailAkiTxt,
+                                        autocorrect: false,
+                                        keyboardType: TextInputType.text,
+                                        minLines: 1,
+                                        maxLines: 2,
+                                        autofocus: false,
+                                        maxLength: 50,
+                                        textAlign: TextAlign.left,
+                                        onEditingComplete: () {
+                                          FocusScope.of(context).unfocus();
+                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                        },
+                                        onChanged: (value) {
+                                          
+                                        },
+                                        onTapOutside: (event) {
+                                          FocusScope.of(context).unfocus();
+                                        },
+                                        validator: (value) {
+                                          /*
+                                          String pattern = regularExp.regexToEmail;
+                                          RegExp regExp = RegExp(pattern);
+                                          return regExp.hasMatch(value ?? '')
+                                              ? null
+                                              : '¡El valor ingresado no luce como un correo!';
+                                              */
+                                        },
+                                      ),
+                                                                        ),
+                                                                        
+                                                                        SizedBox(
+                                      height: size.height * 0.025,
+                                                                        ),
+                                                                    
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                                                      
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                                                                      
+                              
+                                  if(tabAccionesRegPrsp == 1)
                                   Container(
                                     color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: TextFormField(
-                                      initialValue: 'Maria José',
-                                      //initialValue: '',
-                                      cursorColor: AppLightColors().primary,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      inputFormatters: [
-                                        //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                      ],
-                                      style: AppTextStyles.bodyRegular(width: size.width),
-                                      decoration: InputDecorationCvs.formsDecoration(
-                                        labelText: 'Recomendado por',
-                                        hintTetx: 'Ej: Norte',
-                                        size: size
-                                      ),
-                                      //controller: emailAkiTxt,
-                                      autocorrect: false,
-                                      keyboardType: TextInputType.text,
-                                      minLines: 1,
-                                      maxLines: 2,
-                                      autofocus: false,
-                                      maxLength: 50,
-                                      textAlign: TextAlign.left,
-                                      onEditingComplete: () {
-                                        FocusScope.of(context).unfocus();
-                                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                      },
-                                      onChanged: (value) {
-                                        
-                                      },
-                                      onTapOutside: (event) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      validator: (value) {
+                                    height: size.height * 0.55,
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          
+                                          Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.92,
+                                      child: TextFormField(
+                                        //initialValue: 'Mario Piguave',
+                                        //initialValue: '',                                      
+                                        cursorColor: AppLightColors().primary,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        inputFormatters: [
+                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                        ],
+                                        style: AppTextStyles.bodyRegular(width: size.width),
                                         /*
-                                        String pattern = regularExp.regexToEmail;
-                                        RegExp regExp = RegExp(pattern);
-                                        return regExp.hasMatch(value ?? '')
-                                            ? null
-                                            : '¡El valor ingresado no luce como un correo!';
-                                            */
-                                      },
-                                    ),
-                                                                      ),
-                                                                      
-                                                                      SizedBox(
-                                    height: size.height * 0.025,
-                                                                      ),
-                                                                  
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                        decoration: InputDecorationCvs.formsDecoration(
+                                          labelText: 'Probabilidad',
+                                          hintTetx: 'Ej: 50%',
+                                          size: size
+                                        ),
+                                        */
+                                        decoration: InputDecoration(
+                                          hintStyle: SafeGoogleFont(
+                                              GoogleFontsApp().fontMulish,
+                                              fontSize: size.width * 0.0025 * 18,
+                                              fontWeight: FontWeight.w700,
+                                              color:
+                                                  AppLightColors().gray800SecondaryText,
+                                              letterSpacing: 0),
+                                          hintText: "100%",
+                                          suffixText: '%',
+                                        ),
+                                        controller: probabilityTxt,
+                                        autocorrect: false,
+                                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                        minLines: 1,
+                                        maxLines: 1,
+                                        autofocus: false,
+                                        maxLength: 5,
+                                        textAlign: TextAlign.left,
+                                        onEditingComplete: () {
+                                          FocusScope.of(context).unfocus();
+                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                        },
+                                        onChanged: (value) {
+                                          
+                                        },
+                                        onTapOutside: (event) {
+                                          FocusScope.of(context).unfocus();
+                                        },
+                                        validator: (value) {
+                                          /*
+                                          String pattern = regularExp.regexToEmail;
+                                          RegExp regExp = RegExp(pattern);
+                                          return regExp.hasMatch(value ?? '')
+                                              ? null
+                                              : '¡El valor ingresado no luce como un correo!';
+                                              */
+                                        },
+                                      ),
+                                                                        ),
+                                                                        
+                                          SizedBox(
+                                            height: size.height * 0.04,
+                                          ),
+                                          
+                                          Container(
+                                            color: Colors.transparent,
+                                            width: size.width * 0.92,
+                                            child: TextFormField(
+                                            //initialValue: 'Terreno',
+                                            //initialValue: '',
+                                            cursorColor: AppLightColors().primary,
+                                            autovalidateMode: AutovalidateMode.onUserInteraction,                    
+                                            style: AppTextStyles.bodyRegular(width: size.width),
+                                            decoration: InputDecorationCvs.formsDecoration(
+                        labelText: 'Ingreso esperado en dólares',
+                        //hintTetx: 'Ej: 5',
+                        size: size
+                                            ),
+                                            //controller: emailAkiTxt,
+                                            autocorrect: false,
+                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                            minLines: 1,
+                                            maxLines: 1,
+                                            autofocus: false,
+                                            maxLength: 7,
+                                            textAlign: TextAlign.left,
+                                            onEditingComplete: () {
+                        FocusScope.of(context).unfocus();
+                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                            },
+                                            onChanged: (value) {
+                        
+                                            },
+                                            onTapOutside: (event) {
+                        FocusScope.of(context).unfocus();
+                                            },
+                                            validator: (value) {
+                        /*
+                        String pattern = regularExp.regexToEmail;
+                        RegExp regExp = RegExp(pattern);
+                        return regExp.hasMatch(value ?? '')
+                            ? null
+                            : '¡El valor ingresado no luce como un correo!';
+                            */
+                                            },
+                                            ),
+                                          ),
+                                          
+                                          SizedBox(
+                                            height: size.height * 0.04,
+                                          ),
+                                          
+                                          Container(
+                                            color: Colors.transparent,
+                                            width: size.width * 0.92,
+                                            child: TextFormField(
+                                            //initialValue: 'Ecuador',
+                                            //initialValue: '',
+                                            cursorColor: AppLightColors().primary,
+                                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                                            
+                                            style: AppTextStyles.bodyRegular(width: size.width),
+                                            decoration: InputDecorationCvs.formsDecoration(
+                        labelText: 'Correo',
+                        hintTetx: 'Ej: correo@ejemplo.com',
+                        size: size
+                                            ),
+                                            controller: emailTxt,
+                                            autocorrect: false,
+                                            keyboardType: TextInputType.emailAddress,
+                                            minLines: 1,
+                                            maxLines: 2,
+                                            autofocus: false,
+                                            maxLength: 50,
+                                            textAlign: TextAlign.left,
+                                            onEditingComplete: () {
+                        FocusScope.of(context).unfocus();
+                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                            },
+                                            onChanged: (value) {
+                        
+                                            },
+                                            onTapOutside: (event) {
+                        FocusScope.of(context).unfocus();
+                                            },
+                                            validator: (value) {
+                        
+                        String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                        RegExp regExp = RegExp(pattern);
+                        return regExp.hasMatch(value ?? '')
+                          ? null
+                          : 'Correo inválido';                          
+                                            },
+                                            ),
+                                          ),
+                                          
+                                          SizedBox(
+                                            height: size.height * 0.06,
+                                          ),
+                                          
+                                          Container(
+                                            color: Colors.transparent,
+                                            width: size.width * 0.92,
+                                            child: TextFormField(
+                        initialValue: fecCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp),
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Cierre esperado',
+                          border: OutlineInputBorder(),
+                          suffixIcon: Icon(Icons.calendar_today),
+                        ),
+                        onTap: () async {
+                          DateTime? pickedDate =
+                              await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2100),
+                          );
+                          if (pickedDate != null) {
                             
-                                if(tabAccionesRegPrsp == 1)
-                                Container(
-                                  color: Colors.transparent,
-                                  height: size.height * 0.55,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        
-                                        Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: TextFormField(
-                                      //initialValue: 'Mario Piguave',
-                                      //initialValue: '',                                      
-                                      cursorColor: AppLightColors().primary,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      inputFormatters: [
-                                        //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                      ],
-                                      style: AppTextStyles.bodyRegular(width: size.width),
-                                      /*
-                                      decoration: InputDecorationCvs.formsDecoration(
-                                        labelText: 'Probabilidad',
-                                        hintTetx: 'Ej: 50%',
-                                        size: size
-                                      ),
-                                      */
-                                      decoration: InputDecoration(
-                                        hintStyle: SafeGoogleFont(
-                                            GoogleFontsApp().fontMulish,
-                                            fontSize: size.width * 0.0025 * 18,
-                                            fontWeight: FontWeight.w700,
-                                            color:
-                                                AppLightColors().gray800SecondaryText,
-                                            letterSpacing: 0),
-                                        hintText: "100%",
-                                        suffixText: '%',
-                                      ),
-                                      controller: probabilityTxt,
-                                      autocorrect: false,
-                                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                      minLines: 1,
-                                      maxLines: 1,
-                                      autofocus: false,
-                                      maxLength: 5,
-                                      textAlign: TextAlign.left,
-                                      onEditingComplete: () {
-                                        FocusScope.of(context).unfocus();
-                                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                      },
-                                      onChanged: (value) {
-                                        
-                                      },
-                                      onTapOutside: (event) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      validator: (value) {
-                                        /*
-                                        String pattern = regularExp.regexToEmail;
-                                        RegExp regExp = RegExp(pattern);
-                                        return regExp.hasMatch(value ?? '')
-                                            ? null
-                                            : '¡El valor ingresado no luce como un correo!';
-                                            */
-                                      },
-                                    ),
-                                                                      ),
-                                                                      
-                                        SizedBox(
-                    height: size.height * 0.04,
-                                        ),
-                                        
-                                        Container(
-                    color: Colors.transparent,
-                    width: size.width * 0.92,
-                    child: TextFormField(
-                    //initialValue: 'Terreno',
-                    //initialValue: '',
-                    cursorColor: AppLightColors().primary,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    inputFormatters: [
-                      //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                    ],
-                    style: AppTextStyles.bodyRegular(width: size.width),
-                    decoration: InputDecorationCvs.formsDecoration(
-                      labelText: 'Ingreso esperado en dólares',
-                      //hintTetx: 'Ej: 5',
-                      size: size
-                    ),
-                    //controller: emailAkiTxt,
-                    autocorrect: false,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    minLines: 1,
-                    maxLines: 1,
-                    autofocus: false,
-                    maxLength: 7,
-                    textAlign: TextAlign.left,
-                    onEditingComplete: () {
-                      FocusScope.of(context).unfocus();
-                      //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                    },
-                    onChanged: (value) {
-                      
-                    },
-                    onTapOutside: (event) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    validator: (value) {
-                      /*
-                      String pattern = regularExp.regexToEmail;
-                      RegExp regExp = RegExp(pattern);
-                      return regExp.hasMatch(value ?? '')
-                          ? null
-                          : '¡El valor ingresado no luce como un correo!';
-                          */
-                    },
-                    ),
-                                        ),
-                                        
-                                        SizedBox(
-                    height: size.height * 0.04,
-                                        ),
-                  
-                                        Container(
-                    color: Colors.transparent,
-                    width: size.width * 0.92,
-                    child: TextFormField(
-                    //initialValue: 'Ecuador',
-                    //initialValue: '',
-                    cursorColor: AppLightColors().primary,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    
-                    style: AppTextStyles.bodyRegular(width: size.width),
-                    decoration: InputDecorationCvs.formsDecoration(
-                      labelText: 'Correo',
-                      hintTetx: 'Ej: correo@ejemplo.com',
-                      size: size
-                    ),
-                    controller: emailTxt,
-                    autocorrect: false,
-                    keyboardType: TextInputType.emailAddress,
-                    minLines: 1,
-                    maxLines: 2,
-                    autofocus: false,
-                    maxLength: 50,
-                    textAlign: TextAlign.left,
-                    onEditingComplete: () {
-                      FocusScope.of(context).unfocus();
-                      //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                    },
-                    onChanged: (value) {
-                      
-                    },
-                    onTapOutside: (event) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    validator: (value) {
-                      
-                      String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                      RegExp regExp = RegExp(pattern);
-                      return regExp.hasMatch(value ?? '')
-                        ? null
-                        : 'Correo inválido';                          
-                    },
-                    ),
-                  ),
-                  
-                  SizedBox(
-                    height: size.height * 0.06,
-                  ),
-                                        
-                  Container(
-                    color: Colors.transparent,
-                    width: size.width * 0.92,
-                    child: TextFormField(
-                      initialValue: fecCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp),
-                      readOnly: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Cierre esperado',
-                        border: OutlineInputBorder(),
-                        suffixIcon: Icon(Icons.calendar_today),
-                      ),
-                      onTap: () async {
-                        DateTime? pickedDate =
-                            await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2100),
-                        );
-                        if (pickedDate != null) {
-                          
-                          setState(() {
-                            //dateRgPrsp = pickedDate;
-                            fecCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
-                          });
-                                
-                        }
-                      },
-                    ),
-                                                                
-                  ),
-                  
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-
-                  Container(
-                    color: Colors.transparent,
-                    width: size.width * 0.92,
-                    height: size.height * 0.15,
-                    child: TextFormField(
-                      controller: direccionTxt,
-                    //initialValue: 'Yordani Oliva',
-                    //initialValue: '',
-                    cursorColor: AppLightColors().primary,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    inputFormatters: [
-                      //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                    ],
-                    style: AppTextStyles.bodyRegular(width: size.width),
-                    decoration: InputDecorationCvs.formsDecoration(
-                      labelText: 'Dirección',
-                      hintTetx: '',
-                      size: size
-                    ),
-                    autocorrect: false,
-                    keyboardType: TextInputType.text,
-                    minLines: 3,
-                    maxLines: 6,
-                    autofocus: false,
-                    maxLength: 150,
-                    textAlign: TextAlign.left,
-                    onEditingComplete: () {
-                      FocusScope.of(context).unfocus();
-                      //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                    },
-                    onChanged: (value) {
-                      
-                    },
-                    onTapOutside: (event) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    validator: (value) {
-                      /*
-                      String pattern = regularExp.regexToEmail;
-                      RegExp regExp = RegExp(pattern);
-                      return regExp.hasMatch(value ?? '')
-                          ? null
-                          : '¡El valor ingresado no luce como un correo!';
-                          */
-                    },
-                    ),
-                                  ),
+                            setState(() {
+                              //dateRgPrsp = pickedDate;
+                              fecCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
+                            });
                                   
-                                  SizedBox(
-                                    height: size.height * 0.025,
-                                  ),
+                          }
+                        },
+                                            ),
                                                                   
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                            
-                                if(tabAccionesRegPrsp == 2)
-                                Container(
-                                  color: Colors.transparent,
-                                  height: size.height * 0.55,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        
-                                        Container(
-                                          color: Colors.transparent,
-                                          width: size.width * 0.92,
-                                          child: TextFormField(
-                                            //initialValue: 'Ej: Interesado en casa pero no tiene trabajo estable',
+                                          ),
+                                          
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                        
+                                          Container(
+                                            color: Colors.transparent,
+                                            width: size.width * 0.92,
+                                            height: size.height * 0.15,
+                                            child: TextFormField(
+                        controller: direccionTxt,
+                                            //initialValue: 'Yordani Oliva',
                                             //initialValue: '',
                                             cursorColor: AppLightColors().primary,
                                             autovalidateMode: AutovalidateMode.onUserInteraction,
                                             inputFormatters: [
-                                              //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                        //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
                                             ],
                                             style: AppTextStyles.bodyRegular(width: size.width),
                                             decoration: InputDecorationCvs.formsDecoration(
-                                              labelText: 'Observaciones',
-                                              hintTetx: 'Ej: Interesado en casa pero no tiene trabajo estable',
-                                              size: size
+                        labelText: 'Dirección',
+                        hintTetx: '',
+                        size: size
                                             ),
-                                            controller: observacionesTxt,
                                             autocorrect: false,
                                             keyboardType: TextInputType.text,
-                                            minLines: 1,
-                                            maxLines: 4,
+                                            minLines: 3,
+                                            maxLines: 6,
                                             autofocus: false,
                                             maxLength: 150,
                                             textAlign: TextAlign.left,
                                             onEditingComplete: () {
-                                              FocusScope.of(context).unfocus();
-                                              //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                        FocusScope.of(context).unfocus();
+                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
                                             },
                                             onChanged: (value) {
-                                              
+                        
                                             },
                                             onTapOutside: (event) {
-                                              FocusScope.of(context).unfocus();
+                        FocusScope.of(context).unfocus();
                                             },
                                             validator: (value) {
-                                              /*
-                                              String pattern = regularExp.regexToEmail;
-                                              RegExp regExp = RegExp(pattern);
-                                              return regExp.hasMatch(value ?? '')
-                                                  ? null
-                                                  : '¡El valor ingresado no luce como un correo!';
-                                                  */
+                        /*
+                        String pattern = regularExp.regexToEmail;
+                        RegExp regExp = RegExp(pattern);
+                        return regExp.hasMatch(value ?? '')
+                            ? null
+                            : '¡El valor ingresado no luce como un correo!';
+                            */
                                             },
-                                          ),
-                                        ),
-                                        
-                                        SizedBox(
-                                          height: size.height * 0.02,
-                                        ),
-                                                                      
-                                                                  
-                                      ],
+                                            ),
+                                    ),
+                                    
+                                    SizedBox(
+                                      height: size.height * 0.025,
+                                    ),
+                                                                    
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                            
-                              ],
+                              
+                                  if(tabAccionesRegPrsp == 2)
+                                  Container(
+                                    color: Colors.transparent,
+                                    height: size.height * 0.55,
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          
+                                          Container(
+                                            color: Colors.transparent,
+                                            width: size.width * 0.92,
+                                            child: TextFormField(
+                                              //initialValue: 'Ej: Interesado en casa pero no tiene trabajo estable',
+                                              //initialValue: '',
+                                              cursorColor: AppLightColors().primary,
+                                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                                              inputFormatters: [
+                                                //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                              ],
+                                              style: AppTextStyles.bodyRegular(width: size.width),
+                                              decoration: InputDecorationCvs.formsDecoration(
+                                                labelText: 'Observaciones',
+                                                hintTetx: 'Ej: Interesado en casa pero no tiene trabajo estable',
+                                                size: size
+                                              ),
+                                              controller: observacionesTxt,
+                                              autocorrect: false,
+                                              keyboardType: TextInputType.text,
+                                              minLines: 1,
+                                              maxLines: 4,
+                                              autofocus: false,
+                                              maxLength: 150,
+                                              textAlign: TextAlign.left,
+                                              onEditingComplete: () {
+                                                FocusScope.of(context).unfocus();
+                                                //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                              },
+                                              onChanged: (value) {
+                                                
+                                              },
+                                              onTapOutside: (event) {
+                                                FocusScope.of(context).unfocus();
+                                              },
+                                              validator: (value) {
+                                                /*
+                                                String pattern = regularExp.regexToEmail;
+                                                RegExp regExp = RegExp(pattern);
+                                                return regExp.hasMatch(value ?? '')
+                                                    ? null
+                                                    : '¡El valor ingresado no luce como un correo!';
+                                                    */
+                                              },
+                                            ),
+                                          ),
+                                          
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                                                                        
+                                                                    
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                              
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                   
                       Positioned(
@@ -1475,4 +1448,5 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
         
     );
   }
+
 }

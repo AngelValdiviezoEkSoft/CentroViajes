@@ -3,20 +3,31 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/config/environments/environments.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
+import 'package:cvs_ec_app/ui/themes/theme.dart';
 import 'package:cvs_ec_app/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../infraestructure/services/services.dart';
 
 import 'package:geolocator/geolocator.dart';
 
+String rutaServerWelcome = '';
 Rutas objRutasGen = Rutas();
 TextEditingController serverTxt = TextEditingController();
 TextEditingController keyTxt = TextEditingController();
 
 class WelcomeScreen extends StatelessWidget {
+
+  //final String rutaServerTmp;
+
+  WelcomeScreen(Key? key) : super(key: key)
+  {    
+    //rutaServer = rutaServerTmp;
+    serverTxt.text = rutaServerWelcome;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +48,35 @@ class WelcomeScreen extends StatelessWidget {
               ),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ChangeNotifierProvider(
+                    create: (_) => AuthService(),
+                    child: Welcome2Screen(),
+                  ),                  
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+}
+
+class Welcome2Screen extends StatelessWidget {
+  
+  @override
+  Widget build(BuildContext context) {
+
+    final size = MediaQuery.of(context).size;
+
+    final authService = Provider.of<AuthService>(context);
+
+    return Container(
+      width: size.width,
+      height: size.height * 0.98,
+      child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
@@ -77,23 +117,27 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 SizedBox(height: size.height * 0.04),
             
-                // Subtítulo
-                
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Container(
-                  padding: const EdgeInsets.all(16),  // Espaciado interno
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50), // Bordes redondeados
-                    color: Colors.white                  
-                  ),                
-                  child: TextField(
-                    controller: serverTxt,
-                    decoration: InputDecoration(                  
-                      labelText: 'Servidor',
-                      suffixIcon: const Icon(Icons.qr_code_scanner_outlined),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
+                child: GestureDetector(
+                  onTap: () {
+                    context.push(Rutas().rutaScanQr);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(16),  // Espaciado interno
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50), // Bordes redondeados
+                      color: Colors.white
+                    ),                
+                    child: TextField(
+                      enabled: false,
+                      controller: serverTxt,
+                      decoration: InputDecoration(
+                        labelText: 'Servidor',
+                        suffixIcon: const Icon(Icons.qr_code_scanner_outlined),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
                     ),
                   ),
@@ -110,10 +154,34 @@ class WelcomeScreen extends StatelessWidget {
                     color: Colors.white                  
                   ),                
                   child: TextField(
+                    obscureText: authService.varIsKeyOscured,
                     controller: keyTxt,
                     decoration: InputDecoration(                  
                       labelText: 'Key',
-                      suffixIcon: const Icon(Icons.key),
+                      suffixIcon: //const Icon(Icons.key),
+                      !authService.varIsKeyOscured
+                                      ? IconButton(
+                                          onPressed: () {
+                                            authService.varIsKeyOscured =
+                                                !authService.varIsKeyOscured;
+                                          },
+                                          icon: Icon(Icons.key,
+                                              size: 24,
+                                              color: AppLightColors()
+                                                  .gray900PrimaryText),
+                                        )
+                                      : IconButton(
+                                          onPressed: () {
+                                            authService.varIsKeyOscured =
+                                                !authService.varIsKeyOscured;
+                                          },
+                                          icon: Icon(
+                                              size: 24,
+                                              Icons.key_off,
+                                              color: AppLightColors()
+                                                  .gray900PrimaryText),
+                                        ),
+                                
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -213,7 +281,7 @@ TextEditingController keyTxt = TextEditingController();
                     server: serverTxt.text,
                     key: keyTxt.text,
                     imei: imeiCod,
-                    //imei: '823456047',
+                    //imei: '8234560479',
                     lat: position.latitude.toString(),//'-74.45445',
                     lon: position.longitude.toString(),//'72.74548487',
                     so: plataforma//'Android'
@@ -222,7 +290,8 @@ TextEditingController keyTxt = TextEditingController();
                   RegisterDeviceResponseModel respuesta = await AuthService().doneRegister(objRegisterMobileRequestModel);
                   context.pop();
 
-                  if(respuesta.result.estado == 200){                    
+                  if(respuesta.result.estado == 200){   
+                    rutaServerWelcome = '';
                     context.push(objRutasGen.rutaDefault);
                   }
                   else{                    
@@ -309,45 +378,26 @@ TextEditingController keyTxt = TextEditingController();
                     ),
                   ],
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15), // Espaciado interno del botón
-                child: Text(
-                  'Comenzar',
-                  style: TextStyle(
-                    color: Colors.white,  // Color del texto
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15), // Espaciado interno del botón
+                  child: const Text(
+                    'Comenzar',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
                   ),
-                  /*
-                  ElevatedButton(
-                    onPressed: () {
-                      context.push(objRutasGen.rutaDefault);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:Color(0xFF5C6BC0),
-                      padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: Text(
-                      'Comenzar',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                  ),
-                  */
                 ),
               
               ],
             ),
-          ),
-        ),
-      ),
+         
     );
   }
 
+  
    Future<Position> getCurrentLocation() async 
    {
     bool serviceEnabled;
@@ -402,6 +452,7 @@ TextEditingController keyTxt = TextEditingController();
     // Si tienes los permisos necesarios, obtiene la posición actual
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
+
 
 
 }

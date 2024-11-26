@@ -259,9 +259,6 @@ class PerfilScreen extends StatelessWidget {
                 }
               ),
           
-            //SizedBox(height: 20),
-            // Botón de cerrar sesión
-
             Container(
               color: Colors.transparent,
               width: size.width * 0.9,
@@ -270,32 +267,33 @@ class PerfilScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Center(
-                child: OutlinedButton(
-                  onPressed: () {
-                    // Acción de cerrar sesión
-                    context.pop();
-                  },
-                  child: Container(
-                    width: size.width * 0.15,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(Icons.close, color: Colors.black,),
-                        Text(
-                          'Salir',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
+                  child: OutlinedButton(
+                    onPressed: () {
+                      // Acción de cerrar sesión
+                      context.pop();
+                    },
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Colors.grey),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Container(
+                        color: Colors.transparent,
+                        width: size.width * 0.15,
+                        child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(Icons.close, color: Colors.black,),
+                          Text(
+                            'Salir',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                      ),
                     ),
                   ),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.grey),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ),
 
               Center(
                 child: OutlinedButton(

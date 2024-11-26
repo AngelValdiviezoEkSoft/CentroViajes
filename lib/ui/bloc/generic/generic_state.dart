@@ -69,8 +69,19 @@ class GenericState extends Equatable {
 
       Map<String, dynamic> dataTmp = json.decode(json.encode(lstFinal));
 
-      // Extrae los valores de 'name' y crea la lista de String
-      List<String> lstRsp = dataTmp.values.map((item) => item['name'].toString()).toList();
+      List<String> lstRsp = [];
+
+      dataTmp.forEach((key, value) {
+        if(key == objTmp['current_company'].toString()){
+          lstRsp.add(value['name']);
+        }
+      });
+
+      dataTmp.forEach((key, value) {
+        if(key != objTmp['current_company'].toString()){                  
+          lstRsp.add(value['name']);
+        }
+      });
 
       return json.encode(lstRsp);
     }

@@ -4,6 +4,7 @@ import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
+  
   const ProfileScreen(this.username, {Key? key, required this.imagePath})
       : super(key: key);
   final String username;
@@ -11,12 +12,6 @@ class ProfileScreen extends StatelessWidget {
 
   final String githubURL =
       "https://github.com/MCarlomagno/FaceRecognitionAuth/tree/master";
-
-/*
-  void _launchURL() async => await canLaunch(githubURL)
-      ? await launch(githubURL)
-      : throw 'Could not launch $githubURL';
-      */
 
   @override
   Widget build(BuildContext context) {

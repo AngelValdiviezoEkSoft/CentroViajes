@@ -23,3 +23,5 @@ export 'package:cvs_ec_app/ui/screens/perfil/perfil.dart';
 export 'package:cvs_ec_app/ui/screens/prospectos/prospectos.dart';
 
 export 'package:cvs_ec_app/ui/screens/actividades/actividades.dart';
+
+export 'package:cvs_ec_app/ui/screens/qr/qr.dart';

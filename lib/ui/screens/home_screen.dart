@@ -35,7 +35,7 @@ class HomeScreen extends StatefulWidget {
   */
 
   
-  const HomeScreen({Key? key}) : super (key: key);
+  const HomeScreen(Key? key) : super (key: key);
 
   @override
   HomeScreenState createState() => HomeScreenState();
@@ -64,15 +64,6 @@ class HomeScreenState extends State<HomeScreen> {
     int varMuestraNotificacionesTrInfo = 0;
 
     final size = MediaQuery.of(context).size;
-
-    /* 
-    onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        onPressedCont: () {
-                          Navigator.of(context).pop();
-                        },
-    */
 
     final items = <ItemBoton>[
       ItemBoton('','','',1, Icons.group_add, 'Prospectos', 'Seguimiento y control de prospectos','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','',

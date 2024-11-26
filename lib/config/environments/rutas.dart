@@ -17,6 +17,7 @@ class Rutas{
   String rutaConexionInternet = '/conInternet';
   String rutaCheckAuth = '/rutCheckAuth';
   String rutaConsultaVacia = '/consultaVacia';
+  String rutaScanQr = '/scanQr';
 
   //imágenes 
   String rutaImagenes = 'assets/images/';

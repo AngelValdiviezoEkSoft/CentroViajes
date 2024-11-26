@@ -53,6 +53,13 @@ class AuthService extends ChangeNotifier {
   String varCedula = '';
   String varPasaporte = '';
 
+  bool isKeyOscured = true;
+  bool get varIsKeyOscured => isKeyOscured;
+  set varIsKeyOscured(bool value) {
+    isKeyOscured = value;
+    notifyListeners();
+  }
+
   bool isOscured = true;
   bool get varIsOscured => isOscured;
   set varIsOscured(bool value) {

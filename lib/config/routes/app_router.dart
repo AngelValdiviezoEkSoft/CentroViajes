@@ -48,7 +48,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: objRutas.rutaHome,
-      builder: (context, state) => const HomeScreen(),      
+      builder: (context, state) => const HomeScreen(null),      
     ),
     GoRoute(
       path: objRutas.rutaLstAct,
@@ -83,12 +83,13 @@ final GoRouter appRouter = GoRouter(
                       return AuthScreen();
                     }
                     if(snapshot.data == 'home') {
-                      return const HomeScreen();
+                      return const HomeScreen(null);
                     }
                   }
                 }
               }
-              return WelcomeScreen();
+              
+              return WelcomeScreen(null);
             }
           );
         },
@@ -137,6 +138,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: objRutas.rutaCheckAuth,
       builder: (context, state) => const CheckAuthScreen(),      
+    ),
+    GoRoute(
+      path: objRutas.rutaScanQr,
+      builder: (context, state) => ScanQrScreen(null),
     ),
   ],
   initialLocation: objRutas.rutaBienvenida,

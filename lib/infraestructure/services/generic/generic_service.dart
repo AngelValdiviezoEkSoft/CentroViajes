@@ -23,8 +23,17 @@ class GenericService extends ChangeNotifier {
     return formKey.currentState?.validate() ?? false;
   }
 
-  getModelos(ConsultaModelRequestModel objReq) async {
-    final ruta = '${env.apiEndpoint}<imei>/done/data/<model>/model';
+  getModelos(ConsultaModelRequestModel objReq, String modelBusca) async {
+    //final ruta = '${env.apiEndpoint}<imei>/done/data/<model>/model';
+
+    String ruta = '';
+    final objStr = await storage.read(key: 'RespuestaRegistro') ?? '';
+    
+    if(objStr.isNotEmpty)
+    {  
+      var obj = RegisterDeviceResponseModel.fromJson(objStr);
+      ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/data/$modelBusca/model';
+    }
     
     final Map<String, dynamic> body = 
     {
@@ -60,7 +69,17 @@ class GenericService extends ChangeNotifier {
   }
   
   getMultiModelos(ConsultaMultiModelRequestModel objReq, String modelo) async {
-    final ruta = '${env.apiEndpoint}${objReq.params.imei}/done/data/multi/models';
+
+    //final ruta = '${env.apiEndpoint}${objReq.params.imei}/done/data/multi/models';
+    
+    String ruta = '';
+    final objStr = await storage.read(key: 'RespuestaRegistro') ?? '';
+    
+    if(objStr.isNotEmpty)
+    {  
+      var obj = RegisterDeviceResponseModel.fromJson(objStr);
+      ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/data/multi/models';
+    }
 
     String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 

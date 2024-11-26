@@ -2,28 +2,22 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
+import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:cvs_ec_app/config/config.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 
 const storageCamp = FlutterSecureStorage();
-/*
-MensajesAlertas objMensajesProspectoService = MensajesAlertas();
-ResponseValidation objResponseValidationService = ResponseValidation();
-*/
+
 class CampaniaService extends ChangeNotifier{
 
   final String endPoint = CadenaConexion().apiEndpoint;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  
-  //ProspectoTypeService(String tipoIdent, String numIdent){
-  CampaniaService(){
-    //getProspecto(tipoIdent, numIdent);
-  }
 
+  final TokenManager tokenManager = TokenManager();
+  
   getCompanias() async {
     try{
 
@@ -54,6 +48,8 @@ class CampaniaService extends ChangeNotifier{
           models: lstMultiModel
         )
       );
+
+      tokenManager.startTokenCheck();
 
       var rsp = await GenericService().getMultiModelos(objReq, "utm.campaign");
       

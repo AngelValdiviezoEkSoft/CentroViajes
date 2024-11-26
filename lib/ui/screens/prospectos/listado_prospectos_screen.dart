@@ -163,8 +163,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                             */
 
                             return Slidable(
-                              //key: ValueKey(lstCLientes[index].id),
-                              //key: ValueKey(objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["id"]),
                               key: ValueKey(prospectosFiltrados[index].id),
                               startActionPane: ActionPane(
                                 motion: const ScrollMotion(),
@@ -179,22 +177,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                 
                                   ]
                               ),
-                              /*
-                              endActionPane: ActionPane(
-                                  motion: const ScrollMotion(),
-                                  children: [
-                                    
-                                  SlidableAction(
-                                    onPressed: (context) => context.push(Rutas().rutaReasignaCliente),
-                                    backgroundColor: objColorsApp.morado,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.update,
-                                    label: 'Solicitud de revisión de prospecto',
-                                  ),
-                                  
-                                ],
-                              ),
-                              */
                               child: ListTile(
                                 title: Container(
                                 color: Colors.transparent,
@@ -377,7 +359,10 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                               height: size.height * 0.03,
                                               child: IconButton(
                                                 icon: const Icon(Icons.info, color: Colors.grey, size: 20,),
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  idProsp = prospectosFiltrados[index].id;
+                                                  context.push(Rutas().rutaEditProsp);
+                                                },
                                               ),
                                             ),
                                             SizedBox(height: size.height * 0.004,)

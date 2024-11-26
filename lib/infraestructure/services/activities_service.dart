@@ -2,15 +2,17 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
+import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:cvs_ec_app/config/config.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 
 const storageAct = FlutterSecureStorage();
 
 class ActivitiesService extends ChangeNotifier{
+
+  final TokenManager tokenManager = TokenManager();
 
   final String endPoint = CadenaConexion().apiEndpoint;
 
@@ -46,6 +48,8 @@ class ActivitiesService extends ChangeNotifier{
           models: lstMultiModel
         )
       );
+
+      tokenManager.startTokenCheck();
 
       var rsp = await GenericService().getMultiModelos(objReq, "mail.activity.type");
       

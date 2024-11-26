@@ -14,34 +14,35 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 
-int tabAccionesRegPrsp = 0;
+int idProsp = 0;
+int tabAccionesEditPrsp = 0;
 
-late TextEditingController nombresTxt;
-late TextEditingController emailTxt;
-late TextEditingController direccionTxt;
-late TextEditingController observacionesTxt;
-late TextEditingController paisTxt;
-late TextEditingController probabilityTxt;
-late TextEditingController telefonoTxt;
-late TextEditingController sectorTxt;
+late TextEditingController nombresEditTxt;
+late TextEditingController emailEditTxt;
+late TextEditingController direccionEditTxt;
+late TextEditingController observacionesEditTxt;
+late TextEditingController paisEditTxt;
+late TextEditingController probabilityEditTxt;
+late TextEditingController telefonoEditTxt;
+late TextEditingController sectorEditTxt;
 
-DateTime dateRgPrsp = DateTime.now();
+DateTime dateEdPrsp = DateTime.now();
 
-String fecCierre = '';
-String campSelect = '';
-String mediaSelect = '';
-String originSelect = '';
-String actSelect = '';
-String paisSelect = '';
+String fecEditCierre = '';
+String campEditSelect = '';
+String mediaEditSelect = '';
+String originEditSelect = '';
+String actEditSelect = '';
+String paisEditSelect = '';
 
-class FrmRegistroProspectoScreen extends StatefulWidget {
-  const FrmRegistroProspectoScreen({super.key});
+class FrmEditProspectoScreen extends StatefulWidget {
+  const FrmEditProspectoScreen({super.key});
 
   @override
-  State<FrmRegistroProspectoScreen> createState() => _FrmRegistroProspectoScreenState();
+  State<FrmEditProspectoScreen> createState() => _FrmEditProspectoScreenState();
 }
 
-class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen> {
+class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
 
   final LocalAuthentication auth = LocalAuthentication();  
 
@@ -52,15 +53,15 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
   void initState() {
     super.initState();
 
-    nombresTxt = TextEditingController();
-    emailTxt = TextEditingController();
-    direccionTxt = TextEditingController();
-    observacionesTxt = TextEditingController();
-    paisTxt = TextEditingController();
-    probabilityTxt = TextEditingController();
-    fecCierre = DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp);
-    telefonoTxt = TextEditingController();
-    sectorTxt = TextEditingController(text: 'Norte');
+    nombresEditTxt = TextEditingController();
+    emailEditTxt = TextEditingController();
+    direccionEditTxt = TextEditingController();
+    observacionesEditTxt = TextEditingController();
+    paisEditTxt = TextEditingController();
+    probabilityEditTxt = TextEditingController();
+    fecEditCierre = DateFormat('dd-MM-yyyy', 'es').format(dateEdPrsp);
+    telefonoEditTxt = TextEditingController();
+    sectorEditTxt = TextEditingController(text: 'Norte');
   }
 
   void getPhoneNumber(String phoneNumber) async {
@@ -92,7 +93,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
               context.pop();
             },
           ),
-          title: const Text('Prospectos'),
+          title: const Text('Edición de Prospecto'),
           actions: [
             IconButton(
               icon: const Icon(Icons.filter_list, color: Colors.black),
@@ -185,24 +186,24 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                       .map((item) => item["name"]?.toString() ?? '')
                       .toList();
 
-                  if(campSelect.isEmpty){                      
-                    campSelect = lstCampanias.first;
+                  if(campEditSelect.isEmpty){                      
+                    campEditSelect = lstCampanias.first;
                   }
 
-                  if(mediaSelect.isEmpty){
-                    mediaSelect = lstMedias.first;
+                  if(mediaEditSelect.isEmpty){
+                    mediaEditSelect = lstMedias.first;
                   }
 
-                  if(originSelect.isEmpty){
-                    originSelect = lstOrigenes.first;
+                  if(originEditSelect.isEmpty){
+                    originEditSelect = lstOrigenes.first;
                   }
 
-                  if(actSelect.isEmpty){
-                    actSelect = lstActividades.first;
+                  if(actEditSelect.isEmpty){
+                    actEditSelect = lstActividades.first;
                   }
 
-                  if(paisSelect.isEmpty){
-                    paisSelect = lstPaises.first;
+                  if(paisEditSelect.isEmpty){
+                    paisEditSelect = lstPaises.first;
                   }
 
                   return Stack(
@@ -243,27 +244,27 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           children: [
                                             Expanded(
                                               child: Container(
-                                                color: tabAccionesRegPrsp == 0
+                                                color: tabAccionesEditPrsp == 0
                                                     ? Colors.white
                                                     : Colors.blue.shade800,
                                                 child: Center(
                                                   child: TextButton(
                                                     onPressed: () {
-                                                      tabAccionesRegPrsp = 0;
+                                                      tabAccionesEditPrsp = 0;
                                                       setState(() {});
                                                     },
                                                     child: Column(
                                                       children: [
                                                         Icon(
                                                           Icons.info_outline,
-                                                          color: tabAccionesRegPrsp == 0
+                                                          color: tabAccionesEditPrsp == 0
                                                               ? Colors.blue.shade800
                                                               : Colors.white,
                                                         ),
                                                         Text(
                                                           'Inf. general',
                                                           style: TextStyle(
-                                                            color: tabAccionesRegPrsp == 0
+                                                            color: tabAccionesEditPrsp == 0
                                                                 ? Colors.blue.shade800
                                                                 : Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -277,20 +278,20 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             ),
                                             Expanded(
                                               child: Container(
-                                                color: tabAccionesRegPrsp == 1
+                                                color: tabAccionesEditPrsp == 1
                                                     ? Colors.white
                                                     : Colors.blue.shade800,
                                                 child: Center(
                                                   child: TextButton(
                                                     onPressed: () {
-                                                      tabAccionesRegPrsp = 1;
+                                                      tabAccionesEditPrsp = 1;
                                                       setState(() {});
                                                     },
                                                     child: Column(
                                                       children: [
                                                         Icon(
                                                           Icons.grid_on_outlined,
-                                                          color: tabAccionesRegPrsp == 1
+                                                          color: tabAccionesEditPrsp == 1
                                                               ? Colors.blue.shade800
                                                               : Colors.white,
                                                         ),
@@ -298,7 +299,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                           'Inf. Adicional',
                                                           style: TextStyle(
                                                             //color: Colors.purple.shade700,
-                                                            color: tabAccionesRegPrsp == 1
+                                                            color: tabAccionesEditPrsp == 1
                                                                 ? Colors.blue.shade800
                                                                 : Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -312,20 +313,20 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             ),
                                             Expanded(
                                               child: Container(
-                                                color: tabAccionesRegPrsp == 2
+                                                color: tabAccionesEditPrsp == 2
                                                     ? Colors.white
                                                     : Colors.blue.shade800,
                                                 child: Center(
                                                   child: TextButton(
                                                     onPressed: () {
-                                                      tabAccionesRegPrsp = 2;
+                                                      tabAccionesEditPrsp = 2;
                                                       setState(() {});
                                                     },
                                                     child: Column(
                                                       children: [
                                                         Icon(
                                                           Icons.add_business_rounded,
-                                                          color: tabAccionesRegPrsp == 2
+                                                          color: tabAccionesEditPrsp == 2
                                                               ? Colors.blue.shade800
                                                               : Colors.white,
                                                         ),
@@ -333,7 +334,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                           'Notas Int.',
                                                           style: TextStyle(
                                                             //color: Colors.purple.shade700,
-                                                            color: tabAccionesRegPrsp == 2
+                                                            color: tabAccionesEditPrsp == 2
                                                                 ? Colors.blue.shade800
                                                                 : Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -350,56 +351,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         ),
                                       ],
                                     ),
-                                  ),
-                              
-                              /*
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: TextFormField(
-                                      cursorColor: AppLightColors().primary,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                      ],
-                                      style: AppTextStyles.bodyRegular(width: size.width),
-                                      decoration: InputDecorationCvs.formsDecoration(
-                                        labelText: 'Teléfono',
-                                        hintTetx: 'Ej: 09xxxxxxxx',
-                                        size: size,
-                                        prefixIcon: const Icon(Icons.search, color: Colors.blue,)                                      
-                                      ),                                  
-                                      controller: telefonoTxt,
-                                      autocorrect: false,
-                                      keyboardType: TextInputType.text,
-                                      minLines: 1,
-                                      maxLines: 2,
-                                      autofocus: false,
-                                      maxLength: 20,
-                                      textAlign: TextAlign.left,
-                                      onEditingComplete: () async {
-                                        FocusScope.of(context).unfocus();
-                                        
-                                      },
-                                      onChanged: (value) {
-                                        
-                                      },
-                                      onTapOutside: (event) async {
-                                        FocusScope.of(context).unfocus();
-                                        await ProspectoTypeService().getProspectoRegistrado(telefonoTxt.text);
-                                      },
-                                      validator: (value) {
-                                        /*
-                                        String pattern = regularExp.regexToEmail;
-                                        RegExp regExp = RegExp(pattern);
-                                        return regExp.hasMatch(value ?? '')
-                                            ? null
-                                            : '¡El valor ingresado no luce como un correo!';
-                                            */
-                                      },
-                                    ),
-                                  ),
-                                  */
+                                  ),                              
                         
                                   SizedBox(
                                     height: size.height * 0.02,
@@ -410,9 +362,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     width: size.width * 0.92,
                                     child: InternationalPhoneNumberInput(
                                     onInputChanged: (PhoneNumber phoneNumber) async {
-                                      //print("Número cambiado: ${phoneNumber.phoneNumber}");
                                       if(phoneNumber.phoneNumber != null && phoneNumber.phoneNumber!.length == 13){
-                                        telefonoTxt.text = phoneNumber.phoneNumber ?? '';
+                                        telefonoEditTxt.text = phoneNumber.phoneNumber ?? '';
                                         await ProspectoTypeService().getProspectoRegistrado(phoneNumber.phoneNumber!);
                                       }
                                     },
@@ -425,7 +376,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     ignoreBlank: false,
                                     autoValidateMode: AutovalidateMode.onUserInteraction,
                                     initialValue: number,
-                                    textFieldController: telefonoTxt,
+                                    textFieldController: telefonoEditTxt,
                                     formatInput: true,
                                     keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                                     inputDecoration: InputDecoration(
@@ -446,7 +397,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     height: size.height * 0.02,
                                   ),
                               
-                                  if(tabAccionesRegPrsp == 0)
+                                  if(tabAccionesEditPrsp == 0)
                                   Container(
                                     color: Colors.transparent,
                                     height: size.height * 0.55,
@@ -474,7 +425,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           size: size
                                         ),
                                         enabled: false,
-                                        controller: nombresTxt,
+                                        controller: nombresEditTxt,
                                         autocorrect: false,
                                         keyboardType: TextInputType.text,
                                         minLines: 1,
@@ -550,7 +501,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             border: OutlineInputBorder(),
                                             labelText: 'Seleccione el país...',
                                           ),
-                                          value: paisSelect,
+                                          value: paisEditSelect,
                                           items: lstPaises
                                               .map((activityPrsp) =>
                                                   DropdownMenuItem(
@@ -561,7 +512,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           onChanged: (value) {
                                             
                                             setState(() {
-                                              paisSelect = value ?? '';
+                                              paisEditSelect = value ?? '';
                                             });
                                                                     
                                           },
@@ -576,7 +527,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       color: Colors.transparent,
                                       width: size.width * 0.92,
                                       child: TextFormField(
-                                        controller: sectorTxt,
+                                        controller: sectorEditTxt,
                                         //initialValue: 'Norte',
                                         enabled: false,
                                         cursorColor: AppLightColors().primary,
@@ -691,7 +642,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           labelText:
                                               'Seleccione la campaña',
                                         ),
-                                        value: campSelect,
+                                        value: campEditSelect,
                                         //value: selectedActivityType,
                                         items: lstCampanias.map((activityPrsp) =>
                                                 DropdownMenuItem(
@@ -702,7 +653,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             .toList(),
                                         onChanged: (String? newValue) {                        
                                           setState(() {
-                                            campSelect = newValue ?? '';
+                                            campEditSelect = newValue ?? '';
                                           });
                                         },
                                       ),
@@ -721,7 +672,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           labelText:
                                               'Seleccione el origen',
                                         ),
-                                        value: originSelect,
+                                        value: originEditSelect,
                                         items: lstOrigenes
                                             .map((activityPrsp) =>
                                                 DropdownMenuItem(
@@ -732,7 +683,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             .toList(),
                                         onChanged: (newValue) {
                                           setState(() {
-                                            originSelect = newValue ?? '';
+                                            originEditSelect = newValue ?? '';
                                           });
                                         },
                                       ),
@@ -761,7 +712,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                       labelText:
                                                           'Seleccione la media',
                                                     ),
-                                                    value: mediaSelect,
+                                                    value: mediaEditSelect,
                                                     items: lstMedias
                                                         .map((activityPrsp) =>
                                                             DropdownMenuItem(
@@ -772,7 +723,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                         .toList(),
                                                     onChanged: (newValue) {
                                                       setState(() {
-                                            mediaSelect = newValue ?? '';
+                                            mediaEditSelect = newValue ?? '';
                                           });
                                                     },
                                                   ),
@@ -838,7 +789,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     ),
                                   ),
                               
-                                  if(tabAccionesRegPrsp == 1)
+                                  if(tabAccionesEditPrsp == 1)
                                   Container(
                                     color: Colors.transparent,
                                     height: size.height * 0.55,
@@ -876,7 +827,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           hintText: "100%",
                                           suffixText: '%',
                                         ),
-                                        controller: probabilityTxt,
+                                        controller: probabilityEditTxt,
                                         autocorrect: false,
                                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                         minLines: 1,
@@ -973,7 +924,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                         hintTetx: 'Ej: correo@ejemplo.com',
                         size: size
                                             ),
-                                            controller: emailTxt,
+                                            controller: emailEditTxt,
                                             autocorrect: false,
                                             keyboardType: TextInputType.emailAddress,
                                             minLines: 1,
@@ -1010,7 +961,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             color: Colors.transparent,
                                             width: size.width * 0.92,
                                             child: TextFormField(
-                        initialValue: fecCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp),
+                        initialValue: fecEditCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateEdPrsp),
                         readOnly: true,
                         decoration: const InputDecoration(
                           labelText: 'Cierre esperado',
@@ -1028,8 +979,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                           if (pickedDate != null) {
                             
                             setState(() {
-                              //dateRgPrsp = pickedDate;
-                              fecCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
+                              //dateEdPrsp = pickedDate;
+                              fecEditCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
                             });
                                   
                           }
@@ -1047,7 +998,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             width: size.width * 0.92,
                                             height: size.height * 0.15,
                                             child: TextFormField(
-                        controller: direccionTxt,
+                        controller: direccionEditTxt,
                                             //initialValue: 'Yordani Oliva',
                                             //initialValue: '',
                                             cursorColor: AppLightColors().primary,
@@ -1099,7 +1050,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     ),
                                   ),
                               
-                                  if(tabAccionesRegPrsp == 2)
+                                  if(tabAccionesEditPrsp == 2)
                                   Container(
                                     color: Colors.transparent,
                                     height: size.height * 0.55,
@@ -1124,7 +1075,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                 hintTetx: 'Ej: Interesado en casa pero no tiene trabajo estable',
                                                 size: size
                                               ),
-                                              controller: observacionesTxt,
+                                              controller: observacionesEditTxt,
                                               autocorrect: false,
                                               keyboardType: TextInputType.text,
                                               minLines: 1,
@@ -1201,7 +1152,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                 child: GestureDetector(
                                 onTap: () async {
 
-                                  if(nombresTxt.text.isEmpty || emailTxt.text.isEmpty){
+                                  if(nombresEditTxt.text.isEmpty || emailEditTxt.text.isEmpty){
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,
@@ -1225,7 +1176,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     return;
                                   }
 
-                                  if(probabilityTxt.text.isEmpty){
+                                  if(probabilityEditTxt.text.isEmpty){
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,
@@ -1265,26 +1216,26 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
 
                                   DatumCrmLead objProsp = DatumCrmLead(                                    
                                     
-                                    dayClose: double.parse(dateRgPrsp.day.toString()),
+                                    dayClose: double.parse(dateEdPrsp.day.toString()),
                                     id: 0,
-                                    name: nombresTxt.text,
-                                    emailCc: emailTxt.text,
+                                    name: nombresEditTxt.text,
+                                    emailCc: emailEditTxt.text,
                                     priority: '',
                                     type: '',
                                     city: '',
-                                    contactName: nombresTxt.text,
-                                    description: observacionesTxt.text,
-                                    emailFrom: emailTxt.text,
-                                    street: direccionTxt.text,
-                                    phone: telefonoTxt.text,
-                                    partnerName: nombresTxt.text,
+                                    contactName: nombresEditTxt.text,
+                                    description: observacionesEditTxt.text,
+                                    emailFrom: emailEditTxt.text,
+                                    street: direccionEditTxt.text,
+                                    phone: telefonoEditTxt.text,
+                                    partnerName: nombresEditTxt.text,
                                     mobile: '',
                                     dateOpen: DateTime.now(),
                                     dateDeadline: DateTime.now(),
-                                    probability: double.parse(probabilityTxt.text),
+                                    probability: double.parse(probabilityEditTxt.text),
 
                                     activityIds: [
-                                      StructCombos(id: 2, name: actSelect)
+                                      StructCombos(id: 2, name: actEditSelect)
                                     ],
                                     campaignId: CampaignId(
                                       id: 2,
@@ -1292,7 +1243,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     ),
                                     countryId: StructCombos (
                                       id: 2,
-                                      name: paisTxt.text
+                                      name: paisEditTxt.text
                                     ),
                                     lostReasonId: CampaignId(
                                       id: 2,
@@ -1384,46 +1335,9 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     },
                                   );
                                 
-
-                                  /*
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('Prospecto Registrado'),
-                                        content: const Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              'Este prospecto se encuentra registrado desde el 01/02/2024 '
-                                              'y su ultima gestión fue realizada el 01/05/2024',
-                                            ),
-                                          ],
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text('Cancelar', style: TextStyle(color: Colors.blue[200]),),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              // Acción para solicitar revisión
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text('Solicitar Revisión', style: TextStyle(color: Colors.blue[200]),),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                */
                                 },
                                 child: ButtonCvsWidget(
-                                  //text: 'Crear',
-                                  text: 'Crear Prospecto',
+                                  text: 'Actualiza',
                                   textStyle: AppTextStyles.h3Bold(
                                       width: size.width,
                                       color: AppLightColors().white),

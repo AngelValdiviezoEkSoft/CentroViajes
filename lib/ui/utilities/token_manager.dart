@@ -10,13 +10,7 @@ class TokenManager {
   Timer? _timer;
 
   // Iniciar la verificación del token cada X minutos (por ejemplo, 5 minutos)
-  void startTokenCheck() async {
-    /*
-    _timer?.cancel();
-    _timer = Timer.periodic(const Duration(minutes: 5), (timer) async {
-      await checkTokenExpiration();
-    });
-    */
+  void startTokenCheck() async {    
     await checkTokenExpiration();
   }
 
@@ -27,12 +21,6 @@ class TokenManager {
 
   // Verificar si el token ha expirado
   Future<void> checkTokenExpiration() async {
-    
-    //const imeiMovile = MethodChannel('com.ekuasoft.cvs_ec_app/imei');
-    /*
-    const imeiMovile = MethodChannel('device/info');
-    final String? imeiFinal = await imeiMovile.invokeMethod('deviceId');
-    */
 
     String imeiCod = '';
 
@@ -59,7 +47,7 @@ class TokenManager {
 
       final expiration = obj.result.tockenValidDate;
 
-      //imeiCod = '8234560479'; //BORRAR LUEGO
+      imeiCod = '8234560479'; //BORRAR LUEGO
 
       //VALIDACIÓN DE TOKEN
       

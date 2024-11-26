@@ -280,8 +280,8 @@ TextEditingController keyTxt = TextEditingController();
                   RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(
                     server: serverTxt.text,
                     key: keyTxt.text,
-                    imei: imeiCod,
-                    //imei: '8234560479',
+                    //imei: imeiCod,
+                    imei: '8234560479',
                     lat: position.latitude.toString(),//'-74.45445',
                     lon: position.longitude.toString(),//'72.74548487',
                     so: plataforma//'Android'

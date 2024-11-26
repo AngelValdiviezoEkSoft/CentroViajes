@@ -16,18 +16,15 @@ class _CentroViajesAppState extends State<CentroViajesApp> {
   @override
   void initState() {
     super.initState();
-/*
-    const imeiMovile = MethodChannel('com.ekuasoft.cvs_ec_app/imei');
-    final String? imei = await imeiMovile.invokeMethod('getImei');
-    */
-
+    
     // Configura una tarea que se ejecuta cada minuto.
-    cron.schedule(Schedule.parse('*/6 * * * * *'), () {
-      setState(() {
-        //tokenManager.startTokenCheck(imei!);
-        tokenManager.startTokenCheck();
-      });
-    });
+    // cron.schedule(Schedule.parse('*/6 * * * * *'), () {
+    //   setState(() {
+    //     //tokenManager.startTokenCheck(imei!);
+    //     tokenManager.startTokenCheck();
+    //   });
+    // });
+    
   }
 
   @override

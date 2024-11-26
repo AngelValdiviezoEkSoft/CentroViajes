@@ -143,6 +143,10 @@ final GoRouter appRouter = GoRouter(
       path: objRutas.rutaScanQr,
       builder: (context, state) => ScanQrScreen(null),
     ),
+    GoRoute(
+      path: objRutas.rutaEditProsp,
+      builder: (context, state) => const FrmEditProspectoScreen(),
+    ),
   ],
   initialLocation: objRutas.rutaBienvenida,
 );

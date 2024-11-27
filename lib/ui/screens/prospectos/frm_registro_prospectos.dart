@@ -370,8 +370,30 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       if(phoneNumber.phoneNumber != null && phoneNumber.phoneNumber!.length == 13){
                                         
                                         telefonoPrsp = phoneNumber.phoneNumber ?? '';
-                                        await ProspectoTypeService().getProspectoRegistrado(phoneNumber.phoneNumber!);
 
+                                        var resp = await ProspectoTypeService().getProspectoRegistrado(phoneNumber.phoneNumber!);
+                                        
+                                        var objResp = json.decode(resp);
+
+                                        showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return ContentAlertDialog(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              onPressedCont: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              tipoAlerta: TipoAlerta().alertAccion,
+                                              numLineasTitulo: 2,
+                                              numLineasMensaje: 2,
+                                              titulo: 'Atención',
+                                              mensajeAlerta: objResp['result']['mensaje']
+                                            );
+                                          },
+                                        );
                                       }
                                     },
                                     onInputValidated: (bool isValid) async {
@@ -393,7 +415,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       ),
                                     ),
                                     onSaved: (PhoneNumber phoneNumber) {
-                                      print('Número guardado: ${phoneNumber.phoneNumber}');
+                                      //print('Número guardado: ${phoneNumber.phoneNumber}');
                                     },
                                     maxLength: 11,
                                     errorMessage: 'Teléfono no válido',
@@ -457,12 +479,11 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       height: size.height * 0.02,
                                     ),
                                     
+                                    /*
                                     Container(
                                       color: Colors.transparent,
                                       width: size.width * 0.92,
-                                      child: TextFormField(
-                                        //initialValue: 'Terreno',
-                                        //initialValue: '',                                      
+                                      child: TextFormField(                                    
                                         cursorColor: AppLightColors().primary,
                                         autovalidateMode: AutovalidateMode.onUserInteraction,
                                         inputFormatters: [
@@ -485,7 +506,6 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         textAlign: TextAlign.left,
                                         onEditingComplete: () {
                                           FocusScope.of(context).unfocus();
-                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
                                         },
                                         onChanged: (value) {
                                           
@@ -499,6 +519,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     SizedBox(
                                       height: size.height * 0.04,
                                     ),
+                                    */
                         
                                     Container(
                                       color: Colors.transparent,
@@ -529,7 +550,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     SizedBox(
                                       height: size.height * 0.03,
                                     ),
-                                    
+
+                                    /*
                                     Container(
                                       color: Colors.transparent,
                                       width: size.width * 0.92,
@@ -565,27 +587,11 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         },
                                       ),
                                     ),
-                                    /*
+                                    
                                     SizedBox(
                                       height: size.height * 0.03,
-                                    ),
-                                    
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: const Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('Asignado', style: TextStyle(fontSize: 20),),
-                                          Icon(Icons.check_box_outlined),
-                                        ],
-                                      ),
                                     ),
                                     */
-                                    
-                                    SizedBox(
-                                      height: size.height * 0.03,
-                                    ),
                                                                         
                                     Container(
                                       color: Colors.transparent,
@@ -921,19 +927,17 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             width: size.width * 0.92,
                                             height: size.height * 0.15,
                                             child: TextFormField(
-                        controller: direccionTxt,
-                                            //initialValue: 'Yordani Oliva',
-                                            //initialValue: '',
+                                            controller: direccionTxt,
                                             cursorColor: AppLightColors().primary,
                                             autovalidateMode: AutovalidateMode.onUserInteraction,
                                             inputFormatters: [
-                        //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                              FilteringTextInputFormatter.deny(regexToRemoveEmoji)
                                             ],
                                             style: AppTextStyles.bodyRegular(width: size.width),
                                             decoration: InputDecorationCvs.formsDecoration(
-                        labelText: 'Dirección',
-                        hintTetx: '',
-                        size: size
+                                              labelText: 'Dirección',
+                                              hintTetx: '',
+                                              size: size
                                             ),
                                             autocorrect: false,
                                             keyboardType: TextInputType.text,
@@ -943,30 +947,20 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             maxLength: 150,
                                             textAlign: TextAlign.left,
                                             onEditingComplete: () {
-                        FocusScope.of(context).unfocus();
-                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                              FocusScope.of(context).unfocus();
                                             },
                                             onChanged: (value) {
                         
                                             },
                                             onTapOutside: (event) {
-                        FocusScope.of(context).unfocus();
+                                              FocusScope.of(context).unfocus();
                                             },
-                                            validator: (value) {
-                        /*
-                        String pattern = regularExp.regexToEmail;
-                        RegExp regExp = RegExp(pattern);
-                        return regExp.hasMatch(value ?? '')
-                            ? null
-                            : '¡El valor ingresado no luce como un correo!';
-                            */
-                                            },
-                                            ),
-                                    ),
-                                    
-                                    SizedBox(
-                                      height: size.height * 0.025,
-                                    ),
+                                          ),
+                                          ),
+                                          
+                                          SizedBox(
+                                            height: size.height * 0.025,
+                                          ),
                                                                     
                                         ],
                                       ),
@@ -985,13 +979,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             color: Colors.transparent,
                                             width: size.width * 0.92,
                                             child: TextFormField(
-                                              //initialValue: 'Ej: Interesado en casa pero no tiene trabajo estable',
-                                              //initialValue: '',
                                               cursorColor: AppLightColors().primary,
                                               autovalidateMode: AutovalidateMode.onUserInteraction,
-                                              inputFormatters: [
-                                                //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                              ],
                                               style: AppTextStyles.bodyRegular(width: size.width),
                                               decoration: InputDecorationCvs.formsDecoration(
                                                 labelText: 'Observaciones',
@@ -1008,22 +997,12 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               textAlign: TextAlign.left,
                                               onEditingComplete: () {
                                                 FocusScope.of(context).unfocus();
-                                                //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
                                               },
                                               onChanged: (value) {
                                                 
                                               },
                                               onTapOutside: (event) {
                                                 FocusScope.of(context).unfocus();
-                                              },
-                                              validator: (value) {
-                                                /*
-                                                String pattern = regularExp.regexToEmail;
-                                                RegExp regExp = RegExp(pattern);
-                                                return regExp.hasMatch(value ?? '')
-                                                    ? null
-                                                    : '¡El valor ingresado no luce como un correo!';
-                                                    */
                                               },
                                             ),
                                           ),
@@ -1137,6 +1116,35 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     ),
                                   );
 
+                                  int idPais = 0;
+                                  int idCamp = 0;
+                                  int idMedia = 0;
+                                  int idOrigen = 0;
+
+                                  for (var elemento in mappedObjPais3) {
+                                    if (elemento['name'] == paisSelect) {
+                                      idPais = elemento['id'];
+                                    }
+                                  }
+
+                                  for (var elemento in mappedObjCamp3) {
+                                    if (elemento['name'] == campSelect) {
+                                      idCamp = elemento['id'];
+                                    }
+                                  }
+
+                                  for (var elemento in mappedObjOrig3) {
+                                    if (elemento['name'] == originSelect) {
+                                      idOrigen = elemento['id'];
+                                    }
+                                  }
+
+                                  for (var elemento in mappedObjMed3) {
+                                    if (elemento['name'] == mediaSelect) {
+                                      idMedia = elemento['id'];
+                                    }
+                                  }
+
                                   DatumCrmLead objProsp = DatumCrmLead(                                    
                                     expectedRevenue: double.parse(ingresoEsperadoTxt.text),
                                     dayClose: double.parse(dateRgPrsp.day.toString()),
@@ -1152,7 +1160,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     street: direccionTxt.text,
                                     phone: telefonoPrsp,
                                     partnerName: nombresTxt.text,
-                                    mobile: '',
+                                    mobile: telefonoPrsp,
                                     dateOpen: DateTime.now(),
                                     dateDeadline: DateTime.now(),
                                     probability: double.parse(probabilityTxt.text),
@@ -1161,11 +1169,11 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       StructCombos(id: 2, name: actSelect)
                                     ],
                                     campaignId: CampaignId(
-                                      id: 2,
-                                      name: ''
+                                      id: idCamp,
+                                      name: campSelect
                                     ),
                                     countryId: StructCombos (
-                                      id: 2,
+                                      id: idPais,
                                       name: paisTxt.text
                                     ),
                                     lostReasonId: CampaignId(
@@ -1173,7 +1181,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       name: ''
                                     ),
                                     mediumId: StructCombos (
-                                      id: 3,
+                                      id: idMedia,
                                       name: ''
                                     ),
                                     partnerId: StructCombos (
@@ -1181,8 +1189,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       name: ''
                                     ),
                                     sourceId: StructCombos (
-                                      id: 2,
-                                      name: ''
+                                      id: idOrigen,
+                                      name: originSelect
                                     ),
                                     stageId: StructCombos (
                                       id: 2,
@@ -1260,7 +1268,6 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     },
                                   );
                                 
-
                                   /*
                                   showDialog(
                                     context: context,

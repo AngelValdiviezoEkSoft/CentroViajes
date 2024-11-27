@@ -131,17 +131,6 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
     return '';
   }
 
-/*
-  Future<void> _onNavigationDelegateExample(String ruta) {
-    final String contentBase64 = base64Encode(
-      const Utf8Encoder().convert(ruta),
-    );
-    return webViewController.loadRequest(
-      Uri.parse('data:text/html;base64,$contentBase64'),
-    );
-  }
-  */
-
   @override
   Widget build(BuildContext context) {
 
@@ -523,6 +512,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                       height: size.height * 0.02,
                                     ),
                                     
+                                    /*
                                     Container(
                                       color: Colors.transparent,
                                       width: size.width * 0.92,
@@ -565,6 +555,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                     SizedBox(
                                       height: size.height * 0.04,
                                     ),
+                                    */
                         
                                     Container(
                                       color: Colors.transparent,
@@ -596,6 +587,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                       height: size.height * 0.03,
                                     ),
                                     
+                                    /*
                                     Container(
                                       color: Colors.transparent,
                                       width: size.width * 0.92,
@@ -635,6 +627,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                     SizedBox(
                                       height: size.height * 0.03,
                                     ),
+                                    */
                                     
                                     Container(
                                       color: Colors.transparent,

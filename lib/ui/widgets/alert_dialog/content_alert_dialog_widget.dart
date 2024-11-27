@@ -60,9 +60,9 @@ class ContentAlertDialog extends StatelessWidget {
       titlePadding: const EdgeInsets.only(left: 15, right: 15, top: 20),
       backgroundColor: oColorBackgroundTpAlert,
       shape: RoundedRectangleBorder(
-          side:
-              BorderSide(color: oColorBordesTpAlert, width: size.width * 0.004),
-          borderRadius: BorderRadius.circular(size.width * 0.02)),
+        side: BorderSide(color: oColorBordesTpAlert, width: size.width * 0.004),
+        borderRadius: BorderRadius.circular(size.width * 0.02)
+      ),
       title: Container(
         color: Colors.transparent,
         height: tipoAlerta == oTipoAlerta.alertAccion
@@ -131,8 +131,8 @@ class ContentAlertDialog extends StatelessWidget {
             ? size.width
             : size.width * 0.9,
         height: tipoAlerta == oTipoAlerta.alertAccion
-            ? size.height * 0.035 * heightMessage
-            : size.height * 0.04,
+            ? size.height * 0.055 * heightMessage
+            : size.height * 0.06,
         child: BaseText(
           mensajeAlerta,
           null,

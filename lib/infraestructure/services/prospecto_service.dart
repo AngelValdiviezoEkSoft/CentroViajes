@@ -189,9 +189,9 @@ class ProspectoTypeService extends ChangeNotifier{
         body: jsonEncode(requestBody), 
       );
 
-      print("Consulta celular: ${response.body}");
+      //print("Consulta celular: ${response.body}");
 
-      //return json.encode(objRsp);
+      return response.body;
       
     }    
     on SocketException catch (_) {
@@ -240,8 +240,6 @@ class ProspectoTypeService extends ChangeNotifier{
       );
 
       String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
-
-      ////***//// */ ME FALTA LA OBSERVACIÓN
       
       final requestBody = {
       "jsonrpc": "2.0",
@@ -264,6 +262,13 @@ class ProspectoTypeService extends ChangeNotifier{
           "expected_revenue": objProspecto.expectedRevenue,
           "referred": objProspecto.referred,
           "description": objProspecto.description,
+          "probability": objProspecto.probability,
+
+          "campaign_id": objProspecto.campaignId.id,
+          "source_id": objProspecto.sourceId.id,
+          "medium_id": objProspecto.mediumId.id,
+          "country_id": objProspecto.countryId.id,
+
         },
       }
     };

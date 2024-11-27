@@ -116,6 +116,7 @@ class DatumCrmLead {
     String? contactName;
     StructCombos countryId;
     DateTime? dateOpen;
+    DateTime? dateClose;
     double dayClose;
     String? description;
     String? emailFrom;
@@ -128,7 +129,7 @@ class DatumCrmLead {
     String priority;
     StructCombos sourceId;
     StructCombos stageId;
-    StructCombos stateId;
+    StructCombos stateId;    
     List<dynamic> tagIds;
     CampaignId title;
     String type;
@@ -138,6 +139,9 @@ class DatumCrmLead {
     String? street;
     DateTime? dateDeadline;
     double? probability;
+    StructCombos? userId;
+    double expectedRevenue;
+    String? referred;
 
     DatumCrmLead({
         required this.id,
@@ -162,12 +166,16 @@ class DatumCrmLead {
         required this.tagIds,
         required this.title,
         required this.type,
+        required this.expectedRevenue,
         this.city,
         this.emailCc,
         this.mobile,
         this.street,
         this.dateDeadline,
-        this.probability
+        this.probability,
+        this.dateClose,
+        this.userId,
+        this.referred
     });
 
     factory DatumCrmLead.fromJson(String str) => DatumCrmLead.fromMap(json.decode(str));
@@ -181,7 +189,8 @@ class DatumCrmLead {
         contactName: json["contact_name"],
         countryId: StructCombos.fromMap(json["country_id"]),
         dateOpen: json["date_open"] == null ? null : DateTime.parse(json["date_open"]),
-        dayClose: json["day_close"],
+        dateClose: json["date_closed"] == null ? null : DateTime.parse(json["date_closed"]),
+        dayClose: json["day_close"] ?? 0,
         description: json["description"],
         emailFrom: json["email_from"],
         lostReasonId: CampaignId.fromMap(json["lost_reason_id"]),
@@ -202,7 +211,10 @@ class DatumCrmLead {
         mobile: json["mobile"],
         street: json["street"],
         dateDeadline: json["date_deadline"] == null ? null : DateTime.parse(json["date_deadline"]),
-        probability: 0
+        probability: 0,
+        userId: json["user_id"] == null ? null : StructCombos.fromMap(json["user_id"]),
+        expectedRevenue: json["expected_revenue"] ?? 0,
+        referred: json["referred"]
     );
 
     Map<String, dynamic> toMap() => {
@@ -212,6 +224,7 @@ class DatumCrmLead {
         "contact_name": contactName,
         "country_id": countryId.toJson(),
         "date_open": dateOpen?.toIso8601String(),
+        "date_Close": dateClose?.toIso8601String(),
         "day_close": dayClose,
         "description": description,
         "email_from": emailFrom,
@@ -233,7 +246,10 @@ class DatumCrmLead {
         "mobile": mobile,
         "street": street,
         "date_deadline": "${dateDeadline!.year.toString().padLeft(4, '0')}-${dateDeadline!.month.toString().padLeft(2, '0')}-${dateDeadline!.day.toString().padLeft(2, '0')}",
-        "probability": 0
+        "probability": 0,
+        "user_id": userId!.toJson(),
+        "expected_revenue": expectedRevenue,
+        "referred": referred
     };
 }
 

@@ -241,36 +241,6 @@ class ProspectoTypeService extends ChangeNotifier{
 
       String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 
-      /*
-      final requestBody = {
-        "jsonrpc": "2.0",
-        "params": {
-          "name": objProspecto.name,
-          "campaignId": objProspecto.campaignId.id,
-          "countryId": objProspecto.countryId.id,
-          "city": objProspecto.city,
-          "mediumId": objProspecto.mediumId.id,
-          "street": objProspecto.street,
-          "description": objProspecto.description,
-          "emailFrom": objProspecto.emailFrom,
-          "partnerId": objProspecto.partnerId.id,
-          "dayClose": objProspecto.dayClose,
-        }
-      };
-
-      final headers = {
-        "Content-Type": "application/json",
-      };
-
-      final ruta = '${envPrsp.apiEndpoint}${objReq.params.imei}/done/create/${jsonEncode(requestBody)}/model';
-
-      final response = await http.post(
-        Uri.parse(ruta),
-        headers: headers,
-        //body: jsonEncode(requestBody), 
-      );
-      */
-
       ////***//// */ ME FALTA LA OBSERVACIÓN
       
       final requestBody = {
@@ -285,7 +255,15 @@ class ProspectoTypeService extends ChangeNotifier{
         "tocken_valid_date": tockenValidDate,
         "create": {
           "name": objProspecto.name,
-          "phone": objProspecto.phone
+          "phone": objProspecto.phone,          
+          "contact_name": objProspecto.contactName,
+          "partner_name": objProspecto.partnerName,          
+          "date_closed": DateFormat('yyyy-MM-dd', 'es').format(objProspecto.dateClose!),
+          "email_from": objProspecto.emailFrom,
+          "street": objProspecto.street,
+          "expected_revenue": objProspecto.expectedRevenue,
+          "referred": objProspecto.referred,
+          "description": objProspecto.description,
         },
       }
     };
@@ -300,7 +278,7 @@ class ProspectoTypeService extends ChangeNotifier{
     if(objStr.isNotEmpty)
     {  
       var obj = RegisterDeviceResponseModel.fromJson(objStr);
-      ruta = '${obj.result.url}${objReq.params.imei}/done/create/crm.lead/model';
+      ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/create/crm.lead/model';
     }
 
     tokenManager.startTokenCheck();
@@ -311,11 +289,15 @@ class ProspectoTypeService extends ChangeNotifier{
       body: jsonEncode(requestBody), 
     );
     
-    //print(response.body);
+      print(response.body);
 
       return ProspectoRegistroResponseModel.fromJson(response.body);
       //String tst = '';
-    }    
+    } 
+    catch(ex){
+      print('Error: $ex');
+    }
+    /*   
     on SocketException catch (_) {
       Fluttertoast.showToast(
         msg: objMensajesProspectoService.mensajeFallaInternet,
@@ -327,6 +309,7 @@ class ProspectoTypeService extends ChangeNotifier{
         fontSize: 16.0
       );  
     }
+    */
     
   }
 

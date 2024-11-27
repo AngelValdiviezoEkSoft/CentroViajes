@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -13,7 +11,9 @@ import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
+DatumCrmLead? objDatumCrmLeadEdit;
 int idProsp = 0;
 int tabAccionesEditPrsp = 0;
 
@@ -25,6 +25,8 @@ late TextEditingController paisEditTxt;
 late TextEditingController probabilityEditTxt;
 late TextEditingController telefonoEditTxt;
 late TextEditingController sectorEditTxt;
+late TextEditingController ingresoEsperadoEditTxt;
+late TextEditingController recomendadoPorEditTxt;
 
 DateTime dateEdPrsp = DateTime.now();
 
@@ -34,6 +36,7 @@ String mediaEditSelect = '';
 String originEditSelect = '';
 String actEditSelect = '';
 String paisEditSelect = '';
+bool prspAsignado = false;
 
 class FrmEditProspectoScreen extends StatefulWidget {
   const FrmEditProspectoScreen({super.key});
@@ -43,7 +46,8 @@ class FrmEditProspectoScreen extends StatefulWidget {
 }
 
 class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
-
+  
+  late final WebViewController _wvController;
   final LocalAuthentication auth = LocalAuthentication();  
 
   String initialCountry = 'EC';
@@ -59,9 +63,41 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
     observacionesEditTxt = TextEditingController();
     paisEditTxt = TextEditingController();
     probabilityEditTxt = TextEditingController();
-    fecEditCierre = DateFormat('dd-MM-yyyy', 'es').format(dateEdPrsp);
+    ingresoEsperadoEditTxt = TextEditingController();
+    recomendadoPorEditTxt = TextEditingController();
+    
     telefonoEditTxt = TextEditingController();
     sectorEditTxt = TextEditingController(text: 'Norte');
+
+    if(objDatumCrmLead != null){
+      objDatumCrmLeadEdit = objDatumCrmLead;
+      nombresEditTxt.text = objDatumCrmLeadEdit!.contactName ?? '';
+      emailEditTxt.text = objDatumCrmLeadEdit!.emailFrom ?? '';
+      direccionEditTxt.text = objDatumCrmLeadEdit!.street ?? '';
+      observacionesEditTxt.text = objDatumCrmLeadEdit!.description ?? '';
+      probabilityEditTxt.text = objDatumCrmLeadEdit!.probability?.toString() ?? "0";
+
+      String cell = separatePhoneNumber(objDatumCrmLeadEdit!.phone ?? '');
+
+      telefonoEditTxt.text = cell;
+      recomendadoPorEditTxt.text = objDatumCrmLeadEdit!.referred ?? '';
+
+      String rutaFinal = objDatumCrmLeadEdit!.description ?? 'https://flutter.dev';
+
+      fecEditCierre = objDatumCrmLeadEdit!.dateClose != null ? DateFormat('dd-MM-yyyy', 'es').format(objDatumCrmLeadEdit!.dateClose!) : '-- No tiene fecha de cierre --';//DateFormat('dd-MM-yyyy', 'es').format(dateEdPrsp);
+      
+      ingresoEsperadoEditTxt.text = objDatumCrmLeadEdit!.expectedRevenue.toString();
+
+      _wvController = WebViewController();
+
+      _wvController.loadHtmlString(rutaFinal);
+
+      if(objDatumCrmLeadEdit!.userId != null && objDatumCrmLeadEdit!.userId!.name.isNotEmpty){
+        prspAsignado = true;
+      }
+
+    }
+
   }
 
   void getPhoneNumber(String phoneNumber) async {
@@ -71,6 +107,40 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
       this.number = number;
     });
   }
+
+  //final String phoneNumber = "+123456789012"; // Número de ejemplo
+
+  String separatePhoneNumber(String phone) {
+    // Expresión regular para dividir el prefijo y el número
+    //final regExp = RegExp(r'^\+?(\d{1,4})(\d+)$');
+    final regExp = RegExp(r'^\+?(\d{1,3})(\d+)$');
+    final match = regExp.firstMatch(phone);
+
+    if (match != null) {
+      //final countryCode = match.group(1); // Código de país
+      final localNumber = match.group(2); // Número local
+      return localNumber ?? '';
+      /*
+      return {
+        "countryCode": countryCode ?? "",
+        "localNumber": localNumber ?? "",
+      };
+      */
+    }
+
+    return '';
+  }
+
+/*
+  Future<void> _onNavigationDelegateExample(String ruta) {
+    final String contentBase64 = base64Encode(
+      const Utf8Encoder().convert(ruta),
+    );
+    return webViewController.loadRequest(
+      Uri.parse('data:text/html;base64,$contentBase64'),
+    );
+  }
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -187,30 +257,34 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                       .toList();
 
                   if(campEditSelect.isEmpty){                      
-                    campEditSelect = lstCampanias.first;
+                    //campEditSelect = lstCampanias.first;
+                    campEditSelect = objDatumCrmLeadEdit!.campaignId.name.isNotEmpty ? objDatumCrmLeadEdit!.campaignId.name : lstCampanias.first;
                   }
 
                   if(mediaEditSelect.isEmpty){
-                    mediaEditSelect = lstMedias.first;
+                    mediaEditSelect = objDatumCrmLeadEdit!.mediumId.name.isNotEmpty ? objDatumCrmLeadEdit!.mediumId.name : lstMedias.first;
                   }
 
                   if(originEditSelect.isEmpty){
-                    originEditSelect = lstOrigenes.first;
+                    //originEditSelect = lstOrigenes.first;
+                    originEditSelect = objDatumCrmLeadEdit!.sourceId.name.isNotEmpty ? objDatumCrmLeadEdit!.sourceId.name : lstOrigenes.first;
                   }
 
                   if(actEditSelect.isEmpty){
-                    actEditSelect = lstActividades.first;
+                    actEditSelect = objDatumCrmLeadEdit!.activityIds.isNotEmpty ? objDatumCrmLeadEdit!.activityIds.first.name : lstActividades.first;
                   }
 
                   if(paisEditSelect.isEmpty){
-                    paisEditSelect = lstPaises.first;
+                    //paisEditSelect = lstPaises.first;
+                    paisEditSelect = objDatumCrmLeadEdit!.countryId.name.isNotEmpty ? objDatumCrmLeadEdit!.countryId.name : lstPaises.first;
                   }
 
                   return Stack(
                     children: [
                       SingleChildScrollView(
                         child: Column(
-                          children: [                
+                          children: [    
+                            /*            
                             Container(
                               color: Colors.transparent,
                               width: size.width * 0.95, //- 100,
@@ -221,6 +295,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                 presetFontSizes: [30,28,26,24,22,20,18,16,14,12,10],                          
                               ),
                             ),
+                            */
                         
                             Container(
                               //color: const Color(0xffF6F6F6),
@@ -351,7 +426,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                         ),
                                       ],
                                     ),
-                                  ),                              
+                                  ),
                         
                                   SizedBox(
                                     height: size.height * 0.02,
@@ -362,10 +437,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                     width: size.width * 0.92,
                                     child: InternationalPhoneNumberInput(
                                     onInputChanged: (PhoneNumber phoneNumber) async {
-                                      if(phoneNumber.phoneNumber != null && phoneNumber.phoneNumber!.length == 13){
-                                        telefonoEditTxt.text = phoneNumber.phoneNumber ?? '';
-                                        await ProspectoTypeService().getProspectoRegistrado(phoneNumber.phoneNumber!);
-                                      }
+                                      
                                     },
                                     onInputValidated: (bool isValid) async {
                                       //print("¿Es válido?: $isValid");                                      
@@ -386,8 +458,9 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                       ),
                                     ),
                                     onSaved: (PhoneNumber phoneNumber) {
-                                      print('Número guardado: ${phoneNumber.phoneNumber}');
+                                      //print('Número guardado: ${phoneNumber.phoneNumber}');
                                     },
+                                    //isEnabled: false,
                                     maxLength: 11,
                                     errorMessage: 'Teléfono no válido',
                                   ),
@@ -566,91 +639,43 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                     Container(
                                       color: Colors.transparent,
                                       width: size.width * 0.92,
-                                      child: const Row(
+                                      child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Asignado', style: TextStyle(fontSize: 20),),
-                                          Icon(Icons.check_box_outlined),
-                                        ],
-                                      ),
-                                                                        ),
-                                                                        
-                                                                        SizedBox(
-                                      height: size.height * 0.01,
-                                                                        ),
-                                                                        
-                                                                        /*
-                                                                        Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: TextFormField(
-                                        initialValue: 'Yordani Oliva',
-                                        //initialValue: '',
-                                        cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        inputFormatters: [
-                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                        ],
-                                        style: AppTextStyles.bodyRegular(width: size.width),
-                                        decoration: InputDecorationCvs.formsDecoration(
-                                          labelText: 'Asesor Asignado',
-                                          hintTetx: '',
-                                          size: size
-                                        ),
-                                        //controller: emailAkiTxt,
-                                        autocorrect: false,
-                                        keyboardType: TextInputType.text,
-                                        minLines: 1,
-                                        maxLines: 2,
-                                        autofocus: false,
-                                        maxLength: 50,
-                                        textAlign: TextAlign.left,
-                                        onEditingComplete: () {
-                                          FocusScope.of(context).unfocus();
-                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                        },
-                                        onChanged: (value) {
+                                          const Text('Asignado', style: TextStyle(fontSize: 20),),
                                           
-                                        },
-                                        onTapOutside: (event) {
-                                          FocusScope.of(context).unfocus();
-                                        },
-                                        validator: (value) {
-                                          /*
-                                          String pattern = regularExp.regexToEmail;
-                                          RegExp regExp = RegExp(pattern);
-                                          return regExp.hasMatch(value ?? '')
-                                              ? null
-                                              : '¡El valor ingresado no luce como un correo!';
-                                              */
-                                        },
+                                          Checkbox(
+                                            value: prspAsignado,
+                                            onChanged: (bool? value) {
+                                              setState(() {
+                                                prspAsignado = value ?? false;
+                                              });
+                                            },
+                                          ),
+                                        ],
                                       ),
-                                                                        ),
-                                                                        
-                                                                        
-                                    SizedBox(
-                                      height: size.height * 0.02,
                                     ),
-                                    */
-                        
+                                    
+                                    SizedBox(
+                                      height: size.height * 0.01,
+                                    ),
+                                                                      
                                     Container(
                                       color: Colors.transparent,
                                       width: size.width * 0.94,
                                       child: DropdownButtonFormField<String>(
                                         decoration: const InputDecoration(
                                           border: OutlineInputBorder(),
-                                          labelText:
-                                              'Seleccione la campaña',
+                                          labelText: 'Seleccione la campaña',
                                         ),
                                         value: campEditSelect,
-                                        //value: selectedActivityType,
                                         items: lstCampanias.map((activityPrsp) =>
-                                                DropdownMenuItem(
-                                                  value: activityPrsp,
-                                                  //child: Text(activityPrsp),
-                                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
-                                                ))
-                                            .toList(),
+                                          DropdownMenuItem(
+                                            value: activityPrsp,
+                                            child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                          )
+                                        )
+                                        .toList(),
                                         onChanged: (String? newValue) {                        
                                           setState(() {
                                             campEditSelect = newValue ?? '';
@@ -737,20 +762,15 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                       color: Colors.transparent,
                                       width: size.width * 0.92,
                                       child: TextFormField(
-                                        initialValue: 'Maria José',
-                                        //initialValue: '',
                                         cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        inputFormatters: [
-                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                        ],
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,                                        
                                         style: AppTextStyles.bodyRegular(width: size.width),
                                         decoration: InputDecorationCvs.formsDecoration(
                                           labelText: 'Recomendado por',
                                           hintTetx: 'Ej: Norte',
                                           size: size
                                         ),
-                                        //controller: emailAkiTxt,
+                                        controller: recomendadoPorEditTxt,
                                         autocorrect: false,
                                         keyboardType: TextInputType.text,
                                         minLines: 1,
@@ -798,64 +818,42 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                         children: [
                                           
                                           Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: TextFormField(
-                                        //initialValue: 'Mario Piguave',
-                                        //initialValue: '',                                      
-                                        cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        inputFormatters: [
-                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                        ],
-                                        style: AppTextStyles.bodyRegular(width: size.width),
-                                        /*
-                                        decoration: InputDecorationCvs.formsDecoration(
-                                          labelText: 'Probabilidad',
-                                          hintTetx: 'Ej: 50%',
-                                          size: size
-                                        ),
-                                        */
-                                        decoration: InputDecoration(
-                                          hintStyle: SafeGoogleFont(
-                                              GoogleFontsApp().fontMulish,
-                                              fontSize: size.width * 0.0025 * 18,
-                                              fontWeight: FontWeight.w700,
-                                              color:
-                                                  AppLightColors().gray800SecondaryText,
-                                              letterSpacing: 0),
-                                          hintText: "100%",
-                                          suffixText: '%',
-                                        ),
-                                        controller: probabilityEditTxt,
-                                        autocorrect: false,
-                                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                        minLines: 1,
-                                        maxLines: 1,
-                                        autofocus: false,
-                                        maxLength: 5,
-                                        textAlign: TextAlign.left,
-                                        onEditingComplete: () {
-                                          FocusScope.of(context).unfocus();
-                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                        },
-                                        onChanged: (value) {
-                                          
-                                        },
-                                        onTapOutside: (event) {
-                                          FocusScope.of(context).unfocus();
-                                        },
-                                        validator: (value) {
-                                          /*
-                                          String pattern = regularExp.regexToEmail;
-                                          RegExp regExp = RegExp(pattern);
-                                          return regExp.hasMatch(value ?? '')
-                                              ? null
-                                              : '¡El valor ingresado no luce como un correo!';
-                                              */
-                                        },
-                                      ),
-                                                                        ),
+                                            color: Colors.transparent,
+                                            width: size.width * 0.92,
+                                            child: TextFormField(                               
+                                              cursorColor: AppLightColors().primary,
+                                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                                              style: AppTextStyles.bodyRegular(width: size.width),
+                                              decoration: InputDecoration(
+                                                hintStyle: SafeGoogleFont(
+                                                  GoogleFontsApp().fontMulish,
+                                                  fontSize: size.width * 0.0025 * 18,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: AppLightColors().gray800SecondaryText,
+                                                  letterSpacing: 0
+                                                ),
+                                                hintText: "100%",
+                                                suffixText: '%',
+                                              ),
+                                              controller: probabilityEditTxt,
+                                              autocorrect: false,
+                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                              minLines: 1,
+                                              maxLines: 1,
+                                              autofocus: false,
+                                              maxLength: 5,
+                                              textAlign: TextAlign.left,
+                                              onEditingComplete: () {
+                                                FocusScope.of(context).unfocus();
+                                              },
+                                              onChanged: (value) {
+                                                
+                                              },
+                                              onTapOutside: (event) {
+                                                FocusScope.of(context).unfocus();
+                                              },
+                                            ),
+                                          ),
                                                                         
                                           SizedBox(
                                             height: size.height * 0.04,
@@ -865,17 +863,22 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                             color: Colors.transparent,
                                             width: size.width * 0.92,
                                             child: TextFormField(
-                                            //initialValue: 'Terreno',
-                                            //initialValue: '',
                                             cursorColor: AppLightColors().primary,
                                             autovalidateMode: AutovalidateMode.onUserInteraction,                    
                                             style: AppTextStyles.bodyRegular(width: size.width),
-                                            decoration: InputDecorationCvs.formsDecoration(
-                        labelText: 'Ingreso esperado en dólares',
-                        //hintTetx: 'Ej: 5',
-                        size: size
+                                            decoration: InputDecoration(
+                                              hintStyle: SafeGoogleFont(
+                                                GoogleFontsApp().fontMulish,
+                                                fontSize: size.width * 0.0025 * 18,
+                                                fontWeight: FontWeight.w700,
+                                                color: AppLightColors().gray800SecondaryText,
+                                                letterSpacing: 0
+                                              ),
+                                              labelText: 'Ingreso esperado en dólares',
+                                              hintText: "0.00",
+                                              suffixText: '\$',
                                             ),
-                                            //controller: emailAkiTxt,
+                                            controller: ingresoEsperadoEditTxt,
                                             autocorrect: false,
                                             keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                             minLines: 1,
@@ -884,26 +887,16 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                             maxLength: 7,
                                             textAlign: TextAlign.left,
                                             onEditingComplete: () {
-                        FocusScope.of(context).unfocus();
-                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                              FocusScope.of(context).unfocus();
                                             },
                                             onChanged: (value) {
                         
                                             },
                                             onTapOutside: (event) {
-                        FocusScope.of(context).unfocus();
+                                              FocusScope.of(context).unfocus();
                                             },
-                                            validator: (value) {
-                        /*
-                        String pattern = regularExp.regexToEmail;
-                        RegExp regExp = RegExp(pattern);
-                        return regExp.hasMatch(value ?? '')
-                            ? null
-                            : '¡El valor ingresado no luce como un correo!';
-                            */
-                                            },
-                                            ),
                                           ),
+                                        ),
                                           
                                           SizedBox(
                                             height: size.height * 0.04,
@@ -1058,17 +1051,13 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                       child: Column(
                                         children: [
                                           
+                                          /*
                                           Container(
                                             color: Colors.transparent,
                                             width: size.width * 0.92,
                                             child: TextFormField(
-                                              //initialValue: 'Ej: Interesado en casa pero no tiene trabajo estable',
-                                              //initialValue: '',
                                               cursorColor: AppLightColors().primary,
-                                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                                              inputFormatters: [
-                                                //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                              ],
+                                              autovalidateMode: AutovalidateMode.onUserInteraction,                                              
                                               style: AppTextStyles.bodyRegular(width: size.width),
                                               decoration: InputDecorationCvs.formsDecoration(
                                                 labelText: 'Observaciones',
@@ -1103,6 +1092,14 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                                     */
                                               },
                                             ),
+                                          ),
+                                          */
+
+                                          Container(
+                                            color: Colors.transparent,
+                                            width: size.width * 0.92,
+                                            height: size.height * 0.22,
+                                            child: WebViewWidget(controller: _wvController)
                                           ),
                                           
                                           SizedBox(
@@ -1273,7 +1270,9 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                       id: 2,
                                       name: ''
                                     ),
-                                    tagIds: [],                                    
+                                    tagIds: [],
+                                    expectedRevenue: double.parse(ingresoEsperadoEditTxt.text),
+                                    referred: recomendadoPorEditTxt.text
                                   );
 
                                   ProspectoRegistroResponseModel objRsp = await ProspectoTypeService().registraProspecto(objProsp);
@@ -1337,7 +1336,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                 
                                 },
                                 child: ButtonCvsWidget(
-                                  text: 'Actualiza',
+                                  text: 'Actualizar',
                                   textStyle: AppTextStyles.h3Bold(
                                       width: size.width,
                                       color: AppLightColors().white),

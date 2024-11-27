@@ -24,15 +24,19 @@ late TextEditingController paisTxt;
 late TextEditingController probabilityTxt;
 late TextEditingController telefonoTxt;
 late TextEditingController sectorTxt;
+late TextEditingController ingresoEsperadoTxt;
+late TextEditingController recomendadoPorTxt;
 
 DateTime dateRgPrsp = DateTime.now();
 
 String fecCierre = '';
+String fecCierreFin = '';
 String campSelect = '';
 String mediaSelect = '';
 String originSelect = '';
 String actSelect = '';
 String paisSelect = '';
+String telefonoPrsp = '';
 
 class FrmRegistroProspectoScreen extends StatefulWidget {
   const FrmRegistroProspectoScreen({super.key});
@@ -60,7 +64,9 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
     probabilityTxt = TextEditingController();
     fecCierre = DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp);
     telefonoTxt = TextEditingController();
+    ingresoEsperadoTxt = TextEditingController();
     sectorTxt = TextEditingController(text: 'Norte');
+    recomendadoPorTxt = TextEditingController();
   }
 
   void getPhoneNumber(String phoneNumber) async {
@@ -352,55 +358,6 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     ),
                                   ),
                               
-                              /*
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: TextFormField(
-                                      cursorColor: AppLightColors().primary,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                      ],
-                                      style: AppTextStyles.bodyRegular(width: size.width),
-                                      decoration: InputDecorationCvs.formsDecoration(
-                                        labelText: 'Teléfono',
-                                        hintTetx: 'Ej: 09xxxxxxxx',
-                                        size: size,
-                                        prefixIcon: const Icon(Icons.search, color: Colors.blue,)                                      
-                                      ),                                  
-                                      controller: telefonoTxt,
-                                      autocorrect: false,
-                                      keyboardType: TextInputType.text,
-                                      minLines: 1,
-                                      maxLines: 2,
-                                      autofocus: false,
-                                      maxLength: 20,
-                                      textAlign: TextAlign.left,
-                                      onEditingComplete: () async {
-                                        FocusScope.of(context).unfocus();
-                                        
-                                      },
-                                      onChanged: (value) {
-                                        
-                                      },
-                                      onTapOutside: (event) async {
-                                        FocusScope.of(context).unfocus();
-                                        await ProspectoTypeService().getProspectoRegistrado(telefonoTxt.text);
-                                      },
-                                      validator: (value) {
-                                        /*
-                                        String pattern = regularExp.regexToEmail;
-                                        RegExp regExp = RegExp(pattern);
-                                        return regExp.hasMatch(value ?? '')
-                                            ? null
-                                            : '¡El valor ingresado no luce como un correo!';
-                                            */
-                                      },
-                                    ),
-                                  ),
-                                  */
-                        
                                   SizedBox(
                                     height: size.height * 0.02,
                                   ),
@@ -410,10 +367,11 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     width: size.width * 0.92,
                                     child: InternationalPhoneNumberInput(
                                     onInputChanged: (PhoneNumber phoneNumber) async {
-                                      //print("Número cambiado: ${phoneNumber.phoneNumber}");
                                       if(phoneNumber.phoneNumber != null && phoneNumber.phoneNumber!.length == 13){
-                                        telefonoTxt.text = phoneNumber.phoneNumber ?? '';
+                                        
+                                        telefonoPrsp = phoneNumber.phoneNumber ?? '';
                                         await ProspectoTypeService().getProspectoRegistrado(phoneNumber.phoneNumber!);
+
                                       }
                                     },
                                     onInputValidated: (bool isValid) async {
@@ -473,7 +431,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           hintTetx: 'Ej: Juan Valdez',
                                           size: size
                                         ),
-                                        enabled: false,
+                                        //enabled: false,
                                         controller: nombresTxt,
                                         autocorrect: false,
                                         keyboardType: TextInputType.text,
@@ -510,7 +468,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         inputFormatters: [
                                           FilteringTextInputFormatter.deny(regexToRemoveEmoji)
                                         ],
-                                        enabled: false,
+                                        //enabled: false,
                                         style: AppTextStyles.bodyRegular(width: size.width),
                                         decoration: InputDecorationCvs.formsDecoration(
                                           labelText: 'Producto de interés',
@@ -578,7 +536,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       child: TextFormField(
                                         controller: sectorTxt,
                                         //initialValue: 'Norte',
-                                        enabled: false,
+                                        //enabled: false,
                                         cursorColor: AppLightColors().primary,
                                         autovalidateMode: AutovalidateMode.onUserInteraction,
                                         style: AppTextStyles.bodyRegular(width: size.width),
@@ -607,7 +565,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         },
                                       ),
                                     ),
-                                    
+                                    /*
                                     SizedBox(
                                       height: size.height * 0.03,
                                     ),
@@ -622,66 +580,13 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           Icon(Icons.check_box_outlined),
                                         ],
                                       ),
-                                                                        ),
-                                                                        
-                                                                        SizedBox(
-                                      height: size.height * 0.01,
-                                                                        ),
-                                                                        
-                                                                        /*
-                                                                        Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: TextFormField(
-                                        initialValue: 'Yordani Oliva',
-                                        //initialValue: '',
-                                        cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        inputFormatters: [
-                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                        ],
-                                        style: AppTextStyles.bodyRegular(width: size.width),
-                                        decoration: InputDecorationCvs.formsDecoration(
-                                          labelText: 'Asesor Asignado',
-                                          hintTetx: '',
-                                          size: size
-                                        ),
-                                        //controller: emailAkiTxt,
-                                        autocorrect: false,
-                                        keyboardType: TextInputType.text,
-                                        minLines: 1,
-                                        maxLines: 2,
-                                        autofocus: false,
-                                        maxLength: 50,
-                                        textAlign: TextAlign.left,
-                                        onEditingComplete: () {
-                                          FocusScope.of(context).unfocus();
-                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                        },
-                                        onChanged: (value) {
-                                          
-                                        },
-                                        onTapOutside: (event) {
-                                          FocusScope.of(context).unfocus();
-                                        },
-                                        validator: (value) {
-                                          /*
-                                          String pattern = regularExp.regexToEmail;
-                                          RegExp regExp = RegExp(pattern);
-                                          return regExp.hasMatch(value ?? '')
-                                              ? null
-                                              : '¡El valor ingresado no luce como un correo!';
-                                              */
-                                        },
-                                      ),
-                                                                        ),
-                                                                        
-                                                                        
-                                    SizedBox(
-                                      height: size.height * 0.02,
                                     ),
                                     */
-                        
+                                    
+                                    SizedBox(
+                                      height: size.height * 0.03,
+                                    ),
+                                                                        
                                     Container(
                                       color: Colors.transparent,
                                       width: size.width * 0.94,
@@ -786,20 +691,15 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       color: Colors.transparent,
                                       width: size.width * 0.92,
                                       child: TextFormField(
-                                        initialValue: 'Maria José',
-                                        //initialValue: '',
                                         cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        inputFormatters: [
-                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                        ],
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,                                        
                                         style: AppTextStyles.bodyRegular(width: size.width),
                                         decoration: InputDecorationCvs.formsDecoration(
                                           labelText: 'Recomendado por',
-                                          hintTetx: 'Ej: Norte',
+                                          hintTetx: 'Ej: Majo Piguave',
                                           size: size
                                         ),
-                                        //controller: emailAkiTxt,
+                                        controller: recomendadoPorTxt,
                                         autocorrect: false,
                                         keyboardType: TextInputType.text,
                                         minLines: 1,
@@ -809,7 +709,6 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         textAlign: TextAlign.left,
                                         onEditingComplete: () {
                                           FocusScope.of(context).unfocus();
-                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
                                         },
                                         onChanged: (value) {
                                           
@@ -817,19 +716,10 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         onTapOutside: (event) {
                                           FocusScope.of(context).unfocus();
                                         },
-                                        validator: (value) {
-                                          /*
-                                          String pattern = regularExp.regexToEmail;
-                                          RegExp regExp = RegExp(pattern);
-                                          return regExp.hasMatch(value ?? '')
-                                              ? null
-                                              : '¡El valor ingresado no luce como un correo!';
-                                              */
-                                        },
                                       ),
-                                                                        ),
-                                                                        
-                                                                        SizedBox(
+                                    ),
+                                    
+                                    SizedBox(
                                       height: size.height * 0.025,
                                                                         ),
                                                                     
@@ -847,64 +737,52 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         children: [
                                           
                                           Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: TextFormField(
-                                        //initialValue: 'Mario Piguave',
-                                        //initialValue: '',                                      
-                                        cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        inputFormatters: [
-                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                        ],
-                                        style: AppTextStyles.bodyRegular(width: size.width),
-                                        /*
-                                        decoration: InputDecorationCvs.formsDecoration(
-                                          labelText: 'Probabilidad',
-                                          hintTetx: 'Ej: 50%',
-                                          size: size
-                                        ),
-                                        */
-                                        decoration: InputDecoration(
-                                          hintStyle: SafeGoogleFont(
-                                              GoogleFontsApp().fontMulish,
-                                              fontSize: size.width * 0.0025 * 18,
-                                              fontWeight: FontWeight.w700,
-                                              color:
-                                                  AppLightColors().gray800SecondaryText,
-                                              letterSpacing: 0),
-                                          hintText: "100%",
-                                          suffixText: '%',
-                                        ),
-                                        controller: probabilityTxt,
-                                        autocorrect: false,
-                                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                        minLines: 1,
-                                        maxLines: 1,
-                                        autofocus: false,
-                                        maxLength: 5,
-                                        textAlign: TextAlign.left,
-                                        onEditingComplete: () {
-                                          FocusScope.of(context).unfocus();
-                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                        },
-                                        onChanged: (value) {
-                                          
-                                        },
-                                        onTapOutside: (event) {
-                                          FocusScope.of(context).unfocus();
-                                        },
-                                        validator: (value) {
-                                          /*
-                                          String pattern = regularExp.regexToEmail;
-                                          RegExp regExp = RegExp(pattern);
-                                          return regExp.hasMatch(value ?? '')
-                                              ? null
-                                              : '¡El valor ingresado no luce como un correo!';
-                                              */
-                                        },
-                                      ),
-                                                                        ),
+                                            color: Colors.transparent,
+                                            width: size.width * 0.92,
+                                            child: TextFormField(                                    
+                                              cursorColor: AppLightColors().primary,
+                                              autovalidateMode: AutovalidateMode.onUserInteraction,                                              
+                                              style: AppTextStyles.bodyRegular(width: size.width),
+                                              decoration: InputDecoration(
+                                                hintStyle: SafeGoogleFont(
+                                                    GoogleFontsApp().fontMulish,
+                                                    fontSize: size.width * 0.0025 * 18,
+                                                    fontWeight: FontWeight.w700,
+                                                    color:
+                                                        AppLightColors().gray800SecondaryText,
+                                                    letterSpacing: 0),
+                                                hintText: "100%",
+                                                suffixText: '%',
+                                              ),
+                                              controller: probabilityTxt,
+                                              autocorrect: false,
+                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                              minLines: 1,
+                                              maxLines: 1,
+                                              autofocus: false,
+                                              maxLength: 5,
+                                              textAlign: TextAlign.left,
+                                              onEditingComplete: () {
+                                                FocusScope.of(context).unfocus();
+                                                //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                              },
+                                              onChanged: (value) {
+                                                
+                                              },
+                                              onTapOutside: (event) {
+                                                FocusScope.of(context).unfocus();
+                                              },
+                                              validator: (value) {
+                                                /*
+                                                String pattern = regularExp.regexToEmail;
+                                                RegExp regExp = RegExp(pattern);
+                                                return regExp.hasMatch(value ?? '')
+                                                    ? null
+                                                    : '¡El valor ingresado no luce como un correo!';
+                                                    */
+                                              },
+                                            ),
+                                          ),
                                                                         
                                           SizedBox(
                                             height: size.height * 0.04,
@@ -914,43 +792,38 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             color: Colors.transparent,
                                             width: size.width * 0.92,
                                             child: TextFormField(
-                                            //initialValue: 'Terreno',
-                                            //initialValue: '',
-                                            cursorColor: AppLightColors().primary,
-                                            autovalidateMode: AutovalidateMode.onUserInteraction,                    
-                                            style: AppTextStyles.bodyRegular(width: size.width),
-                                            decoration: InputDecorationCvs.formsDecoration(
-                        labelText: 'Ingreso esperado en dólares',
-                        //hintTetx: 'Ej: 5',
-                        size: size
-                                            ),
-                                            //controller: emailAkiTxt,
-                                            autocorrect: false,
-                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                            minLines: 1,
-                                            maxLines: 1,
-                                            autofocus: false,
-                                            maxLength: 7,
-                                            textAlign: TextAlign.left,
-                                            onEditingComplete: () {
-                        FocusScope.of(context).unfocus();
-                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                            },
-                                            onChanged: (value) {
-                        
-                                            },
-                                            onTapOutside: (event) {
-                        FocusScope.of(context).unfocus();
-                                            },
-                                            validator: (value) {
-                        /*
-                        String pattern = regularExp.regexToEmail;
-                        RegExp regExp = RegExp(pattern);
-                        return regExp.hasMatch(value ?? '')
-                            ? null
-                            : '¡El valor ingresado no luce como un correo!';
-                            */
-                                            },
+                                              cursorColor: AppLightColors().primary,
+                                              autovalidateMode: AutovalidateMode.onUserInteraction,                    
+                                              style: AppTextStyles.bodyRegular(width: size.width),
+                                              decoration: InputDecoration(
+                                                hintStyle: SafeGoogleFont(
+                                                  GoogleFontsApp().fontMulish,
+                                                  fontSize: size.width * 0.0025 * 18,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: AppLightColors().gray800SecondaryText,
+                                                  letterSpacing: 0
+                                                ),
+                                                labelText: 'Ingreso esperado en dólares',
+                                                hintText: "0.00",
+                                                suffixText: '\$',
+                                              ),
+                                              controller: ingresoEsperadoTxt,
+                                              autocorrect: false,
+                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                              minLines: 1,
+                                              maxLines: 1,
+                                              autofocus: false,
+                                              maxLength: 7,
+                                              textAlign: TextAlign.left,
+                                              onEditingComplete: () {
+                                                FocusScope.of(context).unfocus();
+                                              },
+                                              onChanged: (value) {
+                          
+                                              },
+                                              onTapOutside: (event) {
+                                                FocusScope.of(context).unfocus();
+                                              },
                                             ),
                                           ),
                                           
@@ -1010,30 +883,31 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             color: Colors.transparent,
                                             width: size.width * 0.92,
                                             child: TextFormField(
-                        initialValue: fecCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp),
-                        readOnly: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Cierre esperado',
-                          border: OutlineInputBorder(),
-                          suffixIcon: Icon(Icons.calendar_today),
-                        ),
-                        onTap: () async {
-                          DateTime? pickedDate =
-                              await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2020),
-                            lastDate: DateTime(2100),
-                          );
-                          if (pickedDate != null) {
-                            
-                            setState(() {
-                              //dateRgPrsp = pickedDate;
-                              fecCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
-                            });
-                                  
-                          }
-                        },
+                                              initialValue: fecCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp),
+                                              readOnly: true,
+                                              decoration: const InputDecoration(
+                                                labelText: 'Cierre esperado',
+                                                border: OutlineInputBorder(),
+                                                suffixIcon: Icon(Icons.calendar_today),
+                                              ),
+                                              onTap: () async {
+                                                DateTime? pickedDate =
+                                                    await showDatePicker(
+                                                  context: context,
+                                                  initialDate: DateTime.now(),
+                                                  firstDate: DateTime(2020),
+                                                  lastDate: DateTime(2100),
+                                                );
+                                                if (pickedDate != null) {
+                                                  
+                                                  setState(() {
+                                                    //dateRgPrsp = pickedDate;
+                                                    fecCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
+                                                    fecCierreFin = DateFormat('yyyy-MM-dd', 'es').format(pickedDate);
+                                                  });
+                                                        
+                                                }
+                                              },
                                             ),
                                                                   
                                           ),
@@ -1264,7 +1138,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                   );
 
                                   DatumCrmLead objProsp = DatumCrmLead(                                    
-                                    
+                                    expectedRevenue: double.parse(ingresoEsperadoTxt.text),
                                     dayClose: double.parse(dateRgPrsp.day.toString()),
                                     id: 0,
                                     name: nombresTxt.text,
@@ -1276,7 +1150,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     description: observacionesTxt.text,
                                     emailFrom: emailTxt.text,
                                     street: direccionTxt.text,
-                                    phone: telefonoTxt.text,
+                                    phone: telefonoPrsp,
                                     partnerName: nombresTxt.text,
                                     mobile: '',
                                     dateOpen: DateTime.now(),
@@ -1322,7 +1196,9 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       id: 2,
                                       name: ''
                                     ),
-                                    tagIds: [],                                    
+                                    tagIds: [],
+                                    referred: recomendadoPorTxt.text,
+                                    dateClose: DateTime.parse(fecCierreFin)                                    
                                   );
 
                                   ProspectoRegistroResponseModel objRsp = await ProspectoTypeService().registraProspecto(objProsp);
@@ -1425,8 +1301,9 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                   //text: 'Crear',
                                   text: 'Crear Prospecto',
                                   textStyle: AppTextStyles.h3Bold(
-                                      width: size.width,
-                                      color: AppLightColors().white),
+                                    width: size.width,
+                                    color: AppLightColors().white
+                                  ),
                                 )),
                               ),
                             ],

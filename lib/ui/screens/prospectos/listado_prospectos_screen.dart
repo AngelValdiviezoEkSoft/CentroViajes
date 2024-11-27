@@ -12,6 +12,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 
 String terminoBusqueda = '';
+DatumCrmLead? objDatumCrmLead;
 
 class ListaProspectosScreen extends StatefulWidget {
   const ListaProspectosScreen({super.key});
@@ -231,10 +232,11 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                     prospectosFiltrados[index].name,
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
-                                                      fontSize: 10,
+                                                      //fontSize: 10,
                                                       color: Colors.black
                                                     ),
-                                                    maxLines: 2,
+                                                    maxLines: 1,
+                                                    minFontSize: 4,
                                                     textAlign: TextAlign.left,
                                                     ),
                                                 ),
@@ -248,10 +250,11 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                     prospectosFiltrados[index].contactName ?? '',
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
-                                                      fontSize: 10,
+                                                      //fontSize: 10,
                                                       color: Colors.black
                                                     ),
-                                                    maxLines: 2,
+                                                    maxLines: 1,
+                                                    minFontSize: 4,
                                                     textAlign: TextAlign.left,
                                                     ),
                                                 ),
@@ -278,8 +281,8 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                           
                                             ),
                                             Container(
-                                                color: Colors.transparent,
-                                                width: size.width * 0.54,
+                                              color: Colors.transparent,
+                                              width: size.width * 0.54,
                                               height: size.height * 0.035,
                                                 child: 
                                                 RichText(
@@ -290,8 +293,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                         style: TextStyle(color: Colors.black)
                                                       ),
                                                       TextSpan(
-                                                        //
-                                                        //text: '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["phone"]}',
                                                         text: prospectosFiltrados[index].phone,
                                                         style: const TextStyle(color: Colors.blue)
                                                       ),
@@ -360,7 +361,9 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                               child: IconButton(
                                                 icon: const Icon(Icons.info, color: Colors.grey, size: 20,),
                                                 onPressed: () {
-                                                  idProsp = prospectosFiltrados[index].id;
+                                                  //idProsp = prospectosFiltrados[index].id;
+                                                  
+                                                  objDatumCrmLead = prospectosFiltrados[index];
                                                   context.push(Rutas().rutaEditProsp);
                                                 },
                                               ),

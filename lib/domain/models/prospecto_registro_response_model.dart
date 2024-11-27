@@ -31,12 +31,12 @@ class ProspectoRegistroResponseModel {
 class ProspectoRegistroModel {
     int estado;
     String mensaje;
-    List<DatumProspectoRegistro> data; //DESCOMENTAR AEVG
+    //List<DatumProspectoRegistro> data; //DESCOMENTAR AEVG
 
     ProspectoRegistroModel({
         required this.estado,
         required this.mensaje,
-        required this.data,
+        //required this.data,
     });
 
     factory ProspectoRegistroModel.fromJson(String str) => ProspectoRegistroModel.fromMap(json.decode(str));
@@ -46,13 +46,13 @@ class ProspectoRegistroModel {
     factory ProspectoRegistroModel.fromMap(Map<String, dynamic> json) => ProspectoRegistroModel(
         estado: json["estado"],
         mensaje: json["mensaje"],
-        data: List<DatumProspectoRegistro>.from(json["data"].map((x) => DatumProspectoRegistro.fromJson(x))),
+        //data: List<DatumProspectoRegistro>.from(json["data"].map((x) => DatumProspectoRegistro.fromJson(x))),
     );
 
     Map<String, dynamic> toMap() => {
         "estado": estado,
         "mensaje": mensaje,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        //"data": List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }
 

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cvs_ec_app/config/config.dart';
 import 'package:cvs_ec_app/config/routes/app_router.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
+import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -211,7 +212,12 @@ class AuthService extends ChangeNotifier {
         body: jsonEncode(body),
       );
 
+      var rspPrsp = ProspectoTypeService().getProspectos();
+      var rspCli = ClienteService().getClientes();
+
       await storage.write(key: 'RespuestaLogin', value: response.body);
+      await storage.write(key: 'RespuestaProspectos', value: rspPrsp);
+      await storage.write(key: 'RespuestaClientes', value: rspCli);
 
       return response.body;
     } catch (e) {

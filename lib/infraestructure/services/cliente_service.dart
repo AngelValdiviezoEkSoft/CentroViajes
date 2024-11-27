@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/services/generic/generic_service.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 const storageClient = FlutterSecureStorage();
 MensajesAlertas objMensajesClienteService = MensajesAlertas();
@@ -102,11 +100,9 @@ class ClienteService extends ChangeNotifier {
       var objRsp = await GenericService().getMultiModelos(objReq, "res.partner");
 
       return json.encode(objRsp);
-      
-      //notifyListeners();
     }
     catch(ex){
-      print('Error: $ex');
+      //print('Error: $ex');
       return null;
     }
     

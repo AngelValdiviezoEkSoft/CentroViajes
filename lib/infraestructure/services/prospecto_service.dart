@@ -294,28 +294,14 @@ class ProspectoTypeService extends ChangeNotifier{
       body: jsonEncode(requestBody), 
     );
     
-      print(response.body);
+      //print(response.body);
 
       return ProspectoRegistroResponseModel.fromJson(response.body);
       //String tst = '';
     } 
-    catch(ex){
-      print('Error: $ex');
+    catch(_){
+      
     }
-    /*   
-    on SocketException catch (_) {
-      Fluttertoast.showToast(
-        msg: objMensajesProspectoService.mensajeFallaInternet,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 5,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-      );  
-    }
-    */
-    
   }
 
 }

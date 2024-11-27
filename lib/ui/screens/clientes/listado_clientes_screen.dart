@@ -69,7 +69,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
         builder: (context,state) {
 
           return FutureBuilder(
-            future: ClienteService().getClientes(),
+            future: state.lstClientes(),//ClienteService().getClientes(),
             builder: (context, snapshot) {
 
               if (snapshot.hasError) {

@@ -137,7 +137,13 @@ class GenericState extends Equatable {
         ),
       ]; 
 
-      final jsonString = serializeItemBotonList(items);
+      var rspPrsp = await ProspectoTypeService().getProspectos();
+      var rspCli = await ClienteService().getClientes();
+
+      await storage.write(key: 'RespuestaProspectos', value: rspPrsp);
+      await storage.write(key: 'RespuestaClientes', value: rspCli);
+      
+      final jsonString = serializeItemBotonMenuList(items);      
 
       respCmbLst = '${json.encode(lstRsp)}---$jsonString---${objPermisos.mainMenu.cardSales}---${objPermisos.mainMenu.cardCollection}';
 
@@ -173,7 +179,20 @@ class GenericState extends Equatable {
     return objLogin;
   }
 
-  Map<String, dynamic> serializeItemBoton(ItemBoton item) {
+  
+  Future<String> lstProspectos() async {
+    var rsp = await storage.read(key: 'RespuestaProspectos') ?? '';
+    
+    return rsp;
+  }
+
+  Future<String> lstClientes() async {
+    var rsp = await storage.read(key: 'RespuestaClientes') ?? '';
+    
+    return rsp;
+  }
+
+  Map<String, dynamic> serializeItemBotonMenu(ItemBoton item) {
     return {
       'tipoNotificacion': item.tipoNotificacion,
       'idSolicitud': item.idSolicitud,
@@ -197,18 +216,18 @@ class GenericState extends Equatable {
     };
   }
 
-  String serializeItemBotonList(List<ItemBoton> items) {    
-    final serializedList = items.map((item) => serializeItemBoton(item)).toList();
+  String serializeItemBotonMenuList(List<ItemBoton> items) {    
+    final serializedList = items.map((item) => serializeItemBotonMenu(item)).toList();
 
     return jsonEncode(serializedList);
   }
 
-  List<ItemBoton> deserializeItemBotonList(String jsonString) {
+  List<ItemBoton> deserializeItemBotonMenuList(String jsonString) {
     final List<dynamic> jsonList = jsonDecode(jsonString);
-    return jsonList.map((json) => deserializeItemBoton(json)).toList();
+    return jsonList.map((json) => deserializeItemBotonMenu(json)).toList();
   }
 
-  ItemBoton deserializeItemBoton(Map<String, dynamic> json) {
+  ItemBoton deserializeItemBotonMenu(Map<String, dynamic> json) {
     return ItemBoton(
       json['tipoNotificacion'] ?? '',
       json['idSolicitud'] ?? '',
@@ -235,6 +254,8 @@ class GenericState extends Equatable {
       () {},
     );
   }
+
+
 
 }
 

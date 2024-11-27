@@ -145,9 +145,7 @@ class HomeScreenState extends State<HomeScreen> {
       child: WillPopScope(
         onWillPop: () async => false,
         child: BlocBuilder<GenericBloc, GenericState>(
-            builder: (context,state) { 
-
-              //lstComp = state.readCompanias().tol;
+            builder: (context,state) {
 
               return FutureBuilder(
                 future: state.readPrincipalPage(),
@@ -159,8 +157,8 @@ class HomeScreenState extends State<HomeScreen> {
                       body: Center(
                         child: Image.asset(
                           "assets/gifs/gif_carga.gif",
-                          height: size.width * 0.85,//150.0,
-                          width: size.width * 0.85,//150.0,                          
+                          height: size.width * 0.85,
+                          width: size.width * 0.85,
                         ),
                       ),
                     );
@@ -175,7 +173,7 @@ class HomeScreenState extends State<HomeScreen> {
                     String cardSalesStr = rspTmp.split('---')[2];
                     String cardCollectionStr = rspTmp.split('---')[3];
 
-                    List<ItemBoton> lstMenu = state.deserializeItemBotonList(objPerm);
+                    List<ItemBoton> lstMenu = state.deserializeItemBotonMenuList(objPerm);
 
                     List<String> lstNames = List<String>.from(json.decode(lstTmp));
 

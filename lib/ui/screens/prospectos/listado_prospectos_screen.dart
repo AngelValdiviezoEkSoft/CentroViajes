@@ -70,7 +70,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
         builder: (context,state) {
 
           return FutureBuilder(
-            future: ProspectoTypeService().getProspectos(),
+            future: state.lstProspectos(),//ProspectoTypeService().getProspectos(),
             builder: (context, snapshot) {
 
               if (snapshot.hasError) {

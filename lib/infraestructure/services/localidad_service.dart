@@ -29,7 +29,7 @@ class LocalidadService extends ChangeNotifier {
       final response = await http.get(
         url,
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': EnvironmentsProd().contentType,//'application/json; charset=UTF-8',
           'Authorization': 'Bearer $tokenUser',
         },
       );

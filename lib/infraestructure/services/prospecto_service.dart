@@ -50,7 +50,7 @@ class ProspectoTypeService extends ChangeNotifier{
       );
 
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-        jsonrpc: '2.0',
+        jsonrpc: EnvironmentsProd().jsonrpc,
         params: ParamsMultiModels(
           bearer: obj.result.bearer,
           company: objLogDecode['result']['current_company'],
@@ -141,7 +141,7 @@ class ProspectoTypeService extends ChangeNotifier{
 
       
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-        jsonrpc: '2.0',
+        jsonrpc: EnvironmentsProd().jsonrpc,
         params: ParamsMultiModels(
           bearer: obj.result.bearer,
           company: objLogDecode['result']['current_company'],
@@ -157,7 +157,7 @@ class ProspectoTypeService extends ChangeNotifier{
       String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 
       final headers = {
-        "Content-Type": "application/json",
+        "Content-Type": EnvironmentsProd().contentType//"application/json",
       };
 
       String ruta = '';
@@ -170,7 +170,7 @@ class ProspectoTypeService extends ChangeNotifier{
       }
 
       final requestBody = {
-        "jsonrpc": "2.0",
+        "jsonrpc": EnvironmentsProd().jsonrpc,
         "params": {
           "key": objReq.params.key,
           "tocken": objReq.params.tocken,
@@ -226,7 +226,7 @@ class ProspectoTypeService extends ChangeNotifier{
       );
 
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-        jsonrpc: '2.0',
+        jsonrpc: EnvironmentsProd().jsonrpc,
         params: ParamsMultiModels(
           bearer: obj.result.bearer,
           company: objLogDecode['result']['current_company'],
@@ -242,7 +242,7 @@ class ProspectoTypeService extends ChangeNotifier{
       String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
       
       final requestBody = {
-      "jsonrpc": "2.0",
+      "jsonrpc": EnvironmentsProd().jsonrpc,
       "params": {
         "key": objReq.params.key,
         "tocken": objReq.params.tocken,
@@ -274,7 +274,7 @@ class ProspectoTypeService extends ChangeNotifier{
     };
 
     final headers = {
-      "Content-Type": "application/json",
+      "Content-Type": EnvironmentsProd().contentType//"application/json",
     };
 
     String ruta = '';

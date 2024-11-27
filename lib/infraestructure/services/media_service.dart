@@ -42,7 +42,7 @@ class MediaService extends ChangeNotifier{
       );
 
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-        jsonrpc: '2.0',
+        jsonrpc: EnvironmentsProd().jsonrpc,
         params: ParamsMultiModels(
           bearer: obj.result.bearer,
           company: objLogDecode['result']['current_company'],

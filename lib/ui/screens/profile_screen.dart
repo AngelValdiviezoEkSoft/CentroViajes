@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
   
-  const ProfileScreen(this.username, {Key? key, required this.imagePath})
+  const ProfileScreen(Key? key, this.username,{ required this.imagePath})
       : super(key: key);
   final String username;
   final String imagePath;

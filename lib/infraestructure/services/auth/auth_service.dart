@@ -97,7 +97,7 @@ class AuthService extends ChangeNotifier {
     final ruta = '${env.apiEndpoint}done/register';
 
     final Map<String, dynamic> body = {
-    "jsonrpc": "2.0",
+    "jsonrpc": EnvironmentsProd().jsonrpc,
     "params": {
       "server": objRegister.server,
       "key": objRegister.key,
@@ -111,7 +111,7 @@ class AuthService extends ChangeNotifier {
     final response = await http.post(
       Uri.parse(ruta),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': EnvironmentsProd().contentType,
       },
       body: jsonEncode(body),
     );
@@ -135,14 +135,14 @@ class AuthService extends ChangeNotifier {
     final ruta = '${env.apiEndpoint}done/$imei/tocken/$key';
     
     final Map<String, dynamic> body = {
-      "jsonrpc": "2.0",
+      "jsonrpc": EnvironmentsProd().jsonrpc,
       "params": {}
     };
     
     final response = await http.post(
       Uri.parse(ruta),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': EnvironmentsProd().contentType,
       },
       body: jsonEncode(body),
     );
@@ -161,7 +161,7 @@ class AuthService extends ChangeNotifier {
     final ruta = '${env.apiEndpoint}done/$imei/validate/tocken/$key';
     
     final Map<String, dynamic> body = {
-      "jsonrpc": "2.0",
+      "jsonrpc": EnvironmentsProd().jsonrpc,
       "params": {
         "tocken": tocken
       }
@@ -170,7 +170,7 @@ class AuthService extends ChangeNotifier {
     final response = await http.post(
       Uri.parse(ruta),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': EnvironmentsProd().contentType,
       },
       body: jsonEncode(body),
     );
@@ -193,10 +193,8 @@ class AuthService extends ChangeNotifier {
         ruta = '${obj.result.url}/web/session/authenticate';
       }
 
-      //final ruta = '${env.apiEndpoint}web/session/authenticate';
-    
       final Map<String, dynamic> body = {
-        "jsonrpc": "2.0",
+        "jsonrpc": EnvironmentsProd().jsonrpc,
         "params": {
           "db": authRequest.db,
           "login": authRequest.login,
@@ -208,7 +206,7 @@ class AuthService extends ChangeNotifier {
       final response = await http.post(
         Uri.parse(ruta),
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': EnvironmentsProd().contentType,
         },
         body: jsonEncode(body),
       );
@@ -227,7 +225,7 @@ class AuthService extends ChangeNotifier {
      final response = await http.post(
       Uri.parse(ruta),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': EnvironmentsProd().contentType,
       },
       body: jsonEncode(
         <String, String>

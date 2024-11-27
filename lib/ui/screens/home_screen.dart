@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
+DonePermissions? objPermisosGen;
+
 String compSelect = '';
 String rutaFotoPerfil = '';
 String numeroIdentificacion = '';
@@ -58,13 +60,16 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
+    /*
     int varMuestraNotificacionesTrAp = 0;
     int varMuestraNotificacionesTrProc = 0;
     int varMuestraNotificacionesTrComp = 0;
     int varMuestraNotificacionesTrInfo = 0;
+    */
 
     final size = MediaQuery.of(context).size;
 
+    /*
     final items = <ItemBoton>[
       ItemBoton('','','',1, Icons.group_add, 'Prospectos', 'Seguimiento y control de prospectos','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','',
         Rutas().rutaListaProspectos, 
@@ -132,6 +137,7 @@ class HomeScreenState extends State<HomeScreen> {
         ),
       )
     ).toList();
+    */
 
     List<String> lstComp = [];
 
@@ -144,7 +150,7 @@ class HomeScreenState extends State<HomeScreen> {
               //lstComp = state.readCompanias().tol;
 
               return FutureBuilder(
-                future: state.readCompanias(),
+                future: state.readPrincipalPage(),
                 builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                   
                   if(!snapshot.hasData) {
@@ -154,8 +160,7 @@ class HomeScreenState extends State<HomeScreen> {
                         child: Image.asset(
                           "assets/gifs/gif_carga.gif",
                           height: size.width * 0.85,//150.0,
-                          width: size.width * 0.85,//150.0,
-                          
+                          width: size.width * 0.85,//150.0,                          
                         ),
                       ),
                     );
@@ -163,15 +168,53 @@ class HomeScreenState extends State<HomeScreen> {
                   else {
                     if(snapshot.data != null && snapshot.data!.isNotEmpty) {
 
-                    String lstTmp = snapshot.data as String;
+                    String rspTmp = snapshot.data as String;
+
+                    String lstTmp = rspTmp.split('---')[0];
+                    String objPerm = rspTmp.split('---')[1];
+                    String cardSalesStr = rspTmp.split('---')[2];
+                    String cardCollectionStr = rspTmp.split('---')[3];
+
+                    List<ItemBoton> lstMenu = state.deserializeItemBotonList(objPerm);
 
                     List<String> lstNames = List<String>.from(json.decode(lstTmp));
-                    
+
                     lstComp = lstNames;
+
+                    bool cardSales = bool.parse(cardSalesStr);
+                    bool cardCollection = bool.parse(cardCollectionStr);
                     
-                    if(compSelect.isEmpty){                      
+                    if(compSelect.isEmpty){
                       compSelect = lstComp.first;
                     }
+
+                    List<Widget> itemMap = lstMenu.map(
+                      (item) => FadeInLeft(
+                        duration: const Duration( milliseconds: 250 ),
+                        child: 
+                          ItemsListasWidget(
+                            null,
+                            varIdPosicionMostrar: varPosicionMostrar,
+                            varEsRelevante: item.esRelevante,
+                            varIdNotificacion: item.ordenNot,
+                            varNumIdenti: numeroIdentificacion,
+                            icon: item.icon,
+                            texto: item.mensajeNotificacion,
+                            texto2: item.mensaje2,
+                            color1: item.color1,
+                            color2: item.color2,
+                            onPress: () {  },
+                            varMuestraNotificacionesTrAp: 0,
+                            varMuestraNotificacionesTrProc: 0,
+                            varMuestraNotificacionesTrComp: 0,
+                            varMuestraNotificacionesTrInfo: 0,
+                            varIconoNot: item.iconoNotificacion,
+                            varIconoNotTrans: item.rutaImagen,
+                            permiteGestion: permiteGestion,
+                            rutaNavegacion: item.rutaNavegacion,
+                          ),
+                        )
+                      ).toList();
                     
                     return Scaffold(
                       backgroundColor: Colors.white,
@@ -195,14 +238,6 @@ class HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(color: Colors.black),
                         ),
                         actions: [
-                              /*
-                              IconButton(
-                  icon: const Icon(Icons.flip_camera_android_rounded, color: Colors.black),
-                  onPressed: () {
-                  
-                  },
-                              ),
-                              */
                               
                               Container(
                   color: Colors.transparent,
@@ -240,6 +275,8 @@ class HomeScreenState extends State<HomeScreen> {
                             body: SingleChildScrollView(
                               child: Column(
                                 children: [
+
+                                  if(cardSales)
                                   Container(
                                     color: Colors.transparent,
                                     width: size.width * 0.99,
@@ -256,6 +293,7 @@ class HomeScreenState extends State<HomeScreen> {
                                             
                                   const SizedBox(height: 16.0),
                     
+                                  if(cardCollection)
                                   Container(
                                     color: Colors.transparent,
                                     width: size.width * 0.99,
@@ -402,6 +440,7 @@ class HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   height: tamanio.height * 0.02,
                 ),
+                
                 Container(
                   width: tamanio.width * 0.3,
                   color: Colors.transparent,
@@ -414,31 +453,33 @@ class HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                 ),
-          Container(
-            width: tamanio.width * 0.3,
+                
+                Container(
+                  width: tamanio.width * 0.3,
                   color: Colors.transparent,
-            child: Text(
-              meta,
-              style: TextStyle(
-                color: textColor.withOpacity(0.7),
-                fontSize: 14.0,
-              ),
-            ),
-          ),
+                  child: Text(
+                    meta,
+                    style: TextStyle(
+                      color: textColor.withOpacity(0.7),
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ),
 
-          const SizedBox(height: 6.0),
+                const SizedBox(height: 6.0),
 
-          AutoSizeText(
-            amount,
-            maxLines: 1,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 32.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+                AutoSizeText(
+                  amount,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: 32.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
 
-          const SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
+
               ],
             ),
           ),
@@ -450,6 +491,7 @@ class HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if(objPermisosGen != null && objPermisosGen!.buttons.btnProgressOfTheDay)
                 Container(
                   width: tamanio.width * 0.17,
                   color: Colors.transparent,
@@ -458,13 +500,19 @@ class HomeScreenState extends State<HomeScreen> {
                     children: [
                       Stack(
                         children: [
-                          CircularProgressIndicator(
-                          value: progress,
-                          backgroundColor: Colors.white.withOpacity(0.5),
-                          color: progressColor,
-                          semanticsLabel: '55%',
-                          semanticsValue: '55%',
-                        ),
+                          Container(
+                            color: Colors.transparent,
+                            width: tamanio.width * 0.1,
+                            height: tamanio.height * 0.05,
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(
+                              value: progress,
+                              backgroundColor: Colors.white.withOpacity(0.5),
+                              color: progressColor,
+                              semanticsLabel: '55%',
+                              semanticsValue: '55%',
+                            ),
+                          ),
                           Positioned(
                             top: 8,
                             left: 5,
@@ -482,19 +530,14 @@ class HomeScreenState extends State<HomeScreen> {
                   color: Colors.transparent,
                   child: ElevatedButton(
                     onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      
+                    style: ElevatedButton.styleFrom(                      
                       backgroundColor: Colors.grey.shade700,
-                      /*
-                      primary: Colors.white, // Cambia el color de fondo del botón
-                      onPrimary: Colors.black, // Cambia el color del texto
-                      */
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         FaIcon(FontAwesomeIcons.chartLine, size: 20, color: Colors.white,),
-                        const Text('Detalles', style: TextStyle(color:  Colors.white, fontSize: 12),),
+                        Text('Detalles', style: TextStyle(color:  Colors.white, fontSize: 12),),
                       ],
                     ),
                   ),

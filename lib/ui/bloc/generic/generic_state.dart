@@ -58,7 +58,7 @@ class GenericState extends Equatable {
   @override
   List<Object> get props => [positionMenu,positionFormaPago,coordenadasMapa,radioMarcacion,formaPago,localidadId,idFormaPago, heightModalPlanAct];
 
-  Future<String> readCompanias() async {
+  Future<String> readPrincipalPage() async {
 
     try{
       final resp = await storage.read(key: 'RespuestaLogin') ?? '';
@@ -66,6 +66,7 @@ class GenericState extends Equatable {
       final data = json.decode(resp);
       final objTmp = data['result'];
       final lstFinal = objTmp['allowed_companies'];
+      final objPermisosTmp = objTmp['done_permissions'];
 
       Map<String, dynamic> dataTmp = json.decode(json.encode(lstFinal));
 
@@ -83,10 +84,66 @@ class GenericState extends Equatable {
         }
       });
 
-      return json.encode(lstRsp);
+      String respCmbLst = '';
+
+      final objPermisos = DonePermissions.fromJson(objPermisosTmp);
+
+      objPermisosGen = objPermisos;
+
+      final items = <ItemBoton>[
+        if(objPermisos.mainMenu.itemListLeads)
+        ItemBoton('','','',1, Icons.group_add, 'Prospectos', 'Seguimiento y control de prospectos','','', Colors.white, Colors.white,false,false,'','','icCompras.png','icComprasTrans.png','',
+          Rutas().rutaListaProspectos, 
+          () {
+            
+          }
+        ),
+        if(objPermisos.mainMenu.itemListPartners)
+        ItemBoton('','','',2, Icons.groups, 'Clientes', 'Listado de todos los clientes asignados','','', Colors.white, Colors.white,false,false,'','','icTramApr.png','icTramAprTrans.png','',
+          Rutas().rutaListaClientes, 
+          () {
+            
+          }
+        ),
+        if(objPermisos.mainMenu.itemScheduledVisits)
+        ItemBoton('','','',3, Icons.calendar_month, 'Visitas Agendadas', 'Listado de clientes programados para el día','','', Colors.white, Colors.white,false,false,'','','icTramProc.png','icTramProcTrans.png','',
+          Rutas().rutaConstruccion, 
+          () {}
+        ),
+        if(objPermisos.mainMenu.itemListCatalog)
+        ItemBoton('','','',4, Icons.auto_stories_sharp, 'Catálogo', 'Catálogo de productos con imágenes','','', Colors.white, Colors.white,false,false,'','','icCompras.png','icComprasTrans.png','',
+          Rutas().rutaConstruccion, 
+          () {}
+        ),
+        if(objPermisos.mainMenu.itemListInventory)
+        ItemBoton('','','',5, Icons.dashboard_customize_outlined, 'Inventario', 'Inventario general de productos con stock','','', Colors.white, Colors.white,false,false,'','','icTramApr.png','icTramAprTrans.png','',
+          Rutas().rutaConstruccion, 
+          () {}
+        ),
+        if(objPermisos.mainMenu.itemListPriceList)
+        ItemBoton('','','',6, Icons.format_list_bulleted_add, 'Listas de precio', 'Lista de precios generales para ventas','','', Colors.white, Colors.white,false,false,'','','icTramProc.png','icTramProcTrans.png','',
+          Rutas().rutaConstruccion, 
+          () {}
+        ),
+        if(objPermisos.mainMenu.itemListPromotions)
+        ItemBoton('','','',7, Icons.percent, 'Promociones Vigentes', 'Listado de Promociones Vigentes','','', Colors.white, Colors.white,false,false,'','','icCompras.png','icComprasTrans.png','',
+          Rutas().rutaConstruccion, 
+          () {}
+        ),
+        if(objPermisos.mainMenu.itemListDistribution)
+        ItemBoton('','','',8, Icons.inventory_rounded, 'Distribución en Rutas', 'Permite realizar el control de vehículos para reparto de ruta','','', Colors.white, Colors.white,false,false,'','','icCompras.png','icComprasTrans.png','',
+          Rutas().rutaConstruccion, 
+          () {}
+        ),
+      ]; 
+
+      final jsonString = serializeItemBotonList(items);
+
+      respCmbLst = '${json.encode(lstRsp)}---$jsonString---${objPermisos.mainMenu.cardSales}---${objPermisos.mainMenu.cardCollection}';
+
+      return respCmbLst;
     }
     catch(ex){
-      //print('Error: ' + ex.toString());
       return '';
     }
   }
@@ -116,6 +173,68 @@ class GenericState extends Equatable {
     return objLogin;
   }
 
+  Map<String, dynamic> serializeItemBoton(ItemBoton item) {
+    return {
+      'tipoNotificacion': item.tipoNotificacion,
+      'idSolicitud': item.idSolicitud,
+      'idNotificacionGen': item.idNotificacionGen,
+      'ordenNot': item.ordenNot,
+      'icon': item.icon.codePoint,
+      'mensajeNotificacion': item.mensajeNotificacion,
+      'mensaje2': item.mensaje2,
+      'fechaNotificacion': item.fechaNotificacion,
+      'tiempoDesde': item.tiempoDesde,
+      'color1': item.color1.value,
+      'color2': item.color2.value,
+      'requiereAccion': item.requiereAccion,
+      'esRelevante': item.esRelevante,
+      'estadoLeido': item.estadoLeido,
+      'numIdenti': item.numIdenti,
+      'iconoNotificacion': item.iconoNotificacion,
+      'rutaImagen': item.rutaImagen,
+      'idTransaccion': item.idTransaccion,
+      'rutaNavegacion': item.rutaNavegacion,
+    };
+  }
+
+  String serializeItemBotonList(List<ItemBoton> items) {    
+    final serializedList = items.map((item) => serializeItemBoton(item)).toList();
+
+    return jsonEncode(serializedList);
+  }
+
+  List<ItemBoton> deserializeItemBotonList(String jsonString) {
+    final List<dynamic> jsonList = jsonDecode(jsonString);
+    return jsonList.map((json) => deserializeItemBoton(json)).toList();
+  }
+
+  ItemBoton deserializeItemBoton(Map<String, dynamic> json) {
+    return ItemBoton(
+      json['tipoNotificacion'] ?? '',
+      json['idSolicitud'] ?? '',
+      json['idNotificacionGen'] ?? '',
+      json['ordenNot'] ?? 0,
+      IconData(
+        json['icon'],
+        fontFamily: 'MaterialIcons',
+      ),
+      json['mensajeNotificacion'] ?? '',
+      json['mensaje2'] ?? '',
+      json['fechaNotificacion'] ?? '',
+      json['tiempoDesde'] ?? '',
+      Color(json['color1'] ?? 0),
+      Color(json['color2'] ?? 0),
+      json['requiereAccion'] ?? false,
+      json['esRelevante'] ?? false,
+      json['estadoLeido'] ?? '',
+      json['numIdenti'] ?? '',
+      json['iconoNotificacion'] ?? '',
+      json['rutaImagen'] ?? '',
+      json['idTransaccion'] ?? '',
+      json['rutaNavegacion'] ?? '',
+      () {},
+    );
+  }
 
 }
 

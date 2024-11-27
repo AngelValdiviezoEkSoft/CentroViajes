@@ -47,7 +47,7 @@ class TokenManager {
 
       final expiration = obj.result.tockenValidDate;
 
-      imeiCod = '8234560479'; //BORRAR LUEGO
+      //imeiCod = '8234560479'; //BORRAR LUEGO
 
       //VALIDACIÓN DE TOKEN
       

@@ -37,7 +37,7 @@ class GenericService extends ChangeNotifier {
     
     final Map<String, dynamic> body = 
     {
-      "jsonrpc": "2.0",
+      "jsonrpc": EnvironmentsProd().jsonrpc,
       "params": {
         "key": objReq.params.key,//"EKzbvpyoQJhresnrSCN1PzMfAc", 
         "tocken": objReq.params.tocken,//"LKMZ1g83WCGwHCy3bXHe2breLesTACkBmQDqBKjelJ9PoxQs", 
@@ -53,7 +53,7 @@ class GenericService extends ChangeNotifier {
     final response = await http.post(
       Uri.parse(ruta),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': EnvironmentsProd().contentType//'application/json; charset=UTF-8',
       },
       body: jsonEncode(body),
     );
@@ -84,7 +84,7 @@ class GenericService extends ChangeNotifier {
     String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 
     final requestBody = {
-      "jsonrpc": "2.0",
+      "jsonrpc": EnvironmentsProd().jsonrpc,
       "params": {
         "key": objReq.params.key,
         "tocken": objReq.params.tocken,
@@ -102,7 +102,7 @@ class GenericService extends ChangeNotifier {
     };
 
     final headers = {
-      "Content-Type": "application/json",
+      "Content-Type": EnvironmentsProd().contentType//"application/json",
     };
 
     final response = await http.post(

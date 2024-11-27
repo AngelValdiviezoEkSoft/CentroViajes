@@ -5,4 +5,8 @@ class EnvironmentsProd {
   final String apiEndpoint = 'https://05f3-181-199-42-131.ngrok-free.app/';
 
   final String tokenAutorizacion = '2c9f8fc09218c2c0f65e8303767fabf671989764';
+
+  final String jsonrpc = '2.0';
+
+  final String contentType = 'application/json; charset=UTF-8';
 }

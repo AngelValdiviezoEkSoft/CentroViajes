@@ -16,14 +16,7 @@ class ListaActividades extends StatelessWidget {
     final items = <ItemBoton>[
       ItemBoton('','','',1, Icons.keyboard_arrow_right_sharp, 'Visita', '','','', Colors.white, const Color(0xFF5636D3),false,true,'','','icTramApr.png','icTramAprTrans.png','','', () => context.push(Rutas().rutaListaClientes),),
       ItemBoton('','','',2, Icons.keyboard_arrow_right_sharp, 'Reunión Virtual', '','','', Colors.white, const Color(0xFF5636D3),false,true,'','','icTramProc.png','icTramProcTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      ItemBoton('','','',3, Icons.keyboard_arrow_right_sharp, 'Reunión Presencial', '','','', Colors.white, const Color(0xFF5636D3),false,true,'','','icCompras.png','icComprasTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      /*
-      ItemBoton('','','',4, Icons.keyboard_arrow_right_sharp, 'Solicitudes de Crédito', '','','', Colors.white, const Color(0xFF5636D3),false,true,'','','icCompras.png','icComprasTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      ItemBoton('','','',5, Icons.keyboard_arrow_right_sharp, 'Cotizaciones', '','','', Colors.white, const Color(0xFF5636D3),false,true,'','','icTramApr.png','icTramAprTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      ItemBoton('','','',6, Icons.keyboard_arrow_right_sharp, 'Promociones Vigentes', '','','', Colors.white, const Color(0xFF5636D3),false,true,'','','icTramProc.png','icTramProcTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      ItemBoton('','','',7, Icons.keyboard_arrow_right_sharp, 'Transacciones Pendientes', '','','', Colors.white, const Color(0xFF5636D3),false,true,'','','icCompras.png','icComprasTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      ItemBoton('','','',8, Icons.keyboard_arrow_right_sharp, 'Activos Concesionados', '','','', Colors.white, const Color(0xFF5636D3),false,true,'','','icCompras.png','icComprasTrans.png','','', () => context.push(Rutas().rutaListaClientes)),
-      */
+      ItemBoton('','','',3, Icons.keyboard_arrow_right_sharp, 'Reunión Presencial', '','','', Colors.white, const Color(0xFF5636D3),false,true,'','','icCompras.png','icComprasTrans.png','','', () => context.push(Rutas().rutaListaClientes)),      
     ]; 
 
     String numeroIdentificacion = '';

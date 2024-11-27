@@ -44,7 +44,7 @@ class UserFormService extends ChangeNotifier{
       final responseLogin = await http.get(
         Uri.parse(baseURL),
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': EnvironmentsProd().contentType,//'application/json; charset=UTF-8',
           'Authorization': 'Bearer $tokenUser',
         },
       );
@@ -74,7 +74,7 @@ class UserFormService extends ChangeNotifier{
       final response = await http.put(
         Uri.parse(baseURL),
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': EnvironmentsProd().contentType,//'application/json; charset=UTF-8',
           'Authorization': 'Bearer $tokenUser',
         },
         body: jsonEncode(<String, String>{
@@ -145,7 +145,7 @@ class UserFormService extends ChangeNotifier{
       final responseDatosUsuario = await http.get(
         Uri.parse(baseURL),
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': EnvironmentsProd().contentType,//'application/json; charset=UTF-8',
           'Authorization': 'Bearer $tokenUser',
         },
       );
@@ -170,7 +170,7 @@ class UserFormService extends ChangeNotifier{
         final response = await http.post(
           Uri.parse(baseURL),
           headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
+            'Content-Type': EnvironmentsProd().contentType,//'application/json; charset=UTF-8',
             'Authorization': 'Bearer $tokenUser',
           },
           body: jsonEncode(<String, dynamic>{
@@ -193,7 +193,7 @@ class UserFormService extends ChangeNotifier{
         final response = await http.post(
           Uri.parse(baseURL),
           headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
+            'Content-Type': EnvironmentsProd().contentType,//'application/json; charset=UTF-8',
             'Authorization': 'Bearer $tokenUser',
           },
           body: jsonEncode(<String, dynamic>{
@@ -227,7 +227,7 @@ class UserFormService extends ChangeNotifier{
       final response = await http.put(
         Uri.parse(baseURL),
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': EnvironmentsProd().contentType,//'application/json; charset=UTF-8',
           'Authorization': 'Bearer $tokenUser',
         },
         body: 
@@ -273,48 +273,4 @@ class UserFormService extends ChangeNotifier{
     }
   }
 
-/*
-  Future<dynamic> autenticacionFacial(String numIdentificacion, FotoPerfilModel? objFotoPerfil, String idLocalidad) async {
-    try {
-      final baseURL = '${apiEndpointEvalCore}Marcacion/GenerarMarcacionApp';
-
-      String tokenUser = await storageUser.read(key: 'jwtEnrolApp') ?? ''; 
-
-      if(objFotoPerfil != null) {
-        final response = await http.post(
-          Uri.parse(baseURL),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer $tokenUser',
-          },
-          body: jsonEncode(<String, dynamic>{
-            /*
-              "base64": objFotoPerfil.base64,
-              "nombre": objFotoPerfil.nombre,
-              "extension": objFotoPerfil.extension,
-              "facialPersonUid": uidPersona
-              */
-              "identificacion": numIdentificacion,
-              "localidadId": idLocalidad,
-              "dispositivoId": '',
-              "base64": objFotoPerfil.base64,
-              "nombre": objFotoPerfil.nombre,
-              "extension": objFotoPerfil.extension
-            }
-          )
-        );
-
-        if(response.statusCode != 200) {
-          return MarcacionResponse(succeeded: false, data: null,errors: Errors(), message: 'Error al autenticar.',statusCode: '001');
-        }
-
-        final rspVacacion = MarcacionResponse.fromJson(response.body); 
-        return rspVacacion;
-      }
-    } catch(_) {
-      return null;
-    }
-  }
-
-*/
 }

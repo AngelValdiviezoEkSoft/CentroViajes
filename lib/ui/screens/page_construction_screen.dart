@@ -48,11 +48,11 @@ class EnConstruccionScreenState extends State<EnConstruccionScreen>{
                   color: Colors.transparent,
                   width: sizeScreen.width,
                   height: 90,
-                  child: Center(
+                  child: const Center(
                     child: AutoSizeText (
                       'Lo sentimos',
                       style: TextStyle(color: Colors.orangeAccent, decorationStyle: TextDecorationStyle.solid, fontWeight: FontWeight.bold,),
-                      presetFontSizes: const [40,38,36,34,32,30,28,26,24,22,20,18],
+                      presetFontSizes: [40,38,36,34,32,30,28,26,24,22,20,18],
                       textAlign: TextAlign.center,
                       maxLines: 3,
                     ),
@@ -68,7 +68,7 @@ class EnConstruccionScreenState extends State<EnConstruccionScreen>{
                     maxLines: 15,
                     softWrap: true,
                     textAlign: TextAlign.center,
-                    text: TextSpan(
+                    text: const TextSpan(
                       text: 'Página en construcción',
                       style: TextStyle(color: Colors.black, fontSize: 22,),
                       ),
@@ -79,11 +79,11 @@ class EnConstruccionScreenState extends State<EnConstruccionScreen>{
                   color: Colors.transparent,
                   width: sizeScreen.width,
                   height: 90,
-                  child: Center(
+                  child: const Center(
                     child: AutoSizeText (
                       'Mantente atento.',
                       style: TextStyle(color: Colors.black, decorationStyle: TextDecorationStyle.solid, fontWeight: FontWeight.bold,),
-                      presetFontSizes: const [24,22,20,18],
+                      presetFontSizes: [24,22,20,18],
                       textAlign: TextAlign.center,
                       maxLines: 2,
                     ),
@@ -96,9 +96,16 @@ class EnConstruccionScreenState extends State<EnConstruccionScreen>{
                           // Acción de cerrar sesión
                           context.pop();
                         },
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.grey),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                         child: Container(
+                          color: Colors.transparent,
                           width: sizeScreen.width * 0.33,
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Icon(Icons.logout, color: Colors.black,),
@@ -109,12 +116,7 @@ class EnConstruccionScreenState extends State<EnConstruccionScreen>{
                             ],
                           ),
                         ),
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: Colors.grey),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
+                        
                       ),
                     ),
 

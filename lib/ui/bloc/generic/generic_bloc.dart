@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:cvs_ec_app/config/config.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
-import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
+import 'package:cvs_ec_app/ui/screens/home_screen.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

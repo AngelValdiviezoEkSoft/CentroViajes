@@ -189,7 +189,7 @@ class ListaNotificaciones extends StatelessWidget {
     final sizeLstNot = MediaQuery.of(context).size;
     initializeDateFormatting('es'); 
     
-    ItemBoton varObjBoton = ItemBoton('','','',1,icon, '', '','', '', color1, color2,false,false,'','','','','','', () => {},);
+    //ItemBoton varObjBoton = ItemBoton('','','',1,icon, '', '','', '', color1, color2,false,false,'','','','','','', () => {},);
     List<ItemBoton> itemsNot = [];
 
   if(varIdNotificacionLst == 1) {

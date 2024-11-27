@@ -43,27 +43,6 @@ class ClienteService extends ChangeNotifier {
   final storageEcommerce = const FlutterSecureStorage();
 
   Future<dynamic> getClientesByVendedor() async {
-    /*
-    String tokenUser = await storageEcommerce.read(key: 'jwtEnrolApp') ?? '';
-    final baseURL = '${endPoint}ProcesoPago/GetTrackingEcommerce?IdPuntoOperacion=$idPuntoOperacion&IdTransaccion=$idTransaccion';
-    final varResponse = await http.get(
-      Uri.parse(baseURL),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $tokenUser',
-      },
-    );
-
-    if (varResponse.statusCode != 200) return null;
-
-    final objRespuesta = ComprasTypeResponse.fromJson(varResponse.body);
-
-    objRespuestaConsultaTracking = objRespuesta;
-
-    if (objRespuesta.succeeded!) {
-      objRespuestaConsultaCompra = objRespuesta.compra!;
-    }
-    */
 
     lstClientes.add(
       ClientModelResponse(id: 1, primerApellido: 'Angel', segundoNombre: 'Elías', primerNombre: 'Valdiviezo', segundoApellido: 'González', direccion: 'Durán', estado: 'Activo', codigoCli: '001', numIdentificacion: '099887766'),      
@@ -107,7 +86,7 @@ class ClienteService extends ChangeNotifier {
       );
 
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-        jsonrpc: '2.0',
+        jsonrpc: EnvironmentsProd().jsonrpc,
         params: ParamsMultiModels(
           bearer: obj.result.bearer,
           company: objLogDecode['result']['current_company'],

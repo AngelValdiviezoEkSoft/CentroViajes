@@ -269,12 +269,10 @@ class LoginScreen extends StatelessWidget {
                         password: passWordTxt.text
                       );
 
-                      //AuthResponseModel objAuthResponseModel = await AuthService().login(objAuthRequest);
                       var resp = await AuthService().login(objAuthRequest);
                       
-                      //context.push(objRutasGen.rutaHome);
-
                       final data = json.decode(resp);
+
                       final objError = data['error'];
                       
                       context.pop();

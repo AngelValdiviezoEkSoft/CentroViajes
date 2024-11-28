@@ -108,7 +108,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: objRutas.rutaPlanificacionActividades,
-      builder: (context, state) => PlanificacionActividades(),      
+      builder: (context, state) => const PlanificacionActividades(null),      
     ),
     GoRoute(
       path: objRutas.rutaEditarPerfil,

@@ -10,6 +10,8 @@ import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:http/http.dart' as http;
 
 String terminoBusqueda = '';
 DatumCrmLead? objDatumCrmLead;
@@ -24,16 +26,57 @@ class ListaProspectosScreen extends StatefulWidget {
 //class MarcacionScreen extends StatelessWidget {
 class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
 
+  late int _pageSize;
+
   final LocalAuthentication auth = LocalAuthentication();
-  //_SupportState _supportState = _SupportState.unknown;
-  
+  final PagingController<int, DatumCrmLead> pagingController = PagingController(firstPageKey: 0);
+
   @override
   void initState() {
     super.initState();
 
+    terminoBusqueda = '';
     montoNuevo_Txt = TextEditingController();
     nombreTrx_Txt = TextEditingController();
+
+    pagingController.addPageRequestListener((pageKey) {
+      //fetchPage(pageKey);
+    });
   }
+
+  @override
+  void dispose() {
+    pagingController.dispose();
+    super.dispose();
+  }
+
+  Future<void> fetchPage(int pageKey) async {
+     try {
+      final url = Uri.parse(
+          "https://api.ejemplo.com/leads?page=$pageKey&size=$_pageSize"); // API ficticia
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final newItems = (data['items'] as List)
+            .map((item) => DatumCrmLead.fromJson(item))
+            .toList();
+
+        final isLastPage = newItems.length < _pageSize;
+        if (isLastPage) {
+          pagingController.appendLastPage(newItems);
+        } else {
+          final nextPageKey = pageKey + 1;
+          pagingController.appendPage(newItems, nextPageKey);
+        }
+      } else {
+        throw Exception('Error al cargar datos paginados');
+      }
+    } catch (error) {
+      pagingController.error = error;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +113,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
         builder: (context,state) {
 
           return FutureBuilder(
-            future: state.lstProspectos(),//ProspectoTypeService().getProspectos(),
+            future: state.lstProspectos(),
             builder: (context, snapshot) {
 
               if (snapshot.hasError) {
@@ -108,11 +151,27 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                     (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
                   .toList();
 
+                  if(prospectosFiltrados.isEmpty){
+                    prospectosFiltrados = apiResponse.result.data.crmLead.data
+                    .where((producto) =>
+                      producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
+                    )
+                    .toList();
+                  }
+
+                  if(prospectosFiltrados.isEmpty){
+                    prospectosFiltrados = apiResponse.result.data.crmLead.data
+                    .where((producto) =>
+                        producto.mobile.toLowerCase().contains(terminoBusqueda.toLowerCase()))
+                    .toList();
+                  }
+
                   contLst = prospectosFiltrados.length;
                 } else{
                   prospectosFiltrados = apiResponse.result.data.crmLead.data;
                 }
-                //
+
+                pagingController.appendPage(prospectosFiltrados, 1);
 
                 return SingleChildScrollView(
                   child: Column(
@@ -127,7 +186,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                         width: size.width * 0.98,
                         child: TextField(
                           decoration: const InputDecoration(
-                            hintText: 'Buscar prospectos...',
+                            hintText: 'Buscar prospectos por nombre, correo o celular',
                             border: InputBorder.none,
                             prefixIcon: Icon(Icons.search, color: Colors.grey),
                           ),
@@ -148,241 +207,248 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                         color: Colors.transparent,
                         width: size.width,
                         height: size.height * 0.65,
-                        child: ListView.builder(
-                          controller: scrollListaClt,
-                          itemCount: contLst,//lstCLientes.length,//carrito.detalles.length,
-                          itemBuilder: ( _, int index ) {
-
-                            /*
-                            try{
-                              if(objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["stage_id"] != null){
-                                estadoPrsp = '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["stage_id"]["name"]}';
-                              }
-                            }
-                            catch(ex){
-                              //print(ex);
-                              estadoPrsp = '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["stage_id"]}';
-                            }
-                            */
-
-                            return Slidable(
-                              key: ValueKey(prospectosFiltrados[index].id),
-                              startActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (context) => context.push(Rutas().rutaPlanificacionActividades),
-                                      backgroundColor: objColorsApp.celeste,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.call_outlined,
-                                      label: 'Actividades',
-                                    ),
-                                
-                                  ]
-                              ),
-                              child: ListTile(
-                                title: Container(
-                                color: Colors.transparent,
-                                width: size.width * 0.98,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      border: Border.all(
-                                          color: const Color.fromARGB(255, 217, 217, 217)),
-                                      borderRadius: const BorderRadius.all(Radius.circular(10))
-                                    ),
-                                  width: size.width * 0.98,
-                                  height: size.height * 0.195,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        color: Colors.transparent,
-                                        width: size.width * 0.7,
-                                        height: size.height * 0.25,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(width: size.width * 0.01,),
-                                            Container(
-                                              color: Colors.transparent,
-                                        width: size.width * 0.14,
-                                        height: size.height * 0.1,
-                                              child: CircleAvatar(
-                                                        radius: 30.0,
-                                                        backgroundColor: Colors.grey[200],
-                                                        child: const Icon(Icons.person, color: Colors.grey, size: 40.0),
-                                                      ),
-                                            ),
-                                            Container(
-                                              color: Colors.transparent,
-                                        width: size.width * 0.55,
-                                        height: size.height * 0.25,
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                        child: PagedListView<int, DatumCrmLead>(
+                          pagingController: pagingController,
+                          builderDelegate: PagedChildBuilderDelegate<DatumCrmLead>(
+                            itemBuilder: (context, item, index) => Container(
+                              color: Colors.transparent,
+                              width: size.width,
+                              height: size.height * 0.65,
+                              child: ListView.builder(
+                                    controller: scrollListaClt,
+                                    itemCount: contLst,//lstCLientes.length,//carrito.detalles.length,
+                                    itemBuilder: ( _, int index ) {
+                                  
+                                      return Slidable(
+                                        key: ValueKey(prospectosFiltrados[index].id),
+                                        startActionPane: ActionPane(
+                                          motion: const ScrollMotion(),
+                                            children: [
+                                              SlidableAction(
+                                                onPressed: (context) => context.push(Rutas().rutaPlanificacionActividades),
+                                                backgroundColor: objColorsApp.celeste,
+                                                foregroundColor: Colors.white,
+                                                icon: Icons.call_outlined,
+                                                label: 'Actividades',
+                                              ),
+                                          
+                                            ]
+                                        ),
+                                        child: ListTile(
+                                          title: Container(
+                                          color: Colors.transparent,
+                                          width: size.width * 0.98,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.transparent,
+                                                border: Border.all(
+                                                    color: const Color.fromARGB(255, 217, 217, 217)),
+                                                borderRadius: const BorderRadius.all(Radius.circular(10))
+                                              ),
+                                            width: size.width * 0.98,
+                                            height: size.height * 0.195,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Container(
                                                   color: Colors.transparent,
-                                                  width: size.width * 0.54,
-                                                  height: size.height * 0.04,
-                                                  child: AutoSizeText(
-                                                    //
-                                                    //'${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["name"]}',
-                                                    prospectosFiltrados[index].name,
-                                                    style: const TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      //fontSize: 10,
-                                                      color: Colors.black
-                                                    ),
-                                                    maxLines: 1,
-                                                    minFontSize: 4,
-                                                    textAlign: TextAlign.left,
-                                                    ),
-                                                ),
-                                                Container(
-                                                  color: Colors.transparent,
-                                                  width: size.width * 0.54,
-                                                  height: size.height * 0.04,
-                                                  child: AutoSizeText(
-                                                    //prospectosFiltrados[index]
-                                                    //'${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["contact_name"]}',
-                                                    prospectosFiltrados[index].contactName ?? '',
-                                                    style: const TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      //fontSize: 10,
-                                                      color: Colors.black
-                                                    ),
-                                                    maxLines: 1,
-                                                    minFontSize: 4,
-                                                    textAlign: TextAlign.left,
-                                                    ),
-                                                ),
-                                                Container(
-                                              color: Colors.transparent,
-                                              width: size.width * 0.54,
-                                              height: size.height * 0.035,
-                                              child: RichText(
-                                                text: TextSpan(
-                                                  children: [
-                                                    const TextSpan(
-                                                      text: 'Email: ',
-                                                      style: TextStyle(color: Colors.black)
-                                                    ),
-                                                    TextSpan(
-                                                      //
-                                                      //text: '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["email_from"]}',
-                                                      text: prospectosFiltrados[index].emailFrom,
-                                                      style: const TextStyle(color: Colors.blue)
-                                                    ),
-                                                  ]
-                                                ),
-                                              )
-                                          
-                                            ),
-                                            Container(
-                                              color: Colors.transparent,
-                                              width: size.width * 0.54,
-                                              height: size.height * 0.035,
-                                                child: 
-                                                RichText(
-                                                  text: TextSpan(
+                                                  width: size.width * 0.7,
+                                                  height: size.height * 0.25,
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
-                                                      const TextSpan(
-                                                        text: 'Teléfono: ',
-                                                        style: TextStyle(color: Colors.black)
+                                                      SizedBox(width: size.width * 0.01,),
+                                                      Container(
+                                                        color: Colors.transparent,
+                                                  width: size.width * 0.14,
+                                                  height: size.height * 0.1,
+                                                        child: CircleAvatar(
+                                                                  radius: 30.0,
+                                                                  backgroundColor: Colors.grey[200],
+                                                                  child: const Icon(Icons.person, color: Colors.grey, size: 40.0),
+                                                                ),
                                                       ),
-                                                      TextSpan(
-                                                        text: prospectosFiltrados[index].phone,
-                                                        style: const TextStyle(color: Colors.blue)
+                                                      Container(
+                                                        color: Colors.transparent,
+                                                  width: size.width * 0.55,
+                                                  height: size.height * 0.25,
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          Container(
+                                                            color: Colors.transparent,
+                                                            width: size.width * 0.54,
+                                                            height: size.height * 0.04,
+                                                            child: AutoSizeText(
+                                                              //
+                                                              //'${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["name"]}',
+                                                              prospectosFiltrados[index].name,
+                                                              style: const TextStyle(
+                                                                fontWeight: FontWeight.bold,
+                                                                //fontSize: 10,
+                                                                color: Colors.black
+                                                              ),
+                                                              maxLines: 1,
+                                                              minFontSize: 4,
+                                                              textAlign: TextAlign.left,
+                                                              ),
+                                                          ),
+                                                          Container(
+                                                            color: Colors.transparent,
+                                                            width: size.width * 0.54,
+                                                            height: size.height * 0.04,
+                                                            child: AutoSizeText(
+                                                              //prospectosFiltrados[index]
+                                                              //'${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["contact_name"]}',
+                                                              prospectosFiltrados[index].contactName ?? '',
+                                                              style: const TextStyle(
+                                                                fontWeight: FontWeight.bold,
+                                                                //fontSize: 10,
+                                                                color: Colors.black
+                                                              ),
+                                                              maxLines: 1,
+                                                              minFontSize: 4,
+                                                              textAlign: TextAlign.left,
+                                                              ),
+                                                          ),
+                                                          Container(
+                                                        color: Colors.transparent,
+                                                        width: size.width * 0.54,
+                                                        height: size.height * 0.035,
+                                                        child: RichText(
+                                                          text: TextSpan(
+                                                            children: [
+                                                              const TextSpan(
+                                                                text: 'Email: ',
+                                                                style: TextStyle(color: Colors.black)
+                                                              ),
+                                                              TextSpan(
+                                                                //
+                                                                //text: '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["email_from"]}',
+                                                                text: prospectosFiltrados[index].emailFrom,
+                                                                style: const TextStyle(color: Colors.blue)
+                                                              ),
+                                                            ]
+                                                          ),
+                                                        )
+                                                    
                                                       ),
-                                                    ]
+                                                      Container(
+                                                        color: Colors.transparent,
+                                                        width: size.width * 0.54,
+                                                        height: size.height * 0.035,
+                                                          child: 
+                                                          RichText(
+                                                            text: TextSpan(
+                                                              children: [
+                                                                const TextSpan(
+                                                                  text: 'Teléfono: ',
+                                                                  style: TextStyle(color: Colors.black)
+                                                                ),
+                                                                TextSpan(
+                                                                  text: prospectosFiltrados[index].phone,
+                                                                  style: const TextStyle(color: Colors.blue)
+                                                                ),
+                                                              ]
+                                                            ),
+                                                          )
+                                                      ),
+                                                      Container(
+                                                          color: Colors.transparent,
+                                                          width: size.width * 0.54,
+                                                        height: size.height * 0.035,
+                                                          child: AutoSizeText(
+                                                              prospectosFiltrados[index].stageId.name,
+                                                                //estadoPrsp,
+                                                                //lstCLientes[index].estado,//ESTADO
+                                                                style: const TextStyle(
+                                                                  fontWeight: FontWeight.bold,
+                                                                  fontSize: 10,
+                                                                  color: Colors.green
+                                                                ),
+                                                                maxLines: 2,
+                                                                textAlign: TextAlign.left,),
+                                                      ),
+                                                    
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      
+                                                      
+                                                    ],
+                                                  )
+                                                ),
+                                                Container(
+                                                  width: size.width * 0.11,
+                                                  height: size.height * 0.17,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.black12, // Color del óvalo
+                                                    borderRadius: BorderRadius.circular(50), // Bordes redondeados para el óvalo
                                                   ),
-                                                )
-                                            ),
-                                            Container(
-                                                color: Colors.transparent,
-                                                width: size.width * 0.54,
-                                              height: size.height * 0.035,
-                                                child: AutoSizeText(
-                                                    prospectosFiltrados[index].stageId.name,
-                                                      //estadoPrsp,
-                                                      //lstCLientes[index].estado,//ESTADO
-                                                      style: const TextStyle(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 10,
-                                                        color: Colors.green
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    //crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Container(
+                                                        color: Colors.transparent,
+                                                        height: size.height * 0.03,
+                                                        alignment: Alignment.topCenter,
+                                                        child: IconButton(
+                                                          icon: const Icon(Icons.location_pin, color: Colors.grey, size: 20,),
+                                                          onPressed: () {},
+                                                        ),
                                                       ),
-                                                      maxLines: 2,
-                                                      textAlign: TextAlign.left,),
-                                            ),
-                                          
-                                                ],
+                                                      Container(
+                                                        color: Colors.transparent,
+                                                        height: size.height * 0.03,
+                                                        alignment: Alignment.topCenter,
+                                                        child: IconButton(
+                                                          icon: const Icon(Icons.route, color: Colors.grey, size: 20,),
+                                                          onPressed: () {},
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        color: Colors.transparent,
+                                                        height: size.height * 0.03,
+                                                        child: IconButton(
+                                                          icon: const Icon(Icons.info, color: Colors.grey, size: 20,),
+                                                          onPressed: () {
+                                                            //idProsp = prospectosFiltrados[index].id;
+                                                            
+                                                            objDatumCrmLead = prospectosFiltrados[index];
+                                                            context.push(Rutas().rutaEditProsp);
+                                                          },
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: size.height * 0.004,)
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(width: size.width * 0.01,)
+                                              ],
                                               ),
                                             ),
-                                            
-                                            
-                                          ],
+                                          ),
                                         )
-                                      ),
-                                      Container(
-                                        width: size.width * 0.11,
-                                        height: size.height * 0.17,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: Colors.black12, // Color del óvalo
-                                          borderRadius: BorderRadius.circular(50), // Bordes redondeados para el óvalo
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          //crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              color: Colors.transparent,
-                                              height: size.height * 0.03,
-                                              alignment: Alignment.topCenter,
-                                              child: IconButton(
-                                                icon: const Icon(Icons.location_pin, color: Colors.grey, size: 20,),
-                                                onPressed: () {},
-                                              ),
-                                            ),
-                                            Container(
-                                              color: Colors.transparent,
-                                              height: size.height * 0.03,
-                                              alignment: Alignment.topCenter,
-                                              child: IconButton(
-                                                icon: const Icon(Icons.route, color: Colors.grey, size: 20,),
-                                                onPressed: () {},
-                                              ),
-                                            ),
-                                            Container(
-                                              color: Colors.transparent,
-                                              height: size.height * 0.03,
-                                              child: IconButton(
-                                                icon: const Icon(Icons.info, color: Colors.grey, size: 20,),
-                                                onPressed: () {
-                                                  //idProsp = prospectosFiltrados[index].id;
-                                                  
-                                                  objDatumCrmLead = prospectosFiltrados[index];
-                                                  context.push(Rutas().rutaEditProsp);
-                                                },
-                                              ),
-                                            ),
-                                            SizedBox(height: size.height * 0.004,)
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(width: size.width * 0.01,)
-                                    ],
-                                    ),
+                                      );
+                                    },
                                   ),
-                                ),
-                              )
-                            );
-                          },
-                        ),
+                            ),
+                              
+                            noItemsFoundIndicatorBuilder: (context) => Container(
+                              width: size.width * 0.75,
+                              height: size.height * 0.75,
+                              color: Colors.transparent,
+                              alignment: Alignment.topCenter,
+                              child: ConsultaVaciaScreen(null, msmCabBand: 'Atención', msmBand: 'No existe lista de prospectos', imgCabBand: 'gifs/consulta_vacia.gif',)
+                            
+                            ),
+                          ),
+                        ) 
                       ),
 
                       if(prospectosFiltrados.isEmpty)
@@ -480,6 +546,20 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                     (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
                   .toList();
 
+                  if(prospectosFiltrados.isEmpty){
+                    prospectosFiltrados = apiResponse.result.data.crmLead.data
+                    .where((producto) =>
+                        producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase()))
+                    .toList();
+                  }
+
+                  if(prospectosFiltrados.isEmpty){
+                    prospectosFiltrados = apiResponse.result.data.crmLead.data
+                    .where((producto) =>
+                        producto.mobile.toLowerCase().contains(terminoBusqueda.toLowerCase()))
+                    .toList();
+                  }
+
                   contLst = prospectosFiltrados.length;
                 } else{
                   prospectosFiltrados = apiResponse.result.data.crmLead.data;
@@ -499,7 +579,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                         width: size.width * 0.98,
                         child: TextField(
                           decoration: const InputDecoration(
-                            hintText: 'Buscar prospectos...',
+                            hintText: 'Buscar prospectos por nombre, correo o celular',
                             border: InputBorder.none,
                             prefixIcon: Icon(Icons.search, color: Colors.grey),
                           ),

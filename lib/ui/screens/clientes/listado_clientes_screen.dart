@@ -3,13 +3,14 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
-import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
+import 'package:http/http.dart' as http;
 
 late TextEditingController montoNuevo_Txt;
 late TextEditingController nombreTrx_Txt;
@@ -26,7 +27,8 @@ class ListaClientesScreen extends StatefulWidget {
 class _ListaClientesScreenState extends State<ListaClientesScreen> {
 
   final LocalAuthentication auth = LocalAuthentication();
-  //_SupportState _supportState = _SupportState.unknown;
+  final PagingController<int, DatumClienteModelData> pagingController = PagingController(firstPageKey: 0);
+  late int _pageSize;
   
   @override
   void initState() {
@@ -34,7 +36,46 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
 
     montoNuevo_Txt = TextEditingController();
     nombreTrx_Txt = TextEditingController();
+    terminoBusquedaClient= '';
+
+    pagingController.addPageRequestListener((pageKey) {
+      //fetchPage(pageKey);
+    });
   }
+
+  @override
+  void dispose() {
+    pagingController.dispose();
+    super.dispose();
+  }
+
+  Future<void> fetchPage(int pageKey) async {
+     try {
+      final url = Uri.parse(
+          "https://api.ejemplo.com/leads?page=$pageKey&size=$_pageSize"); // API ficticia
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final newItems = (data['items'] as List)
+            .map((item) => DatumClienteModelData.fromJson(item))
+            .toList();
+
+        final isLastPage = newItems.length < _pageSize;
+        if (isLastPage) {
+          pagingController.appendLastPage(newItems);
+        } else {
+          final nextPageKey = pageKey + 1;
+          pagingController.appendPage(newItems, nextPageKey);
+        }
+      } else {
+        throw Exception('Error al cargar datos paginados');
+      }
+    } catch (error) {
+      pagingController.error = error;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +110,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
         builder: (context,state) {
 
           return FutureBuilder(
-            future: state.lstClientes(),//ClienteService().getClientes(),
+            future: state.lstClientes(),
             builder: (context, snapshot) {
 
               if (snapshot.hasError) {
@@ -88,12 +129,6 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                 var objLogDecode = json.decode(objRsp);
                 var objLogDecode2 = json.decode(objLogDecode);
 
-                //var tstLength = objLogDecode2["result"]["data"]["res.partner"]["length"];
-
-                //String contStr = '$tstLength';
-
-                //int contLst = int.parse(contStr);
-
                 ClienteResponseModel apiResponse = ClienteResponseModel.fromJson(objLogDecode);
 
                 List<DatumClienteModelData> clientesFiltrados = [];
@@ -103,9 +138,26 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                   .where((producto) =>
                       producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase()))
                   .toList();
+
+                  if(clientesFiltrados.isEmpty){
+                    clientesFiltrados = apiResponse.result.data.resPartner.data
+                    .where((producto) =>
+                        producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase()))
+                    .toList();
+                  }
+
+                  if(clientesFiltrados.isEmpty){
+                    clientesFiltrados = apiResponse.result.data.resPartner.data
+                    .where((producto) =>
+                        producto.mobile.toLowerCase().contains(terminoBusquedaClient.toLowerCase()))
+                    .toList();
+                  }
+
                 } else{
                   clientesFiltrados = apiResponse.result.data.resPartner.data;
                 }
+
+                pagingController.appendPage(clientesFiltrados, 1);
 
                 return SingleChildScrollView(
                   child: Column(
@@ -119,7 +171,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                         width: size.width * 0.98,
                         child: TextField(
                           decoration: const InputDecoration(
-                            hintText: 'Buscar clientes por nombres...',
+                            hintText: 'Buscar clientes por nombre, correo o celular',
                             border: InputBorder.none,
                             prefixIcon: Icon(Icons.search, color: Colors.grey),
                           ),
@@ -140,7 +192,14 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                         color: Colors.transparent,
                         width: size.width,
                         height: size.height * 0.65,
-                        child: ListView.builder(
+                        child: PagedListView<int, DatumClienteModelData>(
+                          pagingController: pagingController,
+                          builderDelegate: PagedChildBuilderDelegate<DatumClienteModelData>(
+                            itemBuilder: (context, item, index) => Container(
+                              color: Colors.transparent,
+                              width: size.width,
+                              height: size.height * 0.65,
+                              child: ListView.builder(
                           controller: scrollListaClt,
                           itemCount: clientesFiltrados.length,
                           itemBuilder: ( _, int index ) {
@@ -371,8 +430,20 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                             );
                           },
                         ),
-                      ),
+                            ),
                               
+                            noItemsFoundIndicatorBuilder: (context) => Container(
+                              width: size.width * 0.75,
+                              height: size.height * 0.75,
+                              color: Colors.transparent,
+                              alignment: Alignment.topCenter,
+                              child: ConsultaVaciaScreen(null, msmCabBand: 'Atención', msmBand: 'No existe lista de clientes', imgCabBand: 'gifs/consulta_vacia.gif',)
+                            
+                            ),
+                          ),
+                        ) 
+                      ),
+
                       if(clientesFiltrados.isEmpty)
                       Container(
                         width: size.width * 0.75,

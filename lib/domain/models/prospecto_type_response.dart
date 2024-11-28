@@ -119,7 +119,7 @@ class DatumCrmLead {
     DateTime? dateClose;
     double dayClose;
     String? description;
-    String? emailFrom;
+    String emailFrom;
     CampaignId lostReasonId;
     StructCombos mediumId;
     String name;
@@ -135,7 +135,7 @@ class DatumCrmLead {
     String type;
     String? city;
     String? emailCc;
-    String? mobile;
+    String mobile;
     String? street;
     DateTime? dateDeadline;
     double? probability;
@@ -152,7 +152,7 @@ class DatumCrmLead {
         this.dateOpen,
         required this.dayClose,
         this.description,
-        this.emailFrom,
+        required this.emailFrom,
         required this.lostReasonId,
         required this.mediumId,
         required this.name,
@@ -169,7 +169,7 @@ class DatumCrmLead {
         required this.expectedRevenue,
         this.city,
         this.emailCc,
-        this.mobile,
+        required this.mobile,
         this.street,
         this.dateDeadline,
         this.probability,
@@ -192,7 +192,7 @@ class DatumCrmLead {
         dateClose: json["date_closed"] == null ? null : DateTime.parse(json["date_closed"]),
         dayClose: json["day_close"] ?? 0,
         description: json["description"],
-        emailFrom: json["email_from"],
+        emailFrom: json["email_from"] ?? '',
         lostReasonId: CampaignId.fromMap(json["lost_reason_id"]),
         mediumId: StructCombos.fromMap(json["medium_id"]),
         name: json["name"],
@@ -208,7 +208,7 @@ class DatumCrmLead {
         type: json["type"],
         city: json["city"],
         emailCc: json["email_cc"],
-        mobile: json["mobile"],
+        mobile: json["mobile"] ?? '',
         street: json["street"],
         dateDeadline: json["date_deadline"] == null ? null : DateTime.parse(json["date_deadline"]),
         probability: 0,

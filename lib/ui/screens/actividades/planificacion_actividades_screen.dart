@@ -1,27 +1,22 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/ui/bloc/bloc.dart';
 import 'package:cvs_ec_app/ui/screens/screens.dart';
-import 'package:cvs_ec_app/ui/theme/app_color_light.dart';
 import 'package:cvs_ec_app/ui/theme/spacing.dart';
-import 'package:cvs_ec_app/ui/theme/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../widgets/widgets.dart';
 import 'package:one_clock/one_clock.dart';
 
 int tabAcciones = 0;
 
 class PlanificacionActividades extends StatefulWidget {
+  const PlanificacionActividades(Key? key) : super (key: key);
   @override
   State<PlanificacionActividades> createState() => PlanActState();
 }
 
 class PlanActState extends State<PlanificacionActividades> {
-  //final authSerrviceTemp = AuthService();
-  //final datosUsuarioServicesTemp = DatosUsuarioService();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +24,7 @@ class PlanActState extends State<PlanificacionActividades> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '- Usuario -',
           style: TextStyle(color: Colors.white),
         ),

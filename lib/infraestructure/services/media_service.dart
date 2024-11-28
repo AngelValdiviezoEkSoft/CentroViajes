@@ -19,11 +19,6 @@ class MediaService extends ChangeNotifier{
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   
-  //ProspectoTypeService(String tipoIdent, String numIdent){
-  MediaService(){
-    //getProspecto(tipoIdent, numIdent);
-  }
-
   getMedias() async {
     try{
 
@@ -57,7 +52,6 @@ class MediaService extends ChangeNotifier{
 
       var rsp = await GenericService().getMultiModelos(objReq, "utm.medium");
       
-      //return CampaniaResponseModel.fromJson(rsp);
       return rsp;
     }
     

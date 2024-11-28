@@ -63,8 +63,6 @@ class ProspectoTypeService extends ChangeNotifier{
         )
       );
 
-      tokenManager.startTokenCheck();
-
       var objRsp = await GenericService().getMultiModelos(objReq, "crm.lead");
 
       return json.encode(objRsp);
@@ -189,7 +187,12 @@ class ProspectoTypeService extends ChangeNotifier{
         body: jsonEncode(requestBody), 
       );
 
-      //print("Consulta celular: ${response.body}");
+      var rspValidacion = json.decode(response.body);
+
+      if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+        await tokenManager.checkTokenExpiration();
+        await getProspectoRegistrado(phoneProsp);
+      }
 
       return response.body;
       
@@ -286,8 +289,6 @@ class ProspectoTypeService extends ChangeNotifier{
       ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/create/crm.lead/model';
     }
 
-    tokenManager.startTokenCheck();
-
     final response = await http.post(
       Uri.parse(ruta),
       headers: headers,
@@ -295,6 +296,13 @@ class ProspectoTypeService extends ChangeNotifier{
     );
     
       //print(response.body);
+
+      var rspValidacion = json.decode(response.body);
+
+      if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+        await tokenManager.checkTokenExpiration();
+        await registraProspecto(objProspecto);
+      }
 
       return ProspectoRegistroResponseModel.fromJson(response.body);
       //String tst = '';

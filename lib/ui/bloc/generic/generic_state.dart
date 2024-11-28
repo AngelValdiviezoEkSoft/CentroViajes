@@ -228,15 +228,24 @@ class GenericState extends Equatable {
   }
 
   ItemBoton deserializeItemBotonMenu(Map<String, dynamic> json) {
+    IconData iconData;
+    
+    try{
+      iconData = IconData(
+        json['icon'],
+        fontFamily: 'MaterialIcons',
+      );
+    }
+    catch(_){
+      iconData = Icons.abc;
+    }
+    
     return ItemBoton(
       json['tipoNotificacion'] ?? '',
       json['idSolicitud'] ?? '',
       json['idNotificacionGen'] ?? '',
       json['ordenNot'] ?? 0,
-      IconData(
-        json['icon'],
-        fontFamily: 'MaterialIcons',
-      ),
+      iconData,
       json['mensajeNotificacion'] ?? '',
       json['mensaje2'] ?? '',
       json['fechaNotificacion'] ?? '',
@@ -253,6 +262,7 @@ class GenericState extends Equatable {
       json['rutaNavegacion'] ?? '',
       () {},
     );
+  
   }
 
 

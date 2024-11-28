@@ -24,33 +24,4 @@ class ColaboradorService {
     return oResp;
   }
 
-/*
-  Future<String> registraMarcacion(String marcacion) async {
-    String rsp = '';
-
-    String conexionValida = await ValidaConexionService().validaConexionInternet();
-
-    if(conexionValida == 'NI') {
-      storageCol.write(key: KeysApp().registraAsistenciaKey, value: marcacion);
-    }
-    else {
-
-    }
-
-    return rsp;
-  }
-
-  Future<String> registraMarcacionMemory() async {
-    String rsp = '';
-
-    String conexionValida = await ValidaConexionService().validaConexionInternet();
-    String dataMemory = await storageCol.read(key: KeysApp().registraAsistenciaKey) ?? '';
-
-    if(conexionValida != 'NI' && dataMemory.isNotEmpty) {
-      storageCol.write(key: KeysApp().registraAsistenciaKey, value: '');
-    }
-
-    return rsp;
-  }
-*/
 }

@@ -16,11 +16,6 @@ class OrigenService extends ChangeNotifier{
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   
-  //ProspectoTypeService(String tipoIdent, String numIdent){
-  OrigenService(){
-    //getProspecto(tipoIdent, numIdent);
-  }
-
   getOrigenes() async {
     try{
 
@@ -54,7 +49,6 @@ class OrigenService extends ChangeNotifier{
 
       var rsp = await GenericService().getMultiModelos(objReq, "utm.source");
       
-      //return CampaniaResponseModel.fromJson(rsp);
       return rsp;
     }
     

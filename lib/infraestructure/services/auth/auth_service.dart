@@ -5,6 +5,7 @@ import 'package:cvs_ec_app/config/config.dart';
 import 'package:cvs_ec_app/config/routes/app_router.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
+import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -18,6 +19,7 @@ class AuthService extends ChangeNotifier {
   final storage = const FlutterSecureStorage();
   List<OpcionesMenuModel> lstOp = [];
 
+  final TokenManager tokenManager = TokenManager();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   String passWord = '';
@@ -215,6 +217,13 @@ class AuthService extends ChangeNotifier {
       var rspPrsp = ProspectoTypeService().getProspectos();
       var rspCli = ClienteService().getClientes();
 
+      var rspValidacion = json.decode(response.body);
+
+      if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+        await tokenManager.checkTokenExpiration();
+        await login(authRequest);
+      }
+
       await storage.write(key: 'RespuestaLogin', value: response.body);
       await storage.write(key: 'RespuestaProspectos', value: rspPrsp);
       await storage.write(key: 'RespuestaClientes', value: rspCli);
@@ -249,6 +258,14 @@ class AuthService extends ChangeNotifier {
     );
     
     var reponseRs = response.body;
+
+    var rspValidacion = json.decode(response.body);
+
+    if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+      await tokenManager.checkTokenExpiration();
+      await consultaUsuarios(authRequest,imei, key);
+    }
+
     return RegisterDeviceResponseModel.fromJson(reponseRs);
     
   }
@@ -271,7 +288,7 @@ class AuthService extends ChangeNotifier {
         onPress: () async =>  await launchUrl(Uri.parse(data["result"]["done_support_url"]), mode: LaunchMode.externalApplication),
       ),
       OpcionesMenuModel(
-        descMenu: 'Terminos de uso',
+        descMenu: 'Términos de uso',
         icono: Icons.info,
         onPress: () async =>  await launchUrl(Uri.parse(data["result"]["done_terms_of_use_url"]), mode: LaunchMode.externalApplication),
       ),

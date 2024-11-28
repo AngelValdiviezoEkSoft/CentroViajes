@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:cvs_ec_app/config/config.dart';
 import 'package:cvs_ec_app/config/routes/app_router.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
+import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -18,6 +17,7 @@ class GenericService extends ChangeNotifier {
   List<OpcionesMenuModel> lstOp = [];
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TokenManager tokenManager = TokenManager();
 
   bool isValidForm() {
     return formKey.currentState?.validate() ?? false;
@@ -60,6 +60,13 @@ class GenericService extends ChangeNotifier {
     
     var reponseRs = response.body;
 
+    var rspValidacion = json.decode(response.body);
+
+    if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+      await tokenManager.checkTokenExpiration();
+      await getModelos(objReq, modelBusca);
+    }
+
     var obj = RegisterDeviceResponseModel.fromJson(reponseRs);
 
     await storage.write(key: 'RespuestaRegistro', value: reponseRs);
@@ -70,8 +77,6 @@ class GenericService extends ChangeNotifier {
   
   getMultiModelos(ConsultaMultiModelRequestModel objReq, String modelo) async {
 
-    //final ruta = '${env.apiEndpoint}${objReq.params.imei}/done/data/multi/models';
-    
     String ruta = '';
     final objStr = await storage.read(key: 'RespuestaRegistro') ?? '';
     
@@ -111,6 +116,13 @@ class GenericService extends ChangeNotifier {
       body: jsonEncode(requestBody), 
     );
     
+    var rspValidacion = json.decode(response.body);
+
+    if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+      await tokenManager.checkTokenExpiration();
+      await getMultiModelos(objReq, modelo);
+    }
+
     return response.body;
     
   }

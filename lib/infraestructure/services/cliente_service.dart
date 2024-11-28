@@ -10,34 +10,11 @@ const storageClient = FlutterSecureStorage();
 MensajesAlertas objMensajesClienteService = MensajesAlertas();
 
 class ClienteService extends ChangeNotifier {
-  //final String endPoint = CadenaConexion().apiEndPointEcommerce;
-
-  /*
-  final debouncer = Debouncer(
-    duration: const Duration(milliseconds: 500),
-  );
-  */
-
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  /*
-  List<BannerModels> varLstBaners = [];
-  List<Categoria> varLstPasillos = [];
-  List<CategoriaProducto> varLstProductos = [];
-  List<CategoriaProducto> varLstProductosByQuery = [];
-  ClienteTypeEcommerce? objClienteEcommerce;
-  ClienteEcommerceTypeResponse? objRespuestaConsulta;
-  ComprasTypeResponse? objRespuestaConsultaTracking;
-  PedidosEcommerceTypeResponse? objPedidosEcommerceTypeResponse;
   
-  List<DireccionType> direccionClienteEcommerce = [];
-*/
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  
   List<ClientModelResponse> lstClientes = [];
   
-  /*
-  final StreamController<List<CategoriaProducto>> _suggestionStreamContoller = StreamController.broadcast();
-  Stream<List<CategoriaProducto>> get suggestionStream => _suggestionStreamContoller.stream;
-  */
-
   final storageEcommerce = const FlutterSecureStorage();
 
   Future<dynamic> getClientesByVendedor() async {

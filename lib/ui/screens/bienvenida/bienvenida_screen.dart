@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/config/environments/environments.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
+import 'package:cvs_ec_app/infraestructure/services/user_service.dart';
 import 'package:cvs_ec_app/ui/themes/theme.dart';
 import 'package:cvs_ec_app/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,6 @@ class WelcomeScreen extends StatelessWidget {
 
   WelcomeScreen(Key? key) : super(key: key)
   {    
-    //rutaServer = rutaServerTmp;
     serverTxt.text = rutaServerWelcome;
   }
 
@@ -76,13 +76,14 @@ class Welcome2Screen extends StatelessWidget {
     return Container(
       width: size.width,
       height: size.height * 0.98,
+      color: Colors.transparent,
       child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   height: size.height * 0.04,
                 ),
-                // Icono central
+                
                 const CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.white,
@@ -92,10 +93,11 @@ class Welcome2Screen extends StatelessWidget {
                     color: Colors.blue,
                   ),
                 ),
+                
                 SizedBox(
                   height: size.height * 0.03,
                 ),
-                // Texto de bienvenida
+                
                 const Text(
                   '¡Bienvenido!',
                   style: TextStyle(
@@ -103,6 +105,7 @@ class Welcome2Screen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
                 SizedBox(
                   height: size.height * 0.02,
                 ),
@@ -115,6 +118,7 @@ class Welcome2Screen extends StatelessWidget {
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
+
                 SizedBox(height: size.height * 0.04),
             
               Padding(
@@ -204,13 +208,7 @@ class Welcome2Screen extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: GestureDetector(
               onTap: () async {
-
-                /*
-                
-TextEditingController serverTxt = TextEditingController();
-TextEditingController keyTxt = TextEditingController();
-                 */
-
+/*
                 if(serverTxt.text.isEmpty || keyTxt.text.isEmpty){
                   showDialog(
                     barrierDismissible: false,
@@ -234,6 +232,7 @@ TextEditingController keyTxt = TextEditingController();
 
                   return;
                 }
+                */
 
                 showDialog(
                   context: context,
@@ -249,14 +248,6 @@ TextEditingController keyTxt = TextEditingController();
                   ),
                 );
 
-                /*
-                const imeiMovile = MethodChannel('com.ekuasoft.cvs_ec_app/imei');
-                final String? imei = await imeiMovile.invokeMethod('getImei');
-                */
-/*
-                const imeiMovile = MethodChannel('device/info');
-                final String? imei = await imeiMovile.invokeMethod('deviceId');    
-*/
                 try{
                   String imeiCod = '';
                   var plataforma = '';
@@ -266,6 +257,11 @@ TextEditingController keyTxt = TextEditingController();
                   if (Platform.isAndroid) {
                     plataforma = 'Android';
                     final androidInfo = await deviceInfo.androidInfo;
+
+                    //imeiCod = await UserService().getImei();
+
+                    //print('Código imei: $imeiCod');
+
                     imeiCod = androidInfo.id;
                   } else if (Platform.isIOS) {
                     plataforma = 'iOS';
@@ -281,7 +277,7 @@ TextEditingController keyTxt = TextEditingController();
                     server: serverTxt.text,
                     key: keyTxt.text,
                     imei: imeiCod,
-                    //imei: '8234560479',
+                    //imei: '8234560480',
                     lat: position.latitude.toString(),//'-74.45445',
                     lon: position.longitude.toString(),//'72.74548487',
                     so: plataforma//'Android'
@@ -398,7 +394,7 @@ TextEditingController keyTxt = TextEditingController();
   }
 
   
-   Future<Position> getCurrentLocation() async 
+  Future<Position> getCurrentLocation() async 
    {
     bool serviceEnabled;
     LocationPermission permission;

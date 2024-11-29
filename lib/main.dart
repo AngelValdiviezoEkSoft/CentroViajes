@@ -24,7 +24,7 @@ void main() {
 
   runApp( 
     MultiBlocProvider(
-      providers: [//asd
+      providers: [//
       
         BlocProvider(create: (context) => getIt<AuthBloc>()..add(AppStarted())),
         BlocProvider(create: (context) => getIt<VerificacionBloc>()),

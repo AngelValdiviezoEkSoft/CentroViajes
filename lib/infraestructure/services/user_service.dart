@@ -1,39 +1,26 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:cvs_ec_app/domain/domain.dart';
+import 'package:device_imei/device_imei.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 const storageClient = FlutterSecureStorage();
 
-class ClienteService extends ChangeNotifier {
-  //final String endPoint = CadenaConexion().apiEndPointEcommerce;
-
-  /*
-  final debouncer = Debouncer(
-    duration: const Duration(milliseconds: 500),
-  );
-  */
+class UserService extends ChangeNotifier {
+ 
+  final _deviceImeiPlugin = DeviceImei();
+  DeviceInfo? deviceInfo;
+  String? deviceImei;
+  bool getPermission = false;
+  String message = "Please allow permission request!";
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  /*
-  List<BannerModels> varLstBaners = [];
-  List<Categoria> varLstPasillos = [];
-  List<CategoriaProducto> varLstProductos = [];
-  List<CategoriaProducto> varLstProductosByQuery = [];
-  ClienteTypeEcommerce? objClienteEcommerce;
-  ClienteEcommerceTypeResponse? objRespuestaConsulta;
-  ComprasTypeResponse? objRespuestaConsultaTracking;
-  PedidosEcommerceTypeResponse? objPedidosEcommerceTypeResponse;
-  
-  List<DireccionType> direccionClienteEcommerce = [];
-*/
+ 
   List<ClientModelResponse> lstClientes = [];
-  
-  /*
-  final StreamController<List<CategoriaProducto>> _suggestionStreamContoller = StreamController.broadcast();
-  Stream<List<CategoriaProducto>> get suggestionStream => _suggestionStreamContoller.stream;
-  */
-
+ 
   final storageEcommerce = const FlutterSecureStorage();
 
   Future<dynamic> getClientesByVendedor() async {
@@ -62,4 +49,48 @@ class ClienteService extends ChangeNotifier {
     return lstClientes;
   }
 
+  Future<String> getImei() async {
+    String imeiFinal = '';
+    var permission = await Permission.phone.status;
+
+    if (permission.isDenied) {
+      // Si está denegado, solicita el permiso
+      permission = await Permission.phone.request();
+    }
+
+    DeviceInfo? dInfo = await _deviceImeiPlugin.getDeviceInfo();
+
+    if (dInfo != null) {
+      deviceInfo = dInfo;
+    }
+
+    if (Platform.isAndroid) {
+      if (permission.isGranted) {
+        String? imei = await _deviceImeiPlugin.getDeviceImei();
+        if (imei != null) {
+          getPermission = true;
+          deviceImei = imei;
+        }
+      } else {
+        PermissionStatus status = await Permission.phone.request();
+        if (status == PermissionStatus.granted) {
+          getPermission = false;
+          getImei();
+        } else {
+          getPermission = false;
+          message = "Permission not granted, please allow permission";
+        }
+      }
+    } else {
+      String? imei = await _deviceImeiPlugin.getDeviceImei();
+      if (imei != null) {
+        getPermission = true;
+        deviceImei = imei;
+      }
+    }
+
+    imeiFinal = deviceImei ?? '';
+
+    return imeiFinal;
+  }
 }

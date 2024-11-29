@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:http/http.dart' as http;
 
-late TextEditingController montoNuevo_Txt;
-late TextEditingController nombreTrx_Txt;
+late TextEditingController filtroCliTxt;
+
 String terminoBusquedaClient= '';
 
 class ListaClientesScreen extends StatefulWidget {
@@ -34,8 +35,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
   void initState() {
     super.initState();
 
-    montoNuevo_Txt = TextEditingController();
-    nombreTrx_Txt = TextEditingController();
+    filtroCliTxt = TextEditingController();
     terminoBusquedaClient= '';
 
     pagingController.addPageRequestListener((pageKey) {
@@ -109,6 +109,41 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
       body: BlocBuilder<GenericBloc, GenericState>(
         builder: (context,state) {
 
+          Future<void> refreshData() async {
+            var rsp = await state.lstClientes();
+
+            
+            var objLogDecode = json.decode(rsp);
+            var objLogDecode2 = json.decode(objLogDecode);
+
+            ClienteResponseModel apiResponse = ClienteResponseModel.fromJson(objLogDecode);
+
+            List<DatumClienteModelData> clientesFiltrados = [];
+
+            if(terminoBusquedaClient.isNotEmpty){
+              clientesFiltrados = apiResponse.result.data.resPartner.data
+              .where((producto) =>
+                  producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+              ).toList();
+
+              if(clientesFiltrados.isEmpty){
+                clientesFiltrados = apiResponse.result.data.resPartner.data
+                .where((producto) =>
+                    producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                ).toList();
+              }
+
+              if(clientesFiltrados.isEmpty){
+                clientesFiltrados = apiResponse.result.data.resPartner.data
+                .where((producto) =>
+                    producto.mobile.contains(terminoBusquedaClient)
+                ).toList();
+              }
+            } else{
+              clientesFiltrados = apiResponse.result.data.resPartner.data;
+            }
+          }
+
           return FutureBuilder(
             future: state.lstClientes(),
             builder: (context, snapshot) {
@@ -136,23 +171,22 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                 if(terminoBusquedaClient.isNotEmpty){
                   clientesFiltrados = apiResponse.result.data.resPartner.data
                   .where((producto) =>
-                      producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase()))
-                  .toList();
+                      producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                  ).toList();
 
                   if(clientesFiltrados.isEmpty){
                     clientesFiltrados = apiResponse.result.data.resPartner.data
                     .where((producto) =>
-                        producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase()))
-                    .toList();
+                        producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                    ).toList();
                   }
 
                   if(clientesFiltrados.isEmpty){
                     clientesFiltrados = apiResponse.result.data.resPartner.data
                     .where((producto) =>
-                        producto.mobile.toLowerCase().contains(terminoBusquedaClient.toLowerCase()))
-                    .toList();
+                        producto.mobile.contains(terminoBusquedaClient)
+                    ).toList();
                   }
-
                 } else{
                   clientesFiltrados = apiResponse.result.data.resPartner.data;
                 }
@@ -192,7 +226,276 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                         color: Colors.transparent,
                         width: size.width,
                         height: size.height * 0.65,
-                        child: PagedListView<int, DatumClienteModelData>(
+                        child: CustomRefreshIndicator(
+                          onRefresh: refreshData,
+                          builder: (context, child, controllerOp) {
+                             // Personalización del indicador
+                            return Stack(
+                              alignment: Alignment.topCenter,
+                              children: [
+                                if (controllerOp.isDragging || controllerOp.value > 0)
+                                  Positioned(
+                                    top: size.height * 0.01,//50,
+                                    child: Opacity(
+                                      opacity: 1,//controllerOp.value,
+                                      child: Container(
+                                        height: size.height * 0.07,//30,
+                                        width: size.width * 0.08,//30,
+                                        color: Colors.transparent,
+                                        /*
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.blueAccent,
+                                        ),
+                                        */
+                                        child: const CircularProgressIndicator(
+                                          strokeWidth: 1,
+                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                Transform.translate(
+                                  offset: Offset(0, 100 * controllerOp.value),
+                                  child: child,
+                                ),
+                              ],
+                            );
+                          },
+                          child: ListView.builder(
+                            controller: scrollListaClt,
+                            itemCount: clientesFiltrados.length,
+                            itemBuilder: ( _, int index ) {
+                          
+                              String? email = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["email"];
+                              String? pais = '';
+                          
+                              if(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"] != null){
+                                pais = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"]["name"];
+                              }
+                          
+                              return Slidable(
+                                //key: ValueKey(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["id"]),
+                                key: ValueKey(clientesFiltrados[index].id),
+                                startActionPane: ActionPane(
+                                  motion: const ScrollMotion(),
+                                    children: [
+                                      SlidableAction(
+                                        onPressed: (context) => context.push(Rutas().rutaPlanificacionActividades),
+                                        backgroundColor: objColorsApp.celeste,
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.call_outlined,
+                                        label: 'Actividades',
+                                      ),
+                                  
+                                    ]
+                                ),
+                                /*
+                                endActionPane: ActionPane(
+                                    motion: const ScrollMotion(),
+                                    children: [
+                                      
+                                    SlidableAction(
+                                      onPressed: (context) => context.push(Rutas().rutaReasignaCliente),
+                                      backgroundColor: objColorsApp.morado,
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.update,
+                                      label: 'Solicitud de revisión de prospecto',
+                                    ),
+                                    
+                                  ],
+                                ),
+                                */
+                                child: ListTile(
+                                  title: Container(
+                                  color: Colors.transparent,
+                                  width: size.width * 0.98,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                        border: Border.all(
+                                            color: const Color.fromARGB(255, 217, 217, 217)),
+                                        borderRadius: const BorderRadius.all(Radius.circular(10))
+                                      ),
+                                    width: size.width * 0.98,
+                                    height: size.height * 0.15,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          color: Colors.transparent,
+                                          width: size.width * 0.7,
+                                          height: size.height * 0.25,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              SizedBox(width: size.width * 0.01,),
+                                              Container(
+                                                color: Colors.transparent,
+                                                width: size.width * 0.14,
+                                                height: size.height * 0.1,
+                                                child: CircleAvatar(
+                                                  radius: 30.0,
+                                                  backgroundColor: Colors.grey[200],
+                                                  child: const Icon(Icons.person, color: Colors.grey, size: 40.0),
+                                                ),
+                                              ),
+                                              Container(
+                                                color: Colors.transparent,
+                                                width: size.width * 0.55,
+                                                height: size.height * 0.25,
+                                                child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                      color: Colors.transparent,
+                                                      width: size.width * 0.54,
+                                                      height: size.height * 0.04,
+                                                      child: AutoSizeText(
+                                                            //
+                                                            //'${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["name"]}',
+                                                            clientesFiltrados[index].name,
+                                                            style: const TextStyle(
+                                                              fontWeight: FontWeight.bold,
+                                                              //fontSize: 10,
+                                                              color: Colors.black
+                                                            ),
+                                                            minFontSize: 5,
+                                                            maxLines: 2,
+                                                            textAlign: TextAlign.left,
+                                                            ),
+                                                  ),
+                          
+                                                  if(email != null)
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    width: size.width * 0.54,
+                                                    height: size.height * 0.035,
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                        children: [
+                                                          const TextSpan(
+                                                            text: 'Correo: ',
+                                                            style: TextStyle(color: Colors.black)
+                                                          ),
+                                                          TextSpan(
+                                                            text: clientesFiltrados[index].email,
+                                                            style: const TextStyle(color: Colors.blue)
+                                                          ),
+                                                        ]
+                                                      ),
+                                                    )
+                                                  ),
+                          
+                                                  if(pais != null)
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    width: size.width * 0.54,
+                                                    height: size.height * 0.035,
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                        children: [
+                                                          const TextSpan(
+                                                            text: 'País: ',
+                                                            style: TextStyle(color: Colors.black)
+                                                          ),
+                                                          TextSpan(
+                                                            text: clientesFiltrados[index].countryId.name,
+                                                            style: const TextStyle(color: Colors.blue)
+                                                          ),
+                                                        ]
+                                                      ),
+                                                    )
+                                                  ),
+                                                  
+                          
+                                              Container(
+                                                  color: Colors.transparent,
+                                                  width: size.width * 0.54,
+                                                  height: size.height * 0.035,
+                                                  child: 
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        const TextSpan(
+                                                          text: 'Teléfono: ',
+                                                          style: TextStyle(color: Colors.black)
+                                                        ),
+                                                        TextSpan(//
+                                                          //text: '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["mobile"]}',//lstCLientes[index].mobile,
+                                                          text: clientesFiltrados[index].mobile,
+                                                          style: const TextStyle(color: Colors.blue)
+                                                        ),
+                                                      ]
+                                                    ),
+                                                  )
+                                              ),
+                                              
+                                                  ],
+                                                ),
+                                              ),
+                                              
+                                              
+                                            ],
+                                          )
+                                        ),
+                                        Container(
+                                          width: size.width * 0.11,
+                                          height: size.height * 0.14,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black12, // Color del óvalo
+                                            borderRadius: BorderRadius.circular(50), // Bordes redondeados para el óvalo
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            //crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                color: Colors.transparent,
+                                                height: size.height * 0.03,
+                                                alignment: Alignment.topCenter,
+                                                child: IconButton(
+                                                  icon: const Icon(Icons.location_pin, color: Colors.grey, size: 20,),
+                                                  onPressed: () {},
+                                                ),
+                                              ),
+                                              Container(
+                                                color: Colors.transparent,
+                                                height: size.height * 0.03,
+                                                alignment: Alignment.topCenter,
+                                                child: IconButton(
+                                                  icon: const Icon(Icons.route, color: Colors.grey, size: 20,),
+                                                  onPressed: () {},
+                                                ),
+                                              ),
+                                              Container(
+                                                color: Colors.transparent,
+                                                height: size.height * 0.03,
+                                                child: IconButton(
+                                                  icon: const Icon(Icons.info, color: Colors.grey, size: 20,),
+                                                  onPressed: () {},
+                                                ),
+                                              ),
+                                              SizedBox(height: size.height * 0.004,)
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(width: size.width * 0.01,)
+                                      ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              );
+                            },
+                          ),
+                        ),
+                        /*
+                        PagedListView<int, DatumClienteModelData>(
                           pagingController: pagingController,
                           builderDelegate: PagedChildBuilderDelegate<DatumClienteModelData>(
                             itemBuilder: (context, item, index) => Container(
@@ -200,238 +503,237 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                               width: size.width,
                               height: size.height * 0.65,
                               child: ListView.builder(
-                          controller: scrollListaClt,
-                          itemCount: clientesFiltrados.length,
-                          itemBuilder: ( _, int index ) {
+                                controller: scrollListaClt,
+                                itemCount: clientesFiltrados.length,
+                                itemBuilder: ( _, int index ) {
 
-                            String? email = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["email"];
-                            String? pais = '';
+                                  String? email = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["email"];
+                                  String? pais = '';
 
-                            if(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"] != null){
-                              pais = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"]["name"];
-                            }
+                                  if(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"] != null){
+                                    pais = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"]["name"];
+                                  }
 
-                            return Slidable(
-                              //key: ValueKey(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["id"]),
-                              key: ValueKey(clientesFiltrados[index].id),
-                              startActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (context) => context.push(Rutas().rutaPlanificacionActividades),
-                                      backgroundColor: objColorsApp.celeste,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.call_outlined,
-                                      label: 'Actividades',
+                                  return Slidable(
+                                    //key: ValueKey(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["id"]),
+                                    key: ValueKey(clientesFiltrados[index].id),
+                                    startActionPane: ActionPane(
+                                      motion: const ScrollMotion(),
+                                        children: [
+                                          SlidableAction(
+                                            onPressed: (context) => context.push(Rutas().rutaPlanificacionActividades),
+                                            backgroundColor: objColorsApp.celeste,
+                                            foregroundColor: Colors.white,
+                                            icon: Icons.call_outlined,
+                                            label: 'Actividades',
+                                          ),
+                                      
+                                        ]
                                     ),
-                                
-                                  ]
-                              ),
-                              /*
-                              endActionPane: ActionPane(
-                                  motion: const ScrollMotion(),
-                                  children: [
-                                    
-                                  SlidableAction(
-                                    onPressed: (context) => context.push(Rutas().rutaReasignaCliente),
-                                    backgroundColor: objColorsApp.morado,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.update,
-                                    label: 'Solicitud de revisión de prospecto',
-                                  ),
-                                  
-                                ],
-                              ),
-                              */
-                              child: ListTile(
-                                title: Container(
-                                color: Colors.transparent,
-                                width: size.width * 0.98,
-                                child: Container(
-                                  decoration: BoxDecoration(
+                                    /*
+                                    endActionPane: ActionPane(
+                                        motion: const ScrollMotion(),
+                                        children: [
+                                          
+                                        SlidableAction(
+                                          onPressed: (context) => context.push(Rutas().rutaReasignaCliente),
+                                          backgroundColor: objColorsApp.morado,
+                                          foregroundColor: Colors.white,
+                                          icon: Icons.update,
+                                          label: 'Solicitud de revisión de prospecto',
+                                        ),
+                                        
+                                      ],
+                                    ),
+                                    */
+                                    child: ListTile(
+                                      title: Container(
                                       color: Colors.transparent,
-                                      border: Border.all(
-                                          color: const Color.fromARGB(255, 217, 217, 217)),
-                                      borderRadius: const BorderRadius.all(Radius.circular(10))
-                                    ),
-                                  width: size.width * 0.98,
-                                  height: size.height * 0.15,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        color: Colors.transparent,
-                                        width: size.width * 0.7,
-                                        height: size.height * 0.25,
+                                      width: size.width * 0.98,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.transparent,
+                                            border: Border.all(
+                                                color: const Color.fromARGB(255, 217, 217, 217)),
+                                            borderRadius: const BorderRadius.all(Radius.circular(10))
+                                          ),
+                                        width: size.width * 0.98,
+                                        height: size.height * 0.15,
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            SizedBox(width: size.width * 0.01,),
                                             Container(
                                               color: Colors.transparent,
-                                        width: size.width * 0.14,
-                                        height: size.height * 0.1,
-                                              child: CircleAvatar(
-                                                        radius: 30.0,
-                                                        backgroundColor: Colors.grey[200],
-                                                        child: const Icon(Icons.person, color: Colors.grey, size: 40.0),
-                                                      ),
-                                            ),
-                                            Container(
-                                              color: Colors.transparent,
-                                        width: size.width * 0.55,
-                                        height: size.height * 0.25,
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
+                                              width: size.width * 0.7,
+                                              height: size.height * 0.25,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(width: size.width * 0.01,),
+                                                  Container(
                                                     color: Colors.transparent,
-                                                    width: size.width * 0.54,
-                                                    height: size.height * 0.04,
-                                                    child: AutoSizeText(
-                                                          //
-                                                          //'${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["name"]}',
-                                                          clientesFiltrados[index].name,
-                                                          style: const TextStyle(
-                                                            fontWeight: FontWeight.bold,
-                                                            //fontSize: 10,
-                                                            color: Colors.black
-                                                          ),
-                                                          minFontSize: 5,
-                                                          maxLines: 2,
-                                                          textAlign: TextAlign.left,
-                                                          ),
-                                                ),
-
-                                                if(email != null)
-                                                Container(
-                                                  color: Colors.transparent,
-                                                  width: size.width * 0.54,
-                                                  height: size.height * 0.035,
-                                                  child: RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        const TextSpan(
-                                                          text: 'Correo: ',
-                                                          style: TextStyle(color: Colors.black)
-                                                        ),
-                                                        TextSpan(
-                                                          text: clientesFiltrados[index].email,
-                                                          style: const TextStyle(color: Colors.blue)
-                                                        ),
-                                                      ]
+                                                    width: size.width * 0.14,
+                                                    height: size.height * 0.1,
+                                                    child: CircleAvatar(
+                                                      radius: 30.0,
+                                                      backgroundColor: Colors.grey[200],
+                                                      child: const Icon(Icons.person, color: Colors.grey, size: 40.0),
                                                     ),
-                                                  )
-                                                ),
-
-                                                if(pais != null)
-                                                Container(
-                                                  color: Colors.transparent,
-                                                  width: size.width * 0.54,
-                                                  height: size.height * 0.035,
-                                                  child: RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        const TextSpan(
-                                                          text: 'País: ',
-                                                          style: TextStyle(color: Colors.black)
-                                                        ),
-                                                        TextSpan(
-                                                          text: clientesFiltrados[index].countryId.name,
-                                                          style: const TextStyle(color: Colors.blue)
-                                                        ),
-                                                      ]
-                                                    ),
-                                                  )
-                                                ),
-                                                
-
-                                            Container(
-                                                color: Colors.transparent,
-                                                width: size.width * 0.54,
-                                                height: size.height * 0.035,
-                                                child: 
-                                                RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      const TextSpan(
-                                                        text: 'Teléfono: ',
-                                                        style: TextStyle(color: Colors.black)
-                                                      ),
-                                                      TextSpan(//
-                                                        //text: '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["mobile"]}',//lstCLientes[index].mobile,
-                                                        text: clientesFiltrados[index].mobile,
-                                                        style: const TextStyle(color: Colors.blue)
-                                                      ),
-                                                    ]
                                                   ),
-                                                )
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    width: size.width * 0.55,
+                                                    height: size.height * 0.25,
+                                                    child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Container(
+                                                          color: Colors.transparent,
+                                                          width: size.width * 0.54,
+                                                          height: size.height * 0.04,
+                                                          child: AutoSizeText(
+                                                                //
+                                                                //'${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["name"]}',
+                                                                clientesFiltrados[index].name,
+                                                                style: const TextStyle(
+                                                                  fontWeight: FontWeight.bold,
+                                                                  //fontSize: 10,
+                                                                  color: Colors.black
+                                                                ),
+                                                                minFontSize: 5,
+                                                                maxLines: 2,
+                                                                textAlign: TextAlign.left,
+                                                                ),
+                                                      ),
+
+                                                      if(email != null)
+                                                      Container(
+                                                        color: Colors.transparent,
+                                                        width: size.width * 0.54,
+                                                        height: size.height * 0.035,
+                                                        child: RichText(
+                                                          text: TextSpan(
+                                                            children: [
+                                                              const TextSpan(
+                                                                text: 'Correo: ',
+                                                                style: TextStyle(color: Colors.black)
+                                                              ),
+                                                              TextSpan(
+                                                                text: clientesFiltrados[index].email,
+                                                                style: const TextStyle(color: Colors.blue)
+                                                              ),
+                                                            ]
+                                                          ),
+                                                        )
+                                                      ),
+
+                                                      if(pais != null)
+                                                      Container(
+                                                        color: Colors.transparent,
+                                                        width: size.width * 0.54,
+                                                        height: size.height * 0.035,
+                                                        child: RichText(
+                                                          text: TextSpan(
+                                                            children: [
+                                                              const TextSpan(
+                                                                text: 'País: ',
+                                                                style: TextStyle(color: Colors.black)
+                                                              ),
+                                                              TextSpan(
+                                                                text: clientesFiltrados[index].countryId.name,
+                                                                style: const TextStyle(color: Colors.blue)
+                                                              ),
+                                                            ]
+                                                          ),
+                                                        )
+                                                      ),
+                                                      
+
+                                                  Container(
+                                                      color: Colors.transparent,
+                                                      width: size.width * 0.54,
+                                                      height: size.height * 0.035,
+                                                      child: 
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          children: [
+                                                            const TextSpan(
+                                                              text: 'Teléfono: ',
+                                                              style: TextStyle(color: Colors.black)
+                                                            ),
+                                                            TextSpan(//
+                                                              //text: '${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["mobile"]}',//lstCLientes[index].mobile,
+                                                              text: clientesFiltrados[index].mobile,
+                                                              style: const TextStyle(color: Colors.blue)
+                                                            ),
+                                                          ]
+                                                        ),
+                                                      )
+                                                  ),
+                                                  
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  
+                                                  
+                                                ],
+                                              )
                                             ),
-                                            
+                                            Container(
+                                              width: size.width * 0.11,
+                                              height: size.height * 0.14,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: Colors.black12, // Color del óvalo
+                                                borderRadius: BorderRadius.circular(50), // Bordes redondeados para el óvalo
+                                              ),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                //crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    height: size.height * 0.03,
+                                                    alignment: Alignment.topCenter,
+                                                    child: IconButton(
+                                                      icon: const Icon(Icons.location_pin, color: Colors.grey, size: 20,),
+                                                      onPressed: () {},
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    height: size.height * 0.03,
+                                                    alignment: Alignment.topCenter,
+                                                    child: IconButton(
+                                                      icon: const Icon(Icons.route, color: Colors.grey, size: 20,),
+                                                      onPressed: () {},
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    height: size.height * 0.03,
+                                                    child: IconButton(
+                                                      icon: const Icon(Icons.info, color: Colors.grey, size: 20,),
+                                                      onPressed: () {},
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: size.height * 0.004,)
                                                 ],
                                               ),
                                             ),
-                                            
-                                            
+                                            SizedBox(width: size.width * 0.01,)
                                           ],
-                                        )
-                                      ),
-                                      Container(
-                                        width: size.width * 0.11,
-                                        height: size.height * 0.14,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: Colors.black12, // Color del óvalo
-                                          borderRadius: BorderRadius.circular(50), // Bordes redondeados para el óvalo
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          //crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              color: Colors.transparent,
-                                              height: size.height * 0.03,
-                                              alignment: Alignment.topCenter,
-                                              child: IconButton(
-                                                icon: const Icon(Icons.location_pin, color: Colors.grey, size: 20,),
-                                                onPressed: () {},
-                                              ),
-                                            ),
-                                            Container(
-                                              color: Colors.transparent,
-                                              height: size.height * 0.03,
-                                              alignment: Alignment.topCenter,
-                                              child: IconButton(
-                                                icon: const Icon(Icons.route, color: Colors.grey, size: 20,),
-                                                onPressed: () {},
-                                              ),
-                                            ),
-                                            Container(
-                                              color: Colors.transparent,
-                                              height: size.height * 0.03,
-                                              child: IconButton(
-                                                icon: const Icon(Icons.info, color: Colors.grey, size: 20,),
-                                                onPressed: () {},
-                                              ),
-                                            ),
-                                            SizedBox(height: size.height * 0.004,)
-                                          ],
+                                          ),
                                         ),
                                       ),
-                                      SizedBox(width: size.width * 0.01,)
-                                    ],
-                                    ),
-                                  ),
-                                ),
-                              )
-                            );
-                          },
-                        ),
+                                    )
+                                  );
+                                },
+                              ),
                             ),
-                              
                             noItemsFoundIndicatorBuilder: (context) => Container(
                               width: size.width * 0.75,
                               height: size.height * 0.75,
@@ -441,7 +743,8 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                             
                             ),
                           ),
-                        ) 
+                        )
+                        */
                       ),
 
                       if(clientesFiltrados.isEmpty)
@@ -467,17 +770,6 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
           );
         }
       ),
-      /*
-      floatingActionButton: 
-      
-      FloatingActionButton(                
-          onPressed: () {
-            context.push(objRutasGen.rutaRegistroPrsp);
-          },
-          backgroundColor: const Color.fromRGBO(75, 57, 239, 1.0), // Color del botón
-          child: const Icon(Icons.person_add_alt, color: Colors.white,), // Icono dentro del botón
-        ),
-        */
     );
   }
 }

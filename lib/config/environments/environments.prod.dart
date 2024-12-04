@@ -9,4 +9,8 @@ class EnvironmentsProd {
   final String jsonrpc = '2.0';
 
   final String contentType = 'application/json; charset=UTF-8';
+
+  //GOOGLE MAP
+  final String apiKeyGMapAndroid = 'AIzaSyBNRevgaESKXBVcIFnEPVBQcTc1i_yqE6k';
+  final String apiKeyGMapIos = 'AIzaSyBNRevgaESKXBVcIFnEPVBQcTc1i_yqE6k';
 }

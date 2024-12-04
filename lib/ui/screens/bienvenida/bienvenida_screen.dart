@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/config/environments/environments.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
-import 'package:cvs_ec_app/infraestructure/services/user_service.dart';
 import 'package:cvs_ec_app/ui/themes/theme.dart';
 import 'package:cvs_ec_app/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
               children: [
                 ChangeNotifierProvider(
                     create: (_) => AuthService(),
-                    child: Welcome2Screen(),
+                    child: Welcome2Screen(key),
                   ),                  
               ],
             ),
@@ -65,6 +64,8 @@ class WelcomeScreen extends StatelessWidget {
 }
 
 class Welcome2Screen extends StatelessWidget {
+
+  const Welcome2Screen(Key? key) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -128,9 +129,9 @@ class Welcome2Screen extends StatelessWidget {
                     context.push(Rutas().rutaScanQr);
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(16),  // Espaciado interno
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50), // Bordes redondeados
+                      borderRadius: BorderRadius.circular(50),
                       color: Colors.white
                     ),                
                     child: TextField(
@@ -147,12 +148,13 @@ class Welcome2Screen extends StatelessWidget {
                   ),
                 ),
               ),
+              
               SizedBox(height: size.height * 0.02),
             
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Container(
-                  padding: const EdgeInsets.all(16),  // Espaciado interno
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50), // Bordes redondeados
                     color: Colors.white                  
@@ -164,28 +166,26 @@ class Welcome2Screen extends StatelessWidget {
                       labelText: 'Key',
                       suffixIcon: //const Icon(Icons.key),
                       !authService.varIsKeyOscured
-                                      ? IconButton(
-                                          onPressed: () {
-                                            authService.varIsKeyOscured =
-                                                !authService.varIsKeyOscured;
-                                          },
-                                          icon: Icon(Icons.key,
-                                              size: 24,
-                                              color: AppLightColors()
-                                                  .gray900PrimaryText),
-                                        )
-                                      : IconButton(
-                                          onPressed: () {
-                                            authService.varIsKeyOscured =
-                                                !authService.varIsKeyOscured;
-                                          },
-                                          icon: Icon(
-                                              size: 24,
-                                              Icons.key_off,
-                                              color: AppLightColors()
-                                                  .gray900PrimaryText),
-                                        ),
-                                
+                        ? IconButton(
+                            onPressed: () {
+                              authService.varIsKeyOscured =
+                                  !authService.varIsKeyOscured;
+                            },
+                            icon: Icon(Icons.key,
+                                size: 24,
+                                color: AppLightColors()
+                                    .gray900PrimaryText),
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              authService.varIsKeyOscured = !authService.varIsKeyOscured;
+                            },
+                            icon: Icon(
+                                size: 24,
+                                Icons.key_off,
+                                color: AppLightColors().gray900PrimaryText
+                              ),
+                          ),                                
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -193,6 +193,7 @@ class Welcome2Screen extends StatelessWidget {
                   ),
                 ),
               ),
+              
               SizedBox(height: size.height * 0.02),
             
               const Spacer(),
@@ -257,16 +258,12 @@ class Welcome2Screen extends StatelessWidget {
                   if (Platform.isAndroid) {
                     plataforma = 'Android';
                     final androidInfo = await deviceInfo.androidInfo;
-
-                    //imeiCod = await UserService().getImei();
-
-                    //print('Código imei: $imeiCod');
-
                     imeiCod = androidInfo.id;
                   } else if (Platform.isIOS) {
                     plataforma = 'iOS';
-                    //final iOSInfo = await deviceInfo.iosInfo;
-                    //imeiCod = iOSInfo.;
+                    final iOSInfo = await deviceInfo.iosInfo;
+                    imeiCod = iOSInfo.identifierForVendor ?? '';
+                    //imeiCod = iOSInfo. ?? '';
                   } else {
                     plataforma = 'Desconocido';
                   }
@@ -276,8 +273,8 @@ class Welcome2Screen extends StatelessWidget {
                   RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(
                     server: serverTxt.text,
                     key: keyTxt.text,
-                    imei: imeiCod,
-                    //imei: '8234560480',
+                    //imei: imeiCod,
+                    imei: '8234560487',
                     lat: position.latitude.toString(),//'-74.45445',
                     lon: position.longitude.toString(),//'72.74548487',
                     so: plataforma//'Android'

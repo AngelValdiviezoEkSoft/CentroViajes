@@ -15,5 +15,16 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(() => GenericBloc());
   getIt.registerLazySingleton(() => AuthBloc());
   getIt.registerLazySingleton(() => SuscripcionBloc());
+  
+  getIt.registerLazySingleton(() => LocationBloc());
+  getIt.registerLazySingleton(() => GpsBloc());
+  
+  getIt.registerLazySingleton(() => MapBloc(
+    locationBloc: LocationBloc()
+  ));
+  
+  getIt.registerLazySingleton(() => SearchBloc(
+    trafficService: TrafficService()
+  ));
   //#EndRegion
 }

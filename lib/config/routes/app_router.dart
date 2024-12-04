@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-
 import '../../infraestructure/infraestructure.dart';
 
 final objRutas = Rutas();
@@ -136,7 +135,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: objRutas.rutaCheckAuth,
-      builder: (context, state) => const CheckAuthScreen(),      
+      builder: (context, state) => const CheckAuthScreen(null),
     ),
     GoRoute(
       path: objRutas.rutaScanQr,
@@ -145,6 +144,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: objRutas.rutaEditProsp,
       builder: (context, state) => const FrmEditProspectoScreen(),
+    ),
+    GoRoute(
+      path: objRutas.rutaMap,
+      builder: (context, state) => MapScreen(null),
     ),
   ],
   initialLocation: objRutas.rutaBienvenida,

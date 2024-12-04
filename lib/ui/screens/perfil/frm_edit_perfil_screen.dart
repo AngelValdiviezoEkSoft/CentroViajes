@@ -349,13 +349,10 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                   try {
                                     if (pickedFile != null) {
                                       final croppedFile = await ImageCropper().cropImage(
-                                        /*
-                                        aspectRatioPresets: [CropAspectRatioPreset.square],
-                                        cropStyle: CropStyle.rectangle,
-                                        */
                                         sourcePath: pickedFile.path,
                                         compressFormat: ImageCompressFormat.png,
                                         compressQuality: 100,
+                                        /*
                                         uiSettings: [
                                           AndroidUiSettings(
                                             hideBottomControls: true,
@@ -368,23 +365,12 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                           IOSUiSettings(
                                             title: 'Recortando',
                                           ),
-                                        
                                           //ignore: use_build_context_synchronously
                                           WebUiSettings(
                                             context: context,
-                                            /*
-                                            presentStyle: CropperPresentStyle.dialog,
-                                            boundary: const CroppieBoundary(
-                                              width: 520,
-                                              height: 520,
-                                            ),
-                                            viewPort: const CroppieViewPort(width: 480, height: 480, type: 'circle'),
-                                            enableExif: true,
-                                            enableZoom: true,
-                                            showZoomer: true,
-                                            */
                                           ),
                                         ],
+                                        */
                                       );
                                       if (croppedFile != null) {
                                         final bytes = File(croppedFile.path).readAsBytesSync();
@@ -401,41 +387,7 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                         validandoFoto = false;
                                         
                                         setState(() {});
-                                        /*
-                                        ClientTypeResponse objRspValidacionFoto = await UserFormService().verificacionFotoPerfil(null,objFotoPerfilNueva);
-                                        
-                                        if(objRspValidacionFoto.succeeded) {
-                                          coloresTextoRepuesta = Colors.white;
-                                          coloresFondoRepuesta = Colors.green;
-                                        } else {
-                                          coloresTextoRepuesta = Colors.white;
-                                          coloresFondoRepuesta = Colors.red;
-                                        }
-                                        
-                                        Fluttertoast.showToast(
-                                          msg: !objRspValidacionFoto.succeeded ? 'Debe colocar su rostro para la foto de perfil.' : objRspValidacionFoto.message,
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.TOP,
-                                          timeInSecForIosWeb: 5,
-                                          backgroundColor: coloresFondoRepuesta,
-                                          textColor: coloresTextoRepuesta,
-                                          fontSize: 16.0
-                                        );
-                                        
-                                        if(!objRspValidacionFoto.succeeded) {
-                                          validandoFoto = false;
-                                          setState(() {});
-                                          return;
-                                        }
-                                        
-                                        rutaNuevaFotoPerfil = croppedFile.path;
-                                        
-                                        //varObjetoProspectoFunc!.imagenPerfil = objFotoPerfilNueva;
-                                        //varObjProspecto!.imagenPerfil = objFotoPerfilNueva;
-                                        
-                                        validandoFoto = false;
-                                        setState(() {});
-                                        */
+                                      
                                       }
                                     }
                                   } catch(_) {
@@ -509,6 +461,7 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                         sourcePath: pickedFile.path,
                                         compressFormat: ImageCompressFormat.png,
                                         compressQuality: 100,
+                                        /*
                                         uiSettings: [
                                           AndroidUiSettings(
                                             hideBottomControls: true,
@@ -524,19 +477,9 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                           //ignore: use_build_context_synchronously
                                           WebUiSettings(
                                             context: context,
-                                            /*
-                                            presentStyle: CropperPresentStyle.dialog,
-                                            boundary: const CroppieBoundary(
-                                              width: 520,
-                                              height: 520,
-                                            ),
-                                            viewPort: const CroppieViewPort(width: 480, height: 480, type: 'circle'),
-                                            enableExif: true,
-                                            enableZoom: true,
-                                            showZoomer: true,
-                                            */
                                           ),
                                         ],
+                                        */
                                       );
                                       if (croppedFile != null) {
                                         final bytes = File(croppedFile.path).readAsBytesSync();

@@ -1,8 +1,6 @@
 
 import 'package:cvs_ec_app/ui/bloc/bloc.dart';
-import 'package:cvs_ec_app/ui/screens/errores/conexion_internet_screen.dart';
 import 'package:cvs_ec_app/ui/screens/screens.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,9 +8,9 @@ import 'package:go_router/go_router.dart';
 
 class CheckAuthScreen extends StatelessWidget {
 
-  const CheckAuthScreen({
-    Key? key,
-  }) : super(key: key);
+  const CheckAuthScreen(
+    Key? key
+  ) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -213,10 +213,7 @@ class AuthService extends ChangeNotifier {
         },
         body: jsonEncode(body),
       );
-
-      var rspPrsp = ProspectoTypeService().getProspectos();
-      var rspCli = ClienteService().getClientes();
-
+      
       var rspValidacion = json.decode(response.body);
 
       if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
@@ -224,12 +221,13 @@ class AuthService extends ChangeNotifier {
         await login(authRequest);
       }
 
-      await storage.write(key: 'RespuestaLogin', value: response.body);
-      await storage.write(key: 'RespuestaProspectos', value: rspPrsp);
-      await storage.write(key: 'RespuestaClientes', value: rspCli);
+      ProspectoTypeService().getProspectos();
+      ClienteService().getClientes();
 
+      await storage.write(key: 'RespuestaLogin', value: response.body);
+      
       return response.body;
-    } catch (e) {
+    } catch (_) {
       //print('Test Error: $e');
     }
   }

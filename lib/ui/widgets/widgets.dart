@@ -1,3 +1,5 @@
+export 'package:cvs_ec_app/ui/widgets/map/map.dart';
+
 export 'package:cvs_ec_app/ui/widgets/default_text_button_widget.dart';
 
 export 'package:cvs_ec_app/ui/widgets/default_button_widget.dart';

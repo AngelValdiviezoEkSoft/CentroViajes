@@ -181,8 +181,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
 
               if (snapshot.hasData) {
 
-                //List<ClientModelResponse> lstCLientes = [];//snapshot.data as List<ClientModelResponse>;
-
                 String objRsp = snapshot.data as String;
 
                 var objLogDecode = json.decode(objRsp);
@@ -196,7 +194,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
 
                 contLst = int.parse(contStr);
 
-                //String estadoPrsp = '';
                 ProspectoResponseModel apiResponse = ProspectoResponseModel.fromJson(objLogDecode);
 
                 List<DatumCrmLead> prospectosFiltrados = [];
@@ -233,7 +230,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
 
                 return SingleChildScrollView(
                   child: Column(
-                    //mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
                         height: size.height * 0.02,
@@ -444,8 +440,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                 height: size.height * 0.035,
                                                   child: AutoSizeText(
                                                       prospectosFiltrados[index].stageId.name,
-                                                        //estadoPrsp,
-                                                        //lstCLientes[index].estado,//ESTADO
                                                         style: const TextStyle(
                                                           fontWeight: FontWeight.bold,
                                                           fontSize: 10,
@@ -473,7 +467,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                           ),
                                           child: Column(
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            //crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Container(
                                                 color: Colors.transparent,
@@ -481,7 +474,13 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                 alignment: Alignment.topCenter,
                                                 child: IconButton(
                                                   icon: const Icon(Icons.location_pin, color: Colors.grey, size: 20,),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    /*
+                                                    final gpsBloc = BlocProvider.of<GpsBloc>(context);
+                                                      gpsBloc.askGpsAccess();
+                                                      */
+                                                    context.push(Rutas().rutaMap);
+                                                  },
                                                 ),
                                               ),
                                               Container(
@@ -490,7 +489,9 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                 alignment: Alignment.topCenter,
                                                 child: IconButton(
                                                   icon: const Icon(Icons.route, color: Colors.grey, size: 20,),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    
+                                                  },
                                                 ),
                                               ),
                                               Container(
@@ -499,8 +500,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                 child: IconButton(
                                                   icon: const Icon(Icons.info, color: Colors.grey, size: 20,),
                                                   onPressed: () {
-                                                    //idProsp = prospectosFiltrados[index].id;
-                                                    
                                                     objDatumCrmLead = prospectosFiltrados[index];
                                                     context.push(Rutas().rutaEditProsp);
                                                   },

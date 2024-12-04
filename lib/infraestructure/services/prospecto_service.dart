@@ -65,6 +65,8 @@ class ProspectoTypeService extends ChangeNotifier{
 
       var objRsp = await GenericService().getMultiModelos(objReq, "crm.lead");
 
+      await storageProspecto.write(key: 'RespuestaProspectos', value: json.encode(objRsp));
+
       return json.encode(objRsp);
       
     }    

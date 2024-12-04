@@ -1,4 +1,8 @@
 
+export 'package:cvs_ec_app/infraestructure/services/direcciones_service.dart';
+
+export 'package:cvs_ec_app/infraestructure/services/traffic_service.dart';
+
 export 'package:cvs_ec_app/infraestructure/services/paises_service.dart';
 
 export 'package:cvs_ec_app/infraestructure/services/data_inicial_service.dart';

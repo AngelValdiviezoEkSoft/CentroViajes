@@ -1,10 +1,3 @@
-// To parse this JSON data, do
-//
-//     final placesResponse = placesResponseFromJson(jsonString);
-
-// To parse this JSON data, do
-//
-//     final placesResponse = placesResponseFromJson(jsonString);
 
 import 'dart:convert';
 

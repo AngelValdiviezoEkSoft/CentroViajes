@@ -1,4 +1,10 @@
 
+export 'package:cvs_ec_app/domain/models/consulta_direccion_response_model.dart';
+
+export 'package:cvs_ec_app/domain/models/search_result.dart';
+
+export 'package:cvs_ec_app/domain/models/route_destination.dart';
+
 export 'package:cvs_ec_app/domain/models/pais_response_model.dart';
 
 export 'package:cvs_ec_app/domain/models/prospecto_registro_response_model.dart';

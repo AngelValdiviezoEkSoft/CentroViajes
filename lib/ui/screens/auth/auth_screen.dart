@@ -269,18 +269,69 @@ class LoginScreen extends StatelessWidget {
                         password: passWordTxt.text
                       );
 
-                      var resp = await AuthService().login(objAuthRequest);
+                      try{
+                        var resp = await AuthService().login(objAuthRequest);
                       
-                      final data = json.decode(resp);
+                        final data = json.decode(resp);
 
-                      final objError = data['error'];
-                      
-                      context.pop();
+                        final objError = data['error'];
+                        
+                        context.pop();
 
-                      if(objError == null) {
-                        context.push(objRutasGen.rutaHome);
-                      } else {
-                        final msmError = data['error']['message'];
+                        if(objError == null) {
+                          context.push(objRutasGen.rutaHome);
+                        } else {
+                          final msmError = data['error']['message'];
+
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Container(
+                                  color: Colors.transparent,
+                                  height: size.height * 0.22,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      
+                                      Container(
+                                        color: Colors.transparent,
+                                        height: size.height * 0.1,
+                                        child: Image.asset('assets/gifs/gifErrorBlanco.gif'),
+                                      ),
+
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.95,
+                                        height: size.height * 0.11,
+                                        alignment: Alignment.center,
+                                        child: AutoSizeText(
+                                          msmError,
+                                          maxLines: 2,
+                                          minFontSize: 4,
+                                        ),
+                                      ),
+                                      
+                                    ],
+                                  )
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      // Acción para solicitar revisión
+                                      Navigator.of(context).pop();
+                                      //Navigator.of(context).pop();
+                                    },
+                                    child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      }
+                      catch(ex){
+                        context.pop();
 
                         showDialog(
                           context: context,
@@ -305,7 +356,7 @@ class LoginScreen extends StatelessWidget {
                                       height: size.height * 0.11,
                                       alignment: Alignment.center,
                                       child: AutoSizeText(
-                                        msmError,
+                                        ex.toString(),
                                         maxLines: 2,
                                         minFontSize: 4,
                                       ),
@@ -317,9 +368,7 @@ class LoginScreen extends StatelessWidget {
                               actions: [
                                 TextButton(
                                   onPressed: () {
-                                    // Acción para solicitar revisión
                                     Navigator.of(context).pop();
-                                    //Navigator.of(context).pop();
                                   },
                                   child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
                                 ),
@@ -327,35 +376,9 @@ class LoginScreen extends StatelessWidget {
                             );
                           },
                         );
+                        
                       }
 
-                      /*
-
-                      if(objAuthResponseModel.error == null){                        
-                        context.push(objRutasGen.rutaHome);
-                      }
-                      else{                    
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Problemas al hacer login'),
-                              
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    // Acción para solicitar revisión
-                                    Navigator.of(context).pop();
-                                    //Navigator.of(context).pop();
-                                  },
-                                  child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                      */
                     }
                     
                   },

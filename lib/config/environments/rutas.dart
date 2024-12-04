@@ -19,6 +19,7 @@ class Rutas{
   String rutaConsultaVacia = '/consultaVacia';
   String rutaScanQr = '/scanQr';
   String rutaEditProsp = '/editProsp';
+  String rutaMap = '/mapas';
 
   //imágenes 
   String rutaImagenes = 'assets/images/';

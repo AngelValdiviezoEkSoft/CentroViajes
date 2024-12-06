@@ -110,8 +110,8 @@ class MapScreenState extends State<MapScreen> {
 
     for(int i = 0; i < lstLocalidades!.length; i++) {
       //respDistancia = calculateDistance(locationState.lastKnownLocation!.latitude,locationState.lastKnownLocation!.longitude,lstLocalidadVerifica?[i].latitud ?? 0,lstLocalidadVerifica?[i].longitud ?? 0,);
-      latLlegada = lstLocalidades?[i].latitud ?? 0;
-      lonLlegada = lstLocalidades?[i].longitud ?? 0;
+      latLlegada = lstLocalidades[i].latitud ?? 0;
+      lonLlegada = lstLocalidades[i].longitud ?? 0;
     }
 
     final marcadorDestino = Marker(
@@ -140,7 +140,7 @@ class MapScreenState extends State<MapScreen> {
                 alignment: Alignment.bottomCenter,
                 content: Container(
                     color: Colors.transparent,
-                    height: size.height * 0.12,
+                    height: size.height * 0.25,
                     alignment: Alignment.center,
                     child: Row(
                       children: [
@@ -159,7 +159,7 @@ class MapScreenState extends State<MapScreen> {
                         */
                         Container(
                           width: size.width * 0.5,
-                          height: size.height * 0.12,
+                          height: size.height * 0.25,
                           color: Colors.transparent,
                           alignment: Alignment.center,
                           child: Column(
@@ -176,14 +176,14 @@ class MapScreenState extends State<MapScreen> {
                               ),
                               Container(
                                 width: size.width * 0.55,
-                                height: size.height * 0.06,
+                                height: size.height * 0.12,
                                 color: Colors.transparent,
                                 alignment: Alignment.topLeft,
                                 child: const BaseText(
                                   'EDIFICIO: UNICENTRO, Clemente Ballén 406 Y, Guayaquil 090313',
                                   null,
                                   size: 0.04,
-                                  maxlines: 2,
+                                  maxlines: 3,
                                   align: TextAlign.left,
                                 ),
                               ),

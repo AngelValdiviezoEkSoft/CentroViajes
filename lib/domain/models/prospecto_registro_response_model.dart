@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class ProspectoRegistroResponseModel {
+    String mensaje;
     String jsonrpc;
     dynamic id;
     ProspectoRegistroModel result;
@@ -9,6 +10,7 @@ class ProspectoRegistroResponseModel {
         required this.jsonrpc,
         required this.id,
         required this.result,
+        required this.mensaje,
     });
 
     factory ProspectoRegistroResponseModel.fromJson(String str) => ProspectoRegistroResponseModel.fromMap(json.decode(str));
@@ -19,6 +21,7 @@ class ProspectoRegistroResponseModel {
         jsonrpc: json["jsonrpc"],
         id: json["id"],
         result: ProspectoRegistroModel.fromMap(json["result"]),
+        mensaje: ''
     );
 
     Map<String, dynamic> toMap() => {

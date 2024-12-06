@@ -57,7 +57,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
             final place = places[i];
             return ListTile(
               title: Text(place.text!),
-              subtitle: Text(place.placeName!),
+              subtitle: Text(place.direccion!),
               leading: const Icon(Icons.place_outlined, color: Colors.black),
               onTap: () {
                 final result = SearchResult(
@@ -66,7 +66,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
                   //position: LatLng(place.center![1], place.center![0]),
                   position: LatLng(place.geometry.location.lat, place.geometry.location.lng),
                   name: place.text,
-                  description: place.placeName
+                  description: place.direccion
                 );
 
                 searchBloc.add(AddToHistoryEvent(place));
@@ -113,7 +113,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
           ),
           ...history.map((place) => ListTile(
             title: Text(place.text!),
-            subtitle: Text(place.placeName!),
+            subtitle: Text(place.direccion!),
             leading: const Icon(Icons.history, color: Colors.black),
             onTap: () {
               final result = SearchResult(
@@ -122,7 +122,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
                 //position: LatLng(place.center![1], place.center![0]),
                 position: LatLng(place.geometry.location.lat, place.geometry.location.lng),
                 name: place.text,
-                description: place.placeName
+                description: place.direccion
               );
 
               //begin agregado

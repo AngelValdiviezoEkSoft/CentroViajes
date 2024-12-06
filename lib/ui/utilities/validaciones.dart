@@ -1,4 +1,5 @@
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -79,5 +80,14 @@ class ValidacionesUtils extends ChangeNotifier {
     return varMensajeCedulaValida;
   }
 
+  Future<String> validaInternet() async {
+    String respuesta = '';
+    var connectivityResult = await (Connectivity().checkConnectivity());
 
+    if(!connectivityResult.contains(ConnectivityResult.mobile) && !connectivityResult.contains(ConnectivityResult.wifi)){
+      respuesta = 'N';
+    }
+
+    return respuesta;
+  }
 }

@@ -22,13 +22,15 @@ abstract class AuthState extends Equatable {
   Future<String> readToken() async {
     try {
       String rspFinal = 'home';
-      //const storage = FlutterSecureStorage();
-
+/*
       var connectivityResult = await (Connectivity().checkConnectivity());
+
+      var tienePendienteRegistros = await storage.read(key: 'TienePendienteRegistros') ?? '';
     
-      if (!connectivityResult.contains(ConnectivityResult.mobile) && !connectivityResult.contains(ConnectivityResult.wifi)) {
+      if (tienePendienteRegistros == 'S' && !connectivityResult.contains(ConnectivityResult.mobile) && !connectivityResult.contains(ConnectivityResult.wifi)) {
         return 'NI';
       }
+      */
 
       var rspReg = await storage.read(key: 'RespuestaRegistro') ?? '';
       var rspLog = await storage.read(key: 'RespuestaLogin') ?? '';

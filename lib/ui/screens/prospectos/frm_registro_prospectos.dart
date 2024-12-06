@@ -382,7 +382,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         context.pop();
 
                                         var resp = await ProspectoTypeService().getProspectoRegistrado(telefonoPrsp);
-                                        
+
                                         var objResp = json.decode(resp);
 
                                         if(objResp['result']['create_date'] == null){
@@ -1136,7 +1136,6 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     return;
                                   }
 
-
 /*
                                   if(telefonoPrsp.length != 13){
                                     showDialog(
@@ -1228,7 +1227,6 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     dateOpen: DateTime.now(),
                                     dateDeadline: DateTime.now(),
                                     probability: double.parse(probabilityTxt.text),
-
                                     activityIds: [
                                       StructCombos(id: 2, name: actSelect)
                                     ],
@@ -1274,20 +1272,70 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                   );
 
                                   ProspectoRegistroResponseModel objRsp = await ProspectoTypeService().registraProspecto(objProsp);
-
+                                  
                                   String respuestaReg = objRsp.result.mensaje;
                                   int estado = objRsp.result.estado;
-                                  String gifRespuesta = '';
+                                  String gifRespuesta = 'assets/gifs/exito.gif';
 
                                   context.pop();
-                                  context.pop();
-                                  context.pop();
+
+                                  if(objRsp.mensaje.isNotEmpty){
+                              
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Container(
+                                            color: Colors.transparent,
+                                            height: size.height * 0.17,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                
+                                                Container(
+                                                  color: Colors.transparent,
+                                                  height: size.height * 0.09,
+                                                  child: Image.asset(gifRespuesta),
+                                                ),
+
+                                                Container(
+                                                  color: Colors.transparent,
+                                                  width: size.width * 0.95,
+                                                  height: size.height * 0.08,
+                                                  alignment: Alignment.center,
+                                                  child: AutoSizeText(
+                                                    objRsp.mensaje,
+                                                    maxLines: 2,
+                                                    minFontSize: 2,
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  
+                                    return;
+                                  }
 
                                   if(estado == 200){
                                     gifRespuesta = 'assets/gifs/exito.gif';
                                   } else {
                                     gifRespuesta = 'assets/gifs/gifErrorBlanco.gif';
                                   }
+
+                                  
+                                  context.pop();
+                                  context.pop();
 
                                   showDialog(
                                     context: context,
@@ -1332,41 +1380,6 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     },
                                   );
                                 
-                                  /*
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('Prospecto Registrado'),
-                                        content: const Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              'Este prospecto se encuentra registrado desde el 01/02/2024 '
-                                              'y su ultima gestión fue realizada el 01/05/2024',
-                                            ),
-                                          ],
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text('Cancelar', style: TextStyle(color: Colors.blue[200]),),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              // Acción para solicitar revisión
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text('Solicitar Revisión', style: TextStyle(color: Colors.blue[200]),),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                */
                                 },
                                 child: ButtonCvsWidget(
                                   //text: 'Crear',

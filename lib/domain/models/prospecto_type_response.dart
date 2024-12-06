@@ -112,15 +112,16 @@ class CrmLead {
 class DatumCrmLead {
     int id;
     List<StructCombos> activityIds;
-    CampaignId campaignId;
+    CampaignId? campaignId;
+    CampaignId lostReasonId;
+    CampaignId title;
     String? contactName;
     StructCombos countryId;
     DateTime? dateOpen;
     DateTime? dateClose;
     double dayClose;
     String? description;
-    String emailFrom;
-    CampaignId lostReasonId;
+    String emailFrom;    
     StructCombos mediumId;
     String name;
     StructCombos partnerId;
@@ -130,8 +131,7 @@ class DatumCrmLead {
     StructCombos sourceId;
     StructCombos stageId;
     StructCombos stateId;    
-    List<dynamic> tagIds;
-    CampaignId title;
+    List<dynamic> tagIds;    
     String type;
     String? city;
     String? emailCc;
@@ -217,10 +217,87 @@ class DatumCrmLead {
         referred: json["referred"]
     );
 
+    factory DatumCrmLead.fromMap2(Map<String, dynamic> json) {
+
+      return DatumCrmLead(
+        id: json['id'],
+        activityIds: (json['activity_ids'] as List<dynamic>)
+            .map((item) => StructCombos.fromJson2(jsonDecode(item)))
+            .toList(),
+        campaignId: json['campaign_id'].toString() == "{}" ? CampaignId(id: 0, name: '') : CampaignId.fromJson2(jsonDecode(json['campaign_id'])),
+        contactName: json['contact_name'],
+        countryId: json['country_id'].toString() == "{}" ? StructCombos(id: 0, name: '') : StructCombos.fromJson2(jsonDecode(json['country_id'])),
+        dateOpen: json['date_open'] == null ? DateTime.now() : DateTime.parse(json['date_open']),
+        dateClose: json['date_Close'] == null ? DateTime.now() : DateTime.parse(json['date_Close']),
+        dayClose: (json['day_close'] as num).toDouble(),
+        description: json['description'],
+        emailFrom: json['email_from'],
+        lostReasonId: json['lost_reason_id'].toString() == "{}" ? CampaignId(id: 0, name: '') : CampaignId.fromJson2(jsonDecode(json['lost_reason_id'])),//json['lost_reason_id'],
+        mediumId: json['medium_id'].toString() == "{}" ? StructCombos(id: 0, name: '') : StructCombos.fromJson2(jsonDecode(json['medium_id'])),
+        name: json['name'],
+        partnerId: json['partner_id'].toString() == "{}" ? StructCombos(id: 0, name: '') : StructCombos.fromJson2(jsonDecode(json['partner_id'])),
+        partnerName: json['partner_name'],
+        phone: json['phone'],
+        priority: json['priority'],
+        sourceId: json['source_id'].toString() == "{}" ? StructCombos(id: 0, name: '') : StructCombos.fromJson2(jsonDecode(json['source_id'])),
+        stageId: json['stage_id'].toString() == "{}" ? StructCombos(id: 0, name: '') : StructCombos.fromJson2(jsonDecode(json['stage_id'])),
+        stateId: json['state_id'].toString() == "{}" ? StructCombos(id: 0, name: '') : StructCombos.fromJson2(jsonDecode(json['state_id'])),
+        tagIds: json['tag_ids'] as List<dynamic>,
+        title: json['title'].toString() == "{}" ? CampaignId(id: 0, name: '') : CampaignId.fromJson2(jsonDecode(json['title'])),
+        type: json['type'],
+        city: json['city'],
+        emailCc: json['email_cc'],
+        mobile: json['mobile'],
+        street: json['street'],
+        dateDeadline: json['date_deadline'] == null ? DateTime.now() : DateTime.parse(json['date_deadline']),
+        probability: (json['probability'] as num).toDouble(),
+        userId: json['user_id'],
+        expectedRevenue: (json['expected_revenue'] as num).toDouble(),
+        referred: json['referred'],
+      );
+    }
+
+    Map<String, dynamic> toJson2() {
+    return {
+      'id': id,
+      'activity_ids': activityIds.map((activity) => jsonEncode(activity.toJson())).toList(),
+      'campaign_id': campaignId?.toJson(),
+      'contact_name': contactName,
+      'country_id': jsonEncode(countryId.toJson()),
+      'date_open': dateOpen?.toIso8601String(),
+      'date_Close': dateClose?.toIso8601String(),
+      'day_close': dayClose,
+      'description': description,
+      'email_from': emailFrom,
+      'lost_reason_id': lostReasonId,
+      'medium_id': jsonEncode(mediumId.toJson()),
+      'name': name,
+      'partner_id': jsonEncode(partnerId.toJson()),
+      'partner_name': partnerName,
+      'phone': phone,
+      'priority': priority,
+      'source_id': jsonEncode(sourceId.toJson()),
+      'stage_id': jsonEncode(stageId.toJson()),
+      'state_id': jsonEncode(stateId.toJson()),
+      'tag_ids': tagIds,
+      'title': title,
+      'type': type,
+      'city': city,
+      'email_cc': emailCc,
+      'mobile': mobile,
+      'street': street,
+      'date_deadline': dateDeadline,
+      'probability': probability,
+      'user_id': userId,
+      'expected_revenue': expectedRevenue,
+      'referred': referred,
+    };
+  }
+
     Map<String, dynamic> toMap() => {
         "id": id,
         "activity_ids": List<dynamic>.from(activityIds.map((x) => x.toJson())),
-        "campaign_id": campaignId.toJson(),
+        "campaign_id": campaignId?.toJson(),
         "contact_name": contactName,
         "country_id": countryId.toJson(),
         "date_open": dateOpen?.toIso8601String(),
@@ -245,9 +322,9 @@ class DatumCrmLead {
         "email_cc": emailCc,
         "mobile": mobile,
         "street": street,
-        "date_deadline": "${dateDeadline!.year.toString().padLeft(4, '0')}-${dateDeadline!.month.toString().padLeft(2, '0')}-${dateDeadline!.day.toString().padLeft(2, '0')}",
+        "date_deadline": "${dateDeadline?.year.toString().padLeft(4, '0')}-${dateDeadline?.month.toString().padLeft(2, '0')}-${dateDeadline?.day.toString().padLeft(2, '0')}",
         "probability": 0,
-        "user_id": userId!.toJson(),
+        "user_id": userId?.toJson(),
         "expected_revenue": expectedRevenue,
         "referred": referred
     };
@@ -273,6 +350,14 @@ class CampaignId {
       id: json["id"] ?? 0,
       name: json["name"] ?? '',
     );
+
+    factory CampaignId.fromJson2(Map<String, dynamic> json) {
+      //print('Tst json2 CampaignId: $json');
+      return CampaignId(
+        id: json['id'] ?? 0,
+        name: json['name'] ?? ''
+      );
+    }
 
     Map<String, dynamic> toMap() => {
     };
@@ -435,6 +520,13 @@ class StructCombos {
         id: json["id"] ?? 0,
         name: json["name"] ?? ''
     );
+
+    factory StructCombos.fromJson2(Map<String, dynamic> json) {
+      return StructCombos(
+        id: json['id'] ?? 0,
+        name: json['name'] ?? ''
+      );
+    }
 
     Map<String, dynamic> toMap() => {
         "id": id,

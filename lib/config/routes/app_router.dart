@@ -14,13 +14,7 @@ final GoRouter appRouter = GoRouter(
       path: objRutas.rutaDefault,
       builder: (context, state) => BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          /*
-          if (state is AuthUnauthenticated) {
-            return const WelcomeScreen();FrmRegistroClientesScreen
-          }
-          */
-          
-          return AuthScreen();//const ();
+          return AuthScreen();
         },
       ),
     ),
@@ -72,18 +66,19 @@ final GoRouter appRouter = GoRouter(
                 return const CargaScreen(null);
               } else {
                 if(snapshot.data != '') {
+                  /*
                   if(snapshot.data == 'NI') {
-
                     return const ConexionInternetScreen(null);
                   }
                   else{
+                    */
                     if(snapshot.data == 'log') {
                       return AuthScreen();
                     }
                     if(snapshot.data == 'home') {
                       return const HomeScreen(null);
                     }
-                  }
+                  //}
                 }
               }
               

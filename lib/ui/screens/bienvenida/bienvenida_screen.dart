@@ -148,7 +148,7 @@ class Welcome2Screen extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: size.height * 0.02),
             
               Padding(
@@ -262,8 +262,7 @@ class Welcome2Screen extends StatelessWidget {
                   } else if (Platform.isIOS) {
                     plataforma = 'iOS';
                     final iOSInfo = await deviceInfo.iosInfo;
-                    imeiCod = iOSInfo.identifierForVendor ?? '';
-                    //imeiCod = iOSInfo. ?? '';
+                    imeiCod = iOSInfo.identifierForVendor ?? '';                    
                   } else {
                     plataforma = 'Desconocido';
                   }

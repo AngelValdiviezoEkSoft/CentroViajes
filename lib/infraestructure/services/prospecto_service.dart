@@ -112,8 +112,8 @@ class ProspectoTypeService extends ChangeNotifier{
   Future<bool> llenaData(ProspectoType objPrpTp) async {
     bool frmValido = true;
 
-    String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp  = RegExp(pattern);
+    //String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    //RegExp regExp  = RegExp(pattern);
 
     if(objPrpTp.fechaNacimiento.trim() == '' || objPrpTp.genero.trim() == null || objPrpTp.genero.trim() == 'S' || objPrpTp.direccion.trim() == null || objPrpTp.direccion.trim() == '') {
       frmValido = false;
@@ -214,104 +214,125 @@ class ProspectoTypeService extends ChangeNotifier{
   }
 
   registraProspecto(DatumCrmLead objProspecto) async {
-    try{
-
-      var codImei = await storageProspecto.read(key: 'codImei') ?? '';
-
-      var objReg = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
-      var obj = RegisterDeviceResponseModel.fromJson(objReg);
-
-      var objLog = await storageProspecto.read(key: 'RespuestaLogin') ?? '';
-      var objLogDecode = json.decode(objLog);
-
-      List<MultiModel> lstMultiModel = [];
-
-      lstMultiModel.add(
-        MultiModel(model: 'crm.lead')
-      );
-
-      ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-        jsonrpc: EnvironmentsProd().jsonrpc,
-        params: ParamsMultiModels(
-          bearer: obj.result.bearer,
-          company: objLogDecode['result']['current_company'],
-          imei: codImei,
-          key: obj.result.key,
-          tocken: obj.result.tocken,
-          tockenValidDate: obj.result.tockenValidDate,
-          uid: objLogDecode['result']['uid'],
-          models: lstMultiModel
-        )
-      );
-
-      String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
-      
-      final requestBody = {
-      "jsonrpc": EnvironmentsProd().jsonrpc,
-      "params": {
-        "key": objReq.params.key,
-        "tocken": objReq.params.tocken,
-        "imei": objReq.params.imei,
-        "uid": objReq.params.uid,
-        "company": objReq.params.company,
-        "bearer": objReq.params.bearer,
-        "tocken_valid_date": tockenValidDate,
-        "create": {
-          "name": objProspecto.name,
-          "phone": objProspecto.phone,          
-          "contact_name": objProspecto.contactName,
-          "partner_name": objProspecto.partnerName,          
-          "date_closed": DateFormat('yyyy-MM-dd', 'es').format(objProspecto.dateClose!),
-          "email_from": objProspecto.emailFrom,
-          "street": objProspecto.street,
-          "expected_revenue": objProspecto.expectedRevenue,
-          "referred": objProspecto.referred,
-          "description": objProspecto.description,
-          "probability": objProspecto.probability,
-
-          "campaign_id": objProspecto.campaignId.id,
-          "source_id": objProspecto.sourceId.id,
-          "medium_id": objProspecto.mediumId.id,
-          "country_id": objProspecto.countryId.id,
-
-        },
-      }
-    };
-
-    final headers = {
-      "Content-Type": EnvironmentsProd().contentType//"application/json",
-    };
-
-    String ruta = '';
-    final objStr = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
+    String internet = await ValidacionesUtils().validaInternet();//await (Connectivity().checkConnectivity());
     
-    if(objStr.isNotEmpty)
-    {  
-      var obj = RegisterDeviceResponseModel.fromJson(objStr);
-      ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/create/crm.lead/model';
+    //VALIDACIÓN DE INTERNETL
+    if(internet.isEmpty){
+      
+      try{
+
+        var codImei = await storageProspecto.read(key: 'codImei') ?? '';
+
+        var objReg = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
+        var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+        var objLog = await storageProspecto.read(key: 'RespuestaLogin') ?? '';
+        var objLogDecode = json.decode(objLog);
+
+        List<MultiModel> lstMultiModel = [];
+
+        lstMultiModel.add(
+          MultiModel(model: 'crm.lead')
+        );
+
+        ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
+          jsonrpc: EnvironmentsProd().jsonrpc,
+          params: ParamsMultiModels(
+            bearer: obj.result.bearer,
+            company: objLogDecode['result']['current_company'],
+            imei: codImei,
+            key: obj.result.key,
+            tocken: obj.result.tocken,
+            tockenValidDate: obj.result.tockenValidDate,
+            uid: objLogDecode['result']['uid'],
+            models: lstMultiModel
+          )
+        );
+
+        String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
+
+        print('Fecha token: $tockenValidDate');
+
+        final requestBody = {
+        "jsonrpc": EnvironmentsProd().jsonrpc,
+        "params": {
+          "key": objReq.params.key,
+          "tocken": objReq.params.tocken,
+          "imei": objReq.params.imei,
+          "uid": objReq.params.uid,
+          "company": objReq.params.company,
+          "bearer": objReq.params.bearer,
+          "tocken_valid_date": tockenValidDate,
+          "create": {
+            "name": objProspecto.name,
+            "phone": objProspecto.phone,          
+            "contact_name": objProspecto.contactName,
+            "partner_name": objProspecto.partnerName,          
+            "date_closed": DateFormat('yyyy-MM-dd', 'es').format(objProspecto.dateClose!),
+            "email_from": objProspecto.emailFrom,
+            "street": objProspecto.street,
+            "expected_revenue": objProspecto.expectedRevenue,
+            "referred": objProspecto.referred,
+            "description": objProspecto.description,
+            "probability": objProspecto.probability,
+
+            "campaign_id": objProspecto.campaignId!.id,
+            "source_id": objProspecto.sourceId.id,
+            "medium_id": objProspecto.mediumId.id,
+            "country_id": objProspecto.countryId.id,
+
+          },
+        }
+      };
+
+        final headers = {
+          "Content-Type": EnvironmentsProd().contentType//"application/json",
+        };
+
+        String ruta = '';
+        final objStr = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
+        
+        if(objStr.isNotEmpty)
+        {  
+          var obj = RegisterDeviceResponseModel.fromJson(objStr);
+          ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/create/crm.lead/model';
+        }
+
+        final response = await http.post(
+          Uri.parse(ruta),
+          headers: headers,
+          body: jsonEncode(requestBody), 
+        );
+      
+        //print(response.body);
+
+        var rspValidacion = json.decode(response.body);
+
+        if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+          await tokenManager.checkTokenExpiration();
+          await registraProspecto(objProspecto);
+        }
+
+        return ProspectoRegistroResponseModel.fromJson(response.body);
+        //String tst = '';
+      } 
+      catch(ex){
+        print('Error al grabar: $ex');
+      }
+    } else {
+      await storageProspecto.write(key: 'registraProspecto', value: jsonEncode(objProspecto.toJson()));
+      //await storageProspecto.write(key: 'TienePendienteRegistros', value: 'S');
+
+      return ProspectoRegistroResponseModel(
+        id: 0,
+        jsonrpc: '',
+        result: ProspectoRegistroModel(
+          estado: 0, mensaje: ''
+        ),
+        mensaje: 'No tiene conexión a internet, ahora tiene datos pendientes de grabar.'
+      );
     }
 
-    final response = await http.post(
-      Uri.parse(ruta),
-      headers: headers,
-      body: jsonEncode(requestBody), 
-    );
-    
-      //print(response.body);
-
-      var rspValidacion = json.decode(response.body);
-
-      if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
-        await tokenManager.checkTokenExpiration();
-        await registraProspecto(objProspecto);
-      }
-
-      return ProspectoRegistroResponseModel.fromJson(response.body);
-      //String tst = '';
-    } 
-    catch(_){
-      
-    }
   }
 
 }

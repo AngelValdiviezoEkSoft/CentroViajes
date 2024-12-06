@@ -129,19 +129,29 @@ class DireccionesService {
         Uri.parse(
           'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=$query&inputtype=textquery&fields=geometry&key=$apiKey',
         ),
+      );     
+
+      final response2 = await http.get(
+        Uri.parse(
+          'https://maps.googleapis.com/maps/api/geocode/json?address=$query&key=$apiKey',
+        ),
       );
+
+      var dec2 = jsonDecode(response2.body);
+
+      //print('Test: $dec2');
 
       var dec = jsonDecode(response.body);
 
       final objResp = ConsultaDireccionResponseModel.fromJson(dec);
       objResp.nombreLugar = query;
-      objResp.candidates[0].placeName = objResp.candidates[0].placeName == null || objResp.candidates[0].placeName!.isEmpty ? query : objResp.candidates[0].placeName;
+      objResp.candidates[0].direccion = dec2['results'][0]['formatted_address'];
       objResp.candidates[0].text = objResp.candidates[0].text == null || objResp.candidates[0].text!.isEmpty ? query : objResp.candidates[0].text;
 
       return objResp.candidates;
       
     } catch (e) {
-      print('Error al buscar direcciones: $e');
+      //print('Error al buscar direcciones: $e');
       return [];
     }
   }

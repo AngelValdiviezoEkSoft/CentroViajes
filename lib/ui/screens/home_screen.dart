@@ -60,84 +60,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    /*
-    int varMuestraNotificacionesTrAp = 0;
-    int varMuestraNotificacionesTrProc = 0;
-    int varMuestraNotificacionesTrComp = 0;
-    int varMuestraNotificacionesTrInfo = 0;
-    */
-
     final size = MediaQuery.of(context).size;
-
-    /*
-    final items = <ItemBoton>[
-      ItemBoton('','','',1, Icons.group_add, 'Prospectos', 'Seguimiento y control de prospectos','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','',
-        Rutas().rutaListaProspectos, 
-        () {
-          context.push(Rutas().rutaListaProspectos);
-        }
-      ),
-      ItemBoton('','','',2, Icons.groups, 'Clientes', 'Listado de todos los clientes asignados','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrAp > 0,'','','icTramApr.png','icTramAprTrans.png','',
-        Rutas().rutaListaClientes, 
-        () {
-          context.push(Rutas().rutaListaClientes);
-        }
-      ),
-      ItemBoton('','','',3, Icons.calendar_month, 'Visitas Agendadas', 'Listado de clientes programados para el día','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrProc > 0,'','','icTramProc.png','icTramProcTrans.png','',
-        Rutas().rutaConstruccion, 
-        () => context.push(Rutas().rutaListaClientes)
-      ),
-      ItemBoton('','','',4, Icons.auto_stories_sharp, 'Catálogo', 'Catálogo de productos con imágenes','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','',
-        Rutas().rutaConstruccion, 
-        () => context.push(Rutas().rutaListaClientes)
-      ),
-      ItemBoton('','','',5, Icons.dashboard_customize_outlined, 'Inventario', 'Inventario general de productos con stock','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrAp > 0,'','','icTramApr.png','icTramAprTrans.png','',
-        Rutas().rutaConstruccion, 
-        () => context.push(Rutas().rutaListaClientes)
-      ),
-      ItemBoton('','','',6, Icons.format_list_bulleted_add, 'Listas de precio', 'Lista de precios generales para ventas','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrProc > 0,'','','icTramProc.png','icTramProcTrans.png','',
-        Rutas().rutaConstruccion, 
-        () => context.push(Rutas().rutaListaClientes)
-      ),
-      ItemBoton('','','',7, Icons.percent, 'Promociones Vigentes', 'Listado de Promociones Vigentes','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','',
-        Rutas().rutaConstruccion, 
-        () => context.push(Rutas().rutaListaClientes)
-      ),
-      ItemBoton('','','',8, Icons.inventory_rounded, 'Distribución en Rutas', 'Permite realizar el control de vehículos para reparto de ruta','','', Colors.white, Colors.white,false,varMuestraNotificacionesTrComp > 0,'','','icCompras.png','icComprasTrans.png','',
-        Rutas().rutaConstruccion, 
-        () => context.push(Rutas().rutaListaClientes)
-      ),
-    ]; 
-
-    List<Widget> itemMap = items.map(
-    (item) => FadeInLeft(
-      duration: const Duration( milliseconds: 250 ),
-      child: 
-        ItemsListasWidget(
-          null,
-          varIdPosicionMostrar: varPosicionMostrar,
-          varEsRelevante: item.esRelevante,
-          varIdNotificacion: item.ordenNot,
-          varNumIdenti: numeroIdentificacion,
-          icon: item.icon,
-          texto: item.mensajeNotificacion,
-          texto2: item.mensaje2,
-          color1: item.color1,
-          color2: item.color2,
-          onPress: () {  },
-          varMuestraNotificacionesTrAp: varMuestraNotificacionesTrAp,
-          varMuestraNotificacionesTrProc: varMuestraNotificacionesTrProc,
-          varMuestraNotificacionesTrComp: varMuestraNotificacionesTrComp,
-          varMuestraNotificacionesTrInfo: varMuestraNotificacionesTrInfo,
-          varIconoNot: item.iconoNotificacion,
-          //objUserSolicVac: objUserSolicNotificacion, 
-          varIconoNotTrans: item.rutaImagen,
-          permiteGestion: permiteGestion,
-          rutaNavegacion: item.rutaNavegacion,
-        ),
-      )
-    ).toList();
-    */
 
     List<String> lstComp = [];
 
@@ -168,10 +91,59 @@ class HomeScreenState extends State<HomeScreen> {
 
                     String rspTmp = snapshot.data as String;
 
-                    String lstTmp = rspTmp.split('---')[0];
-                    String objPerm = rspTmp.split('---')[1];
-                    String cardSalesStr = rspTmp.split('---')[2];
-                    String cardCollectionStr = rspTmp.split('---')[3];
+                    String msmInternet = rspTmp.split('---')[0];
+                    String lstTmp = rspTmp.split('---')[1];
+                    String objPerm = rspTmp.split('---')[2];
+                    String cardSalesStr = rspTmp.split('---')[3];
+                    String cardCollectionStr = rspTmp.split('---')[4];
+
+                    if(msmInternet == 'G'){
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Container(
+                              color: Colors.transparent,
+                              height: size.height * 0.17,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  
+                                  Container(
+                                    color: Colors.transparent,
+                                    height: size.height * 0.09,
+                                    child: Image.asset('assets/gifs/exito.gif'),
+                                  ),
+
+                                  Container(
+                                    color: Colors.transparent,
+                                    width: size.width * 0.95,
+                                    height: size.height * 0.08,
+                                    alignment: Alignment.center,
+                                    child: const AutoSizeText(
+                                      'Los datos que se encontraban en memoria han sido registrados.',
+                                      maxLines: 2,
+                                      minFontSize: 2,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  msmInternet = "";
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      });
+                    }
 
                     List<ItemBoton> lstMenu = state.deserializeItemBotonMenuList(objPerm);
 

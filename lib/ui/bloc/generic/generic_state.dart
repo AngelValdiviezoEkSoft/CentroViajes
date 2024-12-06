@@ -61,6 +61,25 @@ class GenericState extends Equatable {
   Future<String> readPrincipalPage() async {
 
     try{
+      final registraProspecto = await storage.read(key: 'registraProspecto') ?? '';
+      
+      var connectivityResult = await ValidacionesUtils().validaInternet();
+
+      String rspRegistro = '';
+
+      if(registraProspecto.isNotEmpty && connectivityResult.isEmpty){
+        var objReg = jsonDecode(registraProspecto);
+
+        Map<String, dynamic> jsonMap = jsonDecode(objReg);        
+
+        DatumCrmLead  objGuardar = DatumCrmLead.fromMap2(jsonMap);
+
+        await ProspectoTypeService().registraProspecto(objGuardar);
+        await storage.delete(key: 'registraProspecto');
+
+        rspRegistro = 'G';
+      }
+
       final resp = await storage.read(key: 'RespuestaLogin') ?? '';
 
       final data = json.decode(resp);
@@ -145,7 +164,7 @@ class GenericState extends Equatable {
       
       final jsonString = serializeItemBotonMenuList(items);      
 
-      respCmbLst = '${json.encode(lstRsp)}---$jsonString---${objPermisos.mainMenu.cardSales}---${objPermisos.mainMenu.cardCollection}';
+      respCmbLst = '$rspRegistro---${json.encode(lstRsp)}---$jsonString---${objPermisos.mainMenu.cardSales}---${objPermisos.mainMenu.cardCollection}';
 
       return respCmbLst;
     }

@@ -148,18 +148,21 @@ class Candidate {
   final GeometryDir geometry;
   String? text;
   String? placeName;
+  String? direccion;
 
   Candidate({
     required this.geometry,
     required this.text,
-    required this.placeName
+    required this.placeName,
+    required this.direccion
   });
 
   factory Candidate.fromJson(Map<String, dynamic> json) {
     return Candidate(
       geometry: GeometryDir.fromJson(json['geometry']),
       text: '',
-      placeName: ''
+      placeName: '',
+      direccion: ''
     );
   }
 }

@@ -5,11 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cvs_ec_app/app/app.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:secure_application/secure_application.dart';
 
-void main() {
+void main() async {
 
   setupServiceLocator();
+
+  await initializeDateFormatting();
 
   /*
   Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
@@ -45,10 +48,6 @@ void main() {
               locked: true
             )
           ),
-          /*                
-          autoLockTime: const Duration(seconds: 5), // Bloquea tras 5 segundos de inactividad
-          secureScreen: true,
-          */
           child: CentroViajesApp()
         )
       ),

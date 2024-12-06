@@ -1,21 +1,15 @@
 
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:animate_do/animate_do.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
-//import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter/material.dart';
-
 
 String dirProsp = '';
 ProspectoType? varObjProspecUbicReg;
@@ -67,11 +61,13 @@ class MapScreenState extends State<MapScreen> {
   }
 
   generateMarkers() async {
-    double latLlegada = 0;//-2.1409825968652996;
-    double lonLlegada = 0;//-79.93258100251383;
+    double latLlegada = 0;
+    double lonLlegada = 0;
     List<LocalidadType> lstLocalidades = [];
-    //-2.193906, -79.882928//UNICENTRO
-//-2.194379, -79.762934//DC
+    
+    //-2.193906, -79.882928 //UNICENTRO
+    //-2.194379, -79.762934 //DC
+
     lstLocalidades.add(
       LocalidadType(
         codigo: '0123',
@@ -90,8 +86,7 @@ class MapScreenState extends State<MapScreen> {
         /*
         latitud: -2.194379,
         longitud: -79.762934
-        */
-        
+        */        
         /*
         latitud: -2.1510772,
         longitud: -79.8887465         
@@ -108,10 +103,10 @@ class MapScreenState extends State<MapScreen> {
       )
     );
 
-    for(int i = 0; i < lstLocalidades!.length; i++) {
+    for(int i = 0; i < lstLocalidades.length; i++) {
       //respDistancia = calculateDistance(locationState.lastKnownLocation!.latitude,locationState.lastKnownLocation!.longitude,lstLocalidadVerifica?[i].latitud ?? 0,lstLocalidadVerifica?[i].longitud ?? 0,);
-      latLlegada = lstLocalidades[i].latitud ?? 0;
-      lonLlegada = lstLocalidades[i].longitud ?? 0;
+      latLlegada = lstLocalidades[i].latitud;
+      lonLlegada = lstLocalidades[i].longitud;
     }
 
     final marcadorDestino = Marker(

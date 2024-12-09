@@ -306,207 +306,213 @@ class MapScreenState extends State<MapScreen> {
     
     return WillPopScope(
       onWillPop: () async => false,
-      child: ///dirProsp == '' ?
-        
-      Scaffold(
-        
-        body: BlocBuilder<GpsBloc, GpsState>(
-          builder: (context, state) {
-            return state.isGpsEnabled ?
-              BlocBuilder<LocationBloc, LocationState>(
-                builder: (context, locationState) {
-                  
-                  if (locationState.lastKnownLocation == null) {
-                    return const Center(child: Text('Espere por favor...')); 
-                  }
-          
-                  return BlocBuilder<MapBloc, MapState>(
-                    builder: (context, mapState) {
-          
-                      Map<String, Polyline> polylines = Map.from( mapState.polylines );
+      child: 
+      BlocBuilder<GpsBloc, GpsState>(
+        builder: (context, state) {
+          return state.isGpsEnabled ?
+          Scaffold(
+            
+            body: BlocBuilder<GpsBloc, GpsState>(
+              builder: (context, state) {
+                return 
+                  BlocBuilder<LocationBloc, LocationState>(
+                    builder: (context, locationState) {
                       
-                      if ( !mapState.showMyRoute ) {
-                        polylines.removeWhere((key, value) => key == 'myRoute');
+                      if (locationState.lastKnownLocation == null) {
+                        return const Center(child: Text('Espere por favor...')); 
                       }
-
-                      return BlocBuilder<SearchBloc, SearchState>(
-                        builder: (context, stateSearch) {
-                          return BlocBuilder<SuscripcionBloc, SuscripcionState>(builder: (context, stateSuscripcion) {
-
-                            if(stateSuscripcion.direccionUser.isNotEmpty && stateSearch.places.length - 1 >= 0) {
-                              locationBloc.stopFollowingUser();
-                              //List<Feature> nuevaLista = [];
-                              List<Candidate> nuevaLista = [];
-                              
-                              for(int i = 0; i < stateSearch.places.length; i++) {
-                                if(stateSearch.places[i].text != '' && stateSearch.places[i].text!.toLowerCase().contains(dirProsp) && nuevaLista.length - 1 < 0) {
-                                  nuevaLista.add(stateSearch.places[i]);
-                                  break;
+              
+                      return BlocBuilder<MapBloc, MapState>(
+                        builder: (context, mapState) {
+              
+                          Map<String, Polyline> polylines = Map.from( mapState.polylines );
+                          
+                          if ( !mapState.showMyRoute ) {
+                            polylines.removeWhere((key, value) => key == 'myRoute');
+                          }
+          
+                          return BlocBuilder<SearchBloc, SearchState>(
+                            builder: (context, stateSearch) {
+                              return BlocBuilder<SuscripcionBloc, SuscripcionState>(
+                                builder: (context, stateSuscripcion) {
+          
+                                if(stateSuscripcion.direccionUser.isNotEmpty && stateSearch.places.length - 1 >= 0) {
+                                  locationBloc.stopFollowingUser();
+                                  //List<Feature> nuevaLista = [];
+                                  List<Candidate> nuevaLista = [];
+                                  
+                                  for(int i = 0; i < stateSearch.places.length; i++) {
+                                    if(stateSearch.places[i].text != '' && stateSearch.places[i].text!.toLowerCase().contains(dirProsp) && nuevaLista.length - 1 < 0) {
+                                      nuevaLista.add(stateSearch.places[i]);
+                                      break;
+                                    }
+                                  }
+          
+                                  /*
+                                  if(stateSearch.places.length - 1 >= 1) {
+                                    nuevaLista.add(stateSearch.places[1]);
+                                  }
+          
+                                  if(stateSearch.places.length - 1 == 0) {
+                                    nuevaLista.add(stateSearch.places[0]);
+                                  }
+          */
+                                  
+                                  if(nuevaLista.length - 1 < 0) {
+                                    objLatLngRecibido = null;
+                                  } else {
+                                    final result = SearchResult(
+                                      cancel: false,
+                                      manual: false,
+                                      //position: LatLng(nuevaLista[0].center![1], nuevaLista[0].center![0]),
+                                      position: LatLng(nuevaLista[0].geometry.location.lat, nuevaLista[0].geometry.location.lng),
+                                      name: nuevaLista[0].text,
+                                      description: nuevaLista[0].direccion
+                                    );
+          
+                                    if(stateSuscripcion.direccionUser.isEmpty && stateSearch.places.length - 1 < 0) {
+                                      searchBloc.add(AddToHistoryEvent(stateSearch.places[0]));
+                                    }
+          
+                                    final userLocation = result.position;
+                                    objLatLngRecibido = userLocation;
+                                    mapBloc.moveCamera(userLocation!);
+                                  }
                                 }
-                              }
-
-                              /*
-                              if(stateSearch.places.length - 1 >= 1) {
-                                nuevaLista.add(stateSearch.places[1]);
-                              }
-
-                              if(stateSearch.places.length - 1 == 0) {
-                                nuevaLista.add(stateSearch.places[0]);
-                              }
-      */
-                              
-                              if(nuevaLista.length - 1 < 0) {
-                                objLatLngRecibido = null;
-                              } else {
-                                final result = SearchResult(
-                                  cancel: false,
-                                  manual: false,
-                                  //position: LatLng(nuevaLista[0].center![1], nuevaLista[0].center![0]),
-                                  position: LatLng(nuevaLista[0].geometry.location.lat, nuevaLista[0].geometry.location.lng),
-                                  name: nuevaLista[0].text,
-                                  description: nuevaLista[0].direccion
-                                );
-
-                                if(stateSuscripcion.direccionUser.isEmpty && stateSearch.places.length - 1 < 0) {
-                                  searchBloc.add(AddToHistoryEvent(stateSearch.places[0]));
-                                }
-
-                                final userLocation = result.position;
-                                objLatLngRecibido = userLocation;
-                                mapBloc.moveCamera(userLocation!);
-                              }
-                            }
-
-                              return SingleChildScrollView(
-                              child: Stack(
-                                children: [
-
-                                  MapView(
-                                    markers: _markers.values.toSet(),
-                                    //initialLocation: stateSuscripcion.direccionUser.isNotEmpty && objLatLngRecibido != null ? objLatLngRecibido! : locationState.lastKnownLocation!,
-                                    initialLocation: locationState.lastKnownLocation!,
-                                    //markers: mapState.markers.values.toSet(),//con este vale
-                                    circleLlegada: const {},
-                                    llegadaLocation: const LatLng(0, 0),
-                                  ),
-
-                                  SearchBarWidgetMap(null, varFiltroBusqueda: dirProsp, varApiKey: apiKeyMapaUbic),
-                              
-                                  ManualMarker(null, varObjProspEnt: varObjProspect),
-
-                                  const Positioned(
-                                    top: 90,
-                                    left: 20,
-                                    child: BtnBackMapaUbicacionReg(null)
-                                  ),
-
-                                  Positioned(
-                                    bottom: size.height * 0.04,//70
-                                    left: size.width * 0.05,//37,
-                                    child: FadeInUp(
-                                      duration: const Duration( milliseconds: 300 ),
-                                      child: MaterialButton(
-                                        minWidth: size.width * 0.9,
-                                        color: objColoresAppMapaUbicacionReg.naranjaIntenso,
-                                        elevation: 0,
-                                        height: 50,
-                                        shape: const StadiumBorder(),
-                                        onPressed: () async {
-                                          final gpsBloc = BlocProvider.of<GpsBloc>(context);
-                                        
-                                          // Todo: loading
-                                          final start = locationBloc.state.lastKnownLocation;
-                                          if ( start == null ) return;
-
-                                          final end = mapBloc.mapCenter;
-                                          if ( end == null ) return;
-
-                                          searchBloc.add(OnDeactivateManualMarkerEvent());
-
-                                          //bool varTieneUbicacion = true;
-
-                                          var latFin = end.latitude;
-                                          var lonFin = end.longitude;
-
-                                          List<Placemark> placemarks = await placemarkFromCoordinates(latFin, lonFin);
-                                          final direccion = '${placemarks[0].country},${placemarks[0].locality},${placemarks[0].street}';
-
-                                          gpsBloc.vuelvePantallaFrm(true,true,true); 
-                                          
-                                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                                          prefs.setString("coordenadasIngreso",'${end.latitude},${end.longitude}');
-                                          prefs.setString("direccionEscogida",'$direccion ');
-
-                                          const storage = FlutterSecureStorage();
-                                          String esEdicion = await storage.read(key: 'esEdicionData') ?? '';
-
-                                          context.pop();
-
-                                          if(esEdicion.isNotEmpty && esEdicion == 'S') {
-                                            /*
-                                            Color coloresTextoRepuesta = Colors.transparent;
-                                            Color coloresFondoRepuesta = Colors.transparent;                                            
-
-                                            String cedulaTmp = await storage.read(key: 'cedula') ?? '';
-                                                          
-                                            ClientTypeResponse objRps = await UserFormService().editaDataPerfil(objDataPersonalGen!);
-                                            
-                                            if(objRps.succeeded) {
-                                              coloresTextoRepuesta = Colors.white;
-                                              coloresFondoRepuesta = Colors.green;
-                                            } else {
-                                              coloresTextoRepuesta = Colors.white;
-                                              coloresFondoRepuesta = Colors.red;
-                                            }
-
-                                            Fluttertoast.showToast(
-                                              msg: objRps.message,
-                                              toastLength: Toast.LENGTH_LONG,
-                                              gravity: ToastGravity.TOP,
-                                              timeInSecForIosWeb: 5,
-                                              backgroundColor: coloresFondoRepuesta,//Colors.red,
-                                              textColor: coloresTextoRepuesta,//Colors.white,
-                                              fontSize: 16.0
-                                            );
-
-                                            Future.microtask(() => Navigator.pushReplacement(
-                                              context,
-                                              PageRouteBuilder(
-                                                pageBuilder: (_, __, ___) => ActualizacionDatosScreen(varObjUserEnter: objUserActualizacionDatos),
-                                                transitionDuration: const Duration(seconds: 0),
-                                              ))
-                                            );
-                                            */
-                                          }
-                                          
-                                        },
-                                        child: const Text('Confirma tu ubicación', style: TextStyle( color: Colors.white, fontSize: 15 )),
+          
+                                  return SingleChildScrollView(
+                                  child: Stack(
+                                    children: [
+          
+                                      MapView(
+                                        markers: _markers.values.toSet(),
+                                        //initialLocation: stateSuscripcion.direccionUser.isNotEmpty && objLatLngRecibido != null ? objLatLngRecibido! : locationState.lastKnownLocation!,
+                                        initialLocation: locationState.lastKnownLocation!,
+                                        //markers: mapState.markers.values.toSet(),//con este vale
+                                        circleLlegada: const {},
+                                        llegadaLocation: const LatLng(0, 0),
                                       ),
-                                    )
+          
+                                      SearchBarWidgetMap(null, varFiltroBusqueda: dirProsp, varApiKey: apiKeyMapaUbic),
+                                  
+                                      ManualMarker(null, varObjProspEnt: varObjProspect),
+          
+                                      const Positioned(
+                                        top: 90,
+                                        left: 20,
+                                        child: BtnBackMapaUbicacionReg(null)
+                                      ),
+          
+                                      Positioned(
+                                        bottom: size.height * 0.04,//70
+                                        left: size.width * 0.05,//37,
+                                        child: FadeInUp(
+                                          duration: const Duration( milliseconds: 300 ),
+                                          child: MaterialButton(
+                                            minWidth: size.width * 0.9,
+                                            color: objColoresAppMapaUbicacionReg.naranjaIntenso,
+                                            elevation: 0,
+                                            height: 50,
+                                            shape: const StadiumBorder(),
+                                            onPressed: () async {
+                                              final gpsBloc = BlocProvider.of<GpsBloc>(context);
+                                            
+                                              // Todo: loading
+                                              final start = locationBloc.state.lastKnownLocation;
+                                              if ( start == null ) return;
+          
+                                              final end = mapBloc.mapCenter;
+                                              if ( end == null ) return;
+          
+                                              searchBloc.add(OnDeactivateManualMarkerEvent());
+          
+                                              //bool varTieneUbicacion = true;
+          
+                                              var latFin = end.latitude;
+                                              var lonFin = end.longitude;
+          
+                                              List<Placemark> placemarks = await placemarkFromCoordinates(latFin, lonFin);
+                                              final direccion = '${placemarks[0].country},${placemarks[0].locality},${placemarks[0].street}';
+          
+                                              gpsBloc.vuelvePantallaFrm(true,true,true); 
+                                              
+                                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                                              prefs.setString("coordenadasIngreso",'${end.latitude},${end.longitude}');
+                                              prefs.setString("direccionEscogida",'$direccion ');
+          
+                                              const storage = FlutterSecureStorage();
+                                              String esEdicion = await storage.read(key: 'esEdicionData') ?? '';
+          
+                                              context.pop();
+          
+                                              if(esEdicion.isNotEmpty && esEdicion == 'S') {
+                                                /*
+                                                Color coloresTextoRepuesta = Colors.transparent;
+                                                Color coloresFondoRepuesta = Colors.transparent;                                            
+          
+                                                String cedulaTmp = await storage.read(key: 'cedula') ?? '';
+                                                              
+                                                ClientTypeResponse objRps = await UserFormService().editaDataPerfil(objDataPersonalGen!);
+                                                
+                                                if(objRps.succeeded) {
+                                                  coloresTextoRepuesta = Colors.white;
+                                                  coloresFondoRepuesta = Colors.green;
+                                                } else {
+                                                  coloresTextoRepuesta = Colors.white;
+                                                  coloresFondoRepuesta = Colors.red;
+                                                }
+          
+                                                Fluttertoast.showToast(
+                                                  msg: objRps.message,
+                                                  toastLength: Toast.LENGTH_LONG,
+                                                  gravity: ToastGravity.TOP,
+                                                  timeInSecForIosWeb: 5,
+                                                  backgroundColor: coloresFondoRepuesta,//Colors.red,
+                                                  textColor: coloresTextoRepuesta,//Colors.white,
+                                                  fontSize: 16.0
+                                                );
+          
+                                                Future.microtask(() => Navigator.pushReplacement(
+                                                  context,
+                                                  PageRouteBuilder(
+                                                    pageBuilder: (_, __, ___) => ActualizacionDatosScreen(varObjUserEnter: objUserActualizacionDatos),
+                                                    transitionDuration: const Duration(seconds: 0),
+                                                  ))
+                                                );
+                                                */
+                                              }
+                                              
+                                            },
+                                            child: const Text('Confirma tu ubicación', style: TextStyle( color: Colors.white, fontSize: 15 )),
+                                          ),
+                                        )
+                                      ),
+                                    
+                                    ],
                                   ),
-                                
-                                ],
-                              ),
-                            );
+                                );
+                                }
+                              );
                             }
                           );
-                        }
+                        },
                       );
                     },
                   );
-                },
-              )
-              :
-              const EnableGpsMessage(null);
-          }
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            BtnCurrentLocation(),
-          ],
-        ),
+                  
+              }
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            floatingActionButton: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                BtnCurrentLocation(null),
+              ],
+            ),
+          )
+          :
+          const EnableGpsMessage(null);
+        }
       )
     
     );

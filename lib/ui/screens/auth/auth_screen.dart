@@ -114,24 +114,22 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              //SizedBox(height: 10),
+              
               SizedBox(height: size.height * 0.01),
+              
               // Subtítulo
               Container(
                 color: Colors.transparent,
                 width: size.width * 0.9,
                 alignment: Alignment.centerLeft,
                 child: const Text(
-                  'Utilice el siguiente formulario para acceder a su cuenta.',
-                  //textAlign: TextAlign.center,
+                  'Utilice el siguiente formulario para acceder a su cuenta.',                  
                   style: TextStyle(fontSize: 16),
                 ),
               ),
-              //SizedBox(height: 20),
-              SizedBox(height: size.height * 0.04),
-              // Campo de texto "Servidor"
               
-              // Campo de texto "Usuario"
+              SizedBox(height: size.height * 0.04),
+              
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),              
                 child: Container(
@@ -139,21 +137,6 @@ class LoginScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50), // Bordes redondeados
                     color: Colors.white
-                    /*
-                    gradient: LinearGradient(
-                      colors: [Colors.purple.shade100, Colors.white], // Degradado
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5), // Sombra de la caja
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // Desplazamiento de la sombra
-                      ),
-                    ],
-                  */
                   ),
                   child: TextField(
                     controller: userTxt,

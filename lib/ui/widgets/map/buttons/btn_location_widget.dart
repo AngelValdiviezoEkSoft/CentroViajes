@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BtnCurrentLocation extends StatelessWidget {
   
-  const BtnCurrentLocation({Key? key}) : super(key: key);
+  const BtnCurrentLocation(Key? key) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +29,7 @@ class BtnCurrentLocation extends StatelessWidget {
                 return;
             }
             
-
             mapBloc.moveCamera(userLocation);
-
 
           }
         ),

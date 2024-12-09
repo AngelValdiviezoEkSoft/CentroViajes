@@ -23,10 +23,11 @@ class ProspectoTypeService extends ChangeNotifier{
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  //ProspectoTypeService(String tipoIdent, String numIdent){
+  /*
   ProspectoTypeService(){
     //getProspecto(tipoIdent, numIdent);
   }
+  */
 
   bool isValidForm(){
     return formKey.currentState?.validate() ?? false;

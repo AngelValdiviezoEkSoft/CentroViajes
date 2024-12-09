@@ -86,6 +86,13 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
     }
   }
 
+  Future<void> activaGps(bool tieneUbicacion, bool gpsActivado, bool isPermisionGranted) async {
+    //add( GpsAndPermissionEvent(isGpsEnabled: gpsActivado, isGpsPermissionGranted: isPermisionGranted, isMuestraMapa: false, tieneUbicacion: tieneUbicacion));
+    //add( GpsAndPermissionEvent(isGpsEnabled: gpsActivado, isGpsPermissionGranted: isPermisionGranted, isMuestraMapa: true, tieneUbicacion: tieneUbicacion) );
+    openAppSettings();
+    
+  }
+
   Future<void> vuelvePantallaFrm(bool tieneUbicacion, bool gpsActivado, bool isPermisionGranted) async {
     add(GpsAndPermissionEvent(isGpsEnabled: gpsActivado, isGpsPermissionGranted: isPermisionGranted, isMuestraMapa: false, tieneUbicacion: tieneUbicacion));
   }

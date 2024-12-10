@@ -1079,6 +1079,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                       alignment: Alignment.center,
                                       children: [
                                         SimpleDialogCargando(
+                                          null,
                                           mensajeMostrar: 'Estamos registrando',
                                           mensajeMostrarDialogCargando: 'al nuevo cliente.',
                                         ),

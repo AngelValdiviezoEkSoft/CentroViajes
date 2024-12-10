@@ -10,7 +10,7 @@ class SimpleDialogCargando extends StatelessWidget {
   String varMensajeMostrar = '';
   String varMensajeMostrar2 = '';
 
-  SimpleDialogCargando({Key? key, required mensajeMostrar, required mensajeMostrarDialogCargando}) : super(key: key) {
+  SimpleDialogCargando(Key? key, {required mensajeMostrar, required mensajeMostrarDialogCargando}) : super(key: key) {
     varMensajeMostrar = mensajeMostrar;
     varMensajeMostrar2 = mensajeMostrarDialogCargando;
   }

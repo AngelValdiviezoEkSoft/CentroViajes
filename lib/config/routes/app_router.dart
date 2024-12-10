@@ -144,6 +144,10 @@ final GoRouter appRouter = GoRouter(
       path: objRutas.rutaMap,
       builder: (context, state) => MapScreen(null),
     ),
+    GoRoute(
+      path: objRutas.rutaOnBoarding,
+      builder: (context, state) => const OnBoardingScreen(null),
+    ),
   ],
   initialLocation: objRutas.rutaBienvenida,
 );

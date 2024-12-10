@@ -371,6 +371,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             alignment: Alignment.center,
                                             children: [
                                               SimpleDialogCargando(
+                                                null,
                                                 mensajeMostrar: 'Estamos consultando',
                                                 mensajeMostrarDialogCargando: 'los datos del prospecto',
                                               ),
@@ -1172,6 +1173,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       alignment: Alignment.center,
                                       children: [
                                         SimpleDialogCargando(
+                                          null,
                                           mensajeMostrar: 'Estamos registrando',
                                           mensajeMostrarDialogCargando: 'al nuevo cliente.',
                                         ),

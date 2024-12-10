@@ -2,11 +2,9 @@ import 'dart:convert';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-//import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-//import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -65,7 +63,7 @@ class HomeScreenState extends State<HomeScreen> {
     List<String> lstComp = [];
 
     return SafeArea(
-      child: WillPopScope(
+      child: WillPopScope(        
         onWillPop: () async => false,
         child: BlocBuilder<GenericBloc, GenericState>(
             builder: (context,state) {
@@ -237,126 +235,124 @@ class HomeScreenState extends State<HomeScreen> {
                               ),
                             ],
                           ),
-                    
-                    body: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Scaffold(
-                            backgroundColor: Colors.white,
-                            body: SingleChildScrollView(
-                              child: Column(
-                                children: [
+                      body: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Scaffold(
+                              backgroundColor: Colors.white,
+                              body: SingleChildScrollView(
+                                child: Column(
+                                  children: [
 
-                                  if(cardSales)
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.99,
-                                    child: _buildCard(
-                                      title: 'Ventas',
-                                      meta: '\$970.20 / Meta',
-                                      amount: '\$500.20',
-                                      progress: 0.55,
-                                      backgroundColor: Colors.blue.shade800,
-                                      progressColor: const Color.fromARGB(255, 4, 48, 126),
-                                      tamanio: size
+                                    if(cardSales)
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.99,
+                                      child: _buildCard(
+                                        title: 'Ventas',
+                                        meta: '\$970.20 / Meta',
+                                        amount: '\$500.20',
+                                        progress: 0.55,
+                                        backgroundColor: Colors.blue.shade800,
+                                        progressColor: const Color.fromARGB(255, 4, 48, 126),
+                                        tamanio: size
+                                      ),
                                     ),
-                                  ),
-                                            
-                                  const SizedBox(height: 16.0),
+                                              
+                                    const SizedBox(height: 16.0),
+                      
+                                    if(cardCollection)
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.99,
+                                      child: _buildCard(
+                                        title: 'Cobranza',
+                                        meta: '\$970.20 / Meta',
+                                        amount: '\$500.20',
+                                        progress: 0.55,
+                                        backgroundColor: Colors.white,
+                                        //progressColor: Colors.blueAccent,
+                                        progressColor: const Color.fromARGB(255, 4, 48, 126),
+                                        textColor: Colors.black,
+                                        tamanio: size
+                                      ),
+                                    ),
                     
-                                  if(cardCollection)
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.99,
-                                    child: _buildCard(
-                                      title: 'Cobranza',
-                                      meta: '\$970.20 / Meta',
-                                      amount: '\$500.20',
-                                      progress: 0.55,
-                                      backgroundColor: Colors.white,
-                                      //progressColor: Colors.blueAccent,
-                                      progressColor: const Color.fromARGB(255, 4, 48, 126),
-                                      textColor: Colors.black,
-                                      tamanio: size
-                                    ),
-                                  ),
-                  
-                              const SizedBox(height: 16.0),
-                                        
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.99,
-                                    height: size.height * 0.55,
-                                    child: Stack(
-                                      children: <Widget>[
-                                        
-                                        Container(
-                                          color: Colors.transparent,
-                                          width: size.width,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Container(
-                                                color: Colors.transparent,
-                                                width: size.width * 0.35,
-                                                child: const Text('Operaciones', style: TextStyle(fontSize: 12),)
-                                              ),
-                                              Container(
-                                                width: size.width * 0.35,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey.shade700,
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      color: Colors.white,
-                                                      spreadRadius: 2,
-                                                      blurRadius: 5,
-                                                      offset: Offset(0, 3),
-                                                    ),
-                                                  ],
+                                const SizedBox(height: 16.0),
+                                          
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: size.width * 0.99,
+                                      height: size.height * 0.55,
+                                      child: Stack(
+                                        children: <Widget>[
+                                          
+                                          Container(
+                                            color: Colors.transparent,
+                                            width: size.width,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Container(
+                                                  color: Colors.transparent,
+                                                  width: size.width * 0.35,
+                                                  child: const Text('Operaciones', style: TextStyle(fontSize: 12),)
                                                 ),
-                                                child: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    const Icon(Icons.grid_view_outlined, color: Colors.white,),
-                                                    SizedBox(
-                                                      width: size.width * 0.02,
-                                                    ),
-                                                    const Text('Avance del día', style: TextStyle(fontSize: 12, color: Colors.white),),
-                                                  ],
-                                                )
-                                              ),
-                                            ],
+                                                Container(
+                                                  width: size.width * 0.35,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey.shade700,
+                                                    borderRadius: BorderRadius.circular(8.0),
+                                                    boxShadow: const [
+                                                      BoxShadow(
+                                                        color: Colors.white,
+                                                        spreadRadius: 2,
+                                                        blurRadius: 5,
+                                                        offset: Offset(0, 3),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Icon(Icons.grid_view_outlined, color: Colors.white,),
+                                                      SizedBox(
+                                                        width: size.width * 0.02,
+                                                      ),
+                                                      const Text('Avance del día', style: TextStyle(fontSize: 12, color: Colors.white),),
+                                                    ],
+                                                  )
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                    
-                                        Container(
-                                          margin: const EdgeInsets.only( top: 25 ),
-                                          width: size.width * 0.99,
-                                          height: size.height * 0.45,
-                                          child: ListView(
-                                            physics: const BouncingScrollPhysics(),
-                                            children: <Widget>[
-                                              const SizedBox( height: 3, ),
-                                              ...itemMap,
-                                            ],
+                                      
+                                          Container(
+                                            margin: const EdgeInsets.only( top: 25 ),
+                                            width: size.width * 0.99,
+                                            height: size.height * 0.45,
+                                            child: ListView(
+                                              physics: const BouncingScrollPhysics(),
+                                              children: <Widget>[
+                                                const SizedBox( height: 3, ),
+                                                ...itemMap,
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                    
-                                        //_Encabezado()
-                                    
-                                      ],
+                                      
+                                          //_Encabezado()
+                                      
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ),
-                    )
-                    
-                  );
-                
-                  }
+                                  ],
+                                ),
+                              )
+                            ),
+                      )                      
+                    );
+                  
+                    }
                   }
 
                   return Container();

@@ -20,6 +20,7 @@ class Rutas{
   String rutaScanQr = '/scanQr';
   String rutaEditProsp = '/editProsp';
   String rutaMap = '/mapas';
+  String rutaOnBoarding = '/onBoarding';
 
   //imágenes 
   String rutaImagenes = 'assets/images/';

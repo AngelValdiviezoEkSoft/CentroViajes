@@ -37,7 +37,7 @@ class AuthScreen extends StatelessWidget {
           backgroundColor: AppLightColors().gray100Background,
           body: Container(
             width: size.width,//double.infinity,
-        height: size.height * 0.98,//* 1.3
+            height: size.height * 0.98,//* 1.3
             decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -167,30 +167,29 @@ class LoginScreen extends StatelessWidget {
                     controller: passWordTxt,
                     decoration: InputDecoration(
                       labelText: 'Contraseña',
-                      suffixIcon: //Icon(Icons.visibility),
+                      suffixIcon: 
                       !authService.varIsOscured
-                                      ? IconButton(
-                                          onPressed: () {
-                                            authService.varIsOscured =
-                                                !authService.varIsOscured;
-                                          },
-                                          icon: Icon(Icons.visibility,
-                                              size: 24,
-                                              color: AppLightColors()
-                                                  .gray900PrimaryText),
-                                        )
-                                      : IconButton(
-                                          onPressed: () {
-                                            authService.varIsOscured =
-                                                !authService.varIsOscured;
-                                          },
-                                          icon: Icon(
-                                              size: 24,
-                                              Icons.visibility_off,
-                                              color: AppLightColors()
-                                                  .gray900PrimaryText),
-                                        ),
-                                
+                        ? IconButton(
+                            onPressed: () {
+                              authService.varIsOscured =
+                                  !authService.varIsOscured;
+                            },
+                            icon: Icon(Icons.visibility,
+                                size: 24,
+                                color: AppLightColors()
+                                    .gray900PrimaryText),
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              authService.varIsOscured =
+                                  !authService.varIsOscured;
+                            },
+                            icon: Icon(
+                                size: 24,
+                                Icons.visibility_off,
+                                color: AppLightColors()
+                                    .gray900PrimaryText),
+                          ),                                
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -208,19 +207,27 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () async {
                     
                     if(userTxt.text.isEmpty || passWordTxt.text.isEmpty){
+
                       showDialog(
-                        context: context,
                         barrierDismissible: false,
-                        builder: (context) => SimpleDialog(
-                          alignment: Alignment.center,
-                          children: [
-                            SimpleDialogCargando(
-                              mensajeMostrar: 'Error',
-                              mensajeMostrarDialogCargando: 'Ingrese sus credenciales',
-                            ),
-                          ]
-                        ),
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ContentAlertDialog(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            onPressedCont: () {
+                              Navigator.of(context).pop();
+                            },
+                            tipoAlerta: TipoAlerta().alertAccion,
+                            numLineasTitulo: 2,
+                            numLineasMensaje: 2,
+                            titulo: 'Error',
+                            mensajeAlerta: 'Ingrese sus credenciales.'
+                          );
+                        },
                       );
+
 
                       return;
                     }
@@ -232,6 +239,7 @@ class LoginScreen extends StatelessWidget {
                         alignment: Alignment.center,
                         children: [
                           SimpleDialogCargando(
+                            null,
                             mensajeMostrar: 'Estamos validando',
                             mensajeMostrarDialogCargando: 'tus credenciales',
                           ),
@@ -263,6 +271,7 @@ class LoginScreen extends StatelessWidget {
 
                         if(objError == null) {
                           context.push(objRutasGen.rutaHome);
+                          //context.push(objRutasGen.rutaOnBoarding);
                         } else {
                           final msmError = data['error']['message'];
 
@@ -433,12 +442,6 @@ class _LoginFormState extends State<_LoginForm> {
                   ),
                 Column(
                   children: [
-                    /*
-                    Text(
-                      '1.0.16',
-                      style: AppTextStyles.captionRegular(width: size.width),
-                    ),
-                    */
                     Image.asset(
                       'assets/ilustraciones_medium_figma/img_20.png',
                       width: size.height * 0.25,

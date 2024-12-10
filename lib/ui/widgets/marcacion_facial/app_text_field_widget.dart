@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppTextField extends StatelessWidget {
-  AppTextField(
-      {Key? key,
+  const AppTextField(
+      Key? key,
+      {
       required this.labelText,
       required this.controller,
       this.keyboardType = TextInputType.text,

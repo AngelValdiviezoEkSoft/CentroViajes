@@ -224,6 +224,8 @@ class AuthService extends ChangeNotifier {
       ProspectoTypeService().getProspectos();
       ClienteService().getClientes();
 
+      DataInicialService().readCombosProspectos();
+
       await storage.write(key: 'RespuestaLogin', value: response.body);
       
       return response.body;

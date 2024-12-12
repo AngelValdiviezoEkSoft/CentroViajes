@@ -169,6 +169,7 @@ class GenericState extends Equatable {
       return respCmbLst;
     }
     catch(ex){
+      //print('Error gen: $ex');
       return '';
     }
   }

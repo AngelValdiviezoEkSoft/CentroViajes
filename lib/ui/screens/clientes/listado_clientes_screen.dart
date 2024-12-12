@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
+import 'package:cvs_ec_app/infraestructure/services/services.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +17,8 @@ import 'package:http/http.dart' as http;
 late TextEditingController filtroCliTxt;
 
 String terminoBusquedaClient= '';
+
+bool listaVaciaCli = false;
 
 class ListaClientesScreen extends StatefulWidget {
   const ListaClientesScreen({super.key});
@@ -76,6 +79,89 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
     }
   }
 
+  Future<void> refreshDataCli() async {
+
+    String resInt = await ValidacionesUtils().validaInternet();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => SimpleDialog(
+        alignment: Alignment.center,
+        children: [
+          SimpleDialogCargando(
+            null,
+            mensajeMostrar: 'Estamos consultando',
+            mensajeMostrarDialogCargando: 'el listado de clientes.',
+          ),
+        ]
+      ),
+    );
+
+    if(resInt.isEmpty){
+      var rsp = await ClienteService().getClientes();
+      
+      var objLogDecode = json.decode(rsp);
+
+      ClienteResponseModel apiResponse = ClienteResponseModel.fromJson(objLogDecode);
+
+      List<DatumClienteModelData> clientesFiltrados = [];
+
+      if(terminoBusquedaClient.isNotEmpty){
+        clientesFiltrados = apiResponse.result.data.resPartner.data
+        .where((producto) =>
+            producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+        ).toList();
+
+        if(clientesFiltrados.isEmpty){
+          clientesFiltrados = apiResponse.result.data.resPartner.data
+          .where((producto) =>
+              producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+          ).toList();
+        }
+
+        if(clientesFiltrados.isEmpty){
+          clientesFiltrados = apiResponse.result.data.resPartner.data
+          .where((producto) =>
+              producto.mobile.contains(terminoBusquedaClient)
+          ).toList();
+        }
+      } else{
+        clientesFiltrados = apiResponse.result.data.resPartner.data;
+      }
+
+      context.pop();
+
+      setState(() {
+        
+      });
+
+    } else {
+
+      context.pop();
+
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return ContentAlertDialog(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            onPressedCont: () {
+              Navigator.of(context).pop();
+            },
+            tipoAlerta: TipoAlerta().alertAccion,
+            numLineasTitulo: 1,
+            numLineasMensaje: 1,
+            titulo: 'Error',
+            mensajeAlerta: 'No tiene acceso a internet.'
+          );
+        },
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +184,12 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
           ),
           title: const Text('Clientes'),
           actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh, color: Colors.black),
+              onPressed: () {
+                refreshDataCli();
+              },
+            ),
             IconButton(
               icon: const Icon(Icons.calendar_month, color: Colors.black),
               onPressed: () {
@@ -142,6 +234,10 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
             } else{
               clientesFiltrados = apiResponse.result.data.resPartner.data;
             }
+
+            setState(() {
+        
+            });
           }
 
           return FutureBuilder(
@@ -160,38 +256,43 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
               if (snapshot.hasData) {
 
                 String objRsp = snapshot.data as String;
-
-                var objLogDecode = json.decode(objRsp);
-                var objLogDecode2 = json.decode(objLogDecode);
-
-                ClienteResponseModel apiResponse = ClienteResponseModel.fromJson(objLogDecode);
-
                 List<DatumClienteModelData> clientesFiltrados = [];
+                var objLogDecode2;
 
-                if(terminoBusquedaClient.isNotEmpty){
-                  clientesFiltrados = apiResponse.result.data.resPartner.data
-                  .where((producto) =>
-                      producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
-                  ).toList();
+                if(objRsp.isNotEmpty){
+                  
+                  var objLogDecode = json.decode(objRsp);
+                  objLogDecode2 = json.decode(objLogDecode);
 
-                  if(clientesFiltrados.isEmpty){
+                  ClienteResponseModel apiResponse = ClienteResponseModel.fromJson(objLogDecode);
+
+                  if(terminoBusquedaClient.isNotEmpty){
                     clientesFiltrados = apiResponse.result.data.resPartner.data
                     .where((producto) =>
-                        producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                        producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
                     ).toList();
+
+                    if(clientesFiltrados.isEmpty){
+                      clientesFiltrados = apiResponse.result.data.resPartner.data
+                      .where((producto) =>
+                          producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                      ).toList();
+                    }
+
+                    if(clientesFiltrados.isEmpty){
+                      clientesFiltrados = apiResponse.result.data.resPartner.data
+                      .where((producto) =>
+                          producto.mobile.contains(terminoBusquedaClient)
+                      ).toList();
+                    }
+                  } else{
+                    clientesFiltrados = apiResponse.result.data.resPartner.data;
                   }
 
-                  if(clientesFiltrados.isEmpty){
-                    clientesFiltrados = apiResponse.result.data.resPartner.data
-                    .where((producto) =>
-                        producto.mobile.contains(terminoBusquedaClient)
-                    ).toList();
-                  }
-                } else{
-                  clientesFiltrados = apiResponse.result.data.resPartner.data;
+                  pagingController.appendPage(clientesFiltrados, 1);
+                } else {
+                  listaVaciaCli = true;
                 }
-
-                pagingController.appendPage(clientesFiltrados, 1);
 
                 return SingleChildScrollView(
                   child: Column(
@@ -225,7 +326,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                       Container(
                         color: Colors.transparent,
                         width: size.width,
-                        height: size.height * 0.65,
+                        height: size.height * 0.85,
                         child: CustomRefreshIndicator(
                           onRefresh: refreshData,
                           builder: (context, child, controllerOp) {
@@ -266,12 +367,16 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                             controller: scrollListaClt,
                             itemCount: clientesFiltrados.length,
                             itemBuilder: ( _, int index ) {
-                          
-                              String? email = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["email"];
+                              String? email;
                               String? pais = '';
-                          
-                              if(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"] != null){
-                                pais = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"]["name"];
+
+                              if(objLogDecode2 != null)
+                              {
+                                email = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["email"];
+                                
+                                if(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"] != null){
+                                  pais = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"]["name"];
+                                }
                               }
                           
                               return Slidable(
@@ -353,7 +458,8 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                       color: Colors.transparent,
                                                       width: size.width * 0.54,
                                                       height: size.height * 0.04,
-                                                      child: AutoSizeText(
+                                                      child: Text(
+                                                        overflow: TextOverflow.ellipsis,
                                                             //
                                                             //'${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["name"]}',
                                                             clientesFiltrados[index].name,
@@ -362,8 +468,8 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                               //fontSize: 10,
                                                               color: Colors.black
                                                             ),
-                                                            minFontSize: 5,
-                                                            maxLines: 2,
+                                                            //minFontSize: 5,
+                                                            maxLines: 1,
                                                             textAlign: TextAlign.left,
                                                             ),
                                                   ),
@@ -374,6 +480,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                     width: size.width * 0.54,
                                                     height: size.height * 0.035,
                                                     child: RichText(
+                                                      overflow: TextOverflow.ellipsis,
                                                       text: TextSpan(
                                                         children: [
                                                           const TextSpan(
@@ -382,7 +489,8 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                           ),
                                                           TextSpan(
                                                             text: clientesFiltrados[index].email,
-                                                            style: const TextStyle(color: Colors.blue)
+                                                            style: const TextStyle(color: Colors.blue),
+                                                            
                                                           ),
                                                         ]
                                                       ),
@@ -410,13 +518,14 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                     )
                                                   ),
                                                   
-                          
+                                              if(clientesFiltrados[index].mobile.isNotEmpty)
                                               Container(
                                                   color: Colors.transparent,
                                                   width: size.width * 0.54,
                                                   height: size.height * 0.035,
                                                   child: 
                                                   RichText(
+                                                    overflow: TextOverflow.ellipsis,
                                                     text: TextSpan(
                                                       children: [
                                                         const TextSpan(
@@ -475,14 +584,18 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                   },
                                                 ),
                                               ),
+                                              /*
                                               Container(
                                                 color: Colors.transparent,
                                                 height: size.height * 0.03,
                                                 child: IconButton(
                                                   icon: const Icon(Icons.info, color: Colors.grey, size: 20,),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+
+                                                  },
                                                 ),
                                               ),
+                                              */
                                               SizedBox(height: size.height * 0.004,)
                                             ],
                                           ),
@@ -500,12 +613,21 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                       
                       ),
 
-                      if(clientesFiltrados.isEmpty)
+                      if(clientesFiltrados.isEmpty && !listaVaciaCli)
                       Container(
                         width: size.width * 0.75,
                         height: size.height * 0.75,
                         color: Colors.transparent,
                         child: ConsultaVaciaScreen(null, msmCabBand: 'Atención', msmBand: 'No existe el cliente buscado', imgCabBand: 'gifs/consulta_vacia.gif',)
+                      ),
+
+                      if(clientesFiltrados.isEmpty && listaVaciaCli)
+                      Container(
+                        width: size.width * 0.75,
+                        height: size.height * 0.75,
+                        color: Colors.transparent,
+                        alignment: Alignment.topCenter,
+                        child: ConsultaVaciaScreen(null, msmCabBand: 'Atención', msmBand: 'No existe información para mostrar', imgCabBand: 'gifs/consulta_vacia.gif',)
                       )
                     ],
                   ),

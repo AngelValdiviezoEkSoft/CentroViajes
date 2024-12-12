@@ -24,6 +24,7 @@ class CampaniaService extends ChangeNotifier{
       var codImei = await storageCamp.read(key: 'codImei') ?? '';
 
       var objReg = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
+      print('Tst camp: $objReg');
       var obj = RegisterDeviceResponseModel.fromJson(objReg);
 
       var objLog = await storageCamp.read(key: 'RespuestaLogin') ?? '';
@@ -54,6 +55,7 @@ class CampaniaService extends ChangeNotifier{
       var rsp = await GenericService().getMultiModelos(objReq, "utm.campaign");
       
       //return CampaniaResponseModel.fromJson(rsp);
+      
       return rsp;
     }
     

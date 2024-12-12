@@ -73,7 +73,7 @@ class ScanQrScreenState extends State<ScanQrScreen> {
                         Text(
                           'Escanear código QR',
                           style: AppTextStyles.h1Bold(
-                            width: sizeScreen.width * 0.1,
+                            width: sizeScreen.width * 0.5,
                             color: AppLightColors().white
                           ),
                         ),
@@ -104,60 +104,10 @@ class ScanQrScreenState extends State<ScanQrScreen> {
                         SizedBox(
                           height: AppSpacing.space03(),
                         ),
-                        /*
+                        
                         Container(
                           color: Colors.transparent,
-                          height: sizeScreen.height * 0.65,
-                          alignment: Alignment.center,
-                          child: AiBarcodeScanner(
-                            onDetect: (value) async {
-                              String valorScaneado = '';
-                              
-                              if (value.barcodes.isNotEmpty) {
-                                var firstItem = value.barcodes[0].rawValue;
-                                
-                                valorScaneado = firstItem ?? '';
-                              } 
-                              if (valorScaneado.isNotEmpty) {
-
-                                rutaServerWelcome = valorScaneado;
-
-                                context.pop();
-
-                              }
-                            },
-                            onDispose: () {
-                              debugPrint("Barcode scanner disposed!");
-                            },
-                            controller: MobileScannerController(
-                              detectionSpeed: DetectionSpeed.normal,
-                              autoStart: true,                              
-                            ),
-                            borderColor: AppLightColors().primary,
-                            borderRadius: 16,
-                            actions: const [],
-                            hideGalleryButton: true,
-                            successColor: Colors.green,
-                            bottomSheetBuilder: (context, controller) => Container(
-                              color: Colors.black,
-                              height: sizeScreen.height * 0.001,
-                              width: sizeScreen.width * 0.001,
-                              child: const Text(''),
-                            ),
-                            //galleryButtonAlignment: AlignmentGeometry.lerp(a, b, t),
-                            fit: BoxFit.none,
-                            hideGalleryIcon: true,
-                            hideSheetDragHandler: true,
-                            hideSheetTitle: true,
-                            extendBodyBehindAppBar: true,
-                            setPortraitOrientation: true,
-
-                          ),
-                        ),
-                        */
-                        Container(
-                          color: Colors.transparent,
-                          height: sizeScreen.height * 0.65,
+                          height: sizeScreen.height * 0.5,
                           alignment: Alignment.center,
                           child: AiBarcodeScanner(
                             canPop: false,
@@ -202,7 +152,7 @@ class ScanQrScreenState extends State<ScanQrScreen> {
                               if (valorScaneado.isNotEmpty) {
 
                                 rutaServerWelcome = valorScaneado;
-                                rutaServerWelcome = 'https://ekuasoft-taller-16347134.dev.odoo.com';
+                                //rutaServerWelcome = 'https://ekuasoft-taller-16347134.dev.odoo.com';
 
                                 context.pop();
 

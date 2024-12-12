@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
-import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -271,486 +270,522 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
 
                   return Stack(
                     children: [
-                      SingleChildScrollView(
-                        child: Column(
-                          children: [    
-                            /*            
-                            Container(
-                              color: Colors.transparent,
-                              width: size.width * 0.95, //- 100,
-                              height: size.height * 0.045, //40,
-                              alignment: Alignment.centerLeft,
-                              child: const AutoSizeText(
-                                'Registre nuevo prospecto',  
-                                presetFontSizes: [30,28,26,24,22,20,18,16,14,12,10],                          
-                              ),
-                            ),
-                            */
-                        
-                            Container(
-                              //color: const Color(0xffF6F6F6),
-                              color: Colors.transparent,
-                              width: size.width,
-                              height: size.height * 0.86,
-                              alignment: Alignment.topCenter,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                              
-                                  Container(
-                                    color: Colors.blue.shade800,
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Container(
-                                                color: tabAccionesEditPrsp == 0
-                                                    ? Colors.white
-                                                    : Colors.blue.shade800,
-                                                child: Center(
-                                                  child: TextButton(
-                                                    onPressed: () {
-                                                      tabAccionesEditPrsp = 0;
-                                                      setState(() {});
-                                                    },
-                                                    child: Column(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.info_outline,
-                                                          color: tabAccionesEditPrsp == 0
-                                                              ? Colors.blue.shade800
-                                                              : Colors.white,
-                                                        ),
-                                                        Text(
-                                                          'Inf. general',
-                                                          style: TextStyle(
+                      Container(
+                        color: Colors.transparent,
+                        width: size.width * 0.99,
+                        height: size.height * 0.91,
+                        alignment: Alignment.topCenter,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [    
+                          
+                              Container(
+                                //color: const Color(0xffF6F6F6),
+                                color: Colors.transparent,
+                                width: size.width,
+                                height: size.height * 0.86,
+                                alignment: Alignment.topCenter,
+                                child: Column(
+                                  children: [
+                                
+                                    Container(
+                                      color: Colors.blue.shade800,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  color: tabAccionesEditPrsp == 0
+                                                      ? Colors.white
+                                                      : Colors.blue.shade800,
+                                                  child: Center(
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        tabAccionesEditPrsp = 0;
+                                                        setState(() {});
+                                                      },
+                                                      child: Column(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.info_outline,
                                                             color: tabAccionesEditPrsp == 0
                                                                 ? Colors.blue.shade800
                                                                 : Colors.white,
-                                                            fontWeight: FontWeight.bold,
                                                           ),
-                                                        ),
-                                                      ],
+                                                          Text(
+                                                            'Inf. general',
+                                                            style: TextStyle(
+                                                              color: tabAccionesEditPrsp == 0
+                                                                  ? Colors.blue.shade800
+                                                                  : Colors.white,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              child: Container(
-                                                color: tabAccionesEditPrsp == 1
-                                                    ? Colors.white
-                                                    : Colors.blue.shade800,
-                                                child: Center(
-                                                  child: TextButton(
-                                                    onPressed: () {
-                                                      tabAccionesEditPrsp = 1;
-                                                      setState(() {});
-                                                    },
-                                                    child: Column(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.grid_on_outlined,
-                                                          color: tabAccionesEditPrsp == 1
-                                                              ? Colors.blue.shade800
-                                                              : Colors.white,
-                                                        ),
-                                                        Text(
-                                                          'Inf. Adicional',
-                                                          style: TextStyle(
-                                                            //color: Colors.purple.shade700,
+                                              Expanded(
+                                                child: Container(
+                                                  color: tabAccionesEditPrsp == 1
+                                                      ? Colors.white
+                                                      : Colors.blue.shade800,
+                                                  child: Center(
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        tabAccionesEditPrsp = 1;
+                                                        setState(() {});
+                                                      },
+                                                      child: Column(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.grid_on_outlined,
                                                             color: tabAccionesEditPrsp == 1
                                                                 ? Colors.blue.shade800
                                                                 : Colors.white,
-                                                            fontWeight: FontWeight.bold,
                                                           ),
-                                                        ),
-                                                      ],
+                                                          Text(
+                                                            'Inf. Adicional',
+                                                            style: TextStyle(
+                                                              //color: Colors.purple.shade700,
+                                                              color: tabAccionesEditPrsp == 1
+                                                                  ? Colors.blue.shade800
+                                                                  : Colors.white,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              child: Container(
-                                                color: tabAccionesEditPrsp == 2
-                                                    ? Colors.white
-                                                    : Colors.blue.shade800,
-                                                child: Center(
-                                                  child: TextButton(
-                                                    onPressed: () {
-                                                      tabAccionesEditPrsp = 2;
-                                                      setState(() {});
-                                                    },
-                                                    child: Column(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.add_business_rounded,
-                                                          color: tabAccionesEditPrsp == 2
-                                                              ? Colors.blue.shade800
-                                                              : Colors.white,
-                                                        ),
-                                                        Text(
-                                                          'Notas Int.',
-                                                          style: TextStyle(
-                                                            //color: Colors.purple.shade700,
+                                              Expanded(
+                                                child: Container(
+                                                  color: tabAccionesEditPrsp == 2
+                                                      ? Colors.white
+                                                      : Colors.blue.shade800,
+                                                  child: Center(
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        tabAccionesEditPrsp = 2;
+                                                        setState(() {});
+                                                      },
+                                                      child: Column(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.add_business_rounded,
                                                             color: tabAccionesEditPrsp == 2
                                                                 ? Colors.blue.shade800
                                                                 : Colors.white,
-                                                            fontWeight: FontWeight.bold,
                                                           ),
-                                                        ),
-                                                      ],
+                                                          Text(
+                                                            'Notas Int.',
+                                                            style: TextStyle(
+                                                              //color: Colors.purple.shade700,
+                                                              color: tabAccionesEditPrsp == 2
+                                                                  ? Colors.blue.shade800
+                                                                  : Colors.white,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                        
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                        
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: InternationalPhoneNumberInput(
-                                    onInputChanged: (PhoneNumber phoneNumber) async {
-                                      
-                                    },
-                                    onInputValidated: (bool isValid) async {
-                                      //print("¿Es válido?: $isValid");                                      
-                                    },
-                                    selectorConfig: const SelectorConfig(
-                                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET, // Tipo de selector
-                                    ),
-                                    ignoreBlank: false,
-                                    autoValidateMode: AutovalidateMode.onUserInteraction,
-                                    initialValue: number,
-                                    textFieldController: telefonoEditTxt,
-                                    formatInput: true,
-                                    keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                                    inputDecoration: InputDecoration(
-                                      hintText: "Ingrese su número",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                                            
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    onSaved: (PhoneNumber phoneNumber) {
-                                      //print('Número guardado: ${phoneNumber.phoneNumber}');
-                                    },
-                                    //isEnabled: false,
-                                    maxLength: 11,
-                                    errorMessage: 'Teléfono no válido',
-                                  ),
-                                  ),
-                                  
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                              
-                                  if(tabAccionesEditPrsp == 0)
-                                  Container(
-                                    color: Colors.transparent,
-                                    height: size.height * 0.55,
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        children: [
-                                          
-                                                                        Container(
+                          
+                                    SizedBox(
+                                      height: size.height * 0.02,
+                                    ),
+                          
+                                    Container(
                                       color: Colors.transparent,
                                       width: size.width * 0.92,
-                                      child: TextFormField(
-                                        cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        /*
-                                        inputFormatters: [
-                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                        ],
-                                        */
-                                        style: AppTextStyles.bodyRegular(width: size.width),
-                                        decoration: InputDecorationCvs.formsDecoration(
-                                          labelText: 'Nombres',
-                                          hintTetx: 'Ej: Juan Valdez',
-                                          size: size
-                                        ),
-                                        enabled: false,
-                                        controller: nombresEditTxt,
-                                        autocorrect: false,
-                                        keyboardType: TextInputType.text,
-                                        minLines: 1,
-                                        maxLines: 2,
-                                        autofocus: false,
-                                        maxLength: 50,
-                                        textAlign: TextAlign.left,
-                                        onEditingComplete: () {
-                                          FocusScope.of(context).unfocus();
-                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                        },
-                                        onChanged: (value) {
-                                          
-                                        },
-                                        onTapOutside: (event) {
-                                          FocusScope.of(context).unfocus();
-                                        },
+                                      child: InternationalPhoneNumberInput(
+                                        isEnabled: false,
+                                      onInputChanged: (PhoneNumber phoneNumber) async {
+                                        
+                                      },
+                                      onInputValidated: (bool isValid) async {
+                                        //print("¿Es válido?: $isValid");                                      
+                                      },
+                                      selectorConfig: const SelectorConfig(
+                                        selectorType: PhoneInputSelectorType.BOTTOM_SHEET, // Tipo de selector
                                       ),
+                                      ignoreBlank: false,
+                                      autoValidateMode: AutovalidateMode.onUserInteraction,
+                                      initialValue: number,
+                                      textFieldController: telefonoEditTxt,
+                                      formatInput: true,
+                                      keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                                      inputDecoration: InputDecoration(
+                                        hintText: "Ingrese su número",
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      onSaved: (PhoneNumber phoneNumber) {
+                                        //print('Número guardado: ${phoneNumber.phoneNumber}');
+                                      },
+                                      //isEnabled: false,
+                                      maxLength: 11,
+                                      errorMessage: 'Teléfono no válido',
+                                    ),
                                     ),
                                     
                                     SizedBox(
                                       height: size.height * 0.02,
                                     ),
-                        
+                                
+                                    if(tabAccionesEditPrsp == 0)
                                     Container(
                                       color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: DropdownButtonFormField<String>(
-                                          decoration: const InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: 'Seleccione el país...',
+                                      height: size.height * 0.55,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              child: TextFormField(
+                                                cursorColor: AppLightColors().primary,
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                /*
+                                                inputFormatters: [
+                                                  //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                                ],
+                                                */
+                                                style: AppTextStyles.bodyRegular(width: size.width),
+                                                decoration: InputDecorationCvs.formsDecoration(
+                                                  labelText: 'Nombres',
+                                                  hintTetx: 'Ej: Juan Valdez',
+                                                  size: size
+                                                ),
+                                                enabled: false,
+                                                controller: nombresEditTxt,
+                                                autocorrect: false,
+                                                keyboardType: TextInputType.text,
+                                                minLines: 1,
+                                                maxLines: 2,
+                                                autofocus: false,
+                                                maxLength: 50,
+                                                textAlign: TextAlign.left,
+                                                onEditingComplete: () {
+                                                  FocusScope.of(context).unfocus();
+                                                  //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                                },
+                                                onChanged: (value) {
+                                                  
+                                                },
+                                                onTapOutside: (event) {
+                                                  FocusScope.of(context).unfocus();
+                                                },
+                                              ),
+                                            ),
+                                      
+                                      SizedBox(
+                                        height: size.height * 0.02,
+                                      ),
+                          
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: DropdownButtonFormField<String>(
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              labelText: 'Seleccione el país...',
+                                            ),
+                                            value: paisEditSelect,
+                                            items: lstPaises
+                                                .map((activityPrsp) =>
+                                                    DropdownMenuItem(
+                                                      value: activityPrsp,
+                                                      child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
+                                                    ))
+                                                .toList(),
+                                            onChanged: (value) {
+                                              
+                                              setState(() {
+                                                paisEditSelect = value ?? '';
+                                              });
+                                                                      
+                                            },
                                           ),
-                                          value: paisEditSelect,
-                                          items: lstPaises
-                                              .map((activityPrsp) =>
-                                                  DropdownMenuItem(
-                                                    value: activityPrsp,
-                                                    child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
-                                                  ))
-                                              .toList(),
+                                        ),
+                                        
+                                      SizedBox(
+                                        height: size.height * 0.03,
+                                      ),
+                                      
+                                      /*
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: TextFormField(
+                                          controller: sectorEditTxt,
+                                          //initialValue: 'Norte',
+                                          enabled: false,
+                                          cursorColor: AppLightColors().primary,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          style: AppTextStyles.bodyRegular(width: size.width),
+                                          decoration: InputDecorationCvs.formsDecoration(
+                                            labelText: 'Sector',
+                                            hintTetx: 'Ej: Norte',
+                                            size: size
+                                          ),
+                                          //controller: emailAkiTxt,
+                                          autocorrect: false,
+                                          keyboardType: TextInputType.text,
+                                          minLines: 1,
+                                          maxLines: 2,
+                                          autofocus: false,
+                                          maxLength: 50,
+                                          textAlign: TextAlign.left,
+                                          onEditingComplete: () {
+                                            FocusScope.of(context).unfocus();
+                                            //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                          },
                                           onChanged: (value) {
                                             
-                                            setState(() {
-                                              paisEditSelect = value ?? '';
-                                            });
-                                                                    
+                                          },
+                                          onTapOutside: (event) {
+                                            FocusScope.of(context).unfocus();
                                           },
                                         ),
                                       ),
                                       
-                                    SizedBox(
-                                      height: size.height * 0.03,
-                                    ),
-                                    
-                                    /*
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: TextFormField(
-                                        controller: sectorEditTxt,
-                                        //initialValue: 'Norte',
-                                        enabled: false,
-                                        cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        style: AppTextStyles.bodyRegular(width: size.width),
-                                        decoration: InputDecorationCvs.formsDecoration(
-                                          labelText: 'Sector',
-                                          hintTetx: 'Ej: Norte',
-                                          size: size
-                                        ),
-                                        //controller: emailAkiTxt,
-                                        autocorrect: false,
-                                        keyboardType: TextInputType.text,
-                                        minLines: 1,
-                                        maxLines: 2,
-                                        autofocus: false,
-                                        maxLength: 50,
-                                        textAlign: TextAlign.left,
-                                        onEditingComplete: () {
-                                          FocusScope.of(context).unfocus();
-                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                        },
-                                        onChanged: (value) {
-                                          
-                                        },
-                                        onTapOutside: (event) {
-                                          FocusScope.of(context).unfocus();
-                                        },
+                                      SizedBox(
+                                        height: size.height * 0.03,
                                       ),
-                                    ),
-                                    
-                                    SizedBox(
-                                      height: size.height * 0.03,
-                                    ),
-                                    */
-                                    
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text('Asignado', style: TextStyle(fontSize: 20),),
-                                          
-                                          Checkbox(
-                                            value: prspAsignado,
-                                            onChanged: (bool? value) {
-                                              setState(() {
-                                                prspAsignado = value ?? false;
-                                              });
-                                            },
+                                      */
+                                      /*
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('Asignado', style: TextStyle(fontSize: 20),),
+                                            
+                                            Checkbox(
+                                              value: prspAsignado,
+                                              onChanged: (bool? value) {
+                                                setState(() {
+                                                  prspAsignado = value ?? false;
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      
+                                      SizedBox(
+                                        height: size.height * 0.01,
+                                      ),
+                                      */
+                                                                        
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.94,
+                                        child: DropdownButtonFormField<String>(
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Seleccione la campaña',
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    
-                                    SizedBox(
-                                      height: size.height * 0.01,
-                                    ),
-                                                                      
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.94,
-                                      child: DropdownButtonFormField<String>(
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'Seleccione la campaña',
-                                        ),
-                                        value: campEditSelect,
-                                        items: lstCampanias.map((activityPrsp) =>
-                                          DropdownMenuItem(
-                                            value: activityPrsp,
-                                            child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                          value: campEditSelect,
+                                          items: lstCampanias.map((activityPrsp) =>
+                                            DropdownMenuItem(
+                                              value: activityPrsp,
+                                              child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                            )
                                           )
-                                        )
-                                        .toList(),
-                                        onChanged: (String? newValue) {                        
-                                          setState(() {
-                                            campEditSelect = newValue ?? '';
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                                                    
-                                    SizedBox(
-                                      height: size.height * 0.02,
-                                    ),
-                        
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.94,
-                                      child: DropdownButtonFormField<String>(
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText:
-                                              'Seleccione el origen',
+                                          .toList(),
+                                          onChanged: (String? newValue) {                        
+                                            setState(() {
+                                              campEditSelect = newValue ?? '';
+                                            });
+                                          },
                                         ),
-                                        value: originEditSelect,
-                                        items: lstOrigenes
-                                            .map((activityPrsp) =>
-                                                DropdownMenuItem(
-                                                  value: activityPrsp,
-                                                  //child: Text(activityPrsp),
-                                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
-                                                ))
-                                            .toList(),
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            originEditSelect = newValue ?? '';
-                                          });
-                                        },
                                       ),
+                                                                      
+                                      SizedBox(
+                                        height: size.height * 0.03,
                                       ),
-                                                                        
-                                    SizedBox(
-                                      height: size.height * 0.02,
-                                    ),
-                                          
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.94,
-                                      child: DropdownButtonFormField<String>(
-                                                    decoration: const InputDecoration(
-                                                      border: OutlineInputBorder(),
-                                                      labelText:
-                                                          'Seleccione la media',
+                          
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.94,
+                                        child: DropdownButtonFormField<String>(
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText:
+                                                'Seleccione el origen',
+                                          ),
+                                          value: originEditSelect,
+                                          items: lstOrigenes
+                                              .map((activityPrsp) =>
+                                                  DropdownMenuItem(
+                                                    value: activityPrsp,
+                                                    //child: Text(activityPrsp),
+                                                    child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                  ))
+                                              .toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              originEditSelect = newValue ?? '';
+                                            });
+                                          },
+                                        ),
+                                        ),
+                                                                          
+                                      SizedBox(
+                                        height: size.height * 0.03,
+                                      ),
+                                            
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.94,
+                                        child: DropdownButtonFormField<String>(
+                                                      decoration: const InputDecoration(
+                                                        border: OutlineInputBorder(),
+                                                        labelText:
+                                                            'Seleccione la media',
+                                                      ),
+                                                      value: mediaEditSelect,
+                                                      items: lstMedias
+                                                          .map((activityPrsp) =>
+                                                              DropdownMenuItem(
+                                                                value: activityPrsp,
+                                                                //child: Text(activityPrsp),
+                                                                child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                              ))
+                                                          .toList(),
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                              mediaEditSelect = newValue ?? '';
+                                            });
+                                                      },
                                                     ),
-                                                    value: mediaEditSelect,
-                                                    items: lstMedias
-                                                        .map((activityPrsp) =>
-                                                            DropdownMenuItem(
-                                                              value: activityPrsp,
-                                                              //child: Text(activityPrsp),
-                                                              child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
-                                                            ))
-                                                        .toList(),
-                                                    onChanged: (newValue) {
-                                                      setState(() {
-                                            mediaEditSelect = newValue ?? '';
-                                          });
-                                                    },
-                                                  ),
-                                    ),
-                                                                        
-                                    SizedBox(
-                                      height: size.height * 0.02,
-                                    ),
-                                                                        
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: TextFormField(
-                                        cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,                                        
-                                        style: AppTextStyles.bodyRegular(width: size.width),
-                                        decoration: InputDecorationCvs.formsDecoration(
-                                          labelText: 'Recomendado por',
-                                          hintTetx: 'Ej: Norte',
-                                          size: size
-                                        ),
-                                        controller: recomendadoPorEditTxt,
-                                        autocorrect: false,
-                                        keyboardType: TextInputType.text,
-                                        minLines: 1,
-                                        maxLines: 2,
-                                        autofocus: false,
-                                        maxLength: 50,
-                                        textAlign: TextAlign.left,
-                                        onEditingComplete: () {
-                                          FocusScope.of(context).unfocus();
-                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                        },
-                                        onChanged: (value) {
-                                          
-                                        },
-                                        onTapOutside: (event) {
-                                          FocusScope.of(context).unfocus();
-                                        },
                                       ),
-                                    ),
-                                    
-                                    SizedBox(
-                                      height: size.height * 0.025,
-                                    ),
-                                                              
-                                  ],
+                                                                          
+                                      SizedBox(
+                                        height: size.height * 0.03,
+                                      ),
+                                                                          
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: TextFormField(
+                                          cursorColor: AppLightColors().primary,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,                                        
+                                          style: AppTextStyles.bodyRegular(width: size.width),
+                                          decoration: InputDecorationCvs.formsDecoration(
+                                            labelText: 'Recomendado por',
+                                            hintTetx: 'Ej: Norte',
+                                            size: size
+                                          ),
+                                          controller: recomendadoPorEditTxt,
+                                          autocorrect: false,
+                                          keyboardType: TextInputType.text,
+                                          minLines: 1,
+                                          maxLines: 2,
+                                          autofocus: false,
+                                          maxLength: 50,
+                                          textAlign: TextAlign.left,
+                                          onEditingComplete: () {
+                                            FocusScope.of(context).unfocus();
+                                            //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                          },
+                                          onChanged: (value) {
+                                            
+                                          },
+                                          onTapOutside: (event) {
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                        ),
+                                      ),
+                                      
+                                      SizedBox(
+                                        height: size.height * 0.025,
+                                      ),
+                                                                
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                              
-                                  if(tabAccionesEditPrsp == 1)
-                                  Container(
-                                    color: Colors.transparent,
-                                    height: size.height * 0.55,
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        children: [
-                                          
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            child: TextFormField(                               
+                                
+                                    if(tabAccionesEditPrsp == 1)
+                                    Container(
+                                      color: Colors.transparent,
+                                      height: size.height * 0.55,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              child: TextFormField(                               
+                                                cursorColor: AppLightColors().primary,
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                style: AppTextStyles.bodyRegular(width: size.width),
+                                                
+                                                decoration: InputDecoration(
+                                                  hintStyle: SafeGoogleFont(
+                                                    GoogleFontsApp().fontMulish,
+                                                    fontSize: size.width * 0.0025 * 18,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: AppLightColors().gray800SecondaryText,
+                                                    letterSpacing: 0
+                                                  ),
+                                                  hintText: "100%",
+                                                  suffixText: '%',
+                                                  labelText: 'Probabilidad'
+                                                ),
+                                                controller: probabilityEditTxt,
+                                                autocorrect: false,
+                                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                                minLines: 1,
+                                                maxLines: 1,
+                                                autofocus: false,
+                                                maxLength: 5,
+                                                textAlign: TextAlign.left,
+                                                onEditingComplete: () {
+                                                  FocusScope.of(context).unfocus();
+                                                },
+                                                onChanged: (value) {
+                                                  
+                                                },
+                                                onTapOutside: (event) {
+                                                  FocusScope.of(context).unfocus();
+                                                },
+                                              ),
+                                            ),
+                                                                          
+                                            SizedBox(
+                                              height: size.height * 0.02,
+                                            ),
+                                            
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              child: TextFormField(
                                               cursorColor: AppLightColors().primary,
-                                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                                              autovalidateMode: AutovalidateMode.onUserInteraction,                    
                                               style: AppTextStyles.bodyRegular(width: size.width),
                                               decoration: InputDecoration(
                                                 hintStyle: SafeGoogleFont(
@@ -760,237 +795,196 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                                   color: AppLightColors().gray800SecondaryText,
                                                   letterSpacing: 0
                                                 ),
-                                                hintText: "100%",
-                                                suffixText: '%',
+                                                labelText: 'Ingreso esperado en dólares',
+                                                hintText: "0.00",
+                                                suffixText: '\$',
                                               ),
-                                              controller: probabilityEditTxt,
+                                              controller: ingresoEsperadoEditTxt,
                                               autocorrect: false,
                                               keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                               minLines: 1,
                                               maxLines: 1,
                                               autofocus: false,
-                                              maxLength: 5,
+                                              maxLength: 7,
                                               textAlign: TextAlign.left,
                                               onEditingComplete: () {
                                                 FocusScope.of(context).unfocus();
                                               },
                                               onChanged: (value) {
-                                                
+                          
                                               },
                                               onTapOutside: (event) {
                                                 FocusScope.of(context).unfocus();
                                               },
                                             ),
                                           ),
-                                                                        
-                                          SizedBox(
-                                            height: size.height * 0.04,
-                                          ),
-                                          
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            child: TextFormField(
-                                            cursorColor: AppLightColors().primary,
-                                            autovalidateMode: AutovalidateMode.onUserInteraction,                    
-                                            style: AppTextStyles.bodyRegular(width: size.width),
-                                            decoration: InputDecoration(
-                                              hintStyle: SafeGoogleFont(
-                                                GoogleFontsApp().fontMulish,
-                                                fontSize: size.width * 0.0025 * 18,
-                                                fontWeight: FontWeight.w700,
-                                                color: AppLightColors().gray800SecondaryText,
-                                                letterSpacing: 0
-                                              ),
-                                              labelText: 'Ingreso esperado en dólares',
-                                              hintText: "0.00",
-                                              suffixText: '\$',
-                                            ),
-                                            controller: ingresoEsperadoEditTxt,
-                                            autocorrect: false,
-                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                            minLines: 1,
-                                            maxLines: 1,
-                                            autofocus: false,
-                                            maxLength: 7,
-                                            textAlign: TextAlign.left,
-                                            onEditingComplete: () {
-                                              FocusScope.of(context).unfocus();
-                                            },
-                                            onChanged: (value) {
-                        
-                                            },
-                                            onTapOutside: (event) {
-                                              FocusScope.of(context).unfocus();
-                                            },
-                                          ),
-                                        ),
-                                          
-                                          SizedBox(
-                                            height: size.height * 0.04,
-                                          ),
-                                          
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            child: TextFormField(
-                                            //initialValue: 'Ecuador',
-                                            //initialValue: '',
-                                            cursorColor: AppLightColors().primary,
-                                            autovalidateMode: AutovalidateMode.onUserInteraction,
                                             
-                                            style: AppTextStyles.bodyRegular(width: size.width),
-                                            decoration: InputDecorationCvs.formsDecoration(
-                                              labelText: 'Correo',
-                                              hintTetx: 'Ej: correo@ejemplo.com',
-                                              size: size
+                                            SizedBox(
+                                              height: size.height * 0.02,
                                             ),
-                                            controller: emailEditTxt,
-                                            autocorrect: false,
-                                            keyboardType: TextInputType.emailAddress,
-                                            minLines: 1,
-                                            maxLines: 2,
-                                            autofocus: false,
-                                            maxLength: 50,
-                                            textAlign: TextAlign.left,
-                                            onEditingComplete: () {
-                                              FocusScope.of(context).unfocus();
-                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                            },
-                                            onChanged: (value) {
-                        
-                                            },
-                                            onTapOutside: (event) {
-                        FocusScope.of(context).unfocus();
-                                            },
-                                            validator: (value) {
-                        
-                        String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                        RegExp regExp = RegExp(pattern);
-                        return regExp.hasMatch(value ?? '')
-                          ? null
-                          : 'Correo inválido';                          
-                                            },
+                                            
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              child: TextFormField(
+                                              //initialValue: 'Ecuador',
+                                              //initialValue: '',
+                                              cursorColor: AppLightColors().primary,
+                                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                                              
+                                              style: AppTextStyles.bodyRegular(width: size.width),
+                                              decoration: InputDecorationCvs.formsDecoration(
+                                                labelText: 'Correo',
+                                                hintTetx: 'Ej: correo@ejemplo.com',
+                                                size: size
+                                              ),
+                                              controller: emailEditTxt,
+                                              autocorrect: false,
+                                              keyboardType: TextInputType.emailAddress,
+                                              minLines: 1,
+                                              maxLines: 2,
+                                              autofocus: false,
+                                              maxLength: 50,
+                                              textAlign: TextAlign.left,
+                                              onEditingComplete: () {
+                                                FocusScope.of(context).unfocus();
+                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                              },
+                                              onChanged: (value) {
+                          
+                                              },
+                                              onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                                              },
+                                              validator: (value) {
+                          
+                          String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                          RegExp regExp = RegExp(pattern);
+                          return regExp.hasMatch(value ?? '')
+                            ? null
+                            : 'Correo inválido';                          
+                                              },
+                                              ),
                                             ),
-                                          ),
-                                          
-                                          SizedBox(
-                                            height: size.height * 0.06,
-                                          ),
-                                          
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            child: TextFormField(
-                        initialValue: fecEditCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateEdPrsp),
-                        readOnly: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Cierre esperado',
-                          border: OutlineInputBorder(),
-                          suffixIcon: Icon(Icons.calendar_today),
-                        ),
-                        onTap: () async {
-                          DateTime? pickedDate =
-                              await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2020),
-                            lastDate: DateTime(2100),
-                          );
-                          if (pickedDate != null) {
-                            
-                            setState(() {
-                              //dateEdPrsp = pickedDate;
-                              fecEditCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
-                            });
-                                  
-                          }
-                        },
+                                            
+                                            SizedBox(
+                                              height: size.height * 0.04,
                                             ),
-                                                                  
-                                          ),
-                                          
-                                          SizedBox(
-                                            height: size.height * 0.02,
-                                          ),
-                        
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            height: size.height * 0.15,
-                                            child: TextFormField(
-                        controller: direccionEditTxt,
-                                            //initialValue: 'Yordani Oliva',
-                                            //initialValue: '',
-                                            cursorColor: AppLightColors().primary,
-                                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                                            inputFormatters: [
-                        FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                            ],
-                                            style: AppTextStyles.bodyRegular(width: size.width),
-                                            decoration: InputDecorationCvs.formsDecoration(
-                        labelText: 'Dirección',
-                        hintTetx: '',
-                        size: size
-                                            ),
-                                            autocorrect: false,
-                                            keyboardType: TextInputType.text,
-                                            minLines: 3,
-                                            maxLines: 6,
-                                            autofocus: false,
-                                            maxLength: 150,
-                                            textAlign: TextAlign.left,
-                                            onEditingComplete: () {
-                        FocusScope.of(context).unfocus();
-                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                            },
-                                            onChanged: (value) {
-                        
-                                            },
-                                            onTapOutside: (event) {
-                        FocusScope.of(context).unfocus();
-                                            },
-                                            ),
-                                    ),
+                                            
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              child: TextFormField(
+                          initialValue: fecEditCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateEdPrsp),
+                          readOnly: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Cierre esperado',
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.calendar_today),
+                          ),
+                          onTap: () async {
+                            DateTime? pickedDate =
+                                await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2020),
+                              lastDate: DateTime(2100),
+                            );
+                            if (pickedDate != null) {
+                              
+                              setState(() {
+                                //dateEdPrsp = pickedDate;
+                                fecEditCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
+                              });
                                     
-                                    SizedBox(
-                                      height: size.height * 0.025,
-                                    ),
+                            }
+                          },
+                                              ),
                                                                     
-                                        ],
+                                            ),
+                                            
+                                            SizedBox(
+                                              height: size.height * 0.02,
+                                            ),
+                          
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              height: size.height * 0.15,
+                                              child: TextFormField(
+                          controller: direccionEditTxt,
+                                              //initialValue: 'Yordani Oliva',
+                                              //initialValue: '',
+                                              cursorColor: AppLightColors().primary,
+                                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                                              inputFormatters: [
+                          FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                              ],
+                                              style: AppTextStyles.bodyRegular(width: size.width),
+                                              decoration: InputDecorationCvs.formsDecoration(
+                          labelText: 'Dirección',
+                          hintTetx: '',
+                          size: size
+                                              ),
+                                              autocorrect: false,
+                                              keyboardType: TextInputType.text,
+                                              minLines: 3,
+                                              maxLines: 6,
+                                              autofocus: false,
+                                              maxLength: 150,
+                                              textAlign: TextAlign.left,
+                                              onEditingComplete: () {
+                          FocusScope.of(context).unfocus();
+                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                              },
+                                              onChanged: (value) {
+                          
+                                              },
+                                              onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                                              },
+                                              ),
+                                      ),
+                                      
+                                      SizedBox(
+                                        height: size.height * 0.025,
+                                      ),
+                                                                      
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                              
-                                  if(tabAccionesEditPrsp == 2)
-                                  Container(
-                                    color: Colors.transparent,
-                                    height: size.height * 0.55,
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        children: [
-
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            height: size.height * 0.22,
-                                            child: WebViewWidget(controller: _wvController)
-                                          ),
-                                          
-                                          SizedBox(
-                                            height: size.height * 0.02,
-                                          ),
-                                                                        
-                                                                    
-                                        ],
+                                
+                                    if(tabAccionesEditPrsp == 2)
+                                    Container(
+                                      color: Colors.transparent,
+                                      height: size.height * 0.55,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                        
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              height: size.height * 0.22,
+                                              child: WebViewWidget(controller: _wvController)
+                                            ),
+                                            
+                                            SizedBox(
+                                              height: size.height * 0.02,
+                                            ),
+                                                                          
+                                                                      
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                              
-                                ],
+                                
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                   
@@ -1000,6 +994,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                         child: Container(
                           color: Colors.transparent,
                           width: size.width * 0.92,
+                          alignment: Alignment.topCenter,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -1024,54 +1019,156 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                 child: GestureDetector(
                                 onTap: () async {
 
-                                  if(nombresEditTxt.text.isEmpty || emailEditTxt.text.isEmpty){
-                                    showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return ContentAlertDialog(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
+                                  String gifRespuesta = 'assets/gifs/exito.gif';
+                    
+                                    if(nombresEditTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese los nombres del prospecto.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
+                                    }
+
+                                    if(direccionEditTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese la dirección del prospecto.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
+                                    }
+                    
+                                    if(probabilityEditTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese la probabilidad.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
+                                    }
+
+                                    if(ingresoEsperadoEditTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese el monto en dólares.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
+                                    }
+
+                                    if(emailEditTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese el correo.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
+                                    } else {
+                                      String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                      RegExp regExp = RegExp(pattern);
+                                      
+                                      if(!regExp.hasMatch(emailEditTxt.text)){
+                                        showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return ContentAlertDialog(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              onPressedCont: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              tipoAlerta: TipoAlerta().alertAccion,
+                                              numLineasTitulo: 2,
+                                              numLineasMensaje: 2,
+                                              titulo: 'Error',
+                                              mensajeAlerta: 'Correo inválido.'
+                                            );
                                           },
-                                          onPressedCont: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          tipoAlerta: TipoAlerta().alertAccion,
-                                          numLineasTitulo: 2,
-                                          numLineasMensaje: 2,
-                                          titulo: 'Error',
-                                          mensajeAlerta: 'Ingrese todos los datos del formulario.'
                                         );
-                                      },
-                                    );
+                      
+                                        return;
+                                      }
+                                    }
 
-                                    return;
-                                  }
-
-                                  if(probabilityEditTxt.text.isEmpty){
-                                    showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return ContentAlertDialog(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          onPressedCont: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          tipoAlerta: TipoAlerta().alertAccion,
-                                          numLineasTitulo: 2,
-                                          numLineasMensaje: 2,
-                                          titulo: 'Error',
-                                          mensajeAlerta: 'Ingrese la probabilidad.'
-                                        );
-                                      },
-                                    );
-
-                                    return;
-                                  }
-
+                                  /*
                                   showDialog(
                                     context: context,
                                     barrierDismissible: false,
@@ -1080,8 +1177,8 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                       children: [
                                         SimpleDialogCargando(
                                           null,
-                                          mensajeMostrar: 'Estamos registrando',
-                                          mensajeMostrarDialogCargando: 'al nuevo cliente.',
+                                          mensajeMostrar: 'Estamos editando',
+                                          mensajeMostrarDialogCargando: 'los datos del prospecto.',
                                         ),
                                       ]
                                     ),
@@ -1155,7 +1252,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
 
                                   String respuestaReg = objRsp.result.mensaje;
                                   int estado = objRsp.result.estado;
-                                  String gifRespuesta = '';
+                                  
 
                                   if(estado == 200){
                                     gifRespuesta = 'assets/gifs/exito.gif';
@@ -1210,10 +1307,11 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                   
                                     return;
                                   }
+                                  */
 
                                   context.pop();
                                   context.pop();
-                                  context.pop();
+                                  //context.pop();
 
                                   showDialog(
                                     context: context,
@@ -1229,6 +1327,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                               Container(
                                                 color: Colors.transparent,
                                                 height: size.height * 0.09,
+                                                //child: Image.asset(gifRespuesta),
                                                 child: Image.asset(gifRespuesta),
                                               ),
 
@@ -1237,8 +1336,9 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                                 width: size.width * 0.95,
                                                 height: size.height * 0.08,
                                                 alignment: Alignment.center,
-                                                child: AutoSizeText(
-                                                  respuestaReg,
+                                                child: const AutoSizeText(
+                                                  //respuestaReg,
+                                                  'Prospecto editado con éxito',
                                                   maxLines: 2,
                                                   minFontSize: 2,
                                                 ),

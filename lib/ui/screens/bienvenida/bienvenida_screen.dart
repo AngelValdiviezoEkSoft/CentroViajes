@@ -38,7 +38,7 @@ class WelcomeScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Container(
             width: size.width,
-              height: size.height * 1.15,
+              height: size.height * 1.02,//0.99,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft, // Punto de inicio del degradado
@@ -74,321 +74,328 @@ class Welcome2Screen extends StatelessWidget {
 
     final authService = Provider.of<AuthService>(context);
 
-    return Container(
-      width: size.width,
-      height: size.height * 0.98,
-      color: Colors.transparent,
-      child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: size.height * 0.04,
-                ),
-                
-                const CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.check_circle_outline,
-                    size: 80,
-                    color: Colors.blue,
-                  ),
-                ),
-                
-                SizedBox(
-                  height: size.height * 0.03,
-                ),
-                
-                const Text(
-                  '¡Bienvenido!',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                SizedBox(
-                  height: size.height * 0.02,
-                ),
-                
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Text(
-                    '¡Gracias por unirte a la comunidad de D-One! ¡Acceda o cree su cuenta a continuación y comience su viaje!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-
-                SizedBox(height: size.height * 0.04),
-            
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: GestureDetector(
-                  onTap: () {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: size.height * 0.007,
+        ),
+        
+        const CircleAvatar(
+          radius: 50,
+          backgroundColor: Colors.white,
+          child: Icon(
+            Icons.check_circle_outline,
+            size: 80,
+            color: Colors.blue,
+          ),
+        ),
+        
+        SizedBox(
+          height: size.height * 0.02,
+        ),
+        
+        const Text(
+          '¡Bienvenido!',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+    
+        SizedBox(
+          height: size.height * 0.01,
+        ),
+        
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30.0),
+          child: Text(
+            '¡Gracias por unirte a la comunidad de D-One! ¡Acceda o cree su cuenta a continuación y comience su viaje!',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+    
+        SizedBox(height: size.height * 0.02),
+    
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: GestureDetector(
+          onTap: () {
+            //context.push(Rutas().rutaScanQr);
+          },
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: Colors.white
+            ),                
+            child: TextField(
+              //enabled: false,
+              controller: serverTxt,
+              decoration: InputDecoration(
+                labelText: 'Servidor',
+                suffixIcon: //const Icon(Icons.qr_code_scanner_outlined),
+                IconButton(
+                  onPressed: () {
                     context.push(Rutas().rutaScanQr);
                   },
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.white
-                    ),                
-                    child: TextField(
-                      enabled: false,
-                      controller: serverTxt,
-                      decoration: InputDecoration(
-                        labelText: 'Servidor',
-                        suffixIcon: const Icon(Icons.qr_code_scanner_outlined),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ),
-                  ),
+                  icon: Icon(Icons.qr_code_scanner_outlined,
+                      size: 24,
+                      color: AppLightColors()
+                          .gray900PrimaryText),
                 ),
-              ),
-
-              SizedBox(height: size.height * 0.02),
-            
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50), // Bordes redondeados
-                    color: Colors.white                  
-                  ),                
-                  child: TextField(
-                    obscureText: authService.varIsKeyOscured,
-                    controller: keyTxt,
-                    decoration: InputDecoration(                  
-                      labelText: 'Key',
-                      suffixIcon: //const Icon(Icons.key),
-                      !authService.varIsKeyOscured
-                        ? IconButton(
-                            onPressed: () {
-                              authService.varIsKeyOscured =
-                                  !authService.varIsKeyOscured;
-                            },
-                            icon: Icon(Icons.key,
-                                size: 24,
-                                color: AppLightColors()
-                                    .gray900PrimaryText),
-                          )
-                        : IconButton(
-                            onPressed: () {
-                              authService.varIsKeyOscured = !authService.varIsKeyOscured;
-                            },
-                            icon: Icon(
-                                size: 24,
-                                Icons.key_off,
-                                color: AppLightColors().gray900PrimaryText
-                              ),
-                          ),                                
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                  ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
                 ),
-              ),
-              
-              SizedBox(height: size.height * 0.02),
-            
-              const Spacer(),
-            
-              const Divider(color: Colors.red,),
                 
-              SizedBox(
-                height: size.height * 0.04,
               ),
-
-              // Botón de Comenzar
-              Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: GestureDetector(
-              onTap: () async {
-/*
-                if(serverTxt.text.isEmpty || keyTxt.text.isEmpty){
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ContentAlertDialog(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        onPressedCont: () {
-                          Navigator.of(context).pop();
-                        },
-                        tipoAlerta: TipoAlerta().alertAccion,
-                        numLineasTitulo: 2,
-                        numLineasMensaje: 2,
-                        titulo: 'Error',
-                        mensajeAlerta: 'Ingrese los datos del formulario.'
-                      );
+            ),
+          ),
+        ),
+      ),
+    
+      SizedBox(height: size.height * 0.02),
+    
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50), // Bordes redondeados
+            color: Colors.white                  
+          ),                
+          child: TextField(
+            obscureText: authService.varIsKeyOscured,
+            controller: keyTxt,
+            decoration: InputDecoration(                  
+              labelText: 'Key',
+              suffixIcon: //const Icon(Icons.key),
+              !authService.varIsKeyOscured
+                ? IconButton(
+                    onPressed: () {
+                      authService.varIsKeyOscured =
+                          !authService.varIsKeyOscured;
                     },
-                  );
-
-                  return;
-                }
-                */
-
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) => SimpleDialog(
-                    alignment: Alignment.center,
-                    children: [
-                      SimpleDialogCargando(
-                        null,
-                        mensajeMostrar: 'Estamos registrando',
-                        mensajeMostrarDialogCargando: 'tu dispositivo',
+                    icon: Icon(Icons.key,
+                        size: 24,
+                        color: AppLightColors()
+                            .gray900PrimaryText),
+                  )
+                : IconButton(
+                    onPressed: () {
+                      authService.varIsKeyOscured = !authService.varIsKeyOscured;
+                    },
+                    icon: Icon(
+                        size: 24,
+                        Icons.key_off,
+                        color: AppLightColors().gray900PrimaryText
                       ),
-                    ]
-                  ),
-                );
-
-                try{
-                  String imeiCod = '';
-                  var plataforma = '';
-
-                  final deviceInfo = DeviceInfoPlugin();
-                  
-                  if (Platform.isAndroid) {
-                    plataforma = 'Android';
-                    final androidInfo = await deviceInfo.androidInfo;
-                    imeiCod = androidInfo.id;
-                  } else if (Platform.isIOS) {
-                    plataforma = 'iOS';
-                    final iOSInfo = await deviceInfo.iosInfo;
-                    imeiCod = iOSInfo.identifierForVendor ?? '';                    
-                  } else {
-                    plataforma = 'Desconocido';
-                  }
-
-                  Position position = await getLocation();
-
-                  //imeiCod = '8234560487'; //BORRAR LUEGO - PARA CELULAR
-                  //imeiCod = '8234560488'; //BORRAR LUEGO - PARA EMULADOR
-
-                  RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(
-                    server: serverTxt.text,
-                    key: keyTxt.text,
-                    imei: imeiCod,
-                    lat: position.latitude.toString(),//'-74.45445',
-                    lon: position.longitude.toString(),//'72.74548487',
-                    so: plataforma//'Android'
-                  );
-
-                  RegisterDeviceResponseModel respuesta = await AuthService().doneRegister(objRegisterMobileRequestModel);
-                  context.pop();
-
-                  if(respuesta.result.estado == 200){   
-                    rutaServerWelcome = '';
-                    context.push(objRutasGen.rutaDefault);
-                  }
-                  else{                    
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Container(
-                            color: Colors.transparent,
-                            height: size.height * 0.17,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                
-                                //const Text('Error al registrar el móvil:', style: TextStyle(color: Colors.red,)),
-                                Container(
-                                  color: Colors.transparent,
-                                  height: size.height * 0.09,
-                                  child: Image.asset('assets/gifs/gifErrorBlanco.gif'),
-                                ),
-
-                                Container(
-                                  color: Colors.transparent,
-                                  width: size.width * 0.95,
-                                  height: size.height * 0.08,
-                                  alignment: Alignment.center,
-                                  child: AutoSizeText(
-                                    respuesta.result.msmError,
-                                    maxLines: 2,
-                                    minFontSize: 2,
-                                  ),
-                                )
-                              ],
-                            )
+                  ),                                
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+        ),
+      ),
+      
+      //SizedBox(height: size.height * 0.02),
+    
+      //const Spacer(),
+      SizedBox(
+        height: size.height * 0.1,
+      ),
+    
+      const Divider(color: Colors.red,),
+        
+      SizedBox(
+        height: size.height * 0.04,
+      ),
+    
+      // Botón de Comenzar
+      Padding(
+          padding: const EdgeInsets.only(bottom: 20.0),
+          child: GestureDetector(
+      onTap: () async {
+    /*
+        if(serverTxt.text.isEmpty || keyTxt.text.isEmpty){
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) {
+              return ContentAlertDialog(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                onPressedCont: () {
+                  Navigator.of(context).pop();
+                },
+                tipoAlerta: TipoAlerta().alertAccion,
+                numLineasTitulo: 2,
+                numLineasMensaje: 2,
+                titulo: 'Error',
+                mensajeAlerta: 'Ingrese los datos del formulario.'
+              );
+            },
+          );
+    
+          return;
+        }
+        */
+    
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => SimpleDialog(
+            alignment: Alignment.center,
+            children: [
+              SimpleDialogCargando(
+                null,
+                mensajeMostrar: 'Estamos registrando',
+                mensajeMostrarDialogCargando: 'tu dispositivo',
+              ),
+            ]
+          ),
+        );
+    
+        try{
+          String imeiCod = '';
+          var plataforma = '';
+    
+          final deviceInfo = DeviceInfoPlugin();
+          
+          if (Platform.isAndroid) {
+            plataforma = 'Android';
+            final androidInfo = await deviceInfo.androidInfo;
+            imeiCod = androidInfo.id;
+          } else if (Platform.isIOS) {
+            plataforma = 'iOS';
+            final iOSInfo = await deviceInfo.iosInfo;
+            imeiCod = iOSInfo.identifierForVendor ?? '';                    
+          } else {
+            plataforma = 'Desconocido';
+          }
+    
+          Position position = await getLocation();
+    
+          //imeiCod = '8234560487'; //BORRAR LUEGO - PARA CELULAR
+          //imeiCod = '8234560489'; //BORRAR LUEGO - PARA EMULADOR
+    
+          RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(
+            server: serverTxt.text,
+            key: keyTxt.text,
+            imei: imeiCod,
+            lat: position.latitude.toString(),//'-74.45445',
+            lon: position.longitude.toString(),//'72.74548487',
+            so: plataforma//'Android'
+          );
+    
+          RegisterDeviceResponseModel respuesta = await AuthService().doneRegister(objRegisterMobileRequestModel);
+          context.pop();
+    
+          if(respuesta.result.estado == 200){   
+            rutaServerWelcome = '';
+            context.push(objRutasGen.rutaDefault);
+          }
+          else{                    
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Container(
+                    color: Colors.transparent,
+                    height: size.height * 0.17,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        
+                        //const Text('Error al registrar el móvil:', style: TextStyle(color: Colors.red,)),
+                        Container(
+                          color: Colors.transparent,
+                          height: size.height * 0.09,
+                          child: Image.asset('assets/gifs/gifErrorBlanco.gif'),
+                        ),
+    
+                        Container(
+                          color: Colors.transparent,
+                          width: size.width * 0.95,
+                          height: size.height * 0.08,
+                          alignment: Alignment.center,
+                          child: AutoSizeText(
+                            respuesta.result.msmError,
+                            maxLines: 2,
+                            minFontSize: 2,
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                // Acción para solicitar revisión
-                                Navigator.of(context).pop();
-                                //Navigator.of(context).pop();
-                              },
-                              child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
-                            ),
-                          ],
-                        );
+                        )
+                      ],
+                    )
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        // Acción para solicitar revisión
+                        Navigator.of(context).pop();
+                        //Navigator.of(context).pop();
                       },
-                    );
-                  }
-                }
-                catch(ex){
-                  context.pop();
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text(ex.toString()),
-                          
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                // Acción para solicitar revisión
-                                Navigator.of(context).pop();
-                                //Navigator.of(context).pop();
-                              },
-                              child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                }
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFF536DFE), // Color del botón
-                  borderRadius: BorderRadius.circular(20.0), // Bordes redondeados
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3), // Sombra bajo el botón
+                      child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
                     ),
                   ],
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15), // Espaciado interno del botón
-                  child: const Text(
-                    'Comenzar',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                );
+              },
+            );
+          }
+        }
+        catch(ex){
+          context.pop();
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text(ex.toString()),
+                  
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        // Acción para solicitar revisión
+                        Navigator.of(context).pop();
+                        //Navigator.of(context).pop();
+                      },
+                      child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
                     ),
-                  ),
-                ),
-                  ),
-                ),
-              
-              ],
+                  ],
+                );
+              },
+            );
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF536DFE), // Color del botón
+          borderRadius: BorderRadius.circular(20.0), // Bordes redondeados
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: const Offset(0, 3), // Sombra bajo el botón
             ),
-         
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15), // Espaciado interno del botón
+          child: const Text(
+            'Comenzar',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+          ),
+        ),
+      
+      ],
     );
   }
 

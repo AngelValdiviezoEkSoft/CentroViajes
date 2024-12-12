@@ -38,6 +38,7 @@ String paisSelect = '';
 String telefonoPrsp = '';
 bool habilitaGuardar = false;
 bool celularValido = false;
+bool validandoCell = false;
 
 class FrmRegistroProspectoScreen extends StatefulWidget {
   const FrmRegistroProspectoScreen({super.key});
@@ -53,6 +54,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
 
   String initialCountry = 'EC';
   PhoneNumber number = PhoneNumber(isoCode: 'EC');
+  final formKeyRegPrp = GlobalKey<FormState>();
   
   @override
   void initState() {
@@ -202,360 +204,381 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                     paisSelect = lstPaises.first;
                   }
 
-                  return Stack(
-                    children: [
-                      SingleChildScrollView(
-                        child: Column(
-                          children: [                
-                            Container(
-                              color: Colors.transparent,
-                              width: size.width * 0.95, //- 100,
-                              height: size.height * 0.045, //40,
-                              alignment: Alignment.centerLeft,
-                              child: const AutoSizeText(
-                                'Registre nuevo prospecto',  
-                                presetFontSizes: [30,28,26,24,22,20,18,16,14,12,10],                          
+                  return Form(
+                    key: formKeyRegPrp,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: Stack(
+                      children: [
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [                
+                              Container(
+                                color: Colors.transparent,
+                                width: size.width * 0.95, //- 100,
+                                height: size.height * 0.045, //40,
+                                alignment: Alignment.centerLeft,
+                                child: const AutoSizeText(
+                                  'Registre nuevo prospecto',  
+                                  presetFontSizes: [30,28,26,24,22,20,18,16,14,12,10],                          
+                                ),
                               ),
-                            ),
-                        
-                            Container(
-                              //color: const Color(0xffF6F6F6),
-                              color: Colors.transparent,
-                              width: size.width,
-                              height: size.height * 0.86,
-                              alignment: Alignment.topCenter,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                              
-                                  Container(
-                                    color: Colors.blue.shade800,
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Container(
-                                                color: tabAccionesRegPrsp == 0
-                                                    ? Colors.white
-                                                    : Colors.blue.shade800,
-                                                child: Center(
-                                                  child: TextButton(
-                                                    onPressed: () {
-                                                      tabAccionesRegPrsp = 0;
-                                                      setState(() {});
-                                                    },
-                                                    child: Column(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.info_outline,
-                                                          color: tabAccionesRegPrsp == 0
-                                                              ? Colors.blue.shade800
-                                                              : Colors.white,
-                                                        ),
-                                                        Text(
-                                                          'Inf. general',
-                                                          style: TextStyle(
+                          
+                              Container(
+                                //color: const Color(0xffF6F6F6),
+                                color: Colors.transparent,
+                                width: size.width,
+                                height: size.height * 0.86,
+                                alignment: Alignment.topCenter,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: size.height * 0.02,
+                                    ),
+                                
+                                    Container(
+                                      color: Colors.blue.shade800,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  color: tabAccionesRegPrsp == 0
+                                                      ? Colors.white
+                                                      : Colors.blue.shade800,
+                                                  child: Center(
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        tabAccionesRegPrsp = 0;
+                                                        setState(() {});
+                                                      },
+                                                      child: Column(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.info_outline,
                                                             color: tabAccionesRegPrsp == 0
                                                                 ? Colors.blue.shade800
                                                                 : Colors.white,
-                                                            fontWeight: FontWeight.bold,
                                                           ),
-                                                        ),
-                                                      ],
+                                                          Text(
+                                                            'Inf. general',
+                                                            style: TextStyle(
+                                                              color: tabAccionesRegPrsp == 0
+                                                                  ? Colors.blue.shade800
+                                                                  : Colors.white,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              child: Container(
-                                                color: tabAccionesRegPrsp == 1
-                                                    ? Colors.white
-                                                    : Colors.blue.shade800,
-                                                child: Center(
-                                                  child: TextButton(
-                                                    onPressed: () {
-                                                      tabAccionesRegPrsp = 1;
-                                                      setState(() {});
-                                                    },
-                                                    child: Column(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.grid_on_outlined,
-                                                          color: tabAccionesRegPrsp == 1
-                                                              ? Colors.blue.shade800
-                                                              : Colors.white,
-                                                        ),
-                                                        Text(
-                                                          'Inf. Adicional',
-                                                          style: TextStyle(
-                                                            //color: Colors.purple.shade700,
+                                              Expanded(
+                                                child: Container(
+                                                  color: tabAccionesRegPrsp == 1
+                                                      ? Colors.white
+                                                      : Colors.blue.shade800,
+                                                  child: Center(
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        tabAccionesRegPrsp = 1;
+                                                        setState(() {});
+                                                      },
+                                                      child: Column(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.grid_on_outlined,
                                                             color: tabAccionesRegPrsp == 1
                                                                 ? Colors.blue.shade800
                                                                 : Colors.white,
-                                                            fontWeight: FontWeight.bold,
                                                           ),
-                                                        ),
-                                                      ],
+                                                          Text(
+                                                            'Inf. Adicional',
+                                                            style: TextStyle(
+                                                              //color: Colors.purple.shade700,
+                                                              color: tabAccionesRegPrsp == 1
+                                                                  ? Colors.blue.shade800
+                                                                  : Colors.white,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              child: Container(
-                                                color: tabAccionesRegPrsp == 2
-                                                    ? Colors.white
-                                                    : Colors.blue.shade800,
-                                                child: Center(
-                                                  child: TextButton(
-                                                    onPressed: () {
-                                                      tabAccionesRegPrsp = 2;
-                                                      setState(() {});
-                                                    },
-                                                    child: Column(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.add_business_rounded,
-                                                          color: tabAccionesRegPrsp == 2
-                                                              ? Colors.blue.shade800
-                                                              : Colors.white,
-                                                        ),
-                                                        Text(
-                                                          'Notas Int.',
-                                                          style: TextStyle(
-                                                            //color: Colors.purple.shade700,
+                                              Expanded(
+                                                child: Container(
+                                                  color: tabAccionesRegPrsp == 2
+                                                      ? Colors.white
+                                                      : Colors.blue.shade800,
+                                                  child: Center(
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        tabAccionesRegPrsp = 2;
+                                                        setState(() {});
+                                                      },
+                                                      child: Column(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.add_business_rounded,
                                                             color: tabAccionesRegPrsp == 2
                                                                 ? Colors.blue.shade800
                                                                 : Colors.white,
-                                                            fontWeight: FontWeight.bold,
                                                           ),
-                                                        ),
-                                                      ],
+                                                          Text(
+                                                            'Notas Int.',
+                                                            style: TextStyle(
+                                                              //color: Colors.purple.shade700,
+                                                              color: tabAccionesRegPrsp == 2
+                                                                  ? Colors.blue.shade800
+                                                                  : Colors.white,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                              
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                        
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: size.width * 0.92,
-                                    child: InternationalPhoneNumberInput(                                      
-                                    onInputChanged: (PhoneNumber phoneNumber) async {
-                                      telefonoPrsp = phoneNumber.phoneNumber ?? '';
-                                      setState(() {});
-                                    },
-                                    onInputValidated: (bool isValid) async {
-                                      celularValido = isValid;
-                                      if(isValid){
-                                        showDialog(
-                                          context: context,
-                                          barrierDismissible: false,
-                                          builder: (context) => SimpleDialog(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              SimpleDialogCargando(
-                                                null,
-                                                mensajeMostrar: 'Estamos consultando',
-                                                mensajeMostrarDialogCargando: 'los datos del prospecto',
-                                              ),
-                                            ]
+                                            
+                                            ],
                                           ),
-                                        );
-                                          //telefonoPrsp = phoneNumber.phoneNumber ?? '';
-
-                                        context.pop();
-
-                                        var resp = await ProspectoTypeService().getProspectoRegistrado(telefonoPrsp);
-
-                                        var objResp = json.decode(resp);
-
-                                        if(objResp['result']['create_date'] == null){
-                                          habilitaGuardar = true;
-                                        }
-
-                                        //ignore: use_build_context_synchronously
-                                        FocusScope.of(context).unfocus();
-
-                                        showDialog(
-                                          barrierDismissible: false,
-                                          //ignore: use_build_context_synchronously
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return ContentAlertDialog(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              onPressedCont: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              tipoAlerta: TipoAlerta().alertAccion,
-                                              numLineasTitulo: 2,
-                                              numLineasMensaje: 3,
-                                              titulo: 'Atención',
-                                              mensajeAlerta: objResp['result']['mensaje']
-                                            );
-                                          },
-                                        );
-                                      }
-                                      setState(() {
-                                        
-                                      });
-                                    },
-                                    selectorConfig: const SelectorConfig(
-                                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET, // Tipo de selector
-                                    ),
-                                    ignoreBlank: false,
-                                    autoValidateMode: AutovalidateMode.onUserInteraction,
-                                    initialValue: number,
-                                    textFieldController: telefonoTxt,
-                                    formatInput: true,
-                                    keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                                    inputDecoration: InputDecoration(
-                                      hintText: "Ingrese su número",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                                        ],
                                       ),
                                     ),
-                                    onSaved: (PhoneNumber phoneNumber) {
-                                      //print('Número guardado: ${phoneNumber.phoneNumber}');
-                                    },
-                                    maxLength: 11,
-                                    errorMessage: 'Teléfono no válido',
-                                  ),
-                                  ),
-                                  
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                              
-                                  if(tabAccionesRegPrsp == 0)
-                                  Container(
-                                    color: Colors.transparent,
-                                    height: size.height * 0.55,
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        children: [
-                                          
-                                                                        Container(
+                                
+                                    SizedBox(
+                                      height: size.height * 0.02,
+                                    ),
+                          
+                                    Container(
                                       color: Colors.transparent,
                                       width: size.width * 0.92,
-                                      child: TextFormField(
-                                        //initialValue: 'Mario Piguave',
-                                        //initialValue: '',
-                                        cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        /*
-                                        inputFormatters: [
-                                          //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                        ],
-                                        */
-                                        style: AppTextStyles.bodyRegular(width: size.width),
-                                        decoration: InputDecorationCvs.formsDecoration(
-                                          labelText: 'Nombres',
-                                          hintTetx: 'Ej: Juan Valdez',
-                                          size: size
+                                      child: InternationalPhoneNumberInput(
+                                        isEnabled: !validandoCell,
+                                        onInputChanged: (PhoneNumber phoneNumber) async {
+                                          telefonoPrsp = phoneNumber.phoneNumber ?? '';
+                                          setState(() {});
+                                        },
+                                        onInputValidated: (bool isValid) async {
+                                          validandoCell = true;
+                                          celularValido = isValid;
+                                          if(isValid){
+                                            
+                                            String resInt = await ValidacionesUtils().validaInternet();
+
+                                            if(resInt.isEmpty){
+
+                                              showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (context) => SimpleDialog(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  SimpleDialogCargando(
+                                                    null,
+                                                    mensajeMostrar: 'Estamos consultando',
+                                                    mensajeMostrarDialogCargando: 'los datos del prospecto',
+                                                  ),
+                                                ]
+                                              ),
+                                            );
+                                              
+
+                                              var resp = await ProspectoTypeService().getProspectoRegistrado(telefonoPrsp);
+                      
+                                              var objResp = json.decode(resp);
+
+                                              if(objResp['result']['create_date'] == null){
+                                                habilitaGuardar = true;
+                                              } else {
+                                                habilitaGuardar = false;
+                                              }
+                        
+                                              //ignore: use_build_context_synchronously
+                                              FocusScope.of(context).unfocus();
+
+                                              context.pop();
+                        
+                                              showDialog(
+                                                barrierDismissible: false,
+                                                //ignore: use_build_context_synchronously
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return ContentAlertDialog(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    onPressedCont: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    tipoAlerta: TipoAlerta().alertAccion,
+                                                    numLineasTitulo: 2,
+                                                    numLineasMensaje: 3,
+                                                    titulo: 'Atención',
+                                                    mensajeAlerta: objResp['result']['mensaje']
+                                                  );
+                                                },
+                                              );
+                                            
+                                            } else {
+                                              habilitaGuardar = false;
+                                            }
+                      
+                                          }
+
+                                          validandoCell = false;
+                                          setState(() {
+                                            
+                                          });
+                                        },
+                                        selectorConfig: const SelectorConfig(
+                                          selectorType: PhoneInputSelectorType.BOTTOM_SHEET, // Tipo de selector
                                         ),
-                                        //enabled: false,
-                                        controller: nombresTxt,
-                                        autocorrect: false,
-                                        keyboardType: TextInputType.text,
-                                        minLines: 1,
-                                        maxLines: 2,
-                                        autofocus: false,
-                                        maxLength: 50,
-                                        textAlign: TextAlign.left,
-                                        onEditingComplete: () {
-                                          FocusScope.of(context).unfocus();
-                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                        ignoreBlank: false,
+                                        autoValidateMode: AutovalidateMode.onUserInteraction,
+                                        initialValue: number,
+                                        textFieldController: telefonoTxt,
+                                        formatInput: true,
+                                        keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                                        inputDecoration: InputDecoration(
+                                          hintText: "Ingrese su número",
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        onSaved: (PhoneNumber phoneNumber) {
+                                          //print('Número guardado: ${phoneNumber.phoneNumber}');
                                         },
-                                        onChanged: (value) {
-                                          
-                                        },
-                                        onTapOutside: (event) {
-                                          FocusScope.of(context).unfocus();
-                                        },
+                                        maxLength: 11,
+                                        errorMessage: 'Teléfono no válido',
                                       ),
                                     ),
                                     
                                     SizedBox(
                                       height: size.height * 0.02,
                                     ),
-                                    
-                                    /*
+                                
+                                    if(tabAccionesRegPrsp == 0)
                                     Container(
                                       color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: TextFormField(                                    
-                                        cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                        ],
-                                        //enabled: false,
-                                        style: AppTextStyles.bodyRegular(width: size.width),
-                                        decoration: InputDecorationCvs.formsDecoration(
-                                          labelText: 'Producto de interés',
-                                          hintTetx: 'Ej: Terreno',
-                                          size: size
-                                        ),
-                                        //controller: emailAkiTxt,
-                                        autocorrect: false,
-                                        keyboardType: TextInputType.text,
-                                        minLines: 1,
-                                        maxLines: 2,
-                                        autofocus: false,
-                                        maxLength: 50,
-                                        textAlign: TextAlign.left,
-                                        onEditingComplete: () {
-                                          FocusScope.of(context).unfocus();
-                                        },
-                                        onChanged: (value) {
+                                      height: size.height * 0.55,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            
+                                            Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: TextFormField(
                                           
-                                        },
-                                        onTapOutside: (event) {
-                                          FocusScope.of(context).unfocus();
-                                        },
+                                          cursorColor: AppLightColors().primary,
+                                          //autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          /*
+                                          inputFormatters: [
+                                            //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                          ],
+                                          */
+                                          style: AppTextStyles.bodyRegular(width: size.width),
+                                          decoration: InputDecorationCvs.formsDecoration(
+                                            labelText: '* Nombres',
+                                            hintTetx: 'Ej: Juan Valdez',
+                                            size: size
+                                          ),
+                                          enabled: habilitaGuardar,
+                                          controller: nombresTxt,
+                                          autocorrect: false,
+                                          keyboardType: TextInputType.text,
+                                          minLines: 1,
+                                          maxLines: 2,
+                                          autofocus: false,
+                                          maxLength: 50,
+                                          textAlign: TextAlign.left,
+                                          onEditingComplete: () {
+                                            FocusScope.of(context).unfocus();
+                                            //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                          },
+                                          onChanged: (value) {
+                                            
+                                          },
+                                          onTapOutside: (event) {
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                   
-                                    SizedBox(
-                                      height: size.height * 0.04,
-                                    ),
-                                    */
-                        
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: DropdownButtonFormField<String>(
+                                      
+                                      SizedBox(
+                                        height: size.height * 0.04,
+                                      ),
+                                      
+                                      /*
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: TextFormField(                                    
+                                          cursorColor: AppLightColors().primary,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                          ],
+                                          //enabled: false,
+                                          style: AppTextStyles.bodyRegular(width: size.width),
+                                          decoration: InputDecorationCvs.formsDecoration(
+                                            labelText: 'Producto de interés',
+                                            hintTetx: 'Ej: Terreno',
+                                            size: size
+                                          ),
+                                          //controller: emailAkiTxt,
+                                          autocorrect: false,
+                                          keyboardType: TextInputType.text,
+                                          minLines: 1,
+                                          maxLines: 2,
+                                          autofocus: false,
+                                          maxLength: 50,
+                                          textAlign: TextAlign.left,
+                                          onEditingComplete: () {
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                          onChanged: (value) {
+                                            
+                                          },
+                                          onTapOutside: (event) {
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                        ),
+                                      ),
+                                     
+                                      SizedBox(
+                                        height: size.height * 0.04,
+                                      ),
+                                      */
+                          
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: DropdownButtonFormField<String>(
+                                          
                                           decoration: const InputDecoration(
                                             border: OutlineInputBorder(),
                                             labelText: 'Seleccione el país...',
                                           ),
                                           value: paisSelect,
                                           items: lstPaises
-                                              .map((activityPrsp) =>
-                                                  DropdownMenuItem(
-                                                    value: activityPrsp,
-                                                    child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
-                                                  ))
-                                              .toList(),
+                                            .map(
+                                              (activityPrsp) =>
+                                                DropdownMenuItem(
+                                                  value: activityPrsp,
+                                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
+                                                )
+                                              )
+                                            .toList(),
                                           onChanged: (value) {
                                             
                                             setState(() {
@@ -565,270 +588,391 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           },
                                         ),
                                       ),
-                                      
-                                    SizedBox(
-                                      height: size.height * 0.03,
-                                    ),
-
-                                    /*
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: TextFormField(
-                                        controller: sectorTxt,
-                                        //initialValue: 'Norte',
-                                        //enabled: false,
-                                        cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        style: AppTextStyles.bodyRegular(width: size.width),
-                                        decoration: InputDecorationCvs.formsDecoration(
-                                          labelText: 'Sector',
-                                          hintTetx: 'Ej: Norte',
-                                          size: size
-                                        ),
-                                        //controller: emailAkiTxt,
-                                        autocorrect: false,
-                                        keyboardType: TextInputType.text,
-                                        minLines: 1,
-                                        maxLines: 2,
-                                        autofocus: false,
-                                        maxLength: 50,
-                                        textAlign: TextAlign.left,
-                                        onEditingComplete: () {
-                                          FocusScope.of(context).unfocus();
-                                          //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                        },
-                                        onChanged: (value) {
-                                          
-                                        },
-                                        onTapOutside: (event) {
-                                          FocusScope.of(context).unfocus();
-                                        },
+                                        
+                                      SizedBox(
+                                        height: size.height * 0.03,
                                       ),
-                                    ),
-                                    
-                                    SizedBox(
-                                      height: size.height * 0.03,
-                                    ),
-                                    */
-                                                                        
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.94,
-                                      child: DropdownButtonFormField<String>(
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText:
-                                              'Seleccione la campaña',
-                                        ),
-                                        value: campSelect,
-                                        //value: selectedActivityType,
-                                        items: lstCampanias.map((activityPrsp) =>
-                                                DropdownMenuItem(
-                                                  value: activityPrsp,
-                                                  //child: Text(activityPrsp),
-                                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
-                                                ))
-                                            .toList(),
-                                        onChanged: (String? newValue) {                        
-                                          setState(() {
-                                            campSelect = newValue ?? '';
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                                                    
-                                    SizedBox(
-                                      height: size.height * 0.02,
-                                    ),
-                        
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.94,
-                                      child: DropdownButtonFormField<String>(
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText:
-                                              'Seleccione el origen',
-                                        ),
-                                        value: originSelect,
-                                        items: lstOrigenes
-                                            .map((activityPrsp) =>
-                                                DropdownMenuItem(
-                                                  value: activityPrsp,
-                                                  //child: Text(activityPrsp),
-                                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
-                                                ))
-                                            .toList(),
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            originSelect = newValue ?? '';
-                                          });
-                                        },
-                                      ),
-                                      ),
-                                                                        
-                                    SizedBox(
-                                      height: size.height * 0.02,
-                                    ),
-                        
-                                    /*
-                                    String  = '';
-                                    String  = '';
-                                    String  = '';
-                        
-                                    List<String>  = List<String>.from(json.decode(objTmp.campanias));
-                                          List<String>  = List<String>.from(json.decode(objTmp.medias));
-                                          List<String>  = List<String>.from(json.decode(objTmp.origen));
-                                     */
-                                          
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.94,
-                                      child: DropdownButtonFormField<String>(
-                                                    decoration: const InputDecoration(
-                                                      border: OutlineInputBorder(),
-                                                      labelText:
-                                                          'Seleccione la media',
-                                                    ),
-                                                    value: mediaSelect,
-                                                    items: lstMedias
-                                                        .map((activityPrsp) =>
-                                                            DropdownMenuItem(
-                                                              value: activityPrsp,
-                                                              //child: Text(activityPrsp),
-                                                              child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
-                                                            ))
-                                                        .toList(),
-                                                    onChanged: (newValue) {
-                                                      setState(() {
-                                            mediaSelect = newValue ?? '';
-                                          });
-                                                    },
-                                                  ),
-                                    ),
-                                                                        
-                                    SizedBox(
-                                      height: size.height * 0.02,
-                                    ),
-                                                                        
-                                    Container(
-                                      color: Colors.transparent,
-                                      width: size.width * 0.92,
-                                      child: TextFormField(
-                                        cursorColor: AppLightColors().primary,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,                                        
-                                        style: AppTextStyles.bodyRegular(width: size.width),
-                                        decoration: InputDecorationCvs.formsDecoration(
-                                          labelText: 'Recomendado por',
-                                          hintTetx: 'Ej: Majo Piguave',
-                                          size: size
-                                        ),
-                                        controller: recomendadoPorTxt,
-                                        autocorrect: false,
-                                        keyboardType: TextInputType.text,
-                                        minLines: 1,
-                                        maxLines: 2,
-                                        autofocus: false,
-                                        maxLength: 50,
-                                        textAlign: TextAlign.left,
-                                        onEditingComplete: () {
-                                          FocusScope.of(context).unfocus();
-                                        },
-                                        onChanged: (value) {
-                                          
-                                        },
-                                        onTapOutside: (event) {
-                                          FocusScope.of(context).unfocus();
-                                        },
-                                      ),
-                                    ),
-                                    
-                                    SizedBox(
-                                      height: size.height * 0.025,
+                    
+                                      /*
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: TextFormField(
+                                          controller: sectorTxt,
+                                          //initialValue: 'Norte',
+                                          //enabled: false,
+                                          cursorColor: AppLightColors().primary,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          style: AppTextStyles.bodyRegular(width: size.width),
+                                          decoration: InputDecorationCvs.formsDecoration(
+                                            labelText: 'Sector',
+                                            hintTetx: 'Ej: Norte',
+                                            size: size
                                           ),
-                                                                    
-                                        ],
+                                          //controller: emailAkiTxt,
+                                          autocorrect: false,
+                                          keyboardType: TextInputType.text,
+                                          minLines: 1,
+                                          maxLines: 2,
+                                          autofocus: false,
+                                          maxLength: 50,
+                                          textAlign: TextAlign.left,
+                                          onEditingComplete: () {
+                                            FocusScope.of(context).unfocus();
+                                            //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                          },
+                                          onChanged: (value) {
+                                            
+                                          },
+                                          onTapOutside: (event) {
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                        ),
+                                      ),
+                                      
+                                      SizedBox(
+                                        height: size.height * 0.03,
+                                      ),
+                                      */
+                                                                          
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: DropdownButtonFormField<String>(
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText:
+                                                'Seleccione la campaña',
+                                          ),
+                                          value: campSelect,
+                                          //value: selectedActivityType,
+                                          items: lstCampanias.map((activityPrsp) =>
+                                                  DropdownMenuItem(
+                                                    value: activityPrsp,
+                                                    //child: Text(activityPrsp),
+                                                    child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                  ))
+                                              .toList(),
+                                          onChanged: (String? newValue) {                        
+                                            setState(() {
+                                              campSelect = newValue ?? '';
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                                                      
+                                      SizedBox(
+                                        height: size.height * 0.03,
+                                      ),
+                          
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: DropdownButtonFormField<String>(
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText:
+                                                'Seleccione el origen',
+                                          ),
+                                          value: originSelect,
+                                          items: lstOrigenes
+                                              .map((activityPrsp) =>
+                                                  DropdownMenuItem(
+                                                    value: activityPrsp,
+                                                    //child: Text(activityPrsp),
+                                                    child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                  ))
+                                              .toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              originSelect = newValue ?? '';
+                                            });
+                                          },
+                                        ),
+                                        ),
+                                                                          
+                                      SizedBox(
+                                        height: size.height * 0.03,
+                                      ),
+                                            
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: DropdownButtonFormField<String>(
+                                                      decoration: const InputDecoration(
+                                                        border: OutlineInputBorder(),
+                                                        labelText:
+                                                            'Seleccione la media',
+                                                      ),
+                                                      value: mediaSelect,
+                                                      items: lstMedias
+                                                          .map((activityPrsp) =>
+                                                              DropdownMenuItem(
+                                                                value: activityPrsp,
+                                                                //child: Text(activityPrsp),
+                                                                child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                              ))
+                                                          .toList(),
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                              mediaSelect = newValue ?? '';
+                                            });
+                                                      },
+                                                    ),
+                                      ),
+                                                                          
+                                      SizedBox(
+                                        height: size.height * 0.02,
+                                      ),
+                                                                          
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: TextFormField(
+                                          enabled: habilitaGuardar,
+                                          cursorColor: AppLightColors().primary,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,                                        
+                                          style: AppTextStyles.bodyRegular(width: size.width),
+                                          decoration: InputDecorationCvs.formsDecoration(
+                                            labelText: 'Recomendado por',
+                                            hintTetx: 'Ej: Majo Piguave',
+                                            size: size
+                                          ),
+                                          controller: recomendadoPorTxt,
+                                          autocorrect: false,
+                                          keyboardType: TextInputType.text,
+                                          minLines: 1,
+                                          maxLines: 2,
+                                          autofocus: false,
+                                          maxLength: 50,
+                                          textAlign: TextAlign.left,
+                                          onEditingComplete: () {
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                          onChanged: (value) {
+                                            
+                                          },
+                                          onTapOutside: (event) {
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                        ),
+                                      ),
+                                      
+                                      SizedBox(
+                                        height: size.height * 0.025,
+                                            ),
+                                                                      
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                              
-                                  if(tabAccionesRegPrsp == 1)
-                                  Container(
-                                    color: Colors.transparent,
-                                    height: size.height * 0.55,
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        children: [
-                                          
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            child: TextFormField(                                    
-                                              cursorColor: AppLightColors().primary,
-                                              autovalidateMode: AutovalidateMode.onUserInteraction,                                              
-                                              style: AppTextStyles.bodyRegular(width: size.width),
-                                              decoration: InputDecoration(
-                                                hintStyle: SafeGoogleFont(
+                                
+                                    if(tabAccionesRegPrsp == 1)
+                                    Container(
+                                      color: Colors.transparent,
+                                      height: size.height * 0.55,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              child: TextFormField(            
+                                                enabled: habilitaGuardar,                        
+                                                cursorColor: AppLightColors().primary,
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,                                              
+                                                style: AppTextStyles.bodyRegular(width: size.width),
+                                                decoration: InputDecoration(
+                                                  labelText: '* Probabilidad',
+                                                  hintStyle: SafeGoogleFont(
+                                                      GoogleFontsApp().fontMulish,
+                                                      fontSize: size.width * 0.0025 * 18,
+                                                      fontWeight: FontWeight.w700,
+                                                      color:
+                                                          AppLightColors().gray800SecondaryText,
+                                                      letterSpacing: 0),
+                                                      
+                                                  hintText: "100%",
+                                                  suffixText: '%',
+                                                ),
+                                                controller: probabilityTxt,
+                                                autocorrect: false,
+                                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                                minLines: 1,
+                                                maxLines: 1,
+                                                autofocus: false,
+                                                maxLength: 5,
+                                                textAlign: TextAlign.left,
+                                                onEditingComplete: () {
+                                                  FocusScope.of(context).unfocus();
+                                                },
+                                                onChanged: (value) {
+                                                  
+                                                },
+                                                onTapOutside: (event) {
+                                                  FocusScope.of(context).unfocus();
+                                                },
+                                              ),
+                                            ),
+                                                                          
+                                            SizedBox(
+                                              height: size.height * 0.02,
+                                            ),
+                                            
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              child: TextFormField(
+                                                enabled: habilitaGuardar,
+                                                cursorColor: AppLightColors().primary,
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,                    
+                                                style: AppTextStyles.bodyRegular(width: size.width),
+                                                decoration: InputDecoration(
+                                                  hintStyle: SafeGoogleFont(
                                                     GoogleFontsApp().fontMulish,
                                                     fontSize: size.width * 0.0025 * 18,
                                                     fontWeight: FontWeight.w700,
-                                                    color:
-                                                        AppLightColors().gray800SecondaryText,
-                                                    letterSpacing: 0),
-                                                hintText: "100%",
-                                                suffixText: '%',
+                                                    color: AppLightColors().gray800SecondaryText,
+                                                    letterSpacing: 0
+                                                  ),
+                                                  labelText: '* Ingreso esperado en dólares',
+                                                  hintText: "0.00",
+                                                  suffixText: '\$',
+                                                ),
+                                                controller: ingresoEsperadoTxt,
+                                                autocorrect: false,
+                                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                                minLines: 1,
+                                                maxLines: 1,
+                                                autofocus: false,
+                                                maxLength: 7,
+                                                textAlign: TextAlign.left,
+                                                onEditingComplete: () {
+                                                  FocusScope.of(context).unfocus();
+                                                },
+                                                onChanged: (value) {
+                            
+                                                },
+                                                onTapOutside: (event) {
+                                                  FocusScope.of(context).unfocus();
+                                                },
                                               ),
-                                              controller: probabilityTxt,
+                                            ),
+                                            
+                                            SizedBox(
+                                              height: size.height * 0.02,
+                                            ),
+                                            
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              child: TextFormField(
+                                              enabled: habilitaGuardar,
+                                              cursorColor: AppLightColors().primary,
+                                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                                              
+                                              style: AppTextStyles.bodyRegular(width: size.width),
+                                              decoration: InputDecorationCvs.formsDecoration(
+                                                labelText: '* Correo',
+                                                hintTetx: 'Ej: correo@ejemplo.com',
+                                                size: size
+                                              ),
+                                              controller: emailTxt,
                                               autocorrect: false,
-                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                              keyboardType: TextInputType.emailAddress,
                                               minLines: 1,
-                                              maxLines: 1,
+                                              maxLines: 2,
                                               autofocus: false,
-                                              maxLength: 5,
+                                              maxLength: 50,
                                               textAlign: TextAlign.left,
                                               onEditingComplete: () {
                                                 FocusScope.of(context).unfocus();
                                               },
                                               onChanged: (value) {
-                                                
+                          
                                               },
                                               onTapOutside: (event) {
                                                 FocusScope.of(context).unfocus();
                                               },
-                                            ),
-                                          ),
-                                                                        
-                                          SizedBox(
-                                            height: size.height * 0.04,
-                                          ),
-                                          
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            child: TextFormField(
-                                              cursorColor: AppLightColors().primary,
-                                              autovalidateMode: AutovalidateMode.onUserInteraction,                    
-                                              style: AppTextStyles.bodyRegular(width: size.width),
-                                              decoration: InputDecoration(
-                                                hintStyle: SafeGoogleFont(
-                                                  GoogleFontsApp().fontMulish,
-                                                  fontSize: size.width * 0.0025 * 18,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: AppLightColors().gray800SecondaryText,
-                                                  letterSpacing: 0
-                                                ),
-                                                labelText: 'Ingreso esperado en dólares',
-                                                hintText: "0.00",
-                                                suffixText: '\$',
+                                              validator: (value) {                          
+                                                String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                                RegExp regExp = RegExp(pattern);
+                                                return regExp.hasMatch(value ?? '')
+                                                  ? null
+                                                  : 'Correo inválido';
+                                              },
                                               ),
-                                              controller: ingresoEsperadoTxt,
+                                            ),
+                                            
+                                            SizedBox(
+                                              height: size.height * 0.03,
+                                            ),
+                                            
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              child: TextFormField(
+                                                enabled: habilitaGuardar,
+                                                initialValue: fecCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp),
+                                                readOnly: true,
+                                                decoration: const InputDecoration(
+                                                  labelText: 'Cierre esperado',
+                                                  border: OutlineInputBorder(),
+                                                  suffixIcon: Icon(Icons.calendar_today),
+                                                ),
+                                                onTap: () async {
+                                                  DateTime? pickedDate =
+                                                      await showDatePicker(
+                                                    context: context,
+                                                    initialDate: DateTime.now(),
+                                                    firstDate: DateTime(2020),
+                                                    lastDate: DateTime(2100),
+                                                  );
+                                                  if (pickedDate != null) {
+                                                    tabAccionesRegPrsp = 2;
+                                                    fecCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
+                                                    fecCierreFin = DateFormat('yyyy-MM-dd', 'es').format(pickedDate);
+                                                    //tabAccionesRegPrsp = 1;
+
+                                                    setState(() {
+                                                      
+                                                    });
+                                                          
+                                                  }
+                                                },
+                                              ),
+                                                                    
+                                            ),
+                                            
+                                            SizedBox(
+                                              height: size.height * 0.01,
+                                            ),
+                          
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              height: size.height * 0.15,
+                                              child: TextFormField(
+                                                enabled: habilitaGuardar,
+                                              controller: direccionTxt,
+                                              cursorColor: AppLightColors().primary,
+                                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                              ],
+                                              style: AppTextStyles.bodyRegular(width: size.width),
+                                              decoration: InputDecorationCvs.formsDecoration(
+                                                labelText: '* Dirección',
+                                                hintTetx: '',
+                                                size: size
+                                              ),
                                               autocorrect: false,
-                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                              minLines: 1,
-                                              maxLines: 1,
+                                              keyboardType: TextInputType.text,
+                                              minLines: 3,
+                                              maxLines: 6,
                                               autofocus: false,
-                                              maxLength: 7,
+                                              maxLength: 150,
                                               textAlign: TextAlign.left,
                                               onEditingComplete: () {
                                                 FocusScope.of(context).unfocus();
@@ -840,449 +984,479 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                 FocusScope.of(context).unfocus();
                                               },
                                             ),
-                                          ),
-                                          
-                                          SizedBox(
-                                            height: size.height * 0.04,
-                                          ),
-                                          
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            child: TextFormField(
-                                            //initialValue: 'Ecuador',
-                                            //initialValue: '',
-                                            cursorColor: AppLightColors().primary,
-                                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                                            ),
                                             
-                                            style: AppTextStyles.bodyRegular(width: size.width),
-                                            decoration: InputDecorationCvs.formsDecoration(
-                        labelText: 'Correo',
-                        hintTetx: 'Ej: correo@ejemplo.com',
-                        size: size
+                                            SizedBox(
+                                              height: size.height * 0.025,
                                             ),
-                                            controller: emailTxt,
-                                            autocorrect: false,
-                                            keyboardType: TextInputType.emailAddress,
-                                            minLines: 1,
-                                            maxLines: 2,
-                                            autofocus: false,
-                                            maxLength: 50,
-                                            textAlign: TextAlign.left,
-                                            onEditingComplete: () {
-                        FocusScope.of(context).unfocus();
-                        //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                            },
-                                            onChanged: (value) {
-                        
-                                            },
-                                            onTapOutside: (event) {
-                        FocusScope.of(context).unfocus();
-                                            },
-                                            validator: (value) {
-                        
-                        String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                        RegExp regExp = RegExp(pattern);
-                        return regExp.hasMatch(value ?? '')
-                          ? null
-                          : 'Correo inválido';                          
-                                            },
-                                            ),
-                                          ),
-                                          
-                                          SizedBox(
-                                            height: size.height * 0.06,
-                                          ),
-                                          
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            child: TextFormField(
-                                              initialValue: fecCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp),
-                                              readOnly: true,
-                                              decoration: const InputDecoration(
-                                                labelText: 'Cierre esperado',
-                                                border: OutlineInputBorder(),
-                                                suffixIcon: Icon(Icons.calendar_today),
-                                              ),
-                                              onTap: () async {
-                                                DateTime? pickedDate =
-                                                    await showDatePicker(
-                                                  context: context,
-                                                  initialDate: DateTime.now(),
-                                                  firstDate: DateTime(2020),
-                                                  lastDate: DateTime(2100),
-                                                );
-                                                if (pickedDate != null) {
-                                                  
-                                                  setState(() {
-                                                    //dateRgPrsp = pickedDate;
-                                                    fecCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
-                                                    fecCierreFin = DateFormat('yyyy-MM-dd', 'es').format(pickedDate);
-                                                  });
-                                                        
-                                                }
-                                              },
-                                            ),
-                                                                  
-                                          ),
-                                          
-                                          SizedBox(
-                                            height: size.height * 0.02,
-                                          ),
-                        
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            height: size.height * 0.15,
-                                            child: TextFormField(
-                                            controller: direccionTxt,
-                                            cursorColor: AppLightColors().primary,
-                                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.deny(regexToRemoveEmoji)
-                                            ],
-                                            style: AppTextStyles.bodyRegular(width: size.width),
-                                            decoration: InputDecorationCvs.formsDecoration(
-                                              labelText: 'Dirección',
-                                              hintTetx: '',
-                                              size: size
-                                            ),
-                                            autocorrect: false,
-                                            keyboardType: TextInputType.text,
-                                            minLines: 3,
-                                            maxLines: 6,
-                                            autofocus: false,
-                                            maxLength: 150,
-                                            textAlign: TextAlign.left,
-                                            onEditingComplete: () {
-                                              FocusScope.of(context).unfocus();
-                                            },
-                                            onChanged: (value) {
-                        
-                                            },
-                                            onTapOutside: (event) {
-                                              FocusScope.of(context).unfocus();
-                                            },
-                                          ),
-                                          ),
-                                          
-                                          SizedBox(
-                                            height: size.height * 0.025,
-                                          ),
-                                                                    
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                              
-                                  if(tabAccionesRegPrsp == 2)
-                                  Container(
-                                    color: Colors.transparent,
-                                    height: size.height * 0.55,
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        children: [
-                                          
-                                          Container(
-                                            color: Colors.transparent,
-                                            width: size.width * 0.92,
-                                            child: TextFormField(
-                                              cursorColor: AppLightColors().primary,
-                                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                                              style: AppTextStyles.bodyRegular(width: size.width),
-                                              decoration: InputDecorationCvs.formsDecoration(
-                                                labelText: 'Observaciones',
-                                                hintTetx: 'Ej: Interesado en casa pero no tiene trabajo estable',
-                                                size: size
-                                              ),
-                                              controller: observacionesTxt,
-                                              autocorrect: false,
-                                              keyboardType: TextInputType.text,
-                                              minLines: 1,
-                                              maxLines: 4,
-                                              autofocus: false,
-                                              maxLength: 150,
-                                              textAlign: TextAlign.left,
-                                              onEditingComplete: () {
-                                                FocusScope.of(context).unfocus();
-                                              },
-                                              onChanged: (value) {
-                                                
-                                              },
-                                              onTapOutside: (event) {
-                                                FocusScope.of(context).unfocus();
-                                              },
-                                            ),
-                                          ),
-                                          
-                                          SizedBox(
-                                            height: size.height * 0.02,
-                                          ),
-                                                                        
-                                                                    
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                              
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                  
-                      if(habilitaGuardar)
-                      Positioned(
-                        left: size.width * 0.042,
-                        top: size.height * 0.82,
-                        child: Container(
-                          color: Colors.transparent,
-                          width: size.width * 0.92,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: size.width * 0.38,
-                                color: Colors.transparent,
-                                child: GestureDetector(
-                                onTap: () async {
-                                  //context.push(Rutas().rutaHome);
-                                  context.pop();
-                                },
-                                child: ButtonCvsWidget(
-                                  text: 'Cerrar',
-                                  textStyle: AppTextStyles.h3Bold(
-                                      width: size.width,
-                                      color: AppLightColors().white),
-                                )),
-                              ),
-
-                              Container(
-                                width: size.width * 0.5,
-                                color: Colors.transparent,
-                                child: GestureDetector(
-                                onTap: () async {
-
-                                  if(!celularValido){
-                                    showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return ContentAlertDialog(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          onPressedCont: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          tipoAlerta: TipoAlerta().alertAccion,
-                                          numLineasTitulo: 2,
-                                          numLineasMensaje: 2,
-                                          titulo: 'Error',
-                                          mensajeAlerta: 'Número celular inválido, por favor corregir.'
-                                        );
-                                      },
-                                    );
-
-                                    return;
-                                  }
-
-                                  if(nombresTxt.text.isEmpty || emailTxt.text.isEmpty){
-                                    showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return ContentAlertDialog(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          onPressedCont: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          tipoAlerta: TipoAlerta().alertAccion,
-                                          numLineasTitulo: 2,
-                                          numLineasMensaje: 2,
-                                          titulo: 'Error',
-                                          mensajeAlerta: 'Ingrese todos los datos del formulario.'
-                                        );
-                                      },
-                                    );
-
-                                    return;
-                                  }
-
-                                  if(probabilityTxt.text.isEmpty){
-                                    showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return ContentAlertDialog(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          onPressedCont: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          tipoAlerta: TipoAlerta().alertAccion,
-                                          numLineasTitulo: 2,
-                                          numLineasMensaje: 2,
-                                          titulo: 'Error',
-                                          mensajeAlerta: 'Ingrese la probabilidad.'
-                                        );
-                                      },
-                                    );
-
-                                    return;
-                                  }
-
-/*
-                                  if(telefonoPrsp.length != 13){
-                                    showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return ContentAlertDialog(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          onPressedCont: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          tipoAlerta: TipoAlerta().alertAccion,
-                                          numLineasTitulo: 2,
-                                          numLineasMensaje: 2,
-                                          titulo: 'Error',
-                                          mensajeAlerta: 'Ingrese la probabilidad.'
-                                        );
-                                      },
-                                    );
-
-                                    return;
-                                  } else {
-                                    
-                                    
-                                  }
-                                  */
-
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (context) => SimpleDialog(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        SimpleDialogCargando(
-                                          null,
-                                          mensajeMostrar: 'Estamos registrando',
-                                          mensajeMostrarDialogCargando: 'al nuevo cliente.',
+                                                                      
+                                          ],
                                         ),
-                                      ]
+                                      ),
                                     ),
-                                  );
+                                
+                                    if(tabAccionesRegPrsp == 2)
+                                    Container(
+                                      color: Colors.transparent,
+                                      height: size.height * 0.55,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              child: TextFormField(
+                                                enabled: habilitaGuardar,
+                                                cursorColor: AppLightColors().primary,
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                style: AppTextStyles.bodyRegular(width: size.width),
+                                                decoration: InputDecorationCvs.formsDecoration(
+                                                  labelText: 'Observaciones',
+                                                  hintTetx: 'Ej: Interesado en casa pero no tiene trabajo estable',
+                                                  size: size
+                                                ),
+                                                controller: observacionesTxt,
+                                                autocorrect: false,
+                                                keyboardType: TextInputType.text,
+                                                minLines: 1,
+                                                maxLines: 4,
+                                                autofocus: false,
+                                                maxLength: 150,
+                                                textAlign: TextAlign.left,
+                                                onEditingComplete: () {
+                                                  FocusScope.of(context).unfocus();
+                                                },
+                                                onChanged: (value) {
+                                                  
+                                                },
+                                                onTapOutside: (event) {
+                                                  FocusScope.of(context).unfocus();
+                                                },
+                                              ),
+                                            ),
+                                            
+                                            SizedBox(
+                                              height: size.height * 0.02,
+                                            ),
+                                                                          
+                                                                      
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    
+                        if(habilitaGuardar)
+                        Positioned(
+                          left: size.width * 0.042,
+                          top: size.height * 0.82,
+                          child: Container(
+                            color: Colors.transparent,
+                            width: size.width * 0.92,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: size.width * 0.38,
+                                  color: Colors.transparent,
+                                  child: GestureDetector(
+                                  onTap: () async {
+                                    //context.push(Rutas().rutaHome);
+                                    context.pop();
+                                  },
+                                  child: ButtonCvsWidget(
+                                    text: 'Cerrar',
+                                    textStyle: AppTextStyles.h3Bold(
+                                        width: size.width,
+                                        color: AppLightColors().white),
+                                  )),
+                                ),
+                    
+                                Container(
+                                  width: size.width * 0.5,
+                                  color: Colors.transparent,
+                                  child: GestureDetector(
+                                  onTap: () async {
 
-                                  int idPais = 0;
-                                  int idCamp = 0;
-                                  int idMedia = 0;
-                                  int idOrigen = 0;
+                                    FocusScope.of(context).requestFocus(FocusNode());
 
-                                  for (var elemento in mappedObjPais3) {
-                                    if (elemento['name'] == paisSelect) {
-                                      idPais = elemento['id'];
+                                    //print('Test form: ${formKeyRegPrp.currentState!.validate()}');
+
+                                    if (!formKeyRegPrp.currentState!.validate()) {
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Error... Ingrese todos los datos del formulario.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
                                     }
-                                  }
-
-                                  for (var elemento in mappedObjCamp3) {
-                                    if (elemento['name'] == campSelect) {
-                                      idCamp = elemento['id'];
+                    
+                                    if(!celularValido){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Número celular inválido, por favor corregir.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
                                     }
-                                  }
-
-                                  for (var elemento in mappedObjOrig3) {
-                                    if (elemento['name'] == originSelect) {
-                                      idOrigen = elemento['id'];
+                    
+                                    if(nombresTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese los nombres del prospecto.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
                                     }
-                                  }
 
-                                  for (var elemento in mappedObjMed3) {
-                                    if (elemento['name'] == mediaSelect) {
-                                      idMedia = elemento['id'];
+                                    if(direccionTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese la dirección del prospecto.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
                                     }
-                                  }
+                    
+                                    if(probabilityTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese la probabilidad.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
+                                    }
 
-                                  DatumCrmLead objProsp = DatumCrmLead(                                    
-                                    expectedRevenue: double.parse(ingresoEsperadoTxt.text),
-                                    dayClose: double.parse(dateRgPrsp.day.toString()),
-                                    id: 0,
-                                    name: nombresTxt.text,
-                                    emailCc: emailTxt.text,
-                                    priority: '',
-                                    type: '',
-                                    city: '',
-                                    contactName: nombresTxt.text,
-                                    description: observacionesTxt.text,
-                                    emailFrom: emailTxt.text,
-                                    street: direccionTxt.text,
-                                    phone: telefonoPrsp,
-                                    partnerName: nombresTxt.text,
-                                    mobile: telefonoPrsp,
-                                    dateOpen: DateTime.now(),
-                                    dateDeadline: DateTime.now(),
-                                    probability: double.parse(probabilityTxt.text),
-                                    activityIds: [
-                                      StructCombos(id: 2, name: actSelect)
-                                    ],
-                                    campaignId: CampaignId(
-                                      id: idCamp,
-                                      name: campSelect
-                                    ),
-                                    countryId: StructCombos (
-                                      id: idPais,
-                                      name: paisTxt.text
-                                    ),
-                                    lostReasonId: CampaignId(
-                                      id: 2,
-                                      name: ''
-                                    ),
-                                    mediumId: StructCombos (
-                                      id: idMedia,
-                                      name: ''
-                                    ),
-                                    partnerId: StructCombos (
-                                      id: 2,
-                                      name: ''
-                                    ),
-                                    sourceId: StructCombos (
-                                      id: idOrigen,
-                                      name: originSelect
-                                    ),
-                                    stageId: StructCombos (
-                                      id: 2,
-                                      name: ''
-                                    ),
-                                    stateId: StructCombos (
-                                      id: 2,
-                                      name: ''
-                                    ),
-                                    title: CampaignId(
-                                      id: 2,
-                                      name: ''
-                                    ),
-                                    tagIds: [],
-                                    referred: recomendadoPorTxt.text,
-                                    dateClose: DateTime.parse(fecCierreFin)                                    
-                                  );
+                                    if(ingresoEsperadoTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese el monto en dólares.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
+                                    }
 
-                                  ProspectoRegistroResponseModel objRsp = await ProspectoTypeService().registraProspecto(objProsp);
-                                  
-                                  String respuestaReg = objRsp.result.mensaje;
-                                  int estado = objRsp.result.estado;
-                                  String gifRespuesta = 'assets/gifs/exito.gif';
-
-                                  context.pop();
-
-                                  if(objRsp.mensaje.isNotEmpty){
-                              
+                                    if(emailTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese el correo.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
+                                    } else {
+                                      String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                      RegExp regExp = RegExp(pattern);
+                                      
+                                      if(!regExp.hasMatch(emailTxt.text)){
+                                        showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return ContentAlertDialog(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              onPressedCont: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              tipoAlerta: TipoAlerta().alertAccion,
+                                              numLineasTitulo: 2,
+                                              numLineasMensaje: 2,
+                                              titulo: 'Error',
+                                              mensajeAlerta: 'Correo inválido.'
+                                            );
+                                          },
+                                        );
+                      
+                                        return;
+                                      }
+                                    }
+                    
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) => SimpleDialog(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          SimpleDialogCargando(
+                                            null,
+                                            mensajeMostrar: 'Estamos registrando',
+                                            mensajeMostrarDialogCargando: 'al nuevo prospecto.',
+                                          ),
+                                        ]
+                                      ),
+                                    );
+                    
+                                    int idPais = 0;
+                                    int idCamp = 0;
+                                    int idMedia = 0;
+                                    int idOrigen = 0;
+                    
+                                    for (var elemento in mappedObjPais3) {
+                                      if (elemento['name'] == paisSelect) {
+                                        idPais = elemento['id'];
+                                      }
+                                    }
+                    
+                                    for (var elemento in mappedObjCamp3) {
+                                      if (elemento['name'] == campSelect) {
+                                        idCamp = elemento['id'];
+                                      }
+                                    }
+                    
+                                    for (var elemento in mappedObjOrig3) {
+                                      if (elemento['name'] == originSelect) {
+                                        idOrigen = elemento['id'];
+                                      }
+                                    }
+                    
+                                    for (var elemento in mappedObjMed3) {
+                                      if (elemento['name'] == mediaSelect) {
+                                        idMedia = elemento['id'];
+                                      }
+                                    }
+                    
+                                    DatumCrmLead objProsp = DatumCrmLead(                                    
+                                      expectedRevenue: double.parse(ingresoEsperadoTxt.text),
+                                      dayClose: double.parse(dateRgPrsp.day.toString()),
+                                      id: 0,
+                                      name: nombresTxt.text,
+                                      emailCc: emailTxt.text,
+                                      priority: '',
+                                      type: '',
+                                      city: '',
+                                      contactName: nombresTxt.text,
+                                      description: observacionesTxt.text,
+                                      emailFrom: emailTxt.text,
+                                      street: direccionTxt.text,
+                                      phone: telefonoPrsp,
+                                      partnerName: nombresTxt.text,
+                                      mobile: telefonoPrsp,
+                                      dateOpen: DateTime.now(),
+                                      dateDeadline: DateTime.now(),
+                                      probability: double.parse(probabilityTxt.text),
+                                      activityIds: [
+                                        StructCombos(id: 2, name: actSelect)
+                                      ],
+                                      campaignId: CampaignId(
+                                        id: idCamp,
+                                        name: campSelect
+                                      ),
+                                      countryId: StructCombos (
+                                        id: idPais,
+                                        name: paisTxt.text
+                                      ),
+                                      lostReasonId: CampaignId(
+                                        id: 2,
+                                        name: ''
+                                      ),
+                                      mediumId: StructCombos (
+                                        id: idMedia,
+                                        name: ''
+                                      ),
+                                      partnerId: StructCombos (
+                                        id: 2,
+                                        name: ''
+                                      ),
+                                      sourceId: StructCombos (
+                                        id: idOrigen,
+                                        name: originSelect
+                                      ),
+                                      stageId: StructCombos (
+                                        id: 2,
+                                        name: ''
+                                      ),
+                                      stateId: StructCombos (
+                                        id: 2,
+                                        name: ''
+                                      ),
+                                      title: CampaignId(
+                                        id: 2,
+                                        name: ''
+                                      ),
+                                      tagIds: [],
+                                      referred: recomendadoPorTxt.text,
+                                      dateClose: DateTime.parse(fecCierreFin)                                    
+                                    );
+                    
+                                    ProspectoRegistroResponseModel objRsp = await ProspectoTypeService().registraProspecto(objProsp);
+                                    
+                                    String respuestaReg = objRsp.result.mensaje;
+                                    int estado = objRsp.result.estado;
+                                    String gifRespuesta = 'assets/gifs/exito.gif';
+                    
+                                    context.pop();
+                    
+                                    if(objRsp.mensaje.isNotEmpty){
+                                
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Container(
+                                              color: Colors.transparent,
+                                              height: size.height * 0.17,
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    height: size.height * 0.09,
+                                                    child: Image.asset(gifRespuesta),
+                                                  ),
+                    
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    width: size.width * 0.95,
+                                                    height: size.height * 0.08,
+                                                    alignment: Alignment.center,
+                                                    child: AutoSizeText(
+                                                      objRsp.mensaje,
+                                                      maxLines: 2,
+                                                      minFontSize: 2,
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    
+                                      return;
+                                    }
+                    
+                                    if(estado == 200){
+                                      gifRespuesta = 'assets/gifs/exito.gif';
+                                    } else {
+                                      gifRespuesta = 'assets/gifs/gifErrorBlanco.gif';
+                                    }
+                    
+                                    
+                                    context.pop();
+                                    context.pop();
+                    
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -1299,14 +1473,14 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                   height: size.height * 0.09,
                                                   child: Image.asset(gifRespuesta),
                                                 ),
-
+                    
                                                 Container(
                                                   color: Colors.transparent,
                                                   width: size.width * 0.95,
                                                   height: size.height * 0.08,
                                                   alignment: Alignment.center,
                                                   child: AutoSizeText(
-                                                    objRsp.mensaje,
+                                                    respuestaReg,
                                                     maxLines: 2,
                                                     minFontSize: 2,
                                                   ),
@@ -1326,102 +1500,47 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       },
                                     );
                                   
-                                    return;
-                                  }
-
-                                  if(estado == 200){
-                                    gifRespuesta = 'assets/gifs/exito.gif';
-                                  } else {
-                                    gifRespuesta = 'assets/gifs/gifErrorBlanco.gif';
-                                  }
-
-                                  
-                                  context.pop();
-                                  context.pop();
-
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Container(
-                                          color: Colors.transparent,
-                                          height: size.height * 0.17,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              
-                                              Container(
-                                                color: Colors.transparent,
-                                                height: size.height * 0.09,
-                                                child: Image.asset(gifRespuesta),
-                                              ),
-
-                                              Container(
-                                                color: Colors.transparent,
-                                                width: size.width * 0.95,
-                                                height: size.height * 0.08,
-                                                alignment: Alignment.center,
-                                                child: AutoSizeText(
-                                                  respuestaReg,
-                                                  maxLines: 2,
-                                                  minFontSize: 2,
-                                                ),
-                                              )
-                                            ],
-                                          )
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                
-                                },
-                                child: ButtonCvsWidget(
-                                  //text: 'Crear',
-                                  text: 'Crear Prospecto',
-                                  textStyle: AppTextStyles.h3Bold(
-                                    width: size.width,
-                                    color: AppLightColors().white
-                                  ),
-                                )),
-                              ),
-                            ],
+                                  },
+                                  child: ButtonCvsWidget(
+                                    //text: 'Crear',
+                                    text: 'Crear Prospecto',
+                                    textStyle: AppTextStyles.h3Bold(
+                                      width: size.width,
+                                      color: AppLightColors().white
+                                    ),
+                                  )),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                            
-                      if(!habilitaGuardar)
-                      Positioned(
-                        //left: size.width * 0.06,
-                        right: size.width * 0.29,
-                        top: size.height * 0.82,
-                        child: Container(
-                          width: size.width * 0.38,
-                          color: Colors.transparent,
-                          alignment: Alignment.center,
-                          child: GestureDetector(
-                          onTap: () async {
-                            context.pop();
-                          },
-                          child: ButtonCvsWidget(
-                            text: 'Cerrar',
-                            textStyle: AppTextStyles.h3Bold(
-                                width: size.width,
-                                color: AppLightColors().white),
-                          )
+                              
+                        if(!habilitaGuardar)
+                        Positioned(
+                          //left: size.width * 0.06,
+                          right: size.width * 0.29,
+                          top: size.height * 0.82,
+                          child: Container(
+                            width: size.width * 0.38,
+                            color: Colors.transparent,
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                            onTap: () async {
+                              context.pop();
+                            },
+                            child: ButtonCvsWidget(
+                              text: 'Cerrar',
+                              textStyle: AppTextStyles.h3Bold(
+                                  width: size.width,
+                                  color: AppLightColors().white),
+                            )
+                          ),
                         ),
-                      ),
-
-                      ),
-                      
-                    ]
+                    
+                        ),
+                        
+                      ]
+                    ),
                   );
                 
                 }

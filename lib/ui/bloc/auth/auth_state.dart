@@ -11,6 +11,7 @@ sealed class AuthState extends Equatable {
 final class AuthInitial extends AuthState {}
 */
 
+bool entraConsultar = true;
 
 abstract class AuthState extends Equatable {
   
@@ -22,15 +23,8 @@ abstract class AuthState extends Equatable {
   Future<String> readToken() async {
     try {
       String rspFinal = 'home';
-/*
-      var connectivityResult = await (Connectivity().checkConnectivity());
 
-      var tienePendienteRegistros = await storage.read(key: 'TienePendienteRegistros') ?? '';
-    
-      if (tienePendienteRegistros == 'S' && !connectivityResult.contains(ConnectivityResult.mobile) && !connectivityResult.contains(ConnectivityResult.wifi)) {
-        return 'NI';
-      }
-      */
+      String resInt = await ValidacionesUtils().validaInternet();
 
       var rspReg = await storage.read(key: 'RespuestaRegistro') ?? '';
       var rspLog = await storage.read(key: 'RespuestaLogin') ?? '';
@@ -44,7 +38,11 @@ abstract class AuthState extends Equatable {
         }        
       }
 
-      await DataInicialService().readCombosProspectos();
+      if(resInt.isEmpty && rspFinal.isNotEmpty && rspFinal == 'home' && entraConsultar){
+        entraConsultar = false;
+        await DataInicialService().readCombosProspectos();
+        await DataInicialService().readPrincipalPage();        
+      }
 
       return rspFinal; 
     }

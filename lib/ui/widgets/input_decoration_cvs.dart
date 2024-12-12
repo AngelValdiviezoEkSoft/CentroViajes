@@ -9,22 +9,27 @@ class InputDecorationCvs {
       required double size,
       Color? labelColor}) {
     return InputDecoration(
-        counterStyle: const TextStyle(color: Colors.transparent),
-        contentPadding: const EdgeInsets.only(top: 5),
-        hintText: hintTetx,
-        labelText: labelText,
-        labelStyle: AppTextStyles.h6SemiBold(
-            width: size, color: ColorsApp().gris600EtiquetasCvs),
-        border: const UnderlineInputBorder(
-          borderSide: BorderSide.none,
+      errorBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.red,
         ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        prefixIcon: prefixIcon != null
-            ? Icon(
-                prefixIcon,
-                color: ColorsApp().morado,
-              )
-            : null);
+      ),
+      counterStyle: const TextStyle(color: Colors.transparent),
+      contentPadding: const EdgeInsets.only(top: 5),
+      hintText: hintTetx,
+      labelText: labelText,
+      labelStyle: AppTextStyles.h6SemiBold(
+          width: size, color: ColorsApp().gris600EtiquetasCvs),
+      border: const UnderlineInputBorder(
+        borderSide: BorderSide.none,
+      ),
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
+      prefixIcon: prefixIcon != null
+          ? Icon(
+              prefixIcon,
+              color: ColorsApp().morado,
+            )
+          : null);
   }
 
   static InputDecoration authInputDecoration({
@@ -36,30 +41,35 @@ class InputDecorationCvs {
     final VoidCallback? onPressed,
   }) {
     return InputDecoration(
-        counterStyle: const TextStyle(color: Colors.transparent),
-        contentPadding: const EdgeInsets.only(top: 10),
-        hintText: hintTetx,
-        labelText: labelText,
-        labelStyle: AppTextStyles.h6SemiBold(
-          width: size.width,
-          color: AppLightColors().gray800SecondaryText,
+      errorBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.red,
         ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        prefixIcon: prefixIcon != null
-            ? Icon(
-                prefixIcon,
-                color: ColorsApp().morado,
-              )
-            : null,
-        suffixIcon: suffixIcon != null
-            ? IconButton(
-                icon: suffixIcon,
-                color: ColorsApp().morado,
-                onPressed: () {
-                  onPressed;
-                },
-              )
-            : null);
+      ),
+      counterStyle: const TextStyle(color: Colors.transparent),
+      contentPadding: const EdgeInsets.only(top: 10),
+      hintText: hintTetx,
+      labelText: labelText,
+      labelStyle: AppTextStyles.h6SemiBold(
+        width: size.width,
+        color: AppLightColors().gray800SecondaryText,
+      ),
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
+      prefixIcon: prefixIcon != null
+          ? Icon(
+              prefixIcon,
+              color: ColorsApp().morado,
+            )
+          : null,
+      suffixIcon: suffixIcon != null
+          ? IconButton(
+              icon: suffixIcon,
+              color: ColorsApp().morado,
+              onPressed: () {
+                onPressed;
+              },
+            )
+          : null);
   }
 
   static InputDecoration registerInputhDecoration({
@@ -70,32 +80,37 @@ class InputDecorationCvs {
     final VoidCallback? onPressed,
   }) {
     return InputDecoration(
-        counterStyle: const TextStyle(color: Colors.transparent),
-        contentPadding: const EdgeInsets.only(top: 10, bottom: 0),
-        hintText: hintTetx,
-        labelText: labelText,
-        labelStyle: TextStyle(
-          color: ColorsApp().gris600EtiquetasCvs,
+      errorBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.red,
         ),
-        border: const UnderlineInputBorder(
-          borderSide: BorderSide.none,
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        prefixIcon: prefixIcon != null
-            ? Icon(
-                prefixIcon,
-                color: ColorsApp().morado,
-              )
-            : null,
-        suffixIcon: suffixIcon != null
-            ? IconButton(
-                icon: suffixIcon,
-                color: ColorsApp().morado,
-                onPressed: () {
-                  onPressed;
-                },
-              )
-            : null);
+      ),
+      counterStyle: const TextStyle(color: Colors.transparent),
+      contentPadding: const EdgeInsets.only(top: 10, bottom: 0),
+      hintText: hintTetx,
+      labelText: labelText,
+      labelStyle: TextStyle(
+        color: ColorsApp().gris600EtiquetasCvs,
+      ),
+      border: const UnderlineInputBorder(
+        borderSide: BorderSide.none,
+      ),
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
+      prefixIcon: prefixIcon != null
+          ? Icon(
+              prefixIcon,
+              color: ColorsApp().morado,
+            )
+          : null,
+      suffixIcon: suffixIcon != null
+          ? IconButton(
+              icon: suffixIcon,
+              color: ColorsApp().morado,
+              onPressed: () {
+                onPressed;
+              },
+            )
+          : null);
   }
 
   static InputDecoration formsDecoration({
@@ -108,20 +123,27 @@ class InputDecorationCvs {
   }) {
     return InputDecoration(
       enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppLightColors().gray500)),
+        borderSide: BorderSide(color: AppLightColors().gray500)
+      ),
       disabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppLightColors().gray300Stroke)),
+        borderSide: BorderSide(color: AppLightColors().gray300Stroke)
+      ),
       counterText: counterTex ?? '',
       contentPadding: const EdgeInsets.only(top: 10, bottom: 0),
       labelText: labelText ?? '',
-      labelStyle: AppTextStyles.h4SemiBold(
-          width: size.width, color: AppLightColors().gray800SecondaryText),
+      labelStyle: AppTextStyles.h4SemiBold(width: size.width, color: AppLightColors().gray800SecondaryText),
       hintText: hintTetx ?? '',
       hintStyle: AppTextStyles.bodyRegular(
-          width: size.width, color: AppLightColors().gray800SecondaryText),
+        width: size.width, color: AppLightColors().gray800SecondaryText
+      ),
       floatingLabelBehavior: FloatingLabelBehavior.auto,
       prefixText: prefixText ?? '',
-      suffixIcon: prefixIcon
+      suffixIcon: prefixIcon,
+      errorBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.red,
+        ),
+      ),
     );
   }
 }

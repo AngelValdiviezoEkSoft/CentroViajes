@@ -13,4 +13,13 @@ class EnvironmentsProd {
   //GOOGLE MAP
   final String apiKeyGMapAndroid = 'AIzaSyBNRevgaESKXBVcIFnEPVBQcTc1i_yqE6k';
   final String apiKeyGMapIos = 'AIzaSyBNRevgaESKXBVcIFnEPVBQcTc1i_yqE6k';
+
+  //MAPEO MODELOS 
+  final String modProsp = 'crm.lead';
+  final String modClien = 'res.partner';
+  final String modCampa = 'utm.campaign';
+  final String modOrige = 'utm.source';
+  final String modMedio = 'utm.medium';
+  final String modActiv = 'mail.activity.type';
+  final String modPaise = 'res.country';
 }

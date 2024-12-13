@@ -228,7 +228,6 @@ class LoginScreen extends StatelessWidget {
                         },
                       );
 
-
                       return;
                     }
 
@@ -262,6 +261,56 @@ class LoginScreen extends StatelessWidget {
 
                       try{
                         var resp = await AuthService().login(objAuthRequest);
+
+                        if(resp == 'NI'){
+                          context.pop();
+
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Container(
+                                  color: Colors.transparent,
+                                  height: size.height * 0.22,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      
+                                      Container(
+                                        color: Colors.transparent,
+                                        height: size.height * 0.1,
+                                        child: Image.asset('assets/gifs/gifErrorBlanco.gif'),
+                                      ),
+
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.95,
+                                        height: size.height * 0.11,
+                                        alignment: Alignment.center,
+                                        child: const AutoSizeText(
+                                          'No tiene acceso a internet',
+                                          maxLines: 2,
+                                          minFontSize: 2,
+                                        ),
+                                      ),
+                                      
+                                    ],
+                                  )
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        
+                          return;
+                        }
                       
                         final data = json.decode(resp);
 

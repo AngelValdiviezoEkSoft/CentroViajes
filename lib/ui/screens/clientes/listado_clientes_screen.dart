@@ -179,7 +179,10 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             onPressed: () {
+              filtroCliTxt = TextEditingController();
+              terminoBusquedaClient= '';
               context.pop();
+
             },
           ),
           title: const Text('Clientes'),

@@ -1,3 +1,4 @@
+export 'package:cvs_ec_app/domain/models/app_response_models.dart';
 
 export 'package:cvs_ec_app/domain/models/consulta_direccion_response_model.dart';
 

@@ -12,6 +12,19 @@ import 'package:local_auth/local_auth.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+bool comienzaEditarFechaCierre = false;
+bool comienzaEditarCorreo = false;
+bool comienzaEditarDireccion = false;
+bool comienzaEditarNombres = false;
+bool comienzaEditarRecomendacion = false;
+bool comienzaEditarProbabilidad = false;
+bool comienzaEditarIngEsp = false;
+bool comienzaEditarObservacon = false;
+bool comienzaEditarPais = false;
+bool comienzaEditarCampania= false;
+bool comienzaEditarOrigen = false;
+bool comienzaEditarMedio = false;
+
 DatumCrmLead? objDatumCrmLeadEdit;
 int idProsp = 0;
 int tabAccionesEditPrsp = 0;
@@ -26,10 +39,10 @@ late TextEditingController telefonoEditTxt;
 late TextEditingController sectorEditTxt;
 late TextEditingController ingresoEsperadoEditTxt;
 late TextEditingController recomendadoPorEditTxt;
+late TextEditingController fechaCierreEditxt;
 
 DateTime dateEdPrsp = DateTime.now();
 
-String fecEditCierre = '';
 String campEditSelect = '';
 String mediaEditSelect = '';
 String originEditSelect = '';
@@ -45,7 +58,7 @@ class FrmEditProspectoScreen extends StatefulWidget {
 }
 
 class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
-  
+
   late final WebViewController _wvController;
   final LocalAuthentication auth = LocalAuthentication();  
 
@@ -55,6 +68,18 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
   @override
   void initState() {
     super.initState();
+    comienzaEditarFechaCierre = false;
+    comienzaEditarCorreo = false;
+    comienzaEditarDireccion = false;
+    comienzaEditarNombres = false;
+    comienzaEditarRecomendacion = false;
+    comienzaEditarProbabilidad = false;
+    comienzaEditarIngEsp = false;
+    comienzaEditarObservacon = false;
+    comienzaEditarPais = false;
+    comienzaEditarCampania = false;
+    comienzaEditarOrigen = false;
+    comienzaEditarMedio = false;
 
     nombresEditTxt = TextEditingController();
     emailEditTxt = TextEditingController();
@@ -64,28 +89,27 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
     probabilityEditTxt = TextEditingController();
     ingresoEsperadoEditTxt = TextEditingController();
     recomendadoPorEditTxt = TextEditingController();
+    fechaCierreEditxt = TextEditingController();
     
     telefonoEditTxt = TextEditingController();
     sectorEditTxt = TextEditingController(text: 'Norte');
 
     if(objDatumCrmLead != null){
       objDatumCrmLeadEdit = objDatumCrmLead;
-      nombresEditTxt.text = objDatumCrmLeadEdit!.contactName ?? '';
-      emailEditTxt.text = objDatumCrmLeadEdit!.emailFrom;
-      direccionEditTxt.text = objDatumCrmLeadEdit!.street ?? '';
-      observacionesEditTxt.text = objDatumCrmLeadEdit!.description ?? '';
-      probabilityEditTxt.text = objDatumCrmLeadEdit!.probability?.toString() ?? "0";
+      //nombresEditTxt.text = objDatumCrmLeadEdit!.contactName ?? '';
+      //emailEditTxt.text = objDatumCrmLeadEdit!.emailFrom;
+      //direccionEditTxt.text = objDatumCrmLeadEdit!.street ?? '';
+      //observacionesEditTxt.text = objDatumCrmLeadEdit!.description ?? '';
+      //probabilityEditTxt.text = objDatumCrmLeadEdit!.probability?.toString() ?? "0";
 
       String cell = separatePhoneNumber(objDatumCrmLeadEdit!.phone ?? '');
 
       telefonoEditTxt.text = cell;
-      recomendadoPorEditTxt.text = objDatumCrmLeadEdit!.referred ?? '';
+      //recomendadoPorEditTxt.text = objDatumCrmLeadEdit!.referred ?? '';
 
       String rutaFinal = objDatumCrmLeadEdit!.description ?? 'https://flutter.dev';
 
-      fecEditCierre = objDatumCrmLeadEdit!.dateClose != null ? DateFormat('dd-MM-yyyy', 'es').format(objDatumCrmLeadEdit!.dateClose!) : '-- No tiene fecha de cierre --';//DateFormat('dd-MM-yyyy', 'es').format(dateEdPrsp);
-      
-      ingresoEsperadoEditTxt.text = objDatumCrmLeadEdit!.expectedRevenue.toString();
+      //ingresoEsperadoEditTxt.text = objDatumCrmLeadEdit!.expectedRevenue.toString();
 
       _wvController = WebViewController();
 
@@ -116,7 +140,6 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
     final match = regExp.firstMatch(phone);
 
     if (match != null) {
-      //final countryCode = match.group(1); // Código de país
       final localNumber = match.group(2); // Número local
       return localNumber ?? '';
       /*
@@ -181,92 +204,142 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
               }
               else{
                 if(snapshot.data != null) {
-                  
-                  //ProspectoCombosModel objTmp = snapshot.data as ProspectoCombosModel;
+                  String fecEditCierre = '';
+                  List<String> lstPaises = [];
+                  List<String> lstActividades = [];
+                  List<String> lstMedias = [];
+                  List<String> lstCampanias = [];
+                  List<String> lstOrigenes = [];                                    
+
+                  fecEditCierre = DateFormat('yyyy-MM-dd', 'es').format(DateTime.now());
+
+                  if(!comienzaEditarFechaCierre){                    
+
+                    if(objDatumCrmLeadEdit != null ){
+                      fecEditCierre = objDatumCrmLeadEdit!.dateClose != null ? DateFormat('yyyy-MM-dd', 'es').format(objDatumCrmLeadEdit!.dateClose!) : '-- No tiene fecha de cierre --';
+                      fechaCierreEditxt.text = fecEditCierre;
+                    }
+                    
+                  }
+
+                  if(!comienzaEditarCorreo){
+                    emailEditTxt.text = objDatumCrmLeadEdit!.emailFrom;
+                  }
+
+                  if(!comienzaEditarNombres){
+                    nombresEditTxt.text = objDatumCrmLeadEdit!.contactName ?? '';
+                  }
+
+                  if(!comienzaEditarDireccion){
+                    direccionEditTxt.text = objDatumCrmLeadEdit!.street ?? '';
+                  }
+
+                  if(!comienzaEditarRecomendacion){
+                    recomendadoPorEditTxt.text = objDatumCrmLeadEdit!.referred ?? '';
+                  }
+
+                  if(!comienzaEditarProbabilidad){
+                    probabilityEditTxt.text = objDatumCrmLeadEdit!.probability?.toString() ?? "0";
+                  }
+
+                  if(!comienzaEditarIngEsp){
+                    ingresoEsperadoEditTxt.text = objDatumCrmLeadEdit!.expectedRevenue.toString();
+                  }
+
+                  if(!comienzaEditarObservacon){
+                    observacionesEditTxt.text = objDatumCrmLeadEdit!.description ?? '';
+                  }
 
                   String rspCombos = snapshot.data as String;
 
-                  ProspectoCombosModel objTmp = ProspectoCombosModel(
-                    campanias: rspCombos.split('---')[0],
-                    origen: rspCombos.split('---')[1],
-                    medias: rspCombos.split('---')[2],
-                    actividades: rspCombos.split('---')[3],
-                    paises: rspCombos.split('---')[4]
-                  );
+                    ProspectoCombosModel objTmp = ProspectoCombosModel(
+                      campanias: rspCombos.split('---')[0],
+                      origen: rspCombos.split('---')[1],
+                      medias: rspCombos.split('---')[2],
+                      actividades: rspCombos.split('---')[3],
+                      paises: rspCombos.split('---')[4]
+                    );
 
-                  var objCamp = json.decode(objTmp.campanias);
-                  var objCamp2 = json.decode(objCamp);
+                    var objCamp = json.decode(objTmp.campanias);
+                    var objCamp2 = json.decode(objCamp);
 
-                  var objMedia = json.decode(objTmp.medias);
-                  var objMedia2 = json.decode(objMedia);
+                    var objMedia = json.decode(objTmp.medias);
+                    var objMedia2 = json.decode(objMedia);
 
-                  var objOrigen = json.decode(objTmp.origen);
-                  var objOrigen2 = json.decode(objOrigen);
+                    var objOrigen = json.decode(objTmp.origen);
+                    var objOrigen2 = json.decode(objOrigen);
 
-                  var objAct = json.decode(objTmp.actividades);
-                  var objAct2 = json.decode(objAct);
+                    var objAct = json.decode(objTmp.actividades);
+                    var objAct2 = json.decode(objAct);
 
-                  var objPais = json.decode(objTmp.paises);
-                  var objPai2 = json.decode(objPais);
+                    var objPais = json.decode(objTmp.paises);
+                    var objPai2 = json.decode(objPais);
 
-                  var objCamp3 = objCamp2['result']['data']['utm.campaign']['data'];
-                  var objMedia3 = objMedia2['result']['data']['utm.medium']['data'];
-                  var objOrigen3 = objOrigen2['result']['data']['utm.source']['data'];
-                  var objAct3 = objAct2['result']['data']['mail.activity.type']['data'];
-                  var objPai3 = objPai2['result']['data']['res.country']['data'];
+                    var objCamp3 = objCamp2['result']['data']['utm.campaign']['data'];
+                    var objMedia3 = objMedia2['result']['data']['utm.medium']['data'];
+                    var objOrigen3 = objOrigen2['result']['data']['utm.source']['data'];
+                    var objAct3 = objAct2['result']['data']['mail.activity.type']['data'];
+                    var objPai3 = objPai2['result']['data']['res.country']['data'];
 
-                  List<Map<String, dynamic>> mappedObjCamp3 = List<Map<String, dynamic>>.from(objCamp3);
+                    List<Map<String, dynamic>> mappedObjCamp3 = List<Map<String, dynamic>>.from(objCamp3);
 
-                  List<String> lstCampanias = mappedObjCamp3
-                  .map((item) => item["name"]?.toString() ?? '')
-                  .toList();
+                    lstCampanias = mappedObjCamp3
+                    .map((item) => item["name"]?.toString() ?? '')
+                    .toList();
 
-                  List<Map<String, dynamic>> mappedObjMed3 = List<Map<String, dynamic>>.from(objMedia3);
+                    List<Map<String, dynamic>> mappedObjMed3 = List<Map<String, dynamic>>.from(objMedia3);
 
-                  List<String> lstMedias = mappedObjMed3
-                      .map((item) => item["name"]?.toString() ?? '')
-                      .toList();
+                    lstMedias = mappedObjMed3
+                        .map((item) => item["name"]?.toString() ?? '')
+                        .toList();
 
-                  List<Map<String, dynamic>> mappedObjOrig3 = List<Map<String, dynamic>>.from(objOrigen3);
+                    List<Map<String, dynamic>> mappedObjOrig3 = List<Map<String, dynamic>>.from(objOrigen3);
 
-                  List<String> lstOrigenes = mappedObjOrig3
-                      .map((item) => item["name"]?.toString() ?? '')
-                      .toList();
+                    lstOrigenes = mappedObjOrig3
+                        .map((item) => item["name"]?.toString() ?? '')
+                        .toList();
 
-                  List<Map<String, dynamic>> mappedObjAct3 = List<Map<String, dynamic>>.from(objAct3);
+                    List<Map<String, dynamic>> mappedObjAct3 = List<Map<String, dynamic>>.from(objAct3);
 
-                  List<String> lstActividades = mappedObjAct3
-                      .map((item) => item["name"]?.toString() ?? '')
-                      .toList();
+                    lstActividades = mappedObjAct3
+                        .map((item) => item["name"]?.toString() ?? '')
+                        .toList();
 
-                  List<Map<String, dynamic>> mappedObjPais3 = List<Map<String, dynamic>>.from(objPai3);
+                    List<Map<String, dynamic>> mappedObjPais3 = List<Map<String, dynamic>>.from(objPai3);
 
-                  List<String> lstPaises = mappedObjPais3
-                      .map((item) => item["name"]?.toString() ?? '')
-                      .toList();
+                    lstPaises = mappedObjPais3
+                        .map((item) => item["name"]?.toString() ?? '')
+                        .toList();
 
-                  if(campEditSelect.isEmpty && objDatumCrmLeadEdit!.campaignId != null){                      
-                    //campEditSelect = lstCampanias.first;
-                    campEditSelect = objDatumCrmLeadEdit!.campaignId!.name.isNotEmpty ? objDatumCrmLeadEdit!.campaignId!.name : lstCampanias.first;
-                  }
+                    if(actEditSelect.isEmpty){
+                      actEditSelect = objDatumCrmLeadEdit!.activityIds.isNotEmpty ? objDatumCrmLeadEdit!.activityIds.first.name : lstActividades.first;
+                    }
 
-                  if(mediaEditSelect.isEmpty){
-                    mediaEditSelect = objDatumCrmLeadEdit!.mediumId.name.isNotEmpty ? objDatumCrmLeadEdit!.mediumId.name : lstMedias.first;
-                  }
+                    if(!comienzaEditarPais){
+                      if(paisEditSelect.isEmpty){
+                        //paisEditSelect = lstPaises.first;
+                        paisEditSelect = objDatumCrmLeadEdit!.countryId.name.isNotEmpty ? objDatumCrmLeadEdit!.countryId.name : lstPaises.first;
+                      }
+                    }
 
-                  if(originEditSelect.isEmpty){
-                    //originEditSelect = lstOrigenes.first;
-                    originEditSelect = objDatumCrmLeadEdit!.sourceId.name.isNotEmpty ? objDatumCrmLeadEdit!.sourceId.name : lstOrigenes.first;
-                  }
+                    if(!comienzaEditarCampania){
+                      if(campEditSelect.isEmpty && objDatumCrmLeadEdit!.campaignId != null) {
+                        campEditSelect = objDatumCrmLeadEdit!.campaignId!.name.isNotEmpty ? objDatumCrmLeadEdit!.campaignId!.name : lstCampanias.first;
+                      }
+                    }
 
-                  if(actEditSelect.isEmpty){
-                    actEditSelect = objDatumCrmLeadEdit!.activityIds.isNotEmpty ? objDatumCrmLeadEdit!.activityIds.first.name : lstActividades.first;
-                  }
+                    if(!comienzaEditarOrigen){
+                      if(originEditSelect.isEmpty){
+                        //originEditSelect = lstOrigenes.first;
+                        originEditSelect = objDatumCrmLeadEdit!.sourceId.name.isNotEmpty ? objDatumCrmLeadEdit!.sourceId.name : lstOrigenes.first;
+                      }
+                    }
 
-                  if(paisEditSelect.isEmpty){
-                    //paisEditSelect = lstPaises.first;
-                    paisEditSelect = objDatumCrmLeadEdit!.countryId.name.isNotEmpty ? objDatumCrmLeadEdit!.countryId.name : lstPaises.first;
-                  }
+                    if(!comienzaEditarMedio){
+                      if(mediaEditSelect.isEmpty){
+                        mediaEditSelect = objDatumCrmLeadEdit!.mediumId.name.isNotEmpty ? objDatumCrmLeadEdit!.mediumId.name : lstMedias.first;
+                      }
+                    }
 
                   return Stack(
                     children: [
@@ -464,11 +537,11 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                               child: TextFormField(
                                                 cursorColor: AppLightColors().primary,
                                                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                /*
+                                                
                                                 inputFormatters: [
-                                                  //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                                  FilteringTextInputFormatter.deny(regexToRemoveEmoji)
                                                 ],
-                                                */
+                                                textCapitalization: TextCapitalization.sentences,
                                                 style: AppTextStyles.bodyRegular(width: size.width),
                                                 decoration: InputDecorationCvs.formsDecoration(
                                                   labelText: 'Nombres',
@@ -487,12 +560,18 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                                 onEditingComplete: () {
                                                   FocusScope.of(context).unfocus();
                                                   //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                                  setState(() {
+                                                    comienzaEditarNombres = true;
+                                                  });
                                                 },
                                                 onChanged: (value) {
                                                   
                                                 },
                                                 onTapOutside: (event) {
                                                   FocusScope.of(context).unfocus();
+                                                  setState(() {
+                                                    comienzaEditarNombres = true;
+                                                  });
                                                 },
                                               ),
                                             ),
@@ -507,18 +586,19 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                         child: DropdownButtonFormField<String>(
                                             decoration: const InputDecoration(
                                               border: OutlineInputBorder(),
-                                              labelText: 'Seleccione el país...',
+                                              labelText: 'Seleccione el país',
                                             ),
                                             value: paisEditSelect,
                                             items: lstPaises
                                                 .map((activityPrsp) =>
                                                     DropdownMenuItem(
                                                       value: activityPrsp,
-                                                      child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
+                                                      child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                                      //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
                                                     ))
                                                 .toList(),
                                             onChanged: (value) {
-                                              
+                                              comienzaEditarPais = true;
                                               setState(() {
                                                 paisEditSelect = value ?? '';
                                               });
@@ -600,7 +680,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                                                         
                                       Container(
                                         color: Colors.transparent,
-                                        width: size.width * 0.94,
+                                        width: size.width * 0.92,
                                         child: DropdownButtonFormField<String>(
                                           decoration: const InputDecoration(
                                             border: OutlineInputBorder(),
@@ -610,11 +690,13 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                           items: lstCampanias.map((activityPrsp) =>
                                             DropdownMenuItem(
                                               value: activityPrsp,
-                                              child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                              child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                              //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
                                             )
                                           )
                                           .toList(),
-                                          onChanged: (String? newValue) {                        
+                                          onChanged: (String? newValue) {
+                                            comienzaEditarCampania = true;
                                             setState(() {
                                               campEditSelect = newValue ?? '';
                                             });
@@ -628,7 +710,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                           
                                       Container(
                                         color: Colors.transparent,
-                                        width: size.width * 0.94,
+                                        width: size.width * 0.92,
                                         child: DropdownButtonFormField<String>(
                                           decoration: const InputDecoration(
                                             border: OutlineInputBorder(),
@@ -640,11 +722,12 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                               .map((activityPrsp) =>
                                                   DropdownMenuItem(
                                                     value: activityPrsp,
-                                                    //child: Text(activityPrsp),
-                                                    child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                    child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                                    //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
                                                   ))
                                               .toList(),
                                           onChanged: (newValue) {
+                                            comienzaEditarOrigen = true;
                                             setState(() {
                                               originEditSelect = newValue ?? '';
                                             });
@@ -658,23 +741,24 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                             
                                       Container(
                                         color: Colors.transparent,
-                                        width: size.width * 0.94,
+                                        width: size.width * 0.92,
                                         child: DropdownButtonFormField<String>(
                                                       decoration: const InputDecoration(
                                                         border: OutlineInputBorder(),
                                                         labelText:
-                                                            'Seleccione la media',
+                                                            'Seleccione el medio',
                                                       ),
                                                       value: mediaEditSelect,
                                                       items: lstMedias
                                                           .map((activityPrsp) =>
                                                               DropdownMenuItem(
                                                                 value: activityPrsp,
-                                                                //child: Text(activityPrsp),
-                                                                child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                                child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                                                //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
                                                               ))
                                                           .toList(),
                                                       onChanged: (newValue) {
+                                                        comienzaEditarMedio = true;
                                                         setState(() {
                                               mediaEditSelect = newValue ?? '';
                                             });
@@ -690,6 +774,10 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
                                         child: TextFormField(
+                                          textCapitalization: TextCapitalization.sentences,
+                                          inputFormatters: [
+                                                  FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                                ],
                                           cursorColor: AppLightColors().primary,
                                           autovalidateMode: AutovalidateMode.onUserInteraction,                                        
                                           style: AppTextStyles.bodyRegular(width: size.width),
@@ -709,12 +797,18 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                           onEditingComplete: () {
                                             FocusScope.of(context).unfocus();
                                             //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                            setState(() {
+                                              comienzaEditarRecomendacion = true;
+                                            });
                                           },
                                           onChanged: (value) {
                                             
                                           },
                                           onTapOutside: (event) {
                                             FocusScope.of(context).unfocus();
+                                            setState(() {
+                                              comienzaEditarRecomendacion = true;
+                                            });
                                           },
                                         ),
                                       ),
@@ -766,12 +860,19 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                                 textAlign: TextAlign.left,
                                                 onEditingComplete: () {
                                                   FocusScope.of(context).unfocus();
+                                                  setState(() {
+                                                    comienzaEditarProbabilidad = true;
+                                                  });
                                                 },
                                                 onChanged: (value) {
                                                   
                                                 },
                                                 onTapOutside: (event) {
                                                   FocusScope.of(context).unfocus();
+
+                                                  setState(() {
+                                                    comienzaEditarProbabilidad = true;
+                                                  });
                                                 },
                                               ),
                                             ),
@@ -809,12 +910,19 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                               textAlign: TextAlign.left,
                                               onEditingComplete: () {
                                                 FocusScope.of(context).unfocus();
+                                                setState(() {
+                                                  comienzaEditarIngEsp = true;
+                                                });
                                               },
                                               onChanged: (value) {
                           
                                               },
                                               onTapOutside: (event) {
                                                 FocusScope.of(context).unfocus();
+
+                                                setState(() {
+                                                  comienzaEditarIngEsp = true;
+                                                });
                                               },
                                             ),
                                           ),
@@ -829,6 +937,9 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                               child: TextFormField(
                                               //initialValue: 'Ecuador',
                                               //initialValue: '',
+                                              inputFormatters: [
+                                                  FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                                ],
                                               cursorColor: AppLightColors().primary,
                                               autovalidateMode: AutovalidateMode.onUserInteraction,
                                               
@@ -849,21 +960,27 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                               onEditingComplete: () {
                                                 FocusScope.of(context).unfocus();
                           //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                                setState(() {
+                                                  comienzaEditarCorreo = true;
+                                                });
                                               },
                                               onChanged: (value) {
                           
                                               },
                                               onTapOutside: (event) {
-                          FocusScope.of(context).unfocus();
+                                                FocusScope.of(context).unfocus();
+                                                setState(() {
+                                                  comienzaEditarCorreo = true;
+                                                });
                                               },
                                               validator: (value) {
                           
-                          String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                          RegExp regExp = RegExp(pattern);
-                          return regExp.hasMatch(value ?? '')
-                            ? null
-                            : 'Correo inválido';                          
-                                              },
+                                                String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                                RegExp regExp = RegExp(pattern);
+                                                return regExp.hasMatch(value ?? '')
+                                                  ? null
+                                                  : 'Correo inválido';                          
+                                                },
                                               ),
                                             ),
                                             
@@ -875,7 +992,13 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                               color: Colors.transparent,
                                               width: size.width * 0.92,
                                               child: TextFormField(
-                          initialValue: fecEditCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateEdPrsp),
+                                                onTapOutside: (event) {
+                                                  setState(() {
+                                                      
+                                                  });
+                                                },
+                                                controller: fechaCierreEditxt,
+                          //initialValue: fecEditCierre,
                           readOnly: true,
                           decoration: const InputDecoration(
                             labelText: 'Cierre esperado',
@@ -883,21 +1006,25 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                             suffixIcon: Icon(Icons.calendar_today),
                           ),
                           onTap: () async {
-                            DateTime? pickedDate =
+                            DateTime? fechaEdit =
                                 await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime(2020),
                               lastDate: DateTime(2100),
                             );
-                            if (pickedDate != null) {
+                            if (fechaEdit != null) {
+                              fecEditCierre = DateFormat('yyyy-MM-dd', 'es').format(fechaEdit);
+                              fechaCierreEditxt.text = '';
+                              fechaCierreEditxt.text = fecEditCierre;
                               
-                              setState(() {
-                                //dateEdPrsp = pickedDate;
-                                fecEditCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
-                              });
-                                    
+                              comienzaEditarFechaCierre = true;
                             }
+
+                            setState(() {
+                                //dateEdPrsp = pickedDate;
+                                
+                              });
                           },
                                               ),
                                                                     
@@ -934,14 +1061,20 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                               maxLength: 150,
                                               textAlign: TextAlign.left,
                                               onEditingComplete: () {
-                          FocusScope.of(context).unfocus();
+                                                FocusScope.of(context).unfocus();
+                                                setState(() {
+                                                  comienzaEditarDireccion = true;
+                                                });
                           //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
                                               },
                                               onChanged: (value) {
                           
                                               },
                                               onTapOutside: (event) {
-                          FocusScope.of(context).unfocus();
+                                                FocusScope.of(context).unfocus();
+                                                setState(() {
+                                                  comienzaEditarDireccion = true;
+                                                });
                                               },
                                               ),
                                       ),
@@ -1045,30 +1178,6 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                       return;
                                     }
 
-                                    if(direccionEditTxt.text.isEmpty){
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return ContentAlertDialog(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            onPressedCont: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            tipoAlerta: TipoAlerta().alertAccion,
-                                            numLineasTitulo: 2,
-                                            numLineasMensaje: 2,
-                                            titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese la dirección del prospecto.'
-                                          );
-                                        },
-                                      );
-                    
-                                      return;
-                                    }
-                    
                                     if(probabilityEditTxt.text.isEmpty){
                                       showDialog(
                                         barrierDismissible: false,
@@ -1091,6 +1200,34 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                       );
                     
                                       return;
+                                    } else {
+                                      if(probabilityEditTxt.text.isNotEmpty){
+                                        double probNeg = double.parse(probabilityEditTxt.text);
+
+                                        if(probNeg < 0) {
+                                          showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ContentAlertDialog(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                onPressedCont: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                tipoAlerta: TipoAlerta().alertAccion,
+                                                numLineasTitulo: 1,
+                                                numLineasMensaje: 2,
+                                                titulo: 'Error',
+                                                mensajeAlerta: 'La probabilidad no puede ser un valor negativo.'
+                                              );
+                                            },
+                                          );
+                        
+                                          return;
+                                        }
+                                      }
                                     }
 
                                     if(ingresoEsperadoEditTxt.text.isEmpty){
@@ -1109,12 +1246,40 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                             numLineasTitulo: 2,
                                             numLineasMensaje: 2,
                                             titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese el monto en dólares.'
+                                            mensajeAlerta: 'Ingrese el monto esperado.'
                                           );
                                         },
                                       );
                     
                                       return;
+                                    } else {
+                                      if(ingresoEsperadoEditTxt.text.isNotEmpty){
+                                        double ingNeg = double.parse(ingresoEsperadoEditTxt.text);
+
+                                        if(ingNeg < 0) {
+                                          showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ContentAlertDialog(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                onPressedCont: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                tipoAlerta: TipoAlerta().alertAccion,
+                                                numLineasTitulo: 1,
+                                                numLineasMensaje: 2,
+                                                titulo: 'Error',
+                                                mensajeAlerta: 'El ingreso esperado no puede ser un valor negativo.'
+                                              );
+                                            },
+                                          );
+                        
+                                          return;
+                                        }
+                                      }
                                     }
 
                                     if(emailEditTxt.text.isEmpty){
@@ -1140,32 +1305,83 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                     
                                       return;
                                     } else {
-                                      String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                      RegExp regExp = RegExp(pattern);
-                                      
-                                      if(!regExp.hasMatch(emailEditTxt.text)){
-                                        showDialog(
-                                          barrierDismissible: false,
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return ContentAlertDialog(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              onPressedCont: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              tipoAlerta: TipoAlerta().alertAccion,
-                                              numLineasTitulo: 2,
-                                              numLineasMensaje: 2,
-                                              titulo: 'Error',
-                                              mensajeAlerta: 'Correo inválido.'
-                                            );
-                                          },
-                                        );
-                      
-                                        return;
+                                      if(emailEditTxt.text.isNotEmpty){
+                                        String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                        RegExp regExp = RegExp(pattern);
+                                        
+                                        if(!regExp.hasMatch(emailEditTxt.text)){
+                                          showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ContentAlertDialog(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                onPressedCont: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                tipoAlerta: TipoAlerta().alertAccion,
+                                                numLineasTitulo: 2,
+                                                numLineasMensaje: 2,
+                                                titulo: 'Error',
+                                                mensajeAlerta: 'Correo inválido.'
+                                              );
+                                            },
+                                          );
+                        
+                                          return;
+                                        }
                                       }
+
+                                    }
+
+                                    if(fecEditCierre.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese la fecha de cierre esperado.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
+                                    }
+
+                                    if(direccionEditTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese la dirección del prospecto.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
                                     }
 
                                   /*

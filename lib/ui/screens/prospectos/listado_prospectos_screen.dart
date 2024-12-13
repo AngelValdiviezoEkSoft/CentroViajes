@@ -194,6 +194,8 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             onPressed: () {
+              terminoBusqueda = '';
+              filtroPrspTxt = TextEditingController();
               context.pop();
             },
           ),
@@ -681,6 +683,8 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             onPressed: () {
+              terminoBusqueda = '';
+              filtroPrspTxt = TextEditingController();
               context.pop();
             },
           ),

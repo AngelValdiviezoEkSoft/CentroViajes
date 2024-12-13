@@ -127,6 +127,60 @@ class GenericService extends ChangeNotifier {
     
   }
   
+  getMultiModelosGen(ConsultaMultiModelRequestModel objReq, List<Map<String, dynamic>> lstModels) async {
+
+    String ruta = '';
+    final objStr = await storage.read(key: 'RespuestaRegistro') ?? '';
+    
+    if(objStr.isNotEmpty)
+    {  
+      var obj = RegisterDeviceResponseModel.fromJson(objStr);
+      ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/data/multi/models';
+    }
+
+    String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
+
+    final requestBody = {
+      "jsonrpc": EnvironmentsProd().jsonrpc,
+      "params": {
+        "key": objReq.params.key,
+        "tocken": objReq.params.tocken,
+        "imei": objReq.params.imei,
+        "uid": objReq.params.uid,
+        "company": objReq.params.company,
+        "bearer": objReq.params.bearer,
+        "tocken_valid_date": tockenValidDate,
+        "models": lstModels
+      }
+    };
+
+    final headers = {
+      "Content-Type": EnvironmentsProd().contentType//"application/json",
+    };
+
+    final response = await http.post(
+      Uri.parse(ruta),
+      headers: headers,
+      body: jsonEncode(requestBody), 
+    );
+    
+    var rspValidacion = json.decode(response.body);
+
+    if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+      await tokenManager.checkTokenExpiration();
+      await getMultiModelosGen(objReq, lstModels);
+    }
+
+    print('Test Total: ${response.body}');
+
+    var rsp = AppResponseModel.fromRawJson(response.body);
+
+    print('Test Total Conversión: ${rsp.result.data.mailActivityType.fields.category}');
+
+    return response.body;
+    
+  }
+  
 
   Future<dynamic> opcionesMenuPorPerfil(BuildContext context) async {
     lstOp = [

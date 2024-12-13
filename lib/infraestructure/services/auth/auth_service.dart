@@ -187,6 +187,13 @@ class AuthService extends ChangeNotifier {
 
   login(AuthRequest authRequest) async {
     try {
+
+      String resInt = await ValidacionesUtils().validaInternet();
+
+      if(resInt.isNotEmpty){
+        return 'NI';
+      }
+
       String ruta = '';
       final objStr = await storage.read(key: 'RespuestaRegistro') ?? '';
     
@@ -221,12 +228,46 @@ class AuthService extends ChangeNotifier {
         await login(authRequest);
       }
 
-      ProspectoTypeService().getProspectos();
-      ClienteService().getClientes();
-
-      DataInicialService().readCombosProspectos();
+      final models = [
+        //{"model": "res.country", "filters": []}, 
+        {
+          "model": EnvironmentsProd().modProsp,//"crm.lead",
+          "filters": []
+        },
+        {
+          "model": EnvironmentsProd().modClien,//"res.partner",
+          "filters": []
+        },
+        {
+          "model": EnvironmentsProd().modCampa,//"utm.campaign",
+          "filters": []
+        },
+        {
+          "model": EnvironmentsProd().modOrige,//"utm.source",
+          "filters": []
+        },
+        {
+          "model": EnvironmentsProd().modMedio,//"utm.medium",
+          "filters": []
+        },
+        {
+          "model": EnvironmentsProd().modActiv,//"mail.activity.type",
+          "filters": []
+        },
+        {
+          "model": EnvironmentsProd().modPaise,//"res.country",
+          "filters": []
+        },
+      ];
 
       await storage.write(key: 'RespuestaLogin', value: response.body);
+      await DataInicialService().readModelosApp(models);
+      
+      /*
+      ProspectoTypeService().getProspectos();
+      ClienteService().getClientes();
+      DataInicialService().readCombosProspectos();
+      */
       
       return response.body;
     } catch (_) {

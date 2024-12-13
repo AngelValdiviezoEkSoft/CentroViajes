@@ -18,6 +18,37 @@ class DataInicialService extends ChangeNotifier{
   bool isValidForm(){
     return formKey.currentState?.validate() ?? false;
   }
+
+  readModelosApp(List<Map<String, dynamic>> modelo) async {
+    try {
+
+      var codImei = await storageProspecto.read(key: 'codImei') ?? '';
+
+      var objReg = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
+      var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+      var objLog = await storageProspecto.read(key: 'RespuestaLogin') ?? '';
+      var objLogDecode = json.decode(objLog);
+
+      ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
+        jsonrpc: EnvironmentsProd().jsonrpc,
+        params: ParamsMultiModels(
+          bearer: obj.result.bearer,
+          company: objLogDecode['result']['current_company'],
+          imei: codImei,
+          key: obj.result.key,
+          tocken: obj.result.tocken,
+          tockenValidDate: obj.result.tockenValidDate,
+          uid: objLogDecode['result']['uid'],
+          models: []
+        )
+      );
+      await GenericService().getMultiModelosGen(objReq, modelo);
+    }
+    catch(ex){
+      print('Test DataInit $ex');
+    }
+  }
   
   readCombosProspectos() async {
 
@@ -41,8 +72,6 @@ class DataInicialService extends ChangeNotifier{
     }
   }
 
-
-  
   Future<String> readPrincipalPage() async {
 
     try{

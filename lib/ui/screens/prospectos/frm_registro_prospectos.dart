@@ -25,11 +25,14 @@ late TextEditingController telefonoTxt;
 late TextEditingController sectorTxt;
 late TextEditingController ingresoEsperadoTxt;
 late TextEditingController recomendadoPorTxt;
-
-DateTime dateRgPrsp = DateTime.now();
+late TextEditingController fechaCierreContTxt;
 
 String fecCierre = '';
 String fecCierreFin = '';
+                  
+
+DateTime dateRgPrsp = DateTime.now();
+
 String campSelect = '';
 String mediaSelect = '';
 String originSelect = '';
@@ -49,6 +52,7 @@ class FrmRegistroProspectoScreen extends StatefulWidget {
 
 class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen> {
 
+  
   String message = '';
   final LocalAuthentication auth = LocalAuthentication();  
 
@@ -60,17 +64,21 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
   void initState() {
     super.initState();
 
+    fechaCierreContTxt = TextEditingController();
     nombresTxt = TextEditingController();
     emailTxt = TextEditingController();
     direccionTxt = TextEditingController();
     observacionesTxt = TextEditingController();
     paisTxt = TextEditingController();
-    probabilityTxt = TextEditingController();
-    fecCierre = DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp);
+    probabilityTxt = TextEditingController();    
     telefonoTxt = TextEditingController();
     ingresoEsperadoTxt = TextEditingController();
     sectorTxt = TextEditingController(text: 'Norte');
     recomendadoPorTxt = TextEditingController();
+
+    fecCierre = DateFormat('yyyy-MM-dd', 'es').format(dateRgPrsp);
+    fecCierreFin = DateFormat('yyyy-MM-dd', 'es').format(dateRgPrsp);
+    fechaCierreContTxt.text = fecCierre;
   }
 
   @override
@@ -120,7 +128,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
               }
               else{
                 if(snapshot.data != null) {
-                  
+
                   //ProspectoCombosModel objTmp = snapshot.data as ProspectoCombosModel;
 
                   String rspCombos = snapshot.data as String;
@@ -478,14 +486,12 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
                                         child: TextFormField(
-                                          
+                                          textCapitalization: TextCapitalization.sentences,
                                           cursorColor: AppLightColors().primary,
-                                          //autovalidateMode: AutovalidateMode.onUserInteraction,
-                                          /*
+                                          //autovalidateMode: AutovalidateMode.onUserInteraction,                                          
                                           inputFormatters: [
-                                            //FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                            FilteringTextInputFormatter.deny(regexToRemoveEmoji)
                                           ],
-                                          */
                                           style: AppTextStyles.bodyRegular(width: size.width),
                                           decoration: InputDecorationCvs.formsDecoration(
                                             labelText: '* Nombres',
@@ -575,7 +581,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               (activityPrsp) =>
                                                 DropdownMenuItem(
                                                   value: activityPrsp,
-                                                  child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
+                                                  child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                                  //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
                                                 )
                                               )
                                             .toList(),
@@ -649,8 +656,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           items: lstCampanias.map((activityPrsp) =>
                                                   DropdownMenuItem(
                                                     value: activityPrsp,
-                                                    //child: Text(activityPrsp),
-                                                    child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                    child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                                    //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
                                                   ))
                                               .toList(),
                                           onChanged: (String? newValue) {                        
@@ -679,8 +686,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               .map((activityPrsp) =>
                                                   DropdownMenuItem(
                                                     value: activityPrsp,
-                                                    //child: Text(activityPrsp),
-                                                    child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                    child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                                    //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
                                                   ))
                                               .toList(),
                                           onChanged: (newValue) {
@@ -702,15 +709,15 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                       decoration: const InputDecoration(
                                                         border: OutlineInputBorder(),
                                                         labelText:
-                                                            'Seleccione la media',
+                                                            'Seleccione el medio',
                                                       ),
                                                       value: mediaSelect,
                                                       items: lstMedias
                                                           .map((activityPrsp) =>
                                                               DropdownMenuItem(
                                                                 value: activityPrsp,
-                                                                //child: Text(activityPrsp),
-                                                                child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                                child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                                                //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
                                                               ))
                                                           .toList(),
                                                       onChanged: (newValue) {
@@ -730,6 +737,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         width: size.width * 0.92,
                                         child: TextFormField(
                                           enabled: habilitaGuardar,
+                                          textCapitalization: TextCapitalization.sentences,
                                           cursorColor: AppLightColors().primary,
                                           autovalidateMode: AutovalidateMode.onUserInteraction,                                        
                                           style: AppTextStyles.bodyRegular(width: size.width),
@@ -806,12 +814,20 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                 textAlign: TextAlign.left,
                                                 onEditingComplete: () {
                                                   FocusScope.of(context).unfocus();
+
+                                                  setState(() {
+                                                      
+                                                  });
                                                 },
                                                 onChanged: (value) {
                                                   
                                                 },
                                                 onTapOutside: (event) {
                                                   FocusScope.of(context).unfocus();
+
+                                                  setState(() {
+                                                      
+                                                  });
                                                 },
                                               ),
                                             ),
@@ -850,12 +866,20 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                 textAlign: TextAlign.left,
                                                 onEditingComplete: () {
                                                   FocusScope.of(context).unfocus();
+
+                                                  setState(() {
+                                                      
+                                                  });
                                                 },
                                                 onChanged: (value) {
                             
                                                 },
                                                 onTapOutside: (event) {
                                                   FocusScope.of(context).unfocus();
+
+                                                  setState(() {
+                                                      
+                                                  });
                                                 },
                                               ),
                                             ),
@@ -868,6 +892,9 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               color: Colors.transparent,
                                               width: size.width * 0.92,
                                               child: TextFormField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                              ],
                                               enabled: habilitaGuardar,
                                               cursorColor: AppLightColors().primary,
                                               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -888,12 +915,19 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               textAlign: TextAlign.left,
                                               onEditingComplete: () {
                                                 FocusScope.of(context).unfocus();
+
+                                                setState(() {
+                                                      
+                                                  });
                                               },
                                               onChanged: (value) {
                           
                                               },
                                               onTapOutside: (event) {
                                                 FocusScope.of(context).unfocus();
+                                                setState(() {
+                                                      
+                                                  });
                                               },
                                               validator: (value) {                          
                                                 String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -913,33 +947,41 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               color: Colors.transparent,
                                               width: size.width * 0.92,
                                               child: TextFormField(
+                                                onTapOutside: (event) {
+                                                  setState(() {
+                                                      
+                                                  });
+                                                },
+                                                controller: fechaCierreContTxt,
                                                 enabled: habilitaGuardar,
-                                                initialValue: fecCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp),
+                                                //initialValue: fecCierre,//DateFormat('dd-MM-yyyy', 'es').format(dateRgPrsp),
                                                 readOnly: true,
                                                 decoration: const InputDecoration(
-                                                  labelText: 'Cierre esperado',
+                                                  labelText: '* Cierre esperado',
                                                   border: OutlineInputBorder(),
                                                   suffixIcon: Icon(Icons.calendar_today),
                                                 ),
                                                 onTap: () async {
-                                                  DateTime? pickedDate =
+                                                  DateTime? fecCambio =
                                                       await showDatePicker(
                                                     context: context,
                                                     initialDate: DateTime.now(),
                                                     firstDate: DateTime(2020),
                                                     lastDate: DateTime(2100),
                                                   );
-                                                  if (pickedDate != null) {
-                                                    tabAccionesRegPrsp = 2;
-                                                    fecCierre = DateFormat('dd-MM-yyyy', 'es').format(pickedDate);
-                                                    fecCierreFin = DateFormat('yyyy-MM-dd', 'es').format(pickedDate);
+                                                  if (fecCambio != null) {
+                                                    
+                                                    //tabAccionesRegPrsp = 2;
+                                                    fecCierre = DateFormat('yyyy-MM-dd', 'es').format(fecCambio);
+                                                    fecCierreFin = DateFormat('yyyy-MM-dd', 'es').format(fecCambio);
                                                     //tabAccionesRegPrsp = 1;
-
-                                                    setState(() {
-                                                      
-                                                    });
-                                                          
+                                                    fechaCierreContTxt.text = fecCierreFin;
+    
                                                   }
+
+                                                  setState(() {
+                                                      
+                                                  });
                                                 },
                                               ),
                                                                     
@@ -976,12 +1018,19 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               textAlign: TextAlign.left,
                                               onEditingComplete: () {
                                                 FocusScope.of(context).unfocus();
+
+                                                setState(() {
+                                                      
+                                                  });
                                               },
                                               onChanged: (value) {
                           
                                               },
                                               onTapOutside: (event) {
                                                 FocusScope.of(context).unfocus();
+                                                setState(() {
+                                                      
+                                                  });
                                               },
                                             ),
                                             ),
@@ -1008,6 +1057,9 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               width: size.width * 0.92,
                                               child: TextFormField(
                                                 enabled: habilitaGuardar,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter.deny(regexToRemoveEmoji)
+                                                ],
                                                 cursorColor: AppLightColors().primary,
                                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                                 style: AppTextStyles.bodyRegular(width: size.width),
@@ -1088,7 +1140,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     FocusScope.of(context).requestFocus(FocusNode());
 
                                     //print('Test form: ${formKeyRegPrp.currentState!.validate()}');
-
+                                    /*
                                     if (!formKeyRegPrp.currentState!.validate()) {
                                       showDialog(
                                         barrierDismissible: false,
@@ -1112,6 +1164,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                     
                                       return;
                                     }
+                                    */
                     
                                     if(!celularValido){
                                       showDialog(
@@ -1161,30 +1214,6 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       return;
                                     }
 
-                                    if(direccionTxt.text.isEmpty){
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return ContentAlertDialog(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            onPressedCont: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            tipoAlerta: TipoAlerta().alertAccion,
-                                            numLineasTitulo: 2,
-                                            numLineasMensaje: 2,
-                                            titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese la dirección del prospecto.'
-                                          );
-                                        },
-                                      );
-                    
-                                      return;
-                                    }
-                    
                                     if(probabilityTxt.text.isEmpty){
                                       showDialog(
                                         barrierDismissible: false,
@@ -1207,6 +1236,35 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       );
                     
                                       return;
+                                    } else {
+                                      if(probabilityTxt.text.isNotEmpty){
+                                        double probNeg = double.parse(probabilityTxt.text);
+
+                                        if(probNeg < 0) {
+                                          showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ContentAlertDialog(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                onPressedCont: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                tipoAlerta: TipoAlerta().alertAccion,
+                                                numLineasTitulo: 1,
+                                                numLineasMensaje: 2,
+                                                titulo: 'Error',
+                                                mensajeAlerta: 'La probabilidad no puede ser un valor negativo.'
+                                              );
+                                            },
+                                          );
+                        
+                                          return;
+                                        }
+
+                                      }
                                     }
 
                                     if(ingresoEsperadoTxt.text.isEmpty){
@@ -1225,12 +1283,41 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             numLineasTitulo: 2,
                                             numLineasMensaje: 2,
                                             titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese el monto en dólares.'
+                                            mensajeAlerta: 'Ingrese el monto esperado.'
                                           );
                                         },
                                       );
                     
                                       return;
+                                    } else {
+                                      if(ingresoEsperadoTxt.text.isNotEmpty){
+                                        double ingNeg = double.parse(ingresoEsperadoTxt.text);
+
+                                        if(ingNeg < 0) {
+                                          showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ContentAlertDialog(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                onPressedCont: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                tipoAlerta: TipoAlerta().alertAccion,
+                                                numLineasTitulo: 1,
+                                                numLineasMensaje: 2,
+                                                titulo: 'Error',
+                                                mensajeAlerta: 'El ingreso esperado no puede ser un valor negativo.'
+                                              );
+                                            },
+                                          );
+                        
+                                          return;
+                                        }
+
+                                      }
                                     }
 
                                     if(emailTxt.text.isEmpty){
@@ -1282,6 +1369,54 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                       
                                         return;
                                       }
+                                    }
+
+                                    if(fecCierreFin.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese la fecha de cierre.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
+                                    }
+
+                                    if(direccionTxt.text.isEmpty){
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ContentAlertDialog(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            onPressedCont: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            tipoAlerta: TipoAlerta().alertAccion,
+                                            numLineasTitulo: 2,
+                                            numLineasMensaje: 2,
+                                            titulo: 'Error',
+                                            mensajeAlerta: 'Ingrese la dirección del prospecto.'
+                                          );
+                                        },
+                                      );
+                    
+                                      return;
                                     }
                     
                                     showDialog(

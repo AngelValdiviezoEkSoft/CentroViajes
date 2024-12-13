@@ -32,7 +32,7 @@ class ActivitiesService extends ChangeNotifier{
       List<MultiModel> lstMultiModel = [];
 
       lstMultiModel.add(
-        MultiModel(model: 'crm.lead')
+        MultiModel(model: 'mail.activity.type')
       );
 
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(

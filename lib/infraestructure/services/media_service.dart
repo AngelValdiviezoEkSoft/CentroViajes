@@ -33,7 +33,7 @@ class MediaService extends ChangeNotifier{
       List<MultiModel> lstMultiModel = [];
 
       lstMultiModel.add(
-        MultiModel(model: 'crm.lead')
+        MultiModel(model: 'utm.medium')
       );
 
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(

@@ -129,8 +129,6 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
               else{
                 if(snapshot.data != null) {
 
-                  //ProspectoCombosModel objTmp = snapshot.data as ProspectoCombosModel;
-
                   String rspCombos = snapshot.data as String;
 
                   ProspectoCombosModel objTmp = ProspectoCombosModel(
@@ -399,7 +397,6 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               ),
                                             );
                                               
-
                                               var resp = await ProspectoTypeService().getProspectoRegistrado(telefonoPrsp);
                       
                                               var objResp = json.decode(resp);
@@ -566,11 +563,11 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       ),
                                       */
                           
+                                      if(celularValido)
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
-                                        child: DropdownButtonFormField<String>(
-                                          
+                                        child: DropdownButtonFormField<String>(                                          
                                           decoration: const InputDecoration(
                                             border: OutlineInputBorder(),
                                             labelText: 'Seleccione el país...',
@@ -596,63 +593,40 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         ),
                                       ),
                                         
+                                      if(celularValido)
                                       SizedBox(
                                         height: size.height * 0.03,
                                       ),
-                    
-                                      /*
+
+                                      if(!celularValido)
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
-                                        child: TextFormField(
-                                          controller: sectorTxt,
-                                          //initialValue: 'Norte',
-                                          //enabled: false,
-                                          cursorColor: AppLightColors().primary,
-                                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                                          style: AppTextStyles.bodyRegular(width: size.width),
-                                          decoration: InputDecorationCvs.formsDecoration(
-                                            labelText: 'Sector',
-                                            hintTetx: 'Ej: Norte',
-                                            size: size
+                                        child: DropdownButtonFormField<String>(                                          
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Seleccione el país...',
                                           ),
-                                          //controller: emailAkiTxt,
-                                          autocorrect: false,
-                                          keyboardType: TextInputType.text,
-                                          minLines: 1,
-                                          maxLines: 2,
-                                          autofocus: false,
-                                          maxLength: 50,
-                                          textAlign: TextAlign.left,
-                                          onEditingComplete: () {
-                                            FocusScope.of(context).unfocus();
-                                            //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
-                                          },
-                                          onChanged: (value) {
-                                            
-                                          },
-                                          onTapOutside: (event) {
-                                            FocusScope.of(context).unfocus();
-                                          },
+                                          items: const [],
+                                          onChanged: (value) {},
                                         ),
                                       ),
-                                      
+                                        
+                                      if(!celularValido)
                                       SizedBox(
                                         height: size.height * 0.03,
                                       ),
-                                      */
-                                                                          
+
+                                      if(celularValido)    
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
                                         child: DropdownButtonFormField<String>(
                                           decoration: const InputDecoration(
                                             border: OutlineInputBorder(),
-                                            labelText:
-                                                'Seleccione la campaña',
+                                            labelText: 'Seleccione la campaña...',
                                           ),
                                           value: campSelect,
-                                          //value: selectedActivityType,
                                           items: lstCampanias.map((activityPrsp) =>
                                                   DropdownMenuItem(
                                                     value: activityPrsp,
@@ -667,11 +641,32 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           },
                                         ),
                                       ),
-                                                                      
+
+                                      if(celularValido)
                                       SizedBox(
-                                        height: size.height * 0.03,
+                                        height: size.height * 0.02,
+                                      ),
+
+                                      if(!celularValido)
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: DropdownButtonFormField<String>(                                          
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Seleccione la campaña...',
+                                          ),
+                                          items: const [],
+                                          onChanged: (value) {},
+                                        ),
+                                      ),
+
+                                      if(!celularValido)
+                                      SizedBox(
+                                        height: size.height * 0.02,
                                       ),
                           
+                                      if(celularValido)
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
@@ -679,7 +674,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           decoration: const InputDecoration(
                                             border: OutlineInputBorder(),
                                             labelText:
-                                                'Seleccione el origen',
+                                                'Seleccione el origen...',
                                           ),
                                           value: originSelect,
                                           items: lstOrigenes
@@ -697,11 +692,32 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           },
                                         ),
                                         ),
-                                                                          
+
+                                      if(celularValido)                                 
                                       SizedBox(
                                         height: size.height * 0.03,
                                       ),
-                                            
+
+                                      if(!celularValido)
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: DropdownButtonFormField<String>(                                          
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Seleccione el origen...',
+                                          ),
+                                          items: const [],
+                                          onChanged: (value) {},
+                                        ),
+                                      ),
+
+                                      if(!celularValido)
+                                      SizedBox(
+                                        height: size.height * 0.02,
+                                      ),
+
+                                      if(celularValido)
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
@@ -709,7 +725,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                       decoration: const InputDecoration(
                                                         border: OutlineInputBorder(),
                                                         labelText:
-                                                            'Seleccione el medio',
+                                                            'Seleccione el medio...',
                                                       ),
                                                       value: mediaSelect,
                                                       items: lstMedias
@@ -727,11 +743,31 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                       },
                                                     ),
                                       ),
-                                                                          
+
+                                      if(celularValido)
                                       SizedBox(
                                         height: size.height * 0.02,
                                       ),
-                                                                          
+
+                                      if(!celularValido)
+                                      Container(
+                                        color: Colors.transparent,
+                                        width: size.width * 0.92,
+                                        child: DropdownButtonFormField<String>(                                          
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Seleccione el medio...',
+                                          ),
+                                          items: const [],
+                                          onChanged: (value) {},
+                                        ),
+                                      ),
+
+                                      if(!celularValido)
+                                      SizedBox(
+                                        height: size.height * 0.02,
+                                      ),
+
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,

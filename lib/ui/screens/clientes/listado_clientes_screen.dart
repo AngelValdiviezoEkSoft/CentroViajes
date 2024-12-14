@@ -108,24 +108,26 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
       List<DatumClienteModelData> clientesFiltrados = [];
 
       if(terminoBusquedaClient.isNotEmpty){
-        clientesFiltrados = apiResponse.result.data.resPartner.data
-        .where((producto) =>
-            producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
-        ).toList();
+                    if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
+                      clientesFiltrados = apiResponse.result.data.resPartner.data
+                      .where((producto) =>
+                          producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                      ).toList();
 
-        if(clientesFiltrados.isEmpty){
-          clientesFiltrados = apiResponse.result.data.resPartner.data
-          .where((producto) =>
-              producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
-          ).toList();
-        }
-
-        if(clientesFiltrados.isEmpty){
-          clientesFiltrados = apiResponse.result.data.resPartner.data
-          .where((producto) =>
-              producto.mobile.contains(terminoBusquedaClient)
-          ).toList();
-        }
+                      if(clientesFiltrados.isEmpty){
+                        clientesFiltrados = apiResponse.result.data.resPartner.data
+                        .where((producto) =>
+                            producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                        ).toList();
+                      }
+                    } else {
+                      if(clientesFiltrados.isEmpty){
+                        clientesFiltrados = apiResponse.result.data.resPartner.data
+                        .where((producto) =>
+                            producto.mobile.contains(terminoBusquedaClient)
+                        ).toList();
+                      }
+                    }
       } else{
         clientesFiltrados = apiResponse.result.data.resPartner.data;
       }
@@ -179,6 +181,9 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             onPressed: () {
+              //ignore: use_build_context_synchronously
+              FocusScope.of(context).unfocus();
+              
               filtroCliTxt = TextEditingController();
               terminoBusquedaClient= '';
               context.pop();
@@ -216,27 +221,29 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
             List<DatumClienteModelData> clientesFiltrados = [];
 
             if(terminoBusquedaClient.isNotEmpty){
-              clientesFiltrados = apiResponse.result.data.resPartner.data
-              .where((producto) =>
-                  producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
-              ).toList();
+                    if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
+                      clientesFiltrados = apiResponse.result.data.resPartner.data
+                      .where((producto) =>
+                          producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                      ).toList();
 
-              if(clientesFiltrados.isEmpty){
-                clientesFiltrados = apiResponse.result.data.resPartner.data
-                .where((producto) =>
-                    producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
-                ).toList();
-              }
-
-              if(clientesFiltrados.isEmpty){
-                clientesFiltrados = apiResponse.result.data.resPartner.data
-                .where((producto) =>
-                    producto.mobile.contains(terminoBusquedaClient)
-                ).toList();
-              }
-            } else{
-              clientesFiltrados = apiResponse.result.data.resPartner.data;
-            }
+                      if(clientesFiltrados.isEmpty){
+                        clientesFiltrados = apiResponse.result.data.resPartner.data
+                        .where((producto) =>
+                            producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                        ).toList();
+                      }
+                    } else {
+                      if(clientesFiltrados.isEmpty){
+                        clientesFiltrados = apiResponse.result.data.resPartner.data
+                        .where((producto) =>
+                            producto.mobile.contains(terminoBusquedaClient)
+                        ).toList();
+                      }
+                    }
+                  } else{
+                    clientesFiltrados = apiResponse.result.data.resPartner.data;
+                  }
 
             setState(() {
         
@@ -270,29 +277,31 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                   ClienteResponseModel apiResponse = ClienteResponseModel.fromJson(objLogDecode);
 
                   if(terminoBusquedaClient.isNotEmpty){
-                    clientesFiltrados = apiResponse.result.data.resPartner.data
-                    .where((producto) =>
-                        producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
-                    ).toList();
-
-                    if(clientesFiltrados.isEmpty){
+                    if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
                       clientesFiltrados = apiResponse.result.data.resPartner.data
                       .where((producto) =>
-                          producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                          producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
                       ).toList();
-                    }
 
-                    if(clientesFiltrados.isEmpty){
-                      clientesFiltrados = apiResponse.result.data.resPartner.data
-                      .where((producto) =>
-                          producto.mobile.contains(terminoBusquedaClient)
-                      ).toList();
+                      if(clientesFiltrados.isEmpty){
+                        clientesFiltrados = apiResponse.result.data.resPartner.data
+                        .where((producto) =>
+                            producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                        ).toList();
+                      }
+                    } else {
+                      if(clientesFiltrados.isEmpty){
+                        clientesFiltrados = apiResponse.result.data.resPartner.data
+                        .where((producto) =>
+                            producto.mobile.contains(terminoBusquedaClient)
+                        ).toList();
+                      }
                     }
                   } else{
                     clientesFiltrados = apiResponse.result.data.resPartner.data;
                   }
 
-                  pagingController.appendPage(clientesFiltrados, 1);
+                  //pagingController.appendPage(clientesFiltrados, 1);
                 } else {
                   listaVaciaCli = true;
                 }

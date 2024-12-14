@@ -1,18 +1,5 @@
 part of 'auth_bloc.dart';
 
-/*
-sealed class AuthState extends Equatable {
-  const AuthState();
-  
-  @override
-  List<Object> get props => [];
-}
-
-final class AuthInitial extends AuthState {}
-*/
-
-bool entraConsultar = true;
-
 abstract class AuthState extends Equatable {
   
   final storage = const FlutterSecureStorage();
@@ -23,8 +10,6 @@ abstract class AuthState extends Equatable {
   Future<String> readToken() async {
     try {
       String rspFinal = 'home';
-
-      String resInt = await ValidacionesUtils().validaInternet();
 
       var rspReg = await storage.read(key: 'RespuestaRegistro') ?? '';
       var rspLog = await storage.read(key: 'RespuestaLogin') ?? '';
@@ -37,13 +22,7 @@ abstract class AuthState extends Equatable {
           rspFinal = 'log';
         }        
       }
-
-      if(resInt.isEmpty && rspFinal.isNotEmpty && rspFinal == 'home' && entraConsultar){
-        entraConsultar = false;
-        await DataInicialService().readCombosProspectos();
-        await DataInicialService().readPrincipalPage();        
-      }
-
+      
       return rspFinal; 
     }
     catch(ex) {

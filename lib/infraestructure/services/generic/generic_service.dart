@@ -171,11 +171,22 @@ class GenericService extends ChangeNotifier {
       await getMultiModelosGen(objReq, lstModels);
     }
 
-    print('Test Total: ${response.body}');
+    //print('Test Total: ${response.body}');
 
     var rsp = AppResponseModel.fromRawJson(response.body);
 
-    print('Test Total Conversión: ${rsp.result.data.mailActivityType.fields.category}');
+    var tst = json.encode(rsp.result.data.crmLead);
+
+    await storage.write(key: 'RespuestaProspectos', value: json.encode(rsp.result.data.crmLead));
+    await storage.write(key: 'RespuestaClientes', value: json.encode(rsp.result.data.resPartner));
+
+    await storage.write(key: 'cmbCampania', value: json.encode(rsp.result.data.utmCampaign));
+    await storage.write(key: 'cmbOrigen', value: json.encode(rsp.result.data.utmSource));
+    await storage.write(key: 'cmbMedia', value: json.encode(rsp.result.data.utmMedium));
+    await storage.write(key: 'cmbActividades', value: json.encode(rsp.result.data.mailActivityType));
+    await storage.write(key: 'cmbPaises', value: json.encode(rsp.result.data.resCountry));
+
+    //print('Test Total Conversión: ${rsp.result.data.mailActivityType.fields.category}');
 
     return response.body;
     

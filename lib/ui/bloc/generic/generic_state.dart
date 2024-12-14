@@ -156,12 +156,6 @@ class GenericState extends Equatable {
         ),
       ]; 
 
-      var rspPrsp = await ProspectoTypeService().getProspectos();
-      var rspCli = await ClienteService().getClientes();
-
-      await storage.write(key: 'RespuestaProspectos', value: rspPrsp);
-      await storage.write(key: 'RespuestaClientes', value: rspCli);
-      
       final jsonString = serializeItemBotonMenuList(items);      
 
       respCmbLst = '$rspRegistro---${json.encode(lstRsp)}---$jsonString---${objPermisos.mainMenu.cardSales}---${objPermisos.mainMenu.cardCollection}';
@@ -169,7 +163,6 @@ class GenericState extends Equatable {
       return respCmbLst;
     }
     catch(ex){
-      //print('Error gen: $ex');
       return '';
     }
   }

@@ -118,24 +118,28 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
       List<DatumCrmLead> prospectosFiltrados = [];
 
       if(terminoBusqueda.isNotEmpty){
-        prospectosFiltrados = apiResponse.result.data.crmLead.data
-        .where(
-          (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
-        .toList();
-
-        if(prospectosFiltrados.isEmpty){
+        
+        if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
           prospectosFiltrados = apiResponse.result.data.crmLead.data
-          .where((producto) =>
-            producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
-          )
+          .where(
+            (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
           .toList();
-        }
 
-        if(prospectosFiltrados.isEmpty){
-          prospectosFiltrados = apiResponse.result.data.crmLead.data
-          .where((producto) =>
-              producto.mobile.contains(terminoBusqueda)
-          ).toList();
+          if(prospectosFiltrados.isEmpty){
+            prospectosFiltrados = apiResponse.result.data.crmLead.data
+            .where((producto) =>
+              producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
+            )
+            .toList();
+          }
+        } else {
+          if(prospectosFiltrados.isEmpty && (terminoBusqueda.contains('+') || terminoBusqueda.contains('0'))){
+            for(int i = 0; i < apiResponse.result.data.crmLead.data.length; i++){
+              if(apiResponse.result.data.crmLead.data[i].phone != null && apiResponse.result.data.crmLead.data[i].phone!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
+                prospectosFiltrados.add(apiResponse.result.data.crmLead.data[i]);
+              }
+            }
+          }
         }
 
         contLst = prospectosFiltrados.length;
@@ -194,6 +198,9 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             onPressed: () {
+              //ignore: use_build_context_synchronously
+              FocusScope.of(context).unfocus();
+
               terminoBusqueda = '';
               filtroPrspTxt = TextEditingController();
               context.pop();
@@ -239,32 +246,34 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
             List<DatumCrmLead> prospectosFiltrados = [];
 
             if(terminoBusqueda.isNotEmpty){
-              prospectosFiltrados = apiResponse.result.data.crmLead.data
-              .where(
-                (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
-              .toList();
-
-              if(prospectosFiltrados.isEmpty){
+              if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
                 prospectosFiltrados = apiResponse.result.data.crmLead.data
-                .where((producto) =>
-                  producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
-                )
+                .where(
+                  (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
                 .toList();
-              }
 
-              if(prospectosFiltrados.isEmpty){
-                prospectosFiltrados = apiResponse.result.data.crmLead.data
-                .where((producto) =>
-                    producto.mobile.contains(terminoBusqueda)
-                ).toList();
+                if(prospectosFiltrados.isEmpty){
+                  prospectosFiltrados = apiResponse.result.data.crmLead.data
+                  .where((producto) =>
+                    producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
+                  )
+                  .toList();
+                }
+              } else {
+                if(prospectosFiltrados.isEmpty && (terminoBusqueda.contains('+') || terminoBusqueda.contains('0'))){
+                  for(int i = 0; i < apiResponse.result.data.crmLead.data.length; i++){
+                    if(apiResponse.result.data.crmLead.data[i].phone != null && apiResponse.result.data.crmLead.data[i].phone!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
+                      prospectosFiltrados.add(apiResponse.result.data.crmLead.data[i]);
+                    }
+                  }
+                }
               }
-
+              
               contLst = prospectosFiltrados.length;
             } else{
               prospectosFiltrados = apiResponse.result.data.crmLead.data;
             }
 
-            // Refresca los datos llamando a la misma función de carga
             setState(() {
               
             });
@@ -303,24 +312,28 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                   ProspectoResponseModel apiResponse = ProspectoResponseModel.fromJson(objLogDecode);
 
                   if(terminoBusqueda.isNotEmpty){
-                    prospectosFiltrados = apiResponse.result.data.crmLead.data
-                    .where(
-                      (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
-                    .toList();
-
-                    if(prospectosFiltrados.isEmpty){
+                    
+                    if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
                       prospectosFiltrados = apiResponse.result.data.crmLead.data
-                      .where((producto) =>
-                        producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
-                      )
+                      .where(
+                        (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
                       .toList();
-                    }
 
-                    if(prospectosFiltrados.isEmpty){
-                      prospectosFiltrados = apiResponse.result.data.crmLead.data
-                      .where((producto) =>
-                          producto.mobile.contains(terminoBusqueda)
-                      ).toList();
+                      if(prospectosFiltrados.isEmpty){
+                        prospectosFiltrados = apiResponse.result.data.crmLead.data
+                        .where((producto) =>
+                          producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
+                        )
+                        .toList();
+                      }
+                    } else {
+                      if(prospectosFiltrados.isEmpty && (terminoBusqueda.contains('+') || terminoBusqueda.contains('0'))){
+                        for(int i = 0; i < apiResponse.result.data.crmLead.data.length; i++){
+                          if(apiResponse.result.data.crmLead.data[i].phone != null && apiResponse.result.data.crmLead.data[i].phone!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
+                            prospectosFiltrados.add(apiResponse.result.data.crmLead.data[i]);
+                          }
+                        }
+                      }
                     }
 
                     contLst = 0;
@@ -330,7 +343,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                     prospectosFiltrados = apiResponse.result.data.crmLead.data;
                   }
 
-                  pagingController.appendPage(prospectosFiltrados, 1);
+                  //pagingController.appendPage(prospectosFiltrados, 1);
                 } else {
                   listaVaciaPrp = true;
                 }
@@ -683,6 +696,9 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             onPressed: () {
+              //ignore: use_build_context_synchronously
+              FocusScope.of(context).unfocus();
+              
               terminoBusqueda = '';
               filtroPrspTxt = TextEditingController();
               context.pop();
@@ -739,7 +755,8 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                 if(terminoBusqueda.isNotEmpty){
                   prospectosFiltrados = apiResponse.result.data.crmLead.data
                   .where(
-                    (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
+                    (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase())
+                  )
                   .toList();
 
                   if(prospectosFiltrados.isEmpty){
@@ -749,11 +766,12 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                     .toList();
                   }
 
-                  if(prospectosFiltrados.isEmpty){
-                    prospectosFiltrados = apiResponse.result.data.crmLead.data
-                    .where((producto) =>
-                        producto.mobile.toLowerCase().contains(terminoBusqueda.toLowerCase()))
-                    .toList();
+                  if(prospectosFiltrados.isEmpty) {
+                    for(int i = 0; i < apiResponse.result.data.crmLead.data.length; i++) {
+                      if(apiResponse.result.data.crmLead.data[i].phone != null && apiResponse.result.data.crmLead.data[i].phone!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
+                        prospectosFiltrados.add(apiResponse.result.data.crmLead.data[i]);
+                      }
+                    }
                   }
 
                   contLst = 0;
@@ -762,7 +780,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                 } else{
                   prospectosFiltrados = apiResponse.result.data.crmLead.data;
                 }
-                //
 
                 return SingleChildScrollView(
                   child: Column(

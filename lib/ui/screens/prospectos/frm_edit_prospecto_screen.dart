@@ -261,25 +261,25 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                     );
 
                     var objCamp = json.decode(objTmp.campanias);
-                    var objCamp2 = json.decode(objCamp);
+                    //var objCamp2 = json.decode(objCamp);
 
                     var objMedia = json.decode(objTmp.medias);
-                    var objMedia2 = json.decode(objMedia);
+                    //var objMedia2 = json.decode(objMedia);
 
                     var objOrigen = json.decode(objTmp.origen);
-                    var objOrigen2 = json.decode(objOrigen);
+                    //var objOrigen2 = json.decode(objOrigen);
 
                     var objAct = json.decode(objTmp.actividades);
-                    var objAct2 = json.decode(objAct);
+                    //var objAct2 = json.decode(objAct);
 
                     var objPais = json.decode(objTmp.paises);
-                    var objPai2 = json.decode(objPais);
+                    //var objPai2 = json.decode(objPais);
 
-                    var objCamp3 = objCamp2['result']['data']['utm.campaign']['data'];
-                    var objMedia3 = objMedia2['result']['data']['utm.medium']['data'];
-                    var objOrigen3 = objOrigen2['result']['data']['utm.source']['data'];
-                    var objAct3 = objAct2['result']['data']['mail.activity.type']['data'];
-                    var objPai3 = objPai2['result']['data']['res.country']['data'];
+                    var objCamp3 = objCamp['data'];//objCamp2['result']['data']['utm.campaign']['data'];
+                    var objMedia3 = objMedia['data'];//objMedia2['result']['data']['utm.medium']['data'];
+                    var objOrigen3 = objOrigen['data'];//objOrigen2['result']['data']['utm.source']['data'];
+                    var objAct3 = objAct['data'];//objAct2['result']['data']['mail.activity.type']['data'];
+                    var objPai3 = objPais['data'];//objPai2['result']['data']['res.country']['data'];
 
                     List<Map<String, dynamic>> mappedObjCamp3 = List<Map<String, dynamic>>.from(objCamp3);
 
@@ -1135,8 +1135,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                 width: size.width * 0.38,
                                 color: Colors.transparent,
                                 child: GestureDetector(
-                                onTap: () async {
-                                  //context.push(Rutas().rutaHome);
+                                onTap: () async {                                  
                                   context.pop();
                                 },
                                 child: ButtonCvsWidget(
@@ -1154,235 +1153,235 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
 
                                   String gifRespuesta = 'assets/gifs/exito.gif';
                     
-                                    if(nombresEditTxt.text.isEmpty){
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return ContentAlertDialog(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            onPressedCont: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            tipoAlerta: TipoAlerta().alertAccion,
-                                            numLineasTitulo: 2,
-                                            numLineasMensaje: 2,
-                                            titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese los nombres del prospecto.'
-                                          );
-                                        },
-                                      );
-                    
-                                      return;
+                                  if(nombresEditTxt.text.isEmpty){
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return ContentAlertDialog(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          onPressedCont: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          tipoAlerta: TipoAlerta().alertAccion,
+                                          numLineasTitulo: 2,
+                                          numLineasMensaje: 2,
+                                          titulo: 'Error',
+                                          mensajeAlerta: 'Ingrese los nombres del prospecto.'
+                                        );
+                                      },
+                                    );
+                  
+                                    return;
+                                  }
+
+                                  if(probabilityEditTxt.text.isEmpty){
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return ContentAlertDialog(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          onPressedCont: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          tipoAlerta: TipoAlerta().alertAccion,
+                                          numLineasTitulo: 2,
+                                          numLineasMensaje: 2,
+                                          titulo: 'Error',
+                                          mensajeAlerta: 'Ingrese la probabilidad.'
+                                        );
+                                      },
+                                    );
+                  
+                                    return;
+                                  } else {
+                                    if(probabilityEditTxt.text.isNotEmpty){
+                                      double probNeg = double.parse(probabilityEditTxt.text);
+
+                                      if(probNeg < 0) {
+                                        showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return ContentAlertDialog(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              onPressedCont: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              tipoAlerta: TipoAlerta().alertAccion,
+                                              numLineasTitulo: 1,
+                                              numLineasMensaje: 2,
+                                              titulo: 'Error',
+                                              mensajeAlerta: 'La probabilidad no puede ser un valor negativo.'
+                                            );
+                                          },
+                                        );
+                      
+                                        return;
+                                      }
                                     }
+                                  }
 
-                                    if(probabilityEditTxt.text.isEmpty){
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return ContentAlertDialog(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            onPressedCont: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            tipoAlerta: TipoAlerta().alertAccion,
-                                            numLineasTitulo: 2,
-                                            numLineasMensaje: 2,
-                                            titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese la probabilidad.'
-                                          );
-                                        },
-                                      );
-                    
-                                      return;
-                                    } else {
-                                      if(probabilityEditTxt.text.isNotEmpty){
-                                        double probNeg = double.parse(probabilityEditTxt.text);
+                                  if(ingresoEsperadoEditTxt.text.isEmpty){
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return ContentAlertDialog(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          onPressedCont: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          tipoAlerta: TipoAlerta().alertAccion,
+                                          numLineasTitulo: 2,
+                                          numLineasMensaje: 2,
+                                          titulo: 'Error',
+                                          mensajeAlerta: 'Ingrese el monto esperado.'
+                                        );
+                                      },
+                                    );
+                  
+                                    return;
+                                  } else {
+                                    if(ingresoEsperadoEditTxt.text.isNotEmpty){
+                                      double ingNeg = double.parse(ingresoEsperadoEditTxt.text);
 
-                                        if(probNeg < 0) {
-                                          showDialog(
-                                            barrierDismissible: false,
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return ContentAlertDialog(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                onPressedCont: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                tipoAlerta: TipoAlerta().alertAccion,
-                                                numLineasTitulo: 1,
-                                                numLineasMensaje: 2,
-                                                titulo: 'Error',
-                                                mensajeAlerta: 'La probabilidad no puede ser un valor negativo.'
-                                              );
-                                            },
-                                          );
-                        
-                                          return;
-                                        }
+                                      if(ingNeg < 0) {
+                                        showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return ContentAlertDialog(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              onPressedCont: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              tipoAlerta: TipoAlerta().alertAccion,
+                                              numLineasTitulo: 1,
+                                              numLineasMensaje: 2,
+                                              titulo: 'Error',
+                                              mensajeAlerta: 'El ingreso esperado no puede ser un valor negativo.'
+                                            );
+                                          },
+                                        );
+                      
+                                        return;
+                                      }
+                                    }
+                                  }
+
+                                  if(emailEditTxt.text.isEmpty){
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return ContentAlertDialog(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          onPressedCont: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          tipoAlerta: TipoAlerta().alertAccion,
+                                          numLineasTitulo: 2,
+                                          numLineasMensaje: 2,
+                                          titulo: 'Error',
+                                          mensajeAlerta: 'Ingrese el correo.'
+                                        );
+                                      },
+                                    );
+                  
+                                    return;
+                                  } else {
+                                    if(emailEditTxt.text.isNotEmpty){
+                                      String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                      RegExp regExp = RegExp(pattern);
+                                      
+                                      if(!regExp.hasMatch(emailEditTxt.text)){
+                                        showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return ContentAlertDialog(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              onPressedCont: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              tipoAlerta: TipoAlerta().alertAccion,
+                                              numLineasTitulo: 2,
+                                              numLineasMensaje: 2,
+                                              titulo: 'Error',
+                                              mensajeAlerta: 'Correo inválido.'
+                                            );
+                                          },
+                                        );
+                      
+                                        return;
                                       }
                                     }
 
-                                    if(ingresoEsperadoEditTxt.text.isEmpty){
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return ContentAlertDialog(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            onPressedCont: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            tipoAlerta: TipoAlerta().alertAccion,
-                                            numLineasTitulo: 2,
-                                            numLineasMensaje: 2,
-                                            titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese el monto esperado.'
-                                          );
-                                        },
-                                      );
-                    
-                                      return;
-                                    } else {
-                                      if(ingresoEsperadoEditTxt.text.isNotEmpty){
-                                        double ingNeg = double.parse(ingresoEsperadoEditTxt.text);
+                                  }
 
-                                        if(ingNeg < 0) {
-                                          showDialog(
-                                            barrierDismissible: false,
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return ContentAlertDialog(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                onPressedCont: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                tipoAlerta: TipoAlerta().alertAccion,
-                                                numLineasTitulo: 1,
-                                                numLineasMensaje: 2,
-                                                titulo: 'Error',
-                                                mensajeAlerta: 'El ingreso esperado no puede ser un valor negativo.'
-                                              );
-                                            },
-                                          );
-                        
-                                          return;
-                                        }
-                                      }
-                                    }
+                                  if(fecEditCierre.isEmpty){
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return ContentAlertDialog(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          onPressedCont: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          tipoAlerta: TipoAlerta().alertAccion,
+                                          numLineasTitulo: 2,
+                                          numLineasMensaje: 2,
+                                          titulo: 'Error',
+                                          mensajeAlerta: 'Ingrese la fecha de cierre esperado.'
+                                        );
+                                      },
+                                    );
+                  
+                                    return;
+                                  }
 
-                                    if(emailEditTxt.text.isEmpty){
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return ContentAlertDialog(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            onPressedCont: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            tipoAlerta: TipoAlerta().alertAccion,
-                                            numLineasTitulo: 2,
-                                            numLineasMensaje: 2,
-                                            titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese el correo.'
-                                          );
-                                        },
-                                      );
-                    
-                                      return;
-                                    } else {
-                                      if(emailEditTxt.text.isNotEmpty){
-                                        String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                        RegExp regExp = RegExp(pattern);
-                                        
-                                        if(!regExp.hasMatch(emailEditTxt.text)){
-                                          showDialog(
-                                            barrierDismissible: false,
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return ContentAlertDialog(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                onPressedCont: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                tipoAlerta: TipoAlerta().alertAccion,
-                                                numLineasTitulo: 2,
-                                                numLineasMensaje: 2,
-                                                titulo: 'Error',
-                                                mensajeAlerta: 'Correo inválido.'
-                                              );
-                                            },
-                                          );
-                        
-                                          return;
-                                        }
-                                      }
-
-                                    }
-
-                                    if(fecEditCierre.isEmpty){
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return ContentAlertDialog(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            onPressedCont: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            tipoAlerta: TipoAlerta().alertAccion,
-                                            numLineasTitulo: 2,
-                                            numLineasMensaje: 2,
-                                            titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese la fecha de cierre esperado.'
-                                          );
-                                        },
-                                      );
-                    
-                                      return;
-                                    }
-
-                                    if(direccionEditTxt.text.isEmpty){
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return ContentAlertDialog(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            onPressedCont: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            tipoAlerta: TipoAlerta().alertAccion,
-                                            numLineasTitulo: 2,
-                                            numLineasMensaje: 2,
-                                            titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese la dirección del prospecto.'
-                                          );
-                                        },
-                                      );
-                    
-                                      return;
-                                    }
+                                  if(direccionEditTxt.text.isEmpty){
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return ContentAlertDialog(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          onPressedCont: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          tipoAlerta: TipoAlerta().alertAccion,
+                                          numLineasTitulo: 2,
+                                          numLineasMensaje: 2,
+                                          titulo: 'Error',
+                                          mensajeAlerta: 'Ingrese la dirección del prospecto.'
+                                        );
+                                      },
+                                    );
+                  
+                                    return;
+                                  }
 
                                   /*
                                   showDialog(

@@ -319,8 +319,8 @@ class LoginScreen extends StatelessWidget {
                         context.pop();
 
                         if(objError == null) {
-                          context.push(objRutasGen.rutaHome);
-                          //context.push(objRutasGen.rutaOnBoarding);
+                          context.go(objRutasGen.rutaHome);
+                          //context.go(objRutasGen.rutaOnBoarding);
                         } else {
                           final msmError = data['error']['message'];
 
@@ -655,8 +655,7 @@ class _LoginFormState extends State<_LoginForm> {
                                   );
                                 }
                                 */
-                                //context.push(Rutas().rutaListaClientes);
-                                context.push(Rutas().rutaHome);
+                                context.go(Rutas().rutaHome);
                               },
                               child: ButtonCvsWidget(
                                 text: 'Iniciar sesión',

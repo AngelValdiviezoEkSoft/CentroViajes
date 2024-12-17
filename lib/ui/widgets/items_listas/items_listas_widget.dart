@@ -219,18 +219,8 @@ class ListaNotificaciones extends StatelessWidget {
     child: BlocBuilder<AuthBloc, AuthState>(
       builder: (context,state) { 
         return GestureDetector(
-          onTap: () {
-            //context.push(Rutas().rutaListaProspectos);
-            
-            context.push(rutaNavegacionFin!);
-            
-            //onPress2!();
-            /*
-            if (onPress2 != null) {
-              // Si se proporciona onPressed, úsalo
-              onPress2!();
-            }
-            */
+          onTap: () {            
+            context.go(rutaNavegacionFin!);            
           },
           child: Column(
             children: [
@@ -304,7 +294,7 @@ class ListaNotificaciones extends StatelessWidget {
                         if(texto2 != null && texto2!.isNotEmpty )
                         GestureDetector(
                           onTap: () {
-                            context.push(rutaNavegacionFin!);
+                            context.go(rutaNavegacionFin!);
                           },
                           child: Stack(
               alignment: Alignment.center,
@@ -331,13 +321,8 @@ class ListaNotificaciones extends StatelessWidget {
           
                         if(texto2 == null || texto2!.isEmpty)
                         GestureDetector(
-                          onTap: () {
-                             /*
-                                  if(varIdNotificacionLst == 1){
-                                    context.push(Rutas().rutaListaClientes);
-                                  }
-                                  */
-                                  context.push(Rutas().rutaListaClientes);
+                          onTap: () {    
+                            context.go(rutaNavegacionFin!);
                           },
                           child: Container(
                             
@@ -346,13 +331,8 @@ class ListaNotificaciones extends StatelessWidget {
                             color: Colors.transparent,
                             child: Center(
                               child: GestureDetector(
-                                onTap: () {
-                                  /*
-                                  if(varIdNotificacionLst == 1){
-                                    context.push(Rutas().rutaListaClientes);
-                                  }
-                                  */
-                                  context.push(Rutas().rutaListaClientes);
+                                onTap: () {                                  
+                                  context.go(rutaNavegacionFin!);
                                 },
                                 child: Icon(icon, color: Colors.white,))
                             )

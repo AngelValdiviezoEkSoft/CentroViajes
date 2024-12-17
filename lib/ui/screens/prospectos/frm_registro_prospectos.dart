@@ -140,25 +140,25 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                   );
 
                   var objCamp = json.decode(objTmp.campanias);
-                  var objCamp2 = json.decode(objCamp);
+                  //var objCamp2 = json.decode(objCamp);
 
                   var objMedia = json.decode(objTmp.medias);
-                  var objMedia2 = json.decode(objMedia);
+                  //var objMedia2 = json.decode(objMedia);
 
                   var objOrigen = json.decode(objTmp.origen);
-                  var objOrigen2 = json.decode(objOrigen);
+                  //var objOrigen2 = json.decode(objOrigen);
 
                   var objAct = json.decode(objTmp.actividades);
-                  var objAct2 = json.decode(objAct);
+                  //var objAct2 = json.decode(objAct);
 
                   var objPais = json.decode(objTmp.paises);
-                  var objPai2 = json.decode(objPais);
+                  //var objPai2 = json.decode(objPais);
 
-                  var objCamp3 = objCamp2['result']['data']['utm.campaign']['data'];
-                  var objMedia3 = objMedia2['result']['data']['utm.medium']['data'];
-                  var objOrigen3 = objOrigen2['result']['data']['utm.source']['data'];
-                  var objAct3 = objAct2['result']['data']['mail.activity.type']['data'];
-                  var objPai3 = objPai2['result']['data']['res.country']['data'];
+                  var objCamp3 = objCamp['data'];//objCamp2['result']['data']['utm.campaign']['data'];
+                  var objMedia3 = objMedia['data'];//['result']['data']['utm.medium']['data'];
+                  var objOrigen3 = objOrigen['data'];//2['result']['data']['utm.source']['data'];
+                  var objAct3 = objAct['data'];//2['result']['data']['mail.activity.type']['data'];
+                  var objPai3 = objPais['data'];//2['result']['data']['res.country']['data'];
 
                   List<Map<String, dynamic>> mappedObjCamp3 = List<Map<String, dynamic>>.from(objCamp3);
 
@@ -432,9 +432,29 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                   );
                                                 },
                                               );
-                                            
                                             } else {
-                                              habilitaGuardar = false;
+                                              showDialog(
+                                                barrierDismissible: false,
+                                                //ignore: use_build_context_synchronously
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return ContentAlertDialog(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    onPressedCont: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    tipoAlerta: TipoAlerta().alertInfo,
+                                                    numLineasTitulo: 1,
+                                                    numLineasMensaje: 2,
+                                                    titulo: 'Atención',
+                                                    mensajeAlerta: 'Aunque no tiene internet, sus datos se registrarán en memoria.'
+                                                  );
+                                                },
+                                              );
+                                              //habilitaGuardar = false;
+                                              habilitaGuardar = true;
                                             }
                       
                                           }
@@ -1156,7 +1176,6 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                   color: Colors.transparent,
                                   child: GestureDetector(
                                   onTap: () async {
-                                    //context.push(Rutas().rutaHome);
                                     context.pop();
                                   },
                                   child: ButtonCvsWidget(
@@ -1242,7 +1261,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             numLineasTitulo: 2,
                                             numLineasMensaje: 2,
                                             titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese los nombres del prospecto.'
+                                            mensajeAlerta: 'Ingrese los nombres.'
                                           );
                                         },
                                       );
@@ -1447,7 +1466,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             numLineasTitulo: 2,
                                             numLineasMensaje: 2,
                                             titulo: 'Error',
-                                            mensajeAlerta: 'Ingrese la dirección del prospecto.'
+                                            mensajeAlerta: 'Ingrese la dirección.'
                                           );
                                         },
                                       );

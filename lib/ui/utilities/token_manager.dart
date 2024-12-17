@@ -28,12 +28,9 @@ class TokenManager {
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfo.androidInfo;
       imeiCod = androidInfo.id;
-    } else if (Platform.isIOS) {
-      //plataforma = 'iOS';
-      //final iOSInfo = await deviceInfo.iosInfo;
-      //imeiCod = iOSInfo.;
-    } else {
-      //plataforma = 'Desconocido';
+    } else if (Platform.isIOS) {      
+      final iOSInfo = await deviceInfo.iosInfo;
+      imeiCod = iOSInfo.identifierForVendor ?? '';
     }
 
     const storage = FlutterSecureStorage();

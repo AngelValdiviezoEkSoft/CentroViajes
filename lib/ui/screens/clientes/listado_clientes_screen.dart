@@ -17,7 +17,7 @@ import 'package:http/http.dart' as http;
 late TextEditingController filtroCliTxt;
 
 String terminoBusquedaClient= '';
-
+List<ResPartnerDatumAppModel> clientesFiltrados = [];
 bool listaVaciaCli = false;
 
 class ListaClientesScreen extends StatefulWidget {
@@ -37,6 +37,8 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
   @override
   void initState() {
     super.initState();
+
+    clientesFiltrados = [];
 
     filtroCliTxt = TextEditingController();
     terminoBusquedaClient= '';
@@ -108,7 +110,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
       List<DatumClienteModelData> clientesFiltrados = [];
 
       if(terminoBusquedaClient.isNotEmpty){
-                    if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
+                    if(!terminoBusquedaClient.contains('+') && !terminoBusquedaClient.contains('0')){
                       clientesFiltrados = apiResponse.result.data.resPartner.data
                       .where((producto) =>
                           producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
@@ -216,38 +218,92 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
             var objLogDecode = json.decode(rsp);
             //var objLogDecode2 = json.decode(objLogDecode);
 
-            ClienteResponseModel apiResponse = ClienteResponseModel.fromJson(objLogDecode);
+            ResPartnerAppModel  apiResponse = ResPartnerAppModel.fromJson(objLogDecode);
 
-            List<DatumClienteModelData> clientesFiltrados = [];
+            List<ResPartnerDatumAppModel> clientesFiltrados = [];
 
             if(terminoBusquedaClient.isNotEmpty){
-                    if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
-                      clientesFiltrados = apiResponse.result.data.resPartner.data
-                      .where((producto) =>
-                          producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
-                      ).toList();
+              if(!terminoBusquedaClient.contains('+') && !terminoBusquedaClient.contains('0')){                
 
-                      if(clientesFiltrados.isEmpty){
-                        clientesFiltrados = apiResponse.result.data.resPartner.data
-                        .where((producto) =>
-                            producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
-                        ).toList();
-                      }
-                    } else {
-                      if(clientesFiltrados.isEmpty){
-                        clientesFiltrados = apiResponse.result.data.resPartner.data
-                        .where((producto) =>
-                            producto.mobile.contains(terminoBusquedaClient)
-                        ).toList();
-                      }
-                    }
-                  } else{
-                    clientesFiltrados = apiResponse.result.data.resPartner.data;
+                for(int i = 0; i < apiResponse.data.length; i++){
+                  if(apiResponse.data[i].name != null && apiResponse.data[i].name!.toLowerCase().contains(terminoBusquedaClient.toLowerCase())){
+                    clientesFiltrados.add(apiResponse.data[i]);
                   }
+                }
+
+                if(clientesFiltrados.isEmpty){
+                  /*
+                  clientesFiltrados = apiResponse.data//.result.data.resPartner.data
+                  .where((producto) =>
+                      producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
+                  ).toList();
+                  */
+
+                  for(int i = 0; i < apiResponse.data.length; i++){
+                    if(apiResponse.data[i].email != null && apiResponse.data[i].email!.toLowerCase().contains(terminoBusquedaClient.toLowerCase())){
+                      clientesFiltrados.add(apiResponse.data[i]);
+                    }
+                  }
+                }
+              } else {
+                if(clientesFiltrados.isEmpty){
+
+                  for(int i = 0; i < apiResponse.data.length; i++){
+                    if(apiResponse.data[i].mobile != null && apiResponse.data[i].mobile!.toLowerCase().contains(terminoBusquedaClient.toLowerCase())){
+                      clientesFiltrados.add(apiResponse.data[i]);
+                    }
+                  }
+                }
+              }
+            } else{
+              clientesFiltrados = apiResponse.data;//result.data.resPartner.data;
+            }
 
             setState(() {
         
             });
+          }
+
+          Future<void> refreshDataByFiltro(String filtro, String objMemoria) async {
+            clientesFiltrados = [];
+            ResPartnerAppModel apiResponse = ResPartnerAppModel.fromRawJson(objMemoria);
+
+            if(filtro.isNotEmpty){
+              if(!filtro.contains('+') && !filtro.contains('0')){                      
+
+                for(int i = 0; i < apiResponse.data.length; i++){
+                  if(apiResponse.data[i].name != null && apiResponse.data[i].name!.toLowerCase().contains(filtro.toLowerCase())){
+                    clientesFiltrados.add(apiResponse.data[i]);
+                  }
+                }
+
+                if(clientesFiltrados.isEmpty){
+
+                  for(int i = 0; i < apiResponse.data.length; i++){
+                    if(apiResponse.data[i].email != null && apiResponse.data[i].email!.toLowerCase().contains(filtro.toLowerCase())){
+                      clientesFiltrados.add(apiResponse.data[i]);
+                    }
+                  }
+
+                }
+              } else {
+                if(clientesFiltrados.isEmpty) {
+
+                  for(int i = 0; i < apiResponse.data.length; i++){
+                    if(apiResponse.data[i].mobile != null && apiResponse.data[i].mobile!.toLowerCase().contains(terminoBusquedaClient.toLowerCase())){
+                      clientesFiltrados.add(apiResponse.data[i]);
+                    }
+                  }
+                }
+              }
+            } else{
+              clientesFiltrados = apiResponse.data;//.resPartner.data;
+            }
+
+            if(terminoBusquedaClient.isNotEmpty) {
+              setState(() {});
+            }
+
           }
 
           return FutureBuilder(
@@ -266,42 +322,13 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
               if (snapshot.hasData) {
 
                 String objRsp = snapshot.data as String;
-                List<DatumClienteModelData> clientesFiltrados = [];
-                var objLogDecode2;
-
+                
                 if(objRsp.isNotEmpty){
-                  
-                  var objLogDecode = json.decode(objRsp);
-                  objLogDecode2 = json.decode(objLogDecode);
-
-                  ClienteResponseModel apiResponse = ClienteResponseModel.fromJson(objLogDecode);
-
-                  if(terminoBusquedaClient.isNotEmpty){
-                    if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
-                      clientesFiltrados = apiResponse.result.data.resPartner.data
-                      .where((producto) =>
-                          producto.name.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
-                      ).toList();
-
-                      if(clientesFiltrados.isEmpty){
-                        clientesFiltrados = apiResponse.result.data.resPartner.data
-                        .where((producto) =>
-                            producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
-                        ).toList();
-                      }
-                    } else {
-                      if(clientesFiltrados.isEmpty){
-                        clientesFiltrados = apiResponse.result.data.resPartner.data
-                        .where((producto) =>
-                            producto.mobile.contains(terminoBusquedaClient)
-                        ).toList();
-                      }
-                    }
-                  } else{
-                    clientesFiltrados = apiResponse.result.data.resPartner.data;
+                  if(terminoBusquedaClient.isEmpty) {
+                    refreshDataByFiltro('', objRsp);
+                    listaVaciaCli = false;
                   }
-
-                  //pagingController.appendPage(clientesFiltrados, 1);
+                                    
                 } else {
                   listaVaciaCli = true;
                 }
@@ -323,10 +350,8 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                             prefixIcon: Icon(Icons.search, color: Colors.grey),
                           ),
                           onChanged: (value) {
-                            // Actualizar el estado con el término de búsqueda
-                            setState(() {
-                              terminoBusquedaClient = value;
-                            });
+                            terminoBusquedaClient = value;
+                            refreshDataByFiltro(value, objRsp);
                           },
                         ),
                       ),
@@ -379,17 +404,6 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                             controller: scrollListaClt,
                             itemCount: clientesFiltrados.length,
                             itemBuilder: ( _, int index ) {
-                              String? email;
-                              String? pais = '';
-
-                              if(objLogDecode2 != null)
-                              {
-                                email = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["email"];
-                                
-                                if(objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"] != null){
-                                  pais = objLogDecode2["result"]["data"]["res.partner"]["data"][index]["country_id"]["name"];
-                                }
-                              }
                           
                               return Slidable(
                                 key: ValueKey(clientesFiltrados[index].id),
@@ -406,22 +420,6 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                   
                                     ]
                                 ),
-                                /*
-                                endActionPane: ActionPane(
-                                    motion: const ScrollMotion(),
-                                    children: [
-                                      
-                                    SlidableAction(
-                                      onPressed: (context) => context.push(Rutas().rutaReasignaCliente),
-                                      backgroundColor: objColorsApp.morado,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.update,
-                                      label: 'Solicitud de revisión de prospecto',
-                                    ),
-                                    
-                                  ],
-                                ),
-                                */
                                 child: ListTile(
                                   title: Container(
                                   color: Colors.transparent,
@@ -474,7 +472,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                         overflow: TextOverflow.ellipsis,
                                                             //
                                                             //'${objLogDecode2["result"]["data"]["res.partner"]["data"][index]["name"]}',
-                                                            clientesFiltrados[index].name,
+                                                            clientesFiltrados[index].name ?? '',
                                                             style: const TextStyle(
                                                               fontWeight: FontWeight.bold,
                                                               //fontSize: 10,
@@ -486,7 +484,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                             ),
                                                   ),
                           
-                                                  if(email != null)
+                                                  if(clientesFiltrados[index].email != null)
                                                   Container(
                                                     color: Colors.transparent,
                                                     width: size.width * 0.54,
@@ -509,7 +507,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                     )
                                                   ),
                           
-                                                  if(pais != null)
+                                                  if(clientesFiltrados[index].countryId.name != null)
                                                   Container(
                                                     color: Colors.transparent,
                                                     width: size.width * 0.54,
@@ -530,7 +528,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                                     )
                                                   ),
                                                   
-                                              if(clientesFiltrados[index].mobile.isNotEmpty)
+                                              if(clientesFiltrados[index].mobile != null && clientesFiltrados[index].mobile!.isNotEmpty)
                                               Container(
                                                   color: Colors.transparent,
                                                   width: size.width * 0.54,
@@ -562,6 +560,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                             ],
                                           )
                                         ),
+
                                         Container(
                                           width: size.width * 0.11,
                                           height: size.height * 0.14,
@@ -572,7 +571,6 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                           ),
                                           child: Column(
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            //crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Container(
                                                 color: Colors.transparent,

@@ -1,14 +1,5 @@
 import 'dart:convert';
 
-
-    /*
-      factory SolicitudesTypeResponse.fromJson(String str) => SolicitudesTypeResponse.fromMap(json.decode(str));
-
-    String toJson() => json.encode(toMap());
-
-    factory SolicitudesTypeResponse.fromMap(Map<String, dynamic> json) => SolicitudesTypeResponse(
-    */
-
 class ProspectoResponseModel {
     String jsonrpc;
     dynamic id;

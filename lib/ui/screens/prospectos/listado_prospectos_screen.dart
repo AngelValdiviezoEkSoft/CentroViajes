@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
+import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/domain/models/prospecto_type_response.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:http/http.dart' as http;
 
+List<DatumCrmLead> prospectosFiltrados = [];
 String terminoBusqueda = '';
 DatumCrmLead? objDatumCrmLead;
 late TextEditingController filtroPrspTxt;
@@ -40,7 +42,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
     contLst = 0;
     terminoBusqueda = '';
     filtroPrspTxt = TextEditingController();
-
+    prospectosFiltrados = [];
     pagingController.addPageRequestListener((pageKey) {
       //fetchPage(pageKey);
     });
@@ -113,30 +115,33 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
       contLst = int.parse(contStr);
 
       //String estadoPrsp = '';
-      ProspectoResponseModel apiResponse = ProspectoResponseModel.fromJson(objLogDecode);
+      CrmLeadAppModel apiResponse = CrmLeadAppModel.fromJson(objLogDecode);
 
-      List<DatumCrmLead> prospectosFiltrados = [];
+      List<CrmLeadDatumAppModel> prospectosFiltrados = [];
 
       if(terminoBusqueda.isNotEmpty){
         
         if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
-          prospectosFiltrados = apiResponse.result.data.crmLead.data
-          .where(
-            (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
-          .toList();
+
+          for(int i = 0; i < apiResponse.data.length; i++){
+            if(apiResponse.data[i].name != null && apiResponse.data[i].name!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
+              prospectosFiltrados.add(apiResponse.data[i]);
+            }
+          }
 
           if(prospectosFiltrados.isEmpty){
-            prospectosFiltrados = apiResponse.result.data.crmLead.data
-            .where((producto) =>
-              producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
-            )
-            .toList();
+
+            for(int i = 0; i < apiResponse.data.length; i++){
+              if(apiResponse.data[i].emailFrom != null && apiResponse.data[i].emailFrom!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
+                prospectosFiltrados.add(apiResponse.data[i]);
+              }
+            }
           }
         } else {
           if(prospectosFiltrados.isEmpty && (terminoBusqueda.contains('+') || terminoBusqueda.contains('0'))){
-            for(int i = 0; i < apiResponse.result.data.crmLead.data.length; i++){
-              if(apiResponse.result.data.crmLead.data[i].phone != null && apiResponse.result.data.crmLead.data[i].phone!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
-                prospectosFiltrados.add(apiResponse.result.data.crmLead.data[i]);
+            for(int i = 0; i < apiResponse.data.length; i++){
+              if(apiResponse.data[i].phone != null && apiResponse.data[i].phone!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
+                prospectosFiltrados.add(apiResponse.data[i]);
               }
             }
           }
@@ -144,7 +149,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
 
         contLst = prospectosFiltrados.length;
       } else{
-        prospectosFiltrados = apiResponse.result.data.crmLead.data;
+        prospectosFiltrados = apiResponse.data;
       }
 
       context.pop();
@@ -217,7 +222,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
             IconButton(
               icon: const Icon(Icons.calendar_month, color: Colors.black),
               onPressed: () {
-                context.push(objRutasGen.rutaAgenda);
+                context.go(objRutasGen.rutaAgenda);
               },
             ),
           ],
@@ -279,6 +284,50 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
             });
           }
 
+          Future<void> refreshDataByFiltro(String filtro, String objMemoria) async {            
+            prospectosFiltrados = [];
+
+            CrmLead apiResponse = CrmLead.fromJson(objMemoria);
+
+            if(terminoBusqueda.isNotEmpty){
+              
+              if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
+                prospectosFiltrados = apiResponse.data
+                .where(
+                  (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
+                .toList();
+
+                if(prospectosFiltrados.isEmpty){
+                  prospectosFiltrados = apiResponse.data
+                  .where((producto) =>
+                    producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
+                  )
+                  .toList();
+                }
+              } else {
+                if(prospectosFiltrados.isEmpty && (terminoBusqueda.contains('+') || terminoBusqueda.contains('0'))){
+                  for(int i = 0; i < apiResponse.data.length; i++){
+                    if(apiResponse.data[i].phone != null && apiResponse.data[i].phone!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
+                      prospectosFiltrados.add(apiResponse.data[i]);
+                    }
+                  }
+                }
+              }
+
+              contLst = 0;
+
+              contLst = prospectosFiltrados.length;
+            } else{
+              prospectosFiltrados = apiResponse.data;
+            }            
+
+            if(terminoBusqueda.isNotEmpty) {
+              setState(() {});
+            }
+
+          }
+
+
           return FutureBuilder(
             future: state.lstProspectos(),
             builder: (context, snapshot) {
@@ -294,14 +343,12 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
 
               if (snapshot.hasData) {
 
-                String objRsp = snapshot.data as String;
-                List<DatumCrmLead> prospectosFiltrados = [];
+                String objRsp = snapshot.data as String;                
 
                 if(objRsp.isNotEmpty){
                   var objLogDecode = json.decode(objRsp);
-                  var objLogDecode2 = json.decode(objLogDecode);
 
-                  var tstLength = objLogDecode2["result"]["data"]["crm.lead"]["length"];
+                  var tstLength = objLogDecode["length"];
 
                   String contStr = '$tstLength';
 
@@ -309,40 +356,9 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
 
                   contLst = int.parse(contStr);
 
-                  ProspectoResponseModel apiResponse = ProspectoResponseModel.fromJson(objLogDecode);
-
-                  if(terminoBusqueda.isNotEmpty){
-                    
-                    if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
-                      prospectosFiltrados = apiResponse.result.data.crmLead.data
-                      .where(
-                        (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
-                      .toList();
-
-                      if(prospectosFiltrados.isEmpty){
-                        prospectosFiltrados = apiResponse.result.data.crmLead.data
-                        .where((producto) =>
-                          producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
-                        )
-                        .toList();
-                      }
-                    } else {
-                      if(prospectosFiltrados.isEmpty && (terminoBusqueda.contains('+') || terminoBusqueda.contains('0'))){
-                        for(int i = 0; i < apiResponse.result.data.crmLead.data.length; i++){
-                          if(apiResponse.result.data.crmLead.data[i].phone != null && apiResponse.result.data.crmLead.data[i].phone!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
-                            prospectosFiltrados.add(apiResponse.result.data.crmLead.data[i]);
-                          }
-                        }
-                      }
-                    }
-
-                    contLst = 0;
-
-                    contLst = prospectosFiltrados.length;
-                  } else{
-                    prospectosFiltrados = apiResponse.result.data.crmLead.data;
-                  }
-
+                  refreshDataByFiltro('', objRsp);
+                  
+                  listaVaciaPrp = false;
                   //pagingController.appendPage(prospectosFiltrados, 1);
                 } else {
                   listaVaciaPrp = true;
@@ -366,10 +382,8 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                             prefixIcon: Icon(Icons.search, color: Colors.grey),
                           ),
                           onChanged: (value) {
-                            // Actualizar el estado con el término de búsqueda
-                            setState(() {
-                              terminoBusqueda = value;
-                            });
+                            terminoBusqueda = value;
+                            refreshDataByFiltro(value, objRsp);                            
                           },
                         ),
                       ),
@@ -429,7 +443,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                   motion: const ScrollMotion(),
                                     children: [
                                       SlidableAction(
-                                        onPressed: (context) => context.push(Rutas().rutaPlanificacionActividades),
+                                        onPressed: (context) => context.go(Rutas().rutaPlanificacionActividades),
                                         backgroundColor: objColorsApp.celeste,
                                         foregroundColor: Colors.white,
                                         icon: Icons.call_outlined,
@@ -601,7 +615,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                     final gpsBloc = BlocProvider.of<GpsBloc>(context);
                                                       gpsBloc.askGpsAccess();
                                                       */
-                                                    context.push(Rutas().rutaMap);
+                                                    context.go(Rutas().rutaMap);
                                                   },
                                                 ),
                                               ),
@@ -623,7 +637,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                   icon: const Icon(Icons.info, color: Colors.grey, size: 20,),
                                                   onPressed: () {
                                                     objDatumCrmLead = prospectosFiltrados[index];
-                                                    context.push(Rutas().rutaEditProsp);
+                                                    context.go(Rutas().rutaEditProsp);
                                                   },
                                                 ),
                                               ),
@@ -682,7 +696,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
         onPressed: () {
           terminoBusqueda = '';
           filtroPrspTxt = TextEditingController();
-          context.push(objRutasGen.rutaRegistroPrsp);          
+          context.go(objRutasGen.rutaRegistroPrsp);          
         },
         backgroundColor: const Color.fromRGBO(75, 57, 239, 1.0),
         child: const Icon(Icons.person_add_alt, color: Colors.white,),
@@ -709,7 +723,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
             IconButton(
               icon: const Icon(Icons.calendar_month, color: Colors.black),
               onPressed: () {
-                context.push(objRutasGen.rutaAgenda);
+                context.go(objRutasGen.rutaAgenda);
               },
             ),
           ],
@@ -825,7 +839,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                 motion: const ScrollMotion(),
                                   children: [
                                     SlidableAction(
-                                      onPressed: (context) => context.push(Rutas().rutaPlanificacionActividades),
+                                      onPressed: (context) => context.go(Rutas().rutaPlanificacionActividades),
                                       backgroundColor: objColorsApp.celeste,
                                       foregroundColor: Colors.white,
                                       icon: Icons.call_outlined,
@@ -1021,7 +1035,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                   filtroPrspTxt = TextEditingController();
                                                   
                                                   objDatumCrmLead = prospectosFiltrados[index];
-                                                  context.push(Rutas().rutaEditProsp);
+                                                  context.go(Rutas().rutaEditProsp);
                                                 },
                                               ),
                                             ),

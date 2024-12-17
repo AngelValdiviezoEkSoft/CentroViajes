@@ -341,6 +341,15 @@ class AuthService extends ChangeNotifier {
   Future logOut() async {
     await storage.write(key: 'RespuestaLogin', value: '');
     
+    await storage.write(key: 'RespuestaProspectos', value: '');
+    await storage.write(key: 'RespuestaClientes', value: '');
+
+    await storage.write(key: 'cmbCampania', value: '');
+    await storage.write(key: 'cmbOrigen', value: '');
+    await storage.write(key: 'cmbMedia', value: '');
+    await storage.write(key: 'cmbActividades', value: '');
+    await storage.write(key: 'cmbPaises', value: '');
+    
     return;
   }
 

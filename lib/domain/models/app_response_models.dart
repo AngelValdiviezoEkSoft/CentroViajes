@@ -646,6 +646,10 @@ class ResPartnerDatumAppModel {
     String? companyType;
     CombosAppModel countryId;
     String? email;
+    
+    String? mobile;
+    String? name;
+    String? ref;
 
     ResPartnerDatumAppModel({
         required this.id,
@@ -657,6 +661,10 @@ class ResPartnerDatumAppModel {
         required this.companyType,
         required this.countryId,
         required this.email,
+
+        required this.mobile,
+        required this.name,
+        required this.ref,
     });
 
     factory ResPartnerDatumAppModel.fromRawJson(String str) => ResPartnerDatumAppModel.fromJson(json.decode(str));
@@ -673,6 +681,10 @@ class ResPartnerDatumAppModel {
         companyType: json["company_type"] ?? '',
         countryId: CombosAppModel.fromJson(json["country_id"]),
         email: json["email"] ?? '',
+
+        mobile: json["mobile"] ?? '',
+        name: json["name"] ?? '',
+        ref: json["ref"] ?? '',
     );
 
     Map<String, dynamic> toJson() => {
@@ -685,6 +697,10 @@ class ResPartnerDatumAppModel {
         "company_type": companyType,
         "country_id": countryId.toJson(),
         "email": email,
+
+        "mobile": mobile,
+        "name": name,
+        "ref": ref,
     };
 }
 

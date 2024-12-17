@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 int tabAccionesRegPrsp = 0;
 
@@ -52,6 +53,9 @@ class FrmRegistroProspectoScreen extends StatefulWidget {
 
 class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen> {
 
+  var currencyFormatter = CurrencyInputFormatter(
+    thousandSeparator: ThousandSeparator.None,
+  );
   
   String message = '';
   final LocalAuthentication auth = LocalAuthentication();  
@@ -445,10 +449,10 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                     onPressedCont: () {
                                                       Navigator.of(context).pop();
                                                     },
-                                                    tipoAlerta: TipoAlerta().alertInfo,
-                                                    numLineasTitulo: 1,
-                                                    numLineasMensaje: 2,
-                                                    titulo: 'Atención',
+                                                    tipoAlerta: TipoAlerta().alertAccion,
+                                                    numLineasTitulo: 2,
+                                                    numLineasMensaje: 3,
+                                                    titulo: 'Información',
                                                     mensajeAlerta: 'Aunque no tiene internet, sus datos se registrarán en memoria.'
                                                   );
                                                 },
@@ -860,6 +864,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                   hintText: "100%",
                                                   suffixText: '%',
                                                 ),
+                                                inputFormatters: [currencyFormatter],
                                                 controller: probabilityTxt,
                                                 autocorrect: false,
                                                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -920,6 +925,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                 autofocus: false,
                                                 maxLength: 7,
                                                 textAlign: TextAlign.left,
+                                                inputFormatters: [currencyFormatter],
                                                 onEditingComplete: () {
                                                   FocusScope.of(context).unfocus();
 
@@ -1292,10 +1298,36 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                     
                                       return;
                                     } else {
-                                      if(probabilityTxt.text.isNotEmpty){
-                                        double probNeg = double.parse(probabilityTxt.text);
+                                      if(probabilityTxt.text.isNotEmpty){                                       
+                                        try {
+                                          double probNeg = double.parse(probabilityTxt.text);
 
-                                        if(probNeg < 0) {
+                                          if(probNeg < 0) {
+                                            showDialog(
+                                              barrierDismissible: false,
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return ContentAlertDialog(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  onPressedCont: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  tipoAlerta: TipoAlerta().alertAccion,
+                                                  numLineasTitulo: 1,
+                                                  numLineasMensaje: 2,
+                                                  titulo: 'Error',
+                                                  mensajeAlerta: 'La probabilidad no puede ser un valor negativo.'
+                                                );
+                                              },
+                                            );
+                          
+                                            return;
+                                          }
+
+                                        } catch(ex) {
+
                                           showDialog(
                                             barrierDismissible: false,
                                             context: context,
@@ -1307,11 +1339,11 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                 onPressedCont: () {
                                                   Navigator.of(context).pop();
                                                 },
-                                                tipoAlerta: TipoAlerta().alertAccion,
-                                                numLineasTitulo: 1,
+                                                tipoAlerta: TipoAlerta().alertError,
+                                                numLineasTitulo: 2,
                                                 numLineasMensaje: 2,
                                                 titulo: 'Error',
-                                                mensajeAlerta: 'La probabilidad no puede ser un valor negativo.'
+                                                mensajeAlerta: 'La probabilidad no es un valor válido.'
                                               );
                                             },
                                           );
@@ -1346,9 +1378,35 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       return;
                                     } else {
                                       if(ingresoEsperadoTxt.text.isNotEmpty){
-                                        double ingNeg = double.parse(ingresoEsperadoTxt.text);
+                                        
+                                        try {
+                                          double ingNeg = double.parse(ingresoEsperadoTxt.text);
 
-                                        if(ingNeg < 0) {
+                                          if(ingNeg < 0) {
+                                            showDialog(
+                                              barrierDismissible: false,
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return ContentAlertDialog(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  onPressedCont: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  tipoAlerta: TipoAlerta().alertAccion,
+                                                  numLineasTitulo: 1,
+                                                  numLineasMensaje: 2,
+                                                  titulo: 'Error',
+                                                  mensajeAlerta: 'El ingreso esperado no puede ser un valor negativo.'
+                                                );
+                                              },
+                                            );
+                          
+                                            return;
+                                          }
+                                        } catch(ex) {
+
                                           showDialog(
                                             barrierDismissible: false,
                                             context: context,
@@ -1360,18 +1418,17 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                 onPressedCont: () {
                                                   Navigator.of(context).pop();
                                                 },
-                                                tipoAlerta: TipoAlerta().alertAccion,
-                                                numLineasTitulo: 1,
+                                                tipoAlerta: TipoAlerta().alertError,
+                                                numLineasTitulo: 2,
                                                 numLineasMensaje: 2,
                                                 titulo: 'Error',
-                                                mensajeAlerta: 'El ingreso esperado no puede ser un valor negativo.'
+                                                mensajeAlerta: 'El ingreso esperado no es un valor válido.'
                                               );
                                             },
                                           );
                         
                                           return;
                                         }
-
                                       }
                                     }
 
@@ -1493,6 +1550,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     int idCamp = 0;
                                     int idMedia = 0;
                                     int idOrigen = 0;
+                                    int idActivi = 0;
                     
                                     for (var elemento in mappedObjPais3) {
                                       if (elemento['name'] == paisSelect) {
@@ -1517,7 +1575,13 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         idMedia = elemento['id'];
                                       }
                                     }
-                    
+                                    
+                                    for (var elemento in mappedObjAct3) {
+                                      if (elemento['name'] == mediaSelect) {
+                                        idActivi = elemento['id'];
+                                      }
+                                    }
+
                                     DatumCrmLead objProsp = DatumCrmLead(                                    
                                       expectedRevenue: double.parse(ingresoEsperadoTxt.text),
                                       dayClose: double.parse(dateRgPrsp.day.toString()),
@@ -1538,7 +1602,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       dateDeadline: DateTime.now(),
                                       probability: double.parse(probabilityTxt.text),
                                       activityIds: [
-                                        StructCombos(id: 2, name: actSelect)
+                                        StructCombos(id: idActivi, name: actSelect)
                                       ],
                                       campaignId: CampaignId(
                                         id: idCamp,

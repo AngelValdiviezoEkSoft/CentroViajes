@@ -25,13 +25,14 @@ class DefaultButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(size.width * 0.4),
           color: colorBoton ?? ColorsApp().morado),
       child: Center(
-          child: BaseText(
-        text,
-        null,
-        size: 0.055,
-        weight: weight ?? FontWeight.w500,
-        color: colorTexto ?? ColorsApp().blanco0Opacidad,
-      )),
+        child: BaseText(        
+          null,
+          text,
+          size: 0.055,
+          weight: weight ?? FontWeight.w500,
+          color: colorTexto ?? ColorsApp().blanco0Opacidad,
+        )
+      ),
     );
   }
 }

@@ -25,9 +25,9 @@ class DefaultTextButtonCvs extends StatelessWidget {
         style: TextButton.styleFrom(
           backgroundColor: colorBoton,
         ),
-        child: BaseText(
-          text,
+        child: BaseText(          
           null,
+          text,
           size: sizeText ?? 0.045,
           weight: weight ?? FontWeight.w500,
           color: colorTexto ?? ColorsApp().morado,

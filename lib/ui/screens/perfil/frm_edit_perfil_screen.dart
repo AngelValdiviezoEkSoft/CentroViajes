@@ -93,10 +93,7 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
         extension: rutaFotoPerfil.split('.')[rutaFotoPerfil.split('.').length - 1],//'png',
         nombre: 'foto_perfil_$primerNombre'
       );
-/*
-      varObjetoProspectoFunc!.imagenPerfil = objFotoPerfilNueva;
-      varObjProspecto!.imagenPerfil = objFotoPerfilNueva;
-      */
+      
       setState(() {});
     }
   }
@@ -106,11 +103,10 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
   Widget build(BuildContext context) {
 
     final planAct = BlocProvider.of<GenericBloc>(context);
-    //planAct.setHeightModalPlanAct(0.11);
 
     ColorsApp objColorsApp = ColorsApp();
 
-    ScrollController scrollListaClt = ScrollController();
+    //ScrollController scrollListaClt = ScrollController();
 
     final size = MediaQuery.of(context).size;
 
@@ -193,6 +189,8 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
     }
 
     final authService = Provider.of<AuthService>(context);
+
+    final regularExp = CvsRegExp();
     
     return Scaffold(
       appBar: AppBar(
@@ -1219,14 +1217,12 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                               planAct.setHeightModalPlanAct(0.11);
                                               FocusScope.of(context).unfocus();
                                             },
-                                            validator: (value) {
-                                              /*
+                                            validator: (value) {                                              
                                               String pattern = regularExp.regexToEmail;
                                               RegExp regExp = RegExp(pattern);
                                               return regExp.hasMatch(value ?? '')
                                                   ? null
-                                                  : '¡El valor ingresado no luce como un correo!';
-                                                  */
+                                                  : '¡El valor ingresado no luce como un correo!';                                                  
                                             },
                                           ),
                                         ),

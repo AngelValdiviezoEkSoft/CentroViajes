@@ -75,8 +75,11 @@ class ClienteService extends ChangeNotifier {
       );
 
       var objRsp = await GenericService().getMultiModelos(objReq, "res.partner");
+      
+      var rsp = AppResponseModel.fromRawJson(objRsp);
 
-      await storageClient.write(key: 'RespuestaClientes', value: json.encode(objRsp));
+      await storageClient.write(key: 'RespuestaClientes', value: '');
+      await storageClient.write(key: 'RespuestaClientes', value: json.encode(rsp.result.data.resPartner));
 
       return json.encode(objRsp);
     }

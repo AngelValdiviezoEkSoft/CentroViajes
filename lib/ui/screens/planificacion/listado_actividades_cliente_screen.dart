@@ -7,6 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:one_clock/one_clock.dart';
 
 class ListaActividades extends StatelessWidget {
+
+  const ListaActividades(Key? key) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
 
@@ -49,7 +52,7 @@ class ListaActividades extends StatelessWidget {
                       )
                     ).toList();
 
-    DateTime dateTime = DateTime.now();
+    //DateTime dateTime = DateTime.now();
 
     return Scaffold(
         //backgroundColor: Color(0xFF5636D3),
@@ -63,8 +66,8 @@ class ListaActividades extends StatelessWidget {
             },
           ),
           title: Container(
-            color: Color(0xFF5636D3),
-            child: Row(
+            color: const Color(0xFF5636D3),
+            child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(

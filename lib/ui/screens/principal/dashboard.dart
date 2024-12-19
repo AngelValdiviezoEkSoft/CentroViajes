@@ -52,7 +52,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     );
 
     //Color colorBtn = Colors.transparent;
-    bool localizacionValida = false;
+    //bool localizacionValida = false;
 
     return Scaffold(
       body: BlocBuilder<GenericBloc, GenericState>(

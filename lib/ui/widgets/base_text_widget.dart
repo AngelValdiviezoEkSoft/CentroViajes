@@ -9,8 +9,9 @@ class BaseText extends StatelessWidget {
   final String text;
   final int? maxlines;
 
-  const BaseText(this.text,
-      Key? key,{
+  const BaseText(
+      Key? key,
+      this.text,{
       this.color,
       required this.size,
       this.weight,

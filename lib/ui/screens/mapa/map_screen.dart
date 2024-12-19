@@ -161,9 +161,9 @@ class MapScreenState extends State<MapScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              BaseText(
-                                'Guayaquil',
+                              BaseText(                                
                                 null,
+                                'Guayaquil',
                                 size: 0.035,
                                 weight: FontWeight.w500,
                                 color: ColorsApp().gris600EtiquetasCvs,
@@ -175,8 +175,8 @@ class MapScreenState extends State<MapScreen> {
                                 color: Colors.transparent,
                                 alignment: Alignment.topLeft,
                                 child: const BaseText(
-                                  'EDIFICIO: UNICENTRO, Clemente Ballén 406 Y, Guayaquil 090313',
                                   null,
+                                  'EDIFICIO: UNICENTRO, Clemente Ballén 406 Y, Guayaquil 090313',                                  
                                   size: 0.04,
                                   maxlines: 3,
                                   align: TextAlign.left,

@@ -88,8 +88,8 @@ class ContentAlertDialog extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.5,
                   child: BaseText(
-                    titulo,
                     null,
+                    titulo,                    
                     size: 0.05,
                     color: oColors.negro,
                     weight: FontWeight.w700,
@@ -134,8 +134,8 @@ class ContentAlertDialog extends StatelessWidget {
             ? size.height * 0.055 * heightMessage
             : size.height * 0.06,
         child: BaseText(
-          mensajeAlerta,
           null,
+          mensajeAlerta,          
           size: 0.04,
           color: oColors.negro,
           weight: FontWeight.w400,
@@ -148,9 +148,9 @@ class ContentAlertDialog extends StatelessWidget {
       actions: [
         if (tipoAlerta != oTipoAlerta.alertAccion)
           TextButton(
-            child: BaseText(
-              'Aceptar',
+            child: BaseText(              
               null,
+              'Aceptar',
               size: 0.04,
               color: oColorBotonAceptar,
               align: TextAlign.center,

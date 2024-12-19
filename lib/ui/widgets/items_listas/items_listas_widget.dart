@@ -220,7 +220,7 @@ class ListaNotificaciones extends StatelessWidget {
       builder: (context,state) { 
         return GestureDetector(
           onTap: () {            
-            context.go(rutaNavegacionFin!);            
+            context.push(rutaNavegacionFin!);            
           },
           child: Column(
             children: [
@@ -294,7 +294,7 @@ class ListaNotificaciones extends StatelessWidget {
                         if(texto2 != null && texto2!.isNotEmpty )
                         GestureDetector(
                           onTap: () {
-                            context.go(rutaNavegacionFin!);
+                            context.push(rutaNavegacionFin!);
                           },
                           child: Stack(
               alignment: Alignment.center,
@@ -322,7 +322,7 @@ class ListaNotificaciones extends StatelessWidget {
                         if(texto2 == null || texto2!.isEmpty)
                         GestureDetector(
                           onTap: () {    
-                            context.go(rutaNavegacionFin!);
+                            context.push(rutaNavegacionFin!);
                           },
                           child: Container(
                             
@@ -332,7 +332,7 @@ class ListaNotificaciones extends StatelessWidget {
                             child: Center(
                               child: GestureDetector(
                                 onTap: () {                                  
-                                  context.go(rutaNavegacionFin!);
+                                  context.push(rutaNavegacionFin!);
                                 },
                                 child: Icon(icon, color: Colors.white,))
                             )

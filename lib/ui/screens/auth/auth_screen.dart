@@ -319,8 +319,8 @@ class LoginScreen extends StatelessWidget {
                         context.pop();
 
                         if(objError == null) {
-                          context.go(objRutasGen.rutaHome);
-                          //context.go(objRutasGen.rutaOnBoarding);
+                          context.push(objRutasGen.rutaHome);
+                          //context.push(objRutasGen.rutaOnBoarding);
                         } else {
                           final msmError = data['error']['message'];
 
@@ -655,7 +655,7 @@ class _LoginFormState extends State<_LoginForm> {
                                   );
                                 }
                                 */
-                                context.go(Rutas().rutaHome);
+                                context.push(Rutas().rutaHome);
                               },
                               child: ButtonCvsWidget(
                                 text: 'Iniciar sesión',
@@ -724,7 +724,6 @@ class _LoginFormState extends State<_LoginForm> {
                                       ],
                                     )
                                   
-                                  //: Container()
                             ],
                           ),
                         ],
@@ -864,9 +863,9 @@ class _LoginOptionsState extends State<_LoginOptions> {
                 authService.inputPin = false;
                 authService.areInputsView = true;
               },
-              child: _CardOptionLogin(
+              child: const _CardOptionLogin(
                 icon: Icons.verified_user_outlined,
-                text: 'Clave'//AppLocalizations.of(context)!.clave,
+                text: 'Clave'
               ),
             ),
 
@@ -910,7 +909,7 @@ String encodeBase64(String value) {
   return encodedValue;
 }
 
-void _accesoBiometricos(context) {
+void accesoBiometricos(context) {
   final size = MediaQuery.of(context).size;
   showModalBottomSheet(
       shape: const RoundedRectangleBorder(
@@ -989,7 +988,7 @@ void _accesoBiometricos(context) {
       });
 }
 
-void _cambiarUsuario(context) {
+void cambiarUsuario(context) {
   final size = MediaQuery.of(context).size;
   showModalBottomSheet(
       shape: const RoundedRectangleBorder(
@@ -1019,17 +1018,17 @@ void _cambiarUsuario(context) {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BaseText(
-                      'NO usado',//AppLocalizations.of(context)!.noEsUsed,
+                    const BaseText(
                       null,
+                      'NO usado',                      
                       size: 0.05,
                       weight: FontWeight.w700,
                       align: TextAlign.start,
                     ),
                     SizedBox(height: AppSpacing.space01()),
                     const BaseText(
-                      'Se cerrará sesión',//AppLocalizations.of(context)!.seCerraraSesion,
                       null,
+                      'Se cerrará sesión',//AppLocalizations.of(context)!.seCerraraSesion,                      
                       size: 0.045,
                       weight: FontWeight.w400,
                       align: TextAlign.left,
@@ -1042,7 +1041,7 @@ void _cambiarUsuario(context) {
                     GestureDetector(
                         onTap: () async {
                         },
-                        child: DefaultButton(
+                        child: const DefaultButton(
                           text: 'Continuar',//AppLocalizations.of(context)!.continuar,
                           weight: FontWeight.w700,
                         )),
@@ -1138,7 +1137,7 @@ class MyCustomBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Container(
-          padding: EdgeInsets.all(16),  // Espaciado interno
+          padding: const EdgeInsets.all(16),  // Espaciado interno
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30), // Bordes redondeados
             gradient: LinearGradient(
@@ -1151,11 +1150,11 @@ class MyCustomBox extends StatelessWidget {
                 color: Colors.grey.withOpacity(0.5), // Sombra de la caja
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: Offset(0, 3), // Desplazamiento de la sombra
+                offset: const Offset(0, 3), // Desplazamiento de la sombra
               ),
             ],
           ),
-          child: Row(
+          child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               // Texto
@@ -1168,9 +1167,8 @@ class MyCustomBox extends StatelessWidget {
                   ),
                 ),
               ),
-              // Iconos (puedes personalizar con tus propios iconos)
               Icon(Icons.copy, color: Colors.grey),
-              SizedBox(width: 8), // Separación entre iconos
+              SizedBox(width: 8),
               Icon(Icons.paste, color: Colors.grey),
             ],
           ),

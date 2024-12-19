@@ -1,5 +1,4 @@
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -41,7 +40,7 @@ class _PlanificacionActividadClienteScreenState extends State<PlanificacionActiv
 
     ColorsApp objColorsApp = ColorsApp();
 
-    ScrollController scrollListaClt = ScrollController();
+    //ScrollController scrollListaClt = ScrollController();
 
     final size = MediaQuery.of(context).size;
 
@@ -146,9 +145,9 @@ class _PlanificacionActividadClienteScreenState extends State<PlanificacionActiv
                               style: ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: const BorderSide(color: Colors.black)))),
                               onPressed: () async {
                                 initializeDateFormatting('es');
-                                DateTime fechaActual = DateTime.now();
-                                int anioActual = fechaActual.year;
-                                int anioValido = anioActual - 18;
+                                //DateTime fechaActual = DateTime.now();
+                                //int anioActual = fechaActual.year;
+                                //int anioValido = anioActual - 18;
                                 DateTime? varSelectedDate = await showDatePicker(
                                   cancelText: 'Cancelar',
                                   confirmText: 'Ok',

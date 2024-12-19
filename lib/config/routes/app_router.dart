@@ -44,7 +44,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: objRutas.rutaLstAct,
-      builder: (context, state) => ListaActividades(),
+      builder: (context, state) => const ListaActividades(null),
     ),
     GoRoute(
       path: objRutas.rutaConexionInternet,

@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/config/environments/environments.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/ui/themes/theme.dart';
@@ -279,7 +277,7 @@ class Welcome2Screen extends StatelessWidget {
     
           Position position = await getLocation();
     
-          //imeiCod = '82345604001'; //BORRAR LUEGO - PARA CELULAR
+          //imeiCod = '82345604002'; //BORRAR LUEGO - PARA CELULAR
           //imeiCod = '82345604090'; //BORRAR LUEGO - PARA CELULAR PRUEBAS
           //imeiCod = '8234560489'; //BORRAR LUEGO - PARA EMULADOR
     
@@ -299,49 +297,24 @@ class Welcome2Screen extends StatelessWidget {
             rutaServerWelcome = '';
             context.push(objRutasGen.rutaDefault);
           }
-          else{                    
+          else{ 
+
             showDialog(
+              barrierDismissible: false,
               context: context,
               builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Container(
-                    color: Colors.transparent,
-                    height: size.height * 0.2,//0.17,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        
-                        //const Text('Error al registrar el móvil:', style: TextStyle(color: Colors.red,)),
-                        Container(
-                          color: Colors.transparent,
-                          height: size.height * 0.09,
-                          child: Image.asset('assets/gifs/gifErrorBlanco.gif'),
-                        ),
-    
-                        Container(
-                          color: Colors.transparent,
-                          width: size.width * 0.95,
-                          height: size.height * 0.1,//0.08,
-                          alignment: Alignment.center,
-                          child: AutoSizeText(
-                            respuesta.result.msmError,
-                            maxLines: 2,
-                            minFontSize: 4,
-                          ),
-                        )
-                      ],
-                    )
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        // Acción para solicitar revisión
-                        Navigator.of(context).pop();
-                        //Navigator.of(context).pop();
-                      },
-                      child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
-                    ),
-                  ],
+                return ContentAlertDialog(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  onPressedCont: () {
+                    Navigator.of(context).pop();
+                  },
+                  tipoAlerta: TipoAlerta().alertAccion,
+                  numLineasTitulo: 2,
+                  numLineasMensaje: 4,
+                  titulo: 'Error',
+                  mensajeAlerta: respuesta.result.msmError
                 );
               },
             );
@@ -349,25 +322,27 @@ class Welcome2Screen extends StatelessWidget {
         }
         catch(ex){
           context.pop();
-          showDialog(
+        
+            showDialog(
+              barrierDismissible: false,
               context: context,
               builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text(ex.toString()),
-                  
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        // Acción para solicitar revisión
-                        Navigator.of(context).pop();
-                        //Navigator.of(context).pop();
-                      },
-                      child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
-                    ),
-                  ],
+                return ContentAlertDialog(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  onPressedCont: () {
+                    Navigator.of(context).pop();
+                  },
+                  tipoAlerta: TipoAlerta().alertAccion,
+                  numLineasTitulo: 2,
+                  numLineasMensaje: 4,
+                  titulo: 'Error',
+                  mensajeAlerta: ex.toString()
                 );
               },
             );
+          
         }
       },
       child: Container(

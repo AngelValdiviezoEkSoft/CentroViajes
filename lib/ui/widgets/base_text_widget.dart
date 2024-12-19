@@ -22,20 +22,20 @@ class BaseText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    //double height = MediaQuery.of(context).size.height;
-    //final oGoogleFonts = 'Mulish';
 
-    return Text(
-      text,
-      textAlign: align ?? TextAlign.center,
-      style: SafeGoogleFont(
-        GoogleFontsApp().fontMulish,
-        fontSize: width * size,
-        fontWeight: weight ?? FontWeight.w500,
-        color: color ?? ColorsApp().negro,
+    return SingleChildScrollView(
+      child: Text(
+        text,
+        textAlign: align ?? TextAlign.center,
+        style: SafeGoogleFont(
+          GoogleFontsApp().fontMulish,
+          fontSize: width * size,
+          fontWeight: weight ?? FontWeight.w500,
+          color: color ?? ColorsApp().negro,
+        ),
+        maxLines: maxlines ?? 50,
+        overflow: TextOverflow.ellipsis,
       ),
-      maxLines: maxlines ?? 50,
-      overflow: TextOverflow.ellipsis,
     );
   }
 }

@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
-import 'package:cvs_ec_app/domain/models/prospecto_type_response.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +19,7 @@ String terminoBusqueda = '';
 DatumCrmLead? objDatumCrmLead;
 late TextEditingController filtroPrspTxt;
 bool listaVaciaPrp = false;
+bool actualizaListaPrp= false;
 
 class ListaProspectosScreen extends StatefulWidget {
   const ListaProspectosScreen({super.key});
@@ -39,6 +39,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
   @override
   void initState() {
     super.initState();
+    actualizaListaPrp = false;
     contLst = 0;
     terminoBusqueda = '';
     filtroPrspTxt = TextEditingController();
@@ -320,7 +321,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
               prospectosFiltrados = apiResponse.data;
             }            
 
-            if(terminoBusqueda.isNotEmpty) {
+            if(terminoBusqueda.isNotEmpty && actualizaListaPrp) {
               setState(() {});
             }
 
@@ -381,8 +382,19 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                             prefixIcon: Icon(Icons.search, color: Colors.grey),
                           ),
                           onChanged: (value) {
+                            actualizaListaPrp = false;
                             terminoBusqueda = value;
                             refreshDataByFiltro(value, objRsp);                            
+                          },
+                          onEditingComplete: () {
+                            FocusScope.of(context).unfocus();
+                            actualizaListaPrp = true;
+                            setState(() { });
+                          },
+                          onTapOutside: (event) {
+                            FocusScope.of(context).unfocus();
+                            actualizaListaPrp = true;
+                            setState(() { });
                           },
                         ),
                       ),
@@ -730,6 +742,50 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
       body: BlocBuilder<GenericBloc, GenericState>(
         builder: (context,state) {
 
+           Future<void> refreshDataByFiltro(String filtro, String objMemoria) async {            
+            prospectosFiltrados = [];
+
+            CrmLead apiResponse = CrmLead.fromJson(objMemoria);
+
+            if(terminoBusqueda.isNotEmpty){
+              
+              if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
+                prospectosFiltrados = apiResponse.data
+                .where(
+                  (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
+                .toList();
+
+                if(prospectosFiltrados.isEmpty){
+                  prospectosFiltrados = apiResponse.data
+                  .where((producto) =>
+                    producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
+                  )
+                  .toList();
+                }
+              } else {
+                if(prospectosFiltrados.isEmpty && (terminoBusqueda.contains('+') || terminoBusqueda.contains('0'))){
+                  for(int i = 0; i < apiResponse.data.length; i++){
+                    if(apiResponse.data[i].phone != null && apiResponse.data[i].phone!.contains(terminoBusqueda)){
+                      prospectosFiltrados.add(apiResponse.data[i]);
+                    }
+                  }
+                }
+              }
+
+              contLst = 0;
+
+              contLst = prospectosFiltrados.length;
+            } else{
+              prospectosFiltrados = apiResponse.data;
+            }            
+
+            if(terminoBusqueda.isNotEmpty && actualizaListaPrp) {
+              setState(() {});
+            }
+
+          }
+
+
           return FutureBuilder(
             future: ProspectoTypeService().getProspectos(),
             builder: (context, snapshot) {
@@ -812,9 +868,17 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                             prefixIcon: Icon(Icons.search, color: Colors.grey),
                           ),
                           onChanged: (value) {
-                            setState(() {
-                              terminoBusqueda = value;
-                            });
+                            actualizaListaPrp = false;
+                            terminoBusqueda = value;
+                            refreshDataByFiltro(value, objRsp);                            
+                          },
+                          onEditingComplete: () {
+                            actualizaListaPrp = true;
+                            setState(() { });
+                          },
+                          onTapOutside: (event) {
+                            actualizaListaPrp = true;
+                            setState(() { });
                           },
                         ),
                       ),

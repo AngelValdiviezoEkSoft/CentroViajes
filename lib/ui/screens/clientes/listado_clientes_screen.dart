@@ -19,6 +19,7 @@ late TextEditingController filtroCliTxt;
 String terminoBusquedaClient= '';
 List<ResPartnerDatumAppModel> clientesFiltrados = [];
 bool listaVaciaCli = false;
+bool actualizaListaCli = false;
 
 class ListaClientesScreen extends StatefulWidget {
   const ListaClientesScreen({super.key});
@@ -38,6 +39,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
   void initState() {
     super.initState();
 
+    actualizaListaCli = false;
     clientesFiltrados = [];
 
     filtroCliTxt = TextEditingController();
@@ -211,59 +213,6 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
       body: BlocBuilder<GenericBloc, GenericState>(
         builder: (context,state) {
 
-          Future<void> refreshData() async {
-            var rsp = await state.lstClientes();
-
-            
-            var objLogDecode = json.decode(rsp);
-            //var objLogDecode2 = json.decode(objLogDecode);
-
-            ResPartnerAppModel  apiResponse = ResPartnerAppModel.fromJson(objLogDecode);
-
-            List<ResPartnerDatumAppModel> clientesFiltrados = [];
-
-            if(terminoBusquedaClient.isNotEmpty){
-              if(!terminoBusquedaClient.contains('+') && !terminoBusquedaClient.contains('0')){                
-
-                for(int i = 0; i < apiResponse.data.length; i++){
-                  if(apiResponse.data[i].name != null && apiResponse.data[i].name!.toLowerCase().contains(terminoBusquedaClient.toLowerCase())){
-                    clientesFiltrados.add(apiResponse.data[i]);
-                  }
-                }
-
-                if(clientesFiltrados.isEmpty){
-                  /*
-                  clientesFiltrados = apiResponse.data//.result.data.resPartner.data
-                  .where((producto) =>
-                      producto.email.toLowerCase().contains(terminoBusquedaClient.toLowerCase())
-                  ).toList();
-                  */
-
-                  for(int i = 0; i < apiResponse.data.length; i++){
-                    if(apiResponse.data[i].email != null && apiResponse.data[i].email!.toLowerCase().contains(terminoBusquedaClient.toLowerCase())){
-                      clientesFiltrados.add(apiResponse.data[i]);
-                    }
-                  }
-                }
-              } else {
-                if(clientesFiltrados.isEmpty){
-
-                  for(int i = 0; i < apiResponse.data.length; i++){
-                    if(apiResponse.data[i].mobile != null && apiResponse.data[i].mobile!.contains(terminoBusquedaClient)){
-                      clientesFiltrados.add(apiResponse.data[i]);
-                    }
-                  }
-                }
-              }
-            } else{
-              clientesFiltrados = apiResponse.data;//result.data.resPartner.data;
-            }
-
-            setState(() {
-        
-            });
-          }
-
           Future<void> refreshDataByFiltro(String filtro, String objMemoria) async {
             clientesFiltrados = [];
             ResPartnerAppModel apiResponse = ResPartnerAppModel.fromRawJson(objMemoria);
@@ -301,7 +250,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
               clientesFiltrados = apiResponse.data;//.resPartner.data;
             }
 
-            if(terminoBusquedaClient.isNotEmpty) {
+            if(terminoBusquedaClient.isNotEmpty && actualizaListaCli) {
               setState(() {});
             }
 
@@ -351,8 +300,19 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                             prefixIcon: Icon(Icons.search, color: Colors.grey),
                           ),
                           onChanged: (value) {
+                            actualizaListaCli = false;
                             terminoBusquedaClient = value;
                             refreshDataByFiltro(value, objRsp);
+                          },
+                          onEditingComplete: () {
+                            FocusScope.of(context).unfocus();
+                            actualizaListaCli = true;
+                            setState(() { });
+                          },
+                          onTapOutside: (event) {
+                            FocusScope.of(context).unfocus();
+                            actualizaListaCli = true;
+                            setState(() { });
                           },
                         ),
                       ),

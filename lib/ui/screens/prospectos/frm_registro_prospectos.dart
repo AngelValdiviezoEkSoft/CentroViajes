@@ -83,6 +83,10 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
     fecCierre = DateFormat('yyyy-MM-dd', 'es').format(dateRgPrsp);
     fecCierreFin = DateFormat('yyyy-MM-dd', 'es').format(dateRgPrsp);
     fechaCierreContTxt.text = fecCierre;
+
+    habilitaGuardar = false;
+    celularValido = false;
+    validandoCell = false;
   }
 
   @override
@@ -587,7 +591,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       ),
                                       */
                           
-                                      if(celularValido)
+                                      if(habilitaGuardar)
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
@@ -617,12 +621,12 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         ),
                                       ),
                                         
-                                      if(celularValido)
+                                      if(habilitaGuardar)
                                       SizedBox(
                                         height: size.height * 0.03,
                                       ),
 
-                                      if(!celularValido)
+                                      if(!habilitaGuardar)
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
@@ -636,12 +640,12 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         ),
                                       ),
                                         
-                                      if(!celularValido)
+                                      if(!habilitaGuardar)
                                       SizedBox(
                                         height: size.height * 0.03,
                                       ),
 
-                                      if(celularValido)    
+                                      if(habilitaGuardar)    
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
@@ -666,12 +670,12 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         ),
                                       ),
 
-                                      if(celularValido)
+                                      if(habilitaGuardar)
                                       SizedBox(
                                         height: size.height * 0.02,
                                       ),
 
-                                      if(!celularValido)
+                                      if(!habilitaGuardar)
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
@@ -685,12 +689,12 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         ),
                                       ),
 
-                                      if(!celularValido)
+                                      if(!habilitaGuardar)
                                       SizedBox(
                                         height: size.height * 0.02,
                                       ),
                           
-                                      if(celularValido)
+                                      if(habilitaGuardar)
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
@@ -717,12 +721,12 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         ),
                                         ),
 
-                                      if(celularValido)                                 
+                                      if(habilitaGuardar)                                 
                                       SizedBox(
                                         height: size.height * 0.03,
                                       ),
 
-                                      if(!celularValido)
+                                      if(!habilitaGuardar)
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
@@ -736,12 +740,12 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         ),
                                       ),
 
-                                      if(!celularValido)
+                                      if(!habilitaGuardar)
                                       SizedBox(
                                         height: size.height * 0.02,
                                       ),
 
-                                      if(celularValido)
+                                      if(habilitaGuardar)
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
@@ -768,12 +772,12 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                     ),
                                       ),
 
-                                      if(celularValido)
+                                      if(habilitaGuardar)
                                       SizedBox(
                                         height: size.height * 0.02,
                                       ),
 
-                                      if(!celularValido)
+                                      if(!habilitaGuardar)
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
@@ -787,7 +791,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         ),
                                       ),
 
-                                      if(!celularValido)
+                                      if(!habilitaGuardar)
                                       SizedBox(
                                         height: size.height * 0.02,
                                       ),

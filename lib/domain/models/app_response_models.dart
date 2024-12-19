@@ -76,13 +76,41 @@ class DataAppModel {
     String toRawJson() => json.encode(toJson());
 
     factory DataAppModel.fromJson(Map<String, dynamic> json) => DataAppModel(
-        crmLead: CrmLeadAppModel.fromJson(json["crm.lead"]),
-        resPartner: ResPartnerAppModel.fromJson(json["res.partner"]),
-        utmCampaign: UtmCampaignAppModel.fromJson(json["utm.campaign"]),
-        utmSource: UtmAppModel.fromJson(json["utm.source"]),
-        utmMedium: UtmAppModel.fromJson(json["utm.medium"]),
-        mailActivityType: MailActivityTypeAppModel.fromJson(json["mail.activity.type"]),
-        resCountry: ResCountryAppModel.fromJson(json["res.country"]),
+        crmLead: 
+          json["crm.lead"] != null ? 
+            CrmLeadAppModel.fromJson(json["crm.lead"])  
+            : 
+            CrmLeadAppModel(data: [], fields: CrmLeadFieldsAppModel(activityIds: '', campaignId: '', city: '', contactName: '', countryId: '', dateClosed: '', dateDeadline: '', dateOpen: '', dayClose: '', description: '', emailCc: '', emailFrom: '', expectedRevenue: '',function: '', lostReasonId: '', mediumId: '', mobile: '', name: '', partnerId: '', partnerName: '', phone: '', priority: '', referred: '', sourceId: '', stageId: '', stateId: '', street: '', tagIds: '', title: '', type: '', userId: ''), length: 0),
+        resPartner: 
+            json["res.partner"] != null ? 
+            ResPartnerAppModel.fromJson(json["res.partner"]) 
+            : 
+            ResPartnerAppModel(data: [], fields: ResPartnerFieldsAppModel(accountRepresentedCompanyIds: '', barcode: '', categoryId: '', channelIds: '', childIds: '', cityId: '', companyType: '', countryId: '', date: '', email: '', name: ''), length: 0),
+        utmCampaign: 
+            json["utm.campaign"] != null ? 
+            UtmCampaignAppModel.fromJson(json["utm.campaign"]) 
+            : 
+            UtmCampaignAppModel(data: [], length: 0, fields: UtmCampaignFieldsAppModel(active: '', name: '', title: '')),
+        utmSource: 
+            json["utm.source"] != null ? 
+            UtmAppModel.fromJson(json["utm.source"]) 
+            : 
+            UtmAppModel(data: [], length: 0, fields: UtmMediumFields(name: '')),
+        utmMedium: 
+            json["utm.medium"] != null ? 
+            UtmAppModel.fromJson(json["utm.medium"]) 
+            : 
+            UtmAppModel(data: [], length: 0, fields: UtmMediumFields(name: '')),
+        mailActivityType: 
+            json["mail.activity.type"] != null ? 
+            MailActivityTypeAppModel.fromJson(json["mail.activity.type"]) 
+            : 
+            MailActivityTypeAppModel(data: [], length: 0, fields: MailActivityTypeFieldsAppModel(category: '', decorationType: '', defaultNote: '', delayCount: '', delayFrom: '', icon: '', name: '', resModel: '', sequence: '', summary: '')),
+        resCountry: 
+            json["res.country"] != null ? 
+            ResCountryAppModel.fromJson(json["res.country"]) 
+            : 
+            ResCountryAppModel(data: [], length: 0, fields: ResCountryFieldsAppModel(code: '', name: '', stateIds: '')),
     );
 
     Map<String, dynamic> toJson() => {

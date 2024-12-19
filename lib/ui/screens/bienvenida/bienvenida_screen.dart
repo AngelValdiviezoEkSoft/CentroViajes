@@ -306,7 +306,7 @@ class Welcome2Screen extends StatelessWidget {
                 return AlertDialog(
                   title: Container(
                     color: Colors.transparent,
-                    height: size.height * 0.17,
+                    height: size.height * 0.2,//0.17,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -321,12 +321,12 @@ class Welcome2Screen extends StatelessWidget {
                         Container(
                           color: Colors.transparent,
                           width: size.width * 0.95,
-                          height: size.height * 0.08,
+                          height: size.height * 0.1,//0.08,
                           alignment: Alignment.center,
                           child: AutoSizeText(
                             respuesta.result.msmError,
                             maxLines: 2,
-                            minFontSize: 2,
+                            minFontSize: 4,
                           ),
                         )
                       ],

@@ -114,8 +114,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
 
       contLst = int.parse(contStr);
 
-      //String estadoPrsp = '';
-      CrmLeadAppModel apiResponse = CrmLeadAppModel.fromJson(objLogDecode);
+      CrmLeadAppModel apiResponse = CrmLeadAppModel.fromJson(objLogDecode2["result"]["data"]["crm.lead"]);
 
       List<CrmLeadDatumAppModel> prospectosFiltrados = [];
 

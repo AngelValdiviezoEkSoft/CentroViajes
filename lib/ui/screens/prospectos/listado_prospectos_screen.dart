@@ -375,6 +375,9 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                         color: Colors.white,
                         width: size.width * 0.98,
                         child: TextField(
+                          inputFormatters: [
+                            EmojiInputFormatter()
+                          ],
                           controller: filtroPrspTxt,
                           decoration: const InputDecoration(
                             hintText: 'Buscar prospectos por nombre, correo o celular',
@@ -520,7 +523,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
                                                       textAlign: TextAlign.left,
-                                                      ),
+                                                    ),
                                                   ),
                                                   Container(
                                                     color: Colors.transparent,
@@ -535,7 +538,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
                                                       textAlign: TextAlign.left,
-                                                      ),
+                                                    ),
                                                   ),
                                                   Container(
                                                 color: Colors.transparent,
@@ -550,8 +553,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                                         style: TextStyle(color: Colors.black)
                                                       ),
                                                       TextSpan(
-                                                        //
-                                                        //text: '${objLogDecode2["result"]["data"]["crm.lead"]["data"][index]["email_from"]}',
                                                         text: prospectosFiltrados[index].emailFrom,
                                                         style: const TextStyle(color: Colors.blue)
                                                       ),
@@ -862,6 +863,9 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                         color: Colors.white,
                         width: size.width * 0.98,
                         child: TextField(
+                          inputFormatters: [
+                            EmojiInputFormatter()
+                          ],
                           decoration: const InputDecoration(
                             hintText: 'Buscar prospectos por nombre, correo o celular',
                             border: InputBorder.none,

@@ -294,6 +294,9 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                         color: Colors.white,
                         width: size.width * 0.98,
                         child: TextField(
+                          inputFormatters: [
+                            EmojiInputFormatter()
+                          ],
                           decoration: const InputDecoration(
                             hintText: 'Buscar clientes por nombre, correo o celular',
                             border: InputBorder.none,

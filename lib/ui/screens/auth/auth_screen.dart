@@ -556,6 +556,9 @@ class _LoginFormState extends State<_LoginForm> {
                           */
                           SizedBox(height: AppSpacing.space02()),
                           TextFormField(
+                            inputFormatters: [
+                              EmojiInputFormatter()
+                            ],
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cvs_ec_app/config/environments/environments.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/ui/themes/theme.dart';
+import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:cvs_ec_app/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -194,6 +195,9 @@ class Welcome2Screen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
+            inputFormatters: [
+              EmojiInputFormatter()
+            ],
           ),
         ),
       ),

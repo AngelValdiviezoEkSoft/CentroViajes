@@ -55,17 +55,18 @@ class PlanActState extends State<PlanificacionActividades> {
           children: [
             Container(
               color: Colors.blue.shade800,
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
                   Container(
+                    color: Colors.transparent,
                       width: size.width * 0.95,
-                      child: Text(
+                      child: const Text(
                         'Compra de terreno con plan de viaje',
                         style: TextStyle(color: Colors.white, fontSize: 17),
                       )),
-                  SizedBox(height: 15),
-                  Row(
+                  const SizedBox(height: 15),
+                  const Row(
                     children: [
                       Text(
                         "⭐⭐⭐⭐⭐",
@@ -186,16 +187,16 @@ class PlanActState extends State<PlanificacionActividades> {
 
 Widget sectionTitle(IconData icon, String title) {
   return Container(
-    padding: EdgeInsets.all(10.0),
+    padding: const EdgeInsets.all(10.0),
     color: Colors.blue.shade900,
     width: double.infinity,
     child: Row(
       children: [
         Icon(icon, color: Colors.white),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -213,8 +214,8 @@ Widget infoRow(String label, String value) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          label + ":",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          "$label:",
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         Text(value),
       ],

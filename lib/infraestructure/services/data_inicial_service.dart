@@ -43,7 +43,9 @@ class DataInicialService extends ChangeNotifier{
           models: []
         )
       );
+
       await GenericService().getMultiModelosGen(objReq, modelo);
+      
     }
     catch(_){
       //print('Test DataInit $ex');
@@ -190,7 +192,7 @@ class DataInicialService extends ChangeNotifier{
 
 }
 
-    Map<String, dynamic> serializeItemBotonMenu(ItemBoton item) {
+  Map<String, dynamic> serializeItemBotonMenu(ItemBoton item) {
     return {
       'tipoNotificacion': item.tipoNotificacion,
       'idSolicitud': item.idSolicitud,

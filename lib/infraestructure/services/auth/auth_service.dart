@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cvs_ec_app/config/config.dart';
 import 'package:cvs_ec_app/config/routes/app_router.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
@@ -228,7 +227,7 @@ class AuthService extends ChangeNotifier {
       }
 
       
-      if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().toLowerCase() == MensajeValidacion().tockenExpirado)){
+      if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenExpirado)){
         await tokenManager.checkTokenExpiration();
         await login(authRequest);
       }

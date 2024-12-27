@@ -68,7 +68,7 @@ class ProspectoTypeService extends ChangeNotifier{
 
       var rsp = AppResponseModel.fromRawJson(objRsp);
 
-      print('Lst Prsp 1: ${json.encode(rsp.result.data.crmLead)}');
+      //print('Lst Prsp 1: ${json.encode(rsp.result.data.crmLead)}');
 
       await storageProspecto.write(key: 'RespuestaProspectos', value: '');
       await storageProspecto.write(key: 'RespuestaProspectos', value: json.encode(rsp.result.data.crmLead));
@@ -197,7 +197,7 @@ class ProspectoTypeService extends ChangeNotifier{
 
       var rspValidacion = json.decode(response.body);
 
-      if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().toLowerCase() == MensajeValidacion().tockenExpirado)){
+      if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenExpirado)){
         await tokenManager.checkTokenExpiration();
         await getProspectoRegistrado(phoneProsp);
       }
@@ -215,12 +215,11 @@ class ProspectoTypeService extends ChangeNotifier{
         textColor: Colors.white,
         fontSize: 16.0
       );  
-    }
-    
+    }    
   }
 
   registraProspecto(DatumCrmLead objProspecto) async {
-    String internet = await ValidacionesUtils().validaInternet();//await (Connectivity().checkConnectivity());
+    String internet = await ValidacionesUtils().validaInternet();
     
     //VALIDACIÓN DE INTERNET
     if(internet.isEmpty){
@@ -260,47 +259,45 @@ class ProspectoTypeService extends ChangeNotifier{
         //print('Fecha token: $tockenValidDate');
 
         final requestBody = {
-        "jsonrpc": EnvironmentsProd().jsonrpc,
-        "params": {
-          "key": objReq.params.key,
-          "tocken": objReq.params.tocken,
-          "imei": objReq.params.imei,
-          "uid": objReq.params.uid,
-          "company": objReq.params.company,
-          "bearer": objReq.params.bearer,
-          "tocken_valid_date": tockenValidDate,
-          "create": {
-            "name": objProspecto.name,
-            "phone": objProspecto.phone,          
-            "contact_name": objProspecto.contactName,
-            "partner_name": objProspecto.partnerName,          
-            //"date_closed": DateFormat('yyyy-MM-dd', 'es').format(objProspecto.dateClose!),
-            "date_deadline": DateFormat('yyyy-MM-dd', 'es').format(objProspecto.dateDeadline!),//date_deadline
-            "email_from": objProspecto.emailFrom,
-            "street": objProspecto.street,
-            "expected_revenue": objProspecto.expectedRevenue,
-            "referred": objProspecto.referred,
-            "description": objProspecto.description,
-            "probability": objProspecto.probability,
-
-            "campaign_id": objProspecto.campaignId!.id,
-            "source_id": objProspecto.sourceId.id,
-            "medium_id": objProspecto.mediumId.id,
-            "country_id": objProspecto.countryId.id,
-
-          },
-        }
-      };
+          "jsonrpc": EnvironmentsProd().jsonrpc,
+          "params": {
+            "key": objReq.params.key,
+            "tocken": objReq.params.tocken,
+            "imei": objReq.params.imei,
+            "uid": objReq.params.uid,
+            "company": objReq.params.company,
+            "bearer": objReq.params.bearer,
+            "tocken_valid_date": tockenValidDate,
+            "create": {
+              "name": objProspecto.name,
+              "phone": objProspecto.phone,          
+              "contact_name": objProspecto.contactName,
+              "partner_name": objProspecto.partnerName,
+              //"date_closed": DateFormat('yyyy-MM-dd', 'es').format(objProspecto.dateClose!),
+              "date_deadline": DateFormat('yyyy-MM-dd', 'es').format(objProspecto.dateDeadline!),//date_deadline
+              "email_from": objProspecto.emailFrom,
+              "street": objProspecto.street,
+              "expected_revenue": objProspecto.expectedRevenue,
+              "referred": objProspecto.referred,
+              "description": objProspecto.description,
+              "probability": objProspecto.probability,
+              "campaign_id": objProspecto.campaignId!.id,
+              "source_id": objProspecto.sourceId.id,
+              "medium_id": objProspecto.mediumId.id,
+              "country_id": objProspecto.countryId.id
+            },
+          }
+        };
 
         final headers = {
-          "Content-Type": EnvironmentsProd().contentType//"application/json",
+          "Content-Type": EnvironmentsProd().contentType
         };
 
         String ruta = '';
         final objStr = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
         
         if(objStr.isNotEmpty)
-        {  
+        {
           var obj = RegisterDeviceResponseModel.fromJson(objStr);
           ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/create/crm.lead/model';
         }
@@ -315,7 +312,7 @@ class ProspectoTypeService extends ChangeNotifier{
       
         var rspValidacion = json.decode(response.body);
 
-        if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'] == MensajeValidacion().tockenExpirado)){
+        if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenExpirado)){
           await tokenManager.checkTokenExpiration();
           await registraProspecto(objProspecto);
         } 

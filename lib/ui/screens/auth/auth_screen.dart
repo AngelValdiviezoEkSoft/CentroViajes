@@ -316,9 +316,11 @@ class LoginScreen extends StatelessWidget {
 
                         final objError = data['error'];
                         
+                        //ignore: use_build_context_synchronously
                         context.pop();
 
                         if(objError == null) {
+                          //ignore: use_build_context_synchronously
                           context.push(objRutasGen.rutaHome);
                           //context.push(objRutasGen.rutaOnBoarding);
                         } else {
@@ -372,9 +374,11 @@ class LoginScreen extends StatelessWidget {
                         }
                       }
                       catch(ex){
+                        //ignore: use_build_context_synchronously
                         context.pop();
 
                         showDialog(
+                          //ignore: use_build_context_synchronously
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
@@ -416,10 +420,8 @@ class LoginScreen extends StatelessWidget {
                               ],
                             );
                           },
-                        );
-                        
+                        );                        
                       }
-
                     }
                     
                   },

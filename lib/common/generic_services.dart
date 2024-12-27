@@ -14,6 +14,7 @@ class GenericServices {
     Map<String, String>? header,
     Object? body,
   ) async {
+    /*
     if (tipoMetodo == ReqType.GET) {
       final resp = await http.get(ruta, headers: header!);
       var rsp = resp.body;
@@ -23,8 +24,9 @@ class GenericServices {
       var rsp = resp.body;
       return rsp;
     }
+    */
   }
-
+/*
   Future<String> consumoRutas(
     String tipoMetodo, 
     Uri ruta,
@@ -53,5 +55,5 @@ class GenericServices {
     return jsonEncode(decodedResp);
 
   }
-
+*/
 }

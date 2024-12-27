@@ -62,7 +62,8 @@ class GenericService extends ChangeNotifier {
 
     var rspValidacion = json.decode(response.body);
 
-    if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+    //if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+    if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenExpirado)){
       await tokenManager.checkTokenExpiration();
       await getModelos(objReq, modelBusca);
     }
@@ -118,7 +119,8 @@ class GenericService extends ChangeNotifier {
     
     var rspValidacion = json.decode(response.body);
 
-    if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+    //if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+    if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenExpirado)){
       await tokenManager.checkTokenExpiration();
       await getMultiModelos(objReq, modelo);
     }
@@ -166,16 +168,17 @@ class GenericService extends ChangeNotifier {
     
     var rspValidacion = json.decode(response.body);
 
-    if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+    //if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+    if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenExpirado)){
       await tokenManager.checkTokenExpiration();
       await getMultiModelosGen(objReq, lstModels);
     }
 
-    print('Lst gen: ${response.body}');
+    //print('Lst gen: ${response.body}');
 
     var rsp = AppResponseModel.fromRawJson(response.body);
 
-    print('Lst Prsp: ${json.encode(rsp.result.data.crmLead)}');
+    //print('Lst Prsp: ${json.encode(rsp.result.data.crmLead)}');
 
     await storage.write(key: 'RespuestaProspectos', value: json.encode(rsp.result.data.crmLead));
     await storage.write(key: 'RespuestaClientes', value: json.encode(rsp.result.data.resPartner));

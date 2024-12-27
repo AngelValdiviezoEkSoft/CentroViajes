@@ -16,8 +16,6 @@ import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:provider/provider.dart';
 
 int tabAccEdit = 0;
-late TextEditingController montoN_Txt;
-late TextEditingController nombreT_Txt;
 DateTime datRegPrs = DateTime.now();
 String rutaNuevaFotoPerfil = '';
 MemoryImage? nuevaFotoPerfilGen;
@@ -65,8 +63,6 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
     passwordTxt = TextEditingController();
     passwordConfTxt = TextEditingController();
 
-    montoN_Txt = TextEditingController();
-    nombreT_Txt = TextEditingController();
   }
 
   

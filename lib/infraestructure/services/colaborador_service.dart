@@ -1,11 +1,9 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:cvs_ec_app/config/enrutador/enrutador.dart';
-import 'package:cvs_ec_app/domain/domain.dart';
 
 const storageCol = FlutterSecureStorage();
  
 class ColaboradorService {
-
+/*
   Future<EmpleadoResponseModel> datosColaborador(String identificacion) async {
 
     final resp = await EnrutadorColaborador().getDatosColaborador(identificacion);
@@ -23,5 +21,5 @@ class ColaboradorService {
 
     return oResp;
   }
-
+*/
 }

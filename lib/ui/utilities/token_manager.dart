@@ -38,7 +38,7 @@ class TokenManager {
     final objStr = await storage.read(key: 'RespuestaRegistro') ?? '';
     
     if(objStr.isNotEmpty)
-    {  
+    {
       var obj = RegisterDeviceResponseModel.fromJson(objStr);
 
       final expiration = obj.result.tockenValidDate;
@@ -56,7 +56,7 @@ class TokenManager {
 
       if(codEstado != 200){
         await AuthService().doneGetTocken(imeiCod, obj.result.key);
-        return;        
+        return;
       }
 
       //DateTime nuevaFecha = expiration.subtract(const Duration(days: 8));

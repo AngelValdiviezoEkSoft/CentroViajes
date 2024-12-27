@@ -200,11 +200,10 @@ class GenericState extends Equatable {
   }
 
   Future<String> lstClientes() async {
-    var rsp = await storage.read(key: 'RespuestaClientes') ?? '';
-    
+    var rsp = await storage.read(key: 'RespuestaClientes') ?? '';    
     return rsp;
   }
-
+  
   Map<String, dynamic> serializeItemBotonMenu(ItemBoton item) {
     return {
       'tipoNotificacion': item.tipoNotificacion,
@@ -277,8 +276,6 @@ class GenericState extends Equatable {
     );
   
   }
-
-
 
 }
 

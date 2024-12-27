@@ -160,12 +160,12 @@ class ListaNotificaciones extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    int numNotificacionesTrAp = varMuestraNotificacionesTrApLst!;
-    int numNotificacionesTrProc = varMuestraNotificacionesTrProcLst!;
-    int numNotificacionesTrComp = varMuestraNotificacionesTrCompLst!;
-    int numNotificacionesTrInfo = varMuestraNotificacionesTrInfoLst!;
+    //int numNotificacionesTrAp = varMuestraNotificacionesTrApLst!;
+    //int numNotificacionesTrProc = varMuestraNotificacionesTrProcLst!;
+    //int numNotificacionesTrComp = varMuestraNotificacionesTrCompLst!;
+    //int numNotificacionesTrInfo = varMuestraNotificacionesTrInfoLst!;
 
-    List<int> varLstIdNot = [];
+    //List<int> varLstIdNot = [];
     contextWidget = context;
     //bool esRelevantesObj = false;
     //int PosicionMostrar = 0;
@@ -173,10 +173,10 @@ class ListaNotificaciones extends StatelessWidget {
 
     numeroIdentificacionNotificaciones = varNumIdentifLst!;
     
-    bool boolMuestraNotificacionesTrAp = false;//Provider.of<NotificacionesService>(context,listen: false).muestraNotificacionesTramApr;
-    bool boolMuestraNotificacionesTrProc = false;//Provider.of<NotificacionesService>(context,listen: false).muestraNotificacionesTramProc;
-    bool boolMuestraNotificacionesTrComp = false;//Provider.of<NotificacionesService>(context,listen: false).muestraNotificacionesTramComp;
-    bool boolMuestraNotificacionesTrInfo = false;//Provider.of<NotificacionesService>(context,listen: false).muestraNotificacionesTramInfo;
+    //bool boolMuestraNotificacionesTrAp = false;//Provider.of<NotificacionesService>(context,listen: false).muestraNotificacionesTramApr;
+    //bool boolMuestraNotificacionesTrProc = false;//Provider.of<NotificacionesService>(context,listen: false).muestraNotificacionesTramProc;
+    //bool boolMuestraNotificacionesTrComp = false;//Provider.of<NotificacionesService>(context,listen: false).muestraNotificacionesTramComp;
+    //bool boolMuestraNotificacionesTrInfo = false;//Provider.of<NotificacionesService>(context,listen: false).muestraNotificacionesTramInfo;
 
 
     final int varNumNotificacionesTrAp = 0;//Provider.of<NotificacionesService>(context,listen: false).contNotificacionesTramApr;

@@ -5,7 +5,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +16,7 @@ import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 int tabAccionesRegPrsp = 0;
 
 late TextEditingController nombresTxt;
+late TextEditingController nombresOportTxt;
 late TextEditingController emailTxt;
 late TextEditingController direccionTxt;
 late TextEditingController observacionesTxt;
@@ -38,7 +38,7 @@ String campSelect = '';
 String mediaSelect = '';
 String originSelect = '';
 String actSelect = '';
-String paisSelect = '';
+String paisSelect = 'Ecuador';
 String telefonoPrsp = '';
 bool habilitaGuardar = false;
 bool celularValido = false;
@@ -68,8 +68,10 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
   void initState() {
     super.initState();
 
+    tabAccionesRegPrsp = 0;
     fechaCierreContTxt = TextEditingController();
     nombresTxt = TextEditingController();
+    nombresOportTxt = TextEditingController();
     emailTxt = TextEditingController();
     direccionTxt = TextEditingController();
     observacionesTxt = TextEditingController();
@@ -87,6 +89,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
     habilitaGuardar = false;
     celularValido = false;
     validandoCell = false;
+    paisSelect = 'Ecuador';
   }
 
   @override
@@ -211,9 +214,11 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                     actSelect = lstActividades.first;
                   }
 
+                  /*
                   if(paisSelect.isEmpty){
                     paisSelect = lstPaises.first;
                   }
+                  */
 
                   return Form(
                     key: formKeyRegPrp,
@@ -541,7 +546,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           ],
                                           style: AppTextStyles.bodyRegular(width: size.width),
                                           decoration: InputDecorationCvs.formsDecoration(
-                                            labelText: '* Nombres',
+                                            labelText: '* Nombre de Prospecto',
                                             hintTetx: 'Ej: Juan Valdez',
                                             size: size
                                           ),
@@ -571,24 +576,23 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                         height: size.height * 0.04,
                                       ),
                                       
-                                      /*
                                       Container(
                                         color: Colors.transparent,
                                         width: size.width * 0.92,
-                                        child: TextFormField(                                    
-                                          cursorColor: AppLightColors().primary,
-                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        child: TextFormField(
+                                          textCapitalization: TextCapitalization.sentences,
+                                          cursorColor: AppLightColors().primary,                                        
                                           inputFormatters: [
                                             EmojiInputFormatter()
                                           ],
-                                          //enabled: false,
                                           style: AppTextStyles.bodyRegular(width: size.width),
                                           decoration: InputDecorationCvs.formsDecoration(
-                                            labelText: 'Producto de interés',
-                                            hintTetx: 'Ej: Terreno',
+                                            labelText: '* Nombre Oportunidad',
+                                            hintTetx: 'Ej: Juan Valdez',
                                             size: size
                                           ),
-                                          //controller: emailAkiTxt,
+                                          enabled: habilitaGuardar,
+                                          controller: nombresOportTxt,
                                           autocorrect: false,
                                           keyboardType: TextInputType.text,
                                           minLines: 1,
@@ -598,6 +602,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           textAlign: TextAlign.left,
                                           onEditingComplete: () {
                                             FocusScope.of(context).unfocus();
+                                            //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
                                           },
                                           onChanged: (value) {
                                             
@@ -607,12 +612,11 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           },
                                         ),
                                       ),
-                                     
+                                      
                                       SizedBox(
                                         height: size.height * 0.04,
                                       ),
-                                      */
-                          
+
                                       if(habilitaGuardar)
                                       Container(
                                         color: Colors.transparent,
@@ -897,7 +901,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                 minLines: 1,
                                                 maxLines: 1,
                                                 autofocus: false,
-                                                maxLength: 5,
+                                                maxLength: 6,
                                                 textAlign: TextAlign.left,
                                                 onEditingComplete: () {
                                                   FocusScope.of(context).unfocus();
@@ -949,7 +953,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                 minLines: 1,
                                                 maxLines: 1,
                                                 autofocus: false,
-                                                maxLength: 7,
+                                                //maxLength: 7,
                                                 textAlign: TextAlign.left,
                                                 inputFormatters: [currencyFormatter],
                                                 onEditingComplete: () {
@@ -1612,7 +1616,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       expectedRevenue: double.parse(ingresoEsperadoTxt.text),
                                       dayClose: double.parse(dateRgPrsp.day.toString()),
                                       id: 0,
-                                      name: nombresTxt.text,
+                                      name: nombresOportTxt.text,
                                       emailCc: emailTxt.text,
                                       priority: '',
                                       type: '',
@@ -1625,7 +1629,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       partnerName: nombresTxt.text,
                                       mobile: telefonoPrsp,
                                       dateOpen: DateTime.now(),
-                                      dateDeadline: DateTime.now(),
+                                      dateDeadline: DateTime.parse(fecCierreFin),//DateTime.now(),
                                       probability: double.parse(probabilityTxt.text),
                                       activityIds: [
                                         StructCombos(id: idActivi, name: actSelect)
@@ -1668,7 +1672,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       ),
                                       tagIds: [],
                                       referred: recomendadoPorTxt.text,
-                                      dateClose: DateTime.parse(fecCierreFin)                                    
+                                      dateClose: DateTime.now(),//DateTime.parse(fecCierreFin)
                                     );
                     
                                     ProspectoRegistroResponseModel objRsp = await ProspectoTypeService().registraProspecto(objProsp);

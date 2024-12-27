@@ -223,7 +223,12 @@ class AuthService extends ChangeNotifier {
       
       var rspValidacion = json.decode(response.body);
 
-      if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+      if(rspValidacion['error'] != null){
+        return response.body;
+      }
+
+      
+      if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().toLowerCase() == MensajeValidacion().tockenExpirado)){
         await tokenManager.checkTokenExpiration();
         await login(authRequest);
       }
@@ -264,16 +269,8 @@ class AuthService extends ChangeNotifier {
       
       await DataInicialService().readModelosApp(models);
       
-      /*
-      ProspectoTypeService().getProspectos();
-      ClienteService().getClientes();
-      DataInicialService().readCombosProspectos();
-      */
-      
       return response.body;
-    } catch (_) {
-      //print('Test Error: $e');
-    }
+    } catch (_) {}
   }
 
   consultaUsuarios(ConsultaDatosRequestModel authRequest, String imei, String key) async {

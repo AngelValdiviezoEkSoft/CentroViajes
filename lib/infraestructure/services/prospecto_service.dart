@@ -68,6 +68,8 @@ class ProspectoTypeService extends ChangeNotifier{
 
       var rsp = AppResponseModel.fromRawJson(objRsp);
 
+      print('Lst Prsp 1: ${json.encode(rsp.result.data.crmLead)}');
+
       await storageProspecto.write(key: 'RespuestaProspectos', value: '');
       await storageProspecto.write(key: 'RespuestaProspectos', value: json.encode(rsp.result.data.crmLead));
 
@@ -195,7 +197,7 @@ class ProspectoTypeService extends ChangeNotifier{
 
       var rspValidacion = json.decode(response.body);
 
-      if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+      if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().toLowerCase() == MensajeValidacion().tockenExpirado)){
         await tokenManager.checkTokenExpiration();
         await getProspectoRegistrado(phoneProsp);
       }
@@ -220,7 +222,7 @@ class ProspectoTypeService extends ChangeNotifier{
   registraProspecto(DatumCrmLead objProspecto) async {
     String internet = await ValidacionesUtils().validaInternet();//await (Connectivity().checkConnectivity());
     
-    //VALIDACIÓN DE INTERNETL
+    //VALIDACIÓN DE INTERNET
     if(internet.isEmpty){
       
       try{
@@ -272,7 +274,8 @@ class ProspectoTypeService extends ChangeNotifier{
             "phone": objProspecto.phone,          
             "contact_name": objProspecto.contactName,
             "partner_name": objProspecto.partnerName,          
-            "date_closed": DateFormat('yyyy-MM-dd', 'es').format(objProspecto.dateClose!),
+            //"date_closed": DateFormat('yyyy-MM-dd', 'es').format(objProspecto.dateClose!),
+            "date_deadline": DateFormat('yyyy-MM-dd', 'es').format(objProspecto.dateDeadline!),//date_deadline
             "email_from": objProspecto.emailFrom,
             "street": objProspecto.street,
             "expected_revenue": objProspecto.expectedRevenue,
@@ -302,6 +305,8 @@ class ProspectoTypeService extends ChangeNotifier{
           ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/create/crm.lead/model';
         }
 
+        //print('Test: ${jsonEncode(requestBody)}');
+
         final response = await http.post(
           Uri.parse(ruta),
           headers: headers,
@@ -310,7 +315,7 @@ class ProspectoTypeService extends ChangeNotifier{
       
         var rspValidacion = json.decode(response.body);
 
-        if(rspValidacion['result']['mensaje'] == 'El tocken no es valido'){
+        if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'] == MensajeValidacion().tockenExpirado)){
           await tokenManager.checkTokenExpiration();
           await registraProspecto(objProspecto);
         } 
@@ -349,6 +354,11 @@ class ProspectoTypeService extends ChangeNotifier{
           }
 
           CrmLeadDatumAppModel objCrmLeadDatumAppModel = CrmLeadDatumAppModel(
+            dateDeadline:  DateTime.now(),
+            dateClose: DateTime.now(),
+            probability: 0,
+            street: objProspecto.street,
+            referred: objProspecto.referred,
             activityIds: lstActivTmp,
             campaignId: objCampaTmp,
             contactName: objProspecto.contactName,

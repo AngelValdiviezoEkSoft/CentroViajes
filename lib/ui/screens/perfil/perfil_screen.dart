@@ -295,7 +295,41 @@ class PerfilScreen extends StatelessWidget {
               Center(
                 child: OutlinedButton(
                   onPressed: () {
-                    context.pop();
+                    //context.pop();
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('¿Está seguro que desea cerrar su sesión?'),
+                            
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
+
+                                  await AuthService().logOut();
+
+                                  Navigator.of(context).pop();
+
+                                  context.push(objRutasGen.rutaBienvenida);
+
+                                },
+                                child: Text('Sí', style: TextStyle(color: Colors.blue[200]),),
+                              ),
+                              TextButton(
+                                onPressed: () {
+
+                                  Navigator.of(context).pop();
+
+                                  //context.push(objRutasGen.rutaBienvenida);
+
+                                },
+                                child: const Text('No', style: TextStyle(color: Colors.black),),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    
                   },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.grey),
@@ -343,12 +377,11 @@ class PerfilScreen extends StatelessWidget {
                           },
                         );
                       
-                      
                       },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(Icons.logout, color: Colors.black,),
+                          Icon(Icons.logout, color: Colors.black),
                           AutoSizeText(
                             'Cerrar Sesión',
                             style: TextStyle(color: Colors.black),

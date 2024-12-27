@@ -175,6 +175,12 @@ class CrmLeadDatumAppModel {
     CombosAppModel title;
     String? type;
     CombosAppModel userId;
+    
+    String? referred;
+    String? street;
+    double? probability;
+    DateTime? dateClose;
+    DateTime? dateDeadline;
 
     CrmLeadDatumAppModel({
         required this.id,
@@ -199,6 +205,11 @@ class CrmLeadDatumAppModel {
         required this.title,
         required this.type,
         required this.userId,
+        required this.referred,
+        required this.street,
+        required this.probability,
+        required this.dateClose,
+        required this.dateDeadline
     });
 
     factory CrmLeadDatumAppModel.fromRawJson(String str) => CrmLeadDatumAppModel.fromJson(json.decode(str));
@@ -228,6 +239,11 @@ class CrmLeadDatumAppModel {
         title: CombosAppModel.fromJson(json["title"]),
         type: json["type"] ?? '',
         userId: CombosAppModel.fromJson(json["user_id"]),
+        referred: json["referred"] ?? '',
+        street: json["street"] ?? '',
+        dateClose: json["date_closed"] == null ? null : DateTime.parse(json["date_closed"]),
+        dateDeadline: json['date_deadline'] == null ? DateTime.now() : DateTime.parse(json['date_deadline']),
+        probability: json["probability"] ?? 0,
     );
 
     Map<String, dynamic> toJson() => {
@@ -253,6 +269,11 @@ class CrmLeadDatumAppModel {
         "title": title.toJson(),
         "type": type,
         "user_id": userId.toJson(),
+        "referred": referred,
+        "street": street,
+        'date_Close': dateClose?.toIso8601String(),
+        'probability': probability,
+        'date_deadline': dateDeadline?.toIso8601String(),
     };
 }
 

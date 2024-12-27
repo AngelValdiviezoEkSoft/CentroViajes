@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -30,6 +29,7 @@ int idProsp = 0;
 int tabAccionesEditPrsp = 0;
 
 late TextEditingController nombresEditTxt;
+late TextEditingController nombresOportEditTxt;
 late TextEditingController emailEditTxt;
 late TextEditingController direccionEditTxt;
 late TextEditingController observacionesEditTxt;
@@ -40,6 +40,8 @@ late TextEditingController sectorEditTxt;
 late TextEditingController ingresoEsperadoEditTxt;
 late TextEditingController recomendadoPorEditTxt;
 late TextEditingController fechaCierreEditxt;
+
+String rutaFinal = '';
 
 DateTime dateEdPrsp = DateTime.now();
 
@@ -82,6 +84,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
     comienzaEditarMedio = false;
 
     nombresEditTxt = TextEditingController();
+    nombresOportEditTxt = TextEditingController();
     emailEditTxt = TextEditingController();
     direccionEditTxt = TextEditingController();
     observacionesEditTxt = TextEditingController();
@@ -93,6 +96,9 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
     
     telefonoEditTxt = TextEditingController();
     sectorEditTxt = TextEditingController(text: 'Norte');
+
+    rutaFinal = '';
+    tabAccionesEditPrsp = 0;
 
     if(objDatumCrmLead != null){
       objDatumCrmLeadEdit = objDatumCrmLead;
@@ -107,13 +113,13 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
       telefonoEditTxt.text = cell;
       //recomendadoPorEditTxt.text = objDatumCrmLeadEdit!.referred ?? '';
 
-      String rutaFinal = objDatumCrmLeadEdit!.description ?? 'https://flutter.dev';
+      rutaFinal = objDatumCrmLeadEdit!.description ?? '';
 
-      //ingresoEsperadoEditTxt.text = objDatumCrmLeadEdit!.expectedRevenue.toString();
+      if(rutaFinal.isNotEmpty){
+        _wvController = WebViewController();
 
-      _wvController = WebViewController();
-
-      _wvController.loadHtmlString(rutaFinal);
+        _wvController.loadHtmlString(rutaFinal);
+      }
 
       if(objDatumCrmLeadEdit!.userId != null && objDatumCrmLeadEdit!.userId!.name.isNotEmpty){
         prspAsignado = true;
@@ -213,7 +219,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                   if(!comienzaEditarFechaCierre){                    
 
                     if(objDatumCrmLeadEdit != null ){
-                      fecEditCierre = objDatumCrmLeadEdit!.dateClose != null ? DateFormat('yyyy-MM-dd', 'es').format(objDatumCrmLeadEdit!.dateClose!) : '-- No tiene fecha de cierre --';
+                      fecEditCierre = objDatumCrmLeadEdit!.dateDeadline != null ? DateFormat('yyyy-MM-dd', 'es').format(objDatumCrmLeadEdit!.dateDeadline!) : '-- No tiene fecha de cierre --';
                       fechaCierreEditxt.text = fecEditCierre;
                     }
                     
@@ -224,7 +230,13 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                   }
 
                   if(!comienzaEditarNombres){
+                    //nombresEditTxt.text = objDatumCrmLeadEdit!.name;
                     nombresEditTxt.text = objDatumCrmLeadEdit!.contactName ?? '';
+                  }
+
+                  if(!comienzaEditarNombres){
+                    //nombresOportEditTxt.text = objDatumCrmLeadEdit!.contactName ?? '';
+                    nombresOportEditTxt.text = objDatumCrmLeadEdit!.name;
                   }
 
                   if(!comienzaEditarDireccion){
@@ -540,7 +552,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                                 textCapitalization: TextCapitalization.sentences,
                                                 style: AppTextStyles.bodyRegular(width: size.width),
                                                 decoration: InputDecorationCvs.formsDecoration(
-                                                  labelText: 'Nombres',
+                                                  labelText: 'Nombre de prospecto',
                                                   hintTetx: 'Ej: Juan Valdez',
                                                   size: size
                                                 ),
@@ -574,6 +586,54 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                       
                                       SizedBox(
                                         height: size.height * 0.02,
+                                      ),
+
+                                      Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              child: TextFormField(
+                                                cursorColor: AppLightColors().primary,
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,                                                
+                                                inputFormatters: [
+                                                  EmojiInputFormatter()
+                                                ],
+                                                textCapitalization: TextCapitalization.sentences,
+                                                style: AppTextStyles.bodyRegular(width: size.width),
+                                                decoration: InputDecorationCvs.formsDecoration(
+                                                  labelText: 'Nombre Oportunidad',
+                                                  hintTetx: 'Ej: Juan Valdez',
+                                                  size: size
+                                                ),
+                                                enabled: false,
+                                                controller: nombresOportEditTxt,
+                                                autocorrect: false,
+                                                keyboardType: TextInputType.text,
+                                                minLines: 1,
+                                                maxLines: 2,
+                                                autofocus: false,
+                                                maxLength: 50,
+                                                textAlign: TextAlign.left,
+                                                onEditingComplete: () {
+                                                  FocusScope.of(context).unfocus();
+                                                  //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                                  setState(() {
+                                                    comienzaEditarNombres = true;
+                                                  });
+                                                },
+                                                onChanged: (value) {
+                                                  
+                                                },
+                                                onTapOutside: (event) {
+                                                  FocusScope.of(context).unfocus();
+                                                  setState(() {
+                                                    comienzaEditarNombres = true;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                      
+                                      SizedBox(
+                                        height: size.height * 0.04,
                                       ),
                           
                                       Container(
@@ -1092,11 +1152,20 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                         child: Column(
                                           children: [
                         
+                                            if(rutaFinal.isNotEmpty)
                                             Container(
                                               color: Colors.transparent,
                                               width: size.width * 0.92,
                                               height: size.height * 0.22,
                                               child: WebViewWidget(controller: _wvController)
+                                            ),
+
+                                            if(rutaFinal.isEmpty)
+                                            Container(
+                                              color: Colors.transparent,
+                                              width: size.width * 0.92,
+                                              height: size.height * 0.22,
+                                              child: const Text('-- Sin Observaciones --', style: TextStyle(color: Colors.black, fontSize: 20),)
                                             ),
                                             
                                             SizedBox(

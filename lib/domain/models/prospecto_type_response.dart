@@ -200,12 +200,12 @@ class DatumCrmLead {
         city: json["city"],
         emailCc: json["email_cc"],
         mobile: json["mobile"] ?? '',
-        street: json["street"],
-        dateDeadline: json["date_deadline"] == null ? null : DateTime.parse(json["date_deadline"]),
-        probability: 0,
+        street: json["street"] ?? '',
+        dateDeadline: json['date_deadline'] == null ? DateTime.now() : DateTime.parse(json['date_deadline']),
+        probability: json["probability"] ?? 0,
         userId: json["user_id"] == null ? null : StructCombos.fromMap(json["user_id"]),
         expectedRevenue: json["expected_revenue"] ?? 0,
-        referred: json["referred"]
+        referred: json["referred"] ?? ''        
     );
 
     factory DatumCrmLead.fromMap2(Map<String, dynamic> json) {
@@ -281,7 +281,7 @@ class DatumCrmLead {
       'probability': probability,
       'user_id': userId,
       'expected_revenue': expectedRevenue,
-      'referred': referred,
+      'referred': referred
     };
   }
 

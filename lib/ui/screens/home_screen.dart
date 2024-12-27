@@ -277,7 +277,7 @@ class HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                     
-                                const SizedBox(height: 16.0),
+                                    const SizedBox(height: 16.0),
                                           
                                     Container(
                                       color: Colors.transparent,
@@ -331,6 +331,7 @@ class HomeScreenState extends State<HomeScreen> {
                                             margin: const EdgeInsets.only( top: 25 ),
                                             width: size.width * 0.99,
                                             height: size.height * 0.45,
+                                            color: Colors.transparent,
                                             child: ListView(
                                               physics: const BouncingScrollPhysics(),
                                               children: <Widget>[
@@ -403,6 +404,7 @@ class HomeScreenState extends State<HomeScreen> {
             color: Colors.transparent,
             child: Column(
               children: [
+
                 SizedBox(
                   height: tamanio.height * 0.02,
                 ),
@@ -454,6 +456,7 @@ class HomeScreenState extends State<HomeScreen> {
             width: tamanio.width * 0.4,
             height: tamanio.height * 0.1,
             color: Colors.transparent,
+            alignment: Alignment.centerRight,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -490,22 +493,36 @@ class HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+
                 Container(
-                  width: tamanio.width * 0.3,
+                  width: tamanio.width * 0.317,
                   height: tamanio.height * 0.035,
                   color: Colors.transparent,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(                      
-                      backgroundColor: Colors.grey.shade700,
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        FaIcon(FontAwesomeIcons.chartLine, size: 20, color: Colors.white,),
-                        Text('Detalles', style: TextStyle(color:  Colors.white, fontSize: 12),),
-                      ],
-                    ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: tamanio.width * 0.3,
+                        height: tamanio.height * 0.035,
+                        color: Colors.transparent,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(                      
+                            backgroundColor: Colors.grey.shade700,
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              FaIcon(FontAwesomeIcons.chartLine, size: 20, color: Colors.white,),
+                              Text('Detalles', style: TextStyle(color:  Colors.white, fontSize: 12),),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: tamanio.width * 0.01,
+                        color: Colors.transparent,
+                      )
+                    ],
                   ),
                 ),
               ],

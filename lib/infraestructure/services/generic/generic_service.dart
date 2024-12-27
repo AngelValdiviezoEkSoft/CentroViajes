@@ -171,7 +171,11 @@ class GenericService extends ChangeNotifier {
       await getMultiModelosGen(objReq, lstModels);
     }
 
+    print('Lst gen: ${response.body}');
+
     var rsp = AppResponseModel.fromRawJson(response.body);
+
+    print('Lst Prsp: ${json.encode(rsp.result.data.crmLead)}');
 
     await storage.write(key: 'RespuestaProspectos', value: json.encode(rsp.result.data.crmLead));
     await storage.write(key: 'RespuestaClientes', value: json.encode(rsp.result.data.resPartner));

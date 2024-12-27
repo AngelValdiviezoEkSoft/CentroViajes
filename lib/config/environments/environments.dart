@@ -1,4 +1,6 @@
 
+export 'package:cvs_ec_app/config/environments/mensaje_validacion.dart';
+
 export 'package:cvs_ec_app/config/environments/tipo_alertas.dart';
 
 export 'package:cvs_ec_app/config/environments/cvs_ec_regexp.dart';

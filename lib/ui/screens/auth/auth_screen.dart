@@ -322,7 +322,7 @@ class LoginScreen extends StatelessWidget {
                           context.push(objRutasGen.rutaHome);
                           //context.push(objRutasGen.rutaOnBoarding);
                         } else {
-                          final msmError = data['error']['message'];
+                          final msmError = data['error']['data']['name'];
 
                           showDialog(
                             context: context,

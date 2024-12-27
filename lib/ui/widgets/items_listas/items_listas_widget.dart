@@ -227,7 +227,7 @@ class ListaNotificaciones extends StatelessWidget {
               Container(
                 width: sizeLstNot.width,
                 height: sizeLstNot.height * 0.13,
-                margin: const EdgeInsets.all(10), 
+                margin: const EdgeInsets.all(3), 
                 decoration: BoxDecoration(
                   boxShadow: <BoxShadow>[
                     BoxShadow( color: Colors.black.withOpacity(0.2), offset: const Offset(4,6), blurRadius: 10 ),
@@ -246,7 +246,7 @@ class ListaNotificaciones extends StatelessWidget {
                   dense: true,
                   minVerticalPadding: 15,
                   title:  Container( 
-                    width: sizeLstNot.width * 0.95,//65,
+                    width: sizeLstNot.width * 0.98,//65,
                     height: sizeLstNot.height * 0.11,//90,
                     alignment: Alignment.center, 
                     color: Colors.transparent,
@@ -277,7 +277,7 @@ class ListaNotificaciones extends StatelessWidget {
           
                         if(texto2 != null && texto2!.isNotEmpty )
                         Container(
-                          width: sizeLstNot.width * 0.6,
+                          width: sizeLstNot.width * 0.72,
                           height: sizeLstNot.height * 0.11,
                           color: Colors.transparent,
                           alignment: Alignment.centerLeft,

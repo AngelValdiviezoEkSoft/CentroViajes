@@ -385,6 +385,7 @@ class MapScreenState extends State<MapScreen> {
                                     children: [
           
                                       MapView(
+                                        null,
                                         markers: _markers.values.toSet(),
                                         //initialLocation: stateSuscripcion.direccionUser.isNotEmpty && objLatLngRecibido != null ? objLatLngRecibido! : locationState.lastKnownLocation!,
                                         initialLocation: locationState.lastKnownLocation!,
@@ -443,6 +444,7 @@ class MapScreenState extends State<MapScreen> {
                                               const storage = FlutterSecureStorage();
                                               String esEdicion = await storage.read(key: 'esEdicionData') ?? '';
           
+                                              //ignore: use_build_context_synchronously
                                               context.pop();
           
                                               if(esEdicion.isNotEmpty && esEdicion == 'S') {
@@ -547,6 +549,7 @@ class BtnBackMapaUbicacionReg extends StatelessWidget {
               OnDeactivateManualMarkerEvent()
             );
 
+            //ignore: use_build_context_synchronously
             context.pop();
 
           },

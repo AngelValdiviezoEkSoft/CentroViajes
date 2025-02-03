@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class CustomSnackbar extends SnackBar {
   
-  CustomSnackbar({
+  CustomSnackbar(
     Key? key,
+    {
+    
     required String message,
     String btnLabel = 'OK',
     Duration duration = const Duration( seconds: 2 ),

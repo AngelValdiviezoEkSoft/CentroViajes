@@ -102,6 +102,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               const Spacer(),
               AppButton(
+                null,
                 text: "LOG OUT",
                 onPressed: () {
                   

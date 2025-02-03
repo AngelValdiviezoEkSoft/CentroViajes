@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-late Timer _timer;
+//late Timer _timer;
 
 class AuthService extends ChangeNotifier {
   final env = CadenaConexion();
@@ -233,7 +233,6 @@ class AuthService extends ChangeNotifier {
       }
 
       final models = [
-        //{"model": "res.country", "filters": []}, 
         {
           "model": EnvironmentsProd().modProsp,//"crm.lead",
           "filters": []
@@ -256,7 +255,10 @@ class AuthService extends ChangeNotifier {
         },
         {
           "model": EnvironmentsProd().modActiv,//"mail.activity.type",
-          "filters": []
+          "filters": [
+            //"|",["res_model","=","crm.lead"]
+            ["res_model","=",false]
+          ]
         },
         {
           "model": EnvironmentsProd().modPaise,//"res.country",
@@ -269,7 +271,9 @@ class AuthService extends ChangeNotifier {
       await DataInicialService().readModelosApp(models);
       
       return response.body;
-    } catch (_) {}
+    } catch (_) {
+
+    }
   }
 
   consultaUsuarios(ConsultaDatosRequestModel authRequest, String imei, String key) async {

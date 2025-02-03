@@ -14,13 +14,13 @@ final GoRouter appRouter = GoRouter(
       path: objRutas.rutaDefault,
       builder: (context, state) => BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          return AuthScreen();
+          return AuthScreen(null);
         },
       ),
     ),
     GoRoute(
       path: objRutas.rutaRegistroCliente,
-      builder: (context, state) => FrmRegistroClientesScreen(),      
+      builder: (context, state) => FrmRegistroClientesScreen(null),      
     ),
     GoRoute(
       path: objRutas.rutaListaClientes,
@@ -73,7 +73,7 @@ final GoRouter appRouter = GoRouter(
                   else{
                     */
                     if(snapshot.data == 'log') {
-                      return AuthScreen();
+                      return AuthScreen(null);
                     }
                     if(snapshot.data == 'home') {
                       return const HomeScreen(null);
@@ -90,7 +90,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: objRutas.rutaAgenda,
-      builder: (context, state) => AgendaScreen(),      
+      builder: (context, state) => const AgendaScreen(null),      
     ),
     GoRoute(
       path: objRutas.rutaPerfil,
@@ -126,7 +126,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: objRutas.rutaConstruccion,
-      builder: (context, state) => const EnConstruccionScreen(),      
+      builder: (context, state) => const EnConstruccionScreen(null),      
     ),
     GoRoute(
       path: objRutas.rutaCheckAuth,

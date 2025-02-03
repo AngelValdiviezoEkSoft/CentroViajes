@@ -10,7 +10,7 @@ class CargaScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Center(
-      child: FrmCargaScreen(),
+      child: FrmCargaScreen(null),
     );
   }
 }
@@ -21,7 +21,7 @@ class FrmCargaScreen extends StatelessWidget {
   int varPosicionMostrar = 0;
   //List<NotificacionesModels> varLstNotificaciones = [];
 
-  FrmCargaScreen({Key? key}) : super (key: key);
+  FrmCargaScreen(Key? key) : super (key: key);
 
   @override
   Widget build(BuildContext context) {

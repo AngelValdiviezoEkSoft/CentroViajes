@@ -220,18 +220,18 @@ class ListaActividades extends StatelessWidget {
       );
   }
 
-  Widget _buildMenuButton(String title) {
+  Widget buildMenuButton(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Text(
         title,
-        style: TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.black),
       ),
     );
   }
 
   
-  Widget _buildMenuButton2(String title) {
+  Widget buildMenuButton2(String title) {
     return Container(
       color: const Color(0xFF5636D3),
       child: Padding(
@@ -278,7 +278,7 @@ class ListaActividades extends StatelessWidget {
     );
   }
 
-  Widget _buildExpandableTile(String title) {
+  Widget buildExpandableTile(String title) {
     return ListTile(
       title: Text(title),
       onTap: () {
@@ -287,9 +287,9 @@ class ListaActividades extends StatelessWidget {
     );
   }
 
-  Widget _buildIndicators() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+  Widget buildIndicators() {
+    return const Padding(
+      padding: EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -319,22 +319,22 @@ class ListaActividades extends StatelessWidget {
     );
   }
 
-   Widget _buildTopProductsTable() {
+   Widget buildTopProductsTable() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Top 5 Productos',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           DataTable(
-            columns: [
+            columns: const [
               DataColumn(label: Text('Productos')),
               DataColumn(label: Text('Cantidad')),
             ],
-            rows: [
+            rows: const [
               DataRow(cells: [
                 DataCell(Text('Producto 1')),
                 DataCell(Text('1,234.56')),
@@ -357,7 +357,7 @@ class ListaActividades extends StatelessWidget {
 }
 
 
-Widget AnalogClockExample(DateTime dateTimee) {
+Widget analogClockExample(DateTime dateTimee) {
   return SingleChildScrollView(
     // padding: EdgeInsets.all(7),
     scrollDirection: Axis.horizontal,
@@ -436,7 +436,7 @@ Widget AnalogClockExample(DateTime dateTimee) {
   );
 }
 
-List<Widget> DigitalClockExample(DateTime dateTimee) {
+List<Widget> digitalClockExample(DateTime dateTimee) {
   return [
     SingleChildScrollView(
       //scrollDirection: Axis.horizontal,

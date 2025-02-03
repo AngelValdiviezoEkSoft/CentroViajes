@@ -5,11 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:cron/cron.dart';
 
 class CentroViajesApp extends StatefulWidget {
+  
+  const CentroViajesApp(Key? key,
+  ) : super(key: key);
+
   @override
-  _CentroViajesAppState createState() => _CentroViajesAppState();
+  CentroViajesAppState createState() => CentroViajesAppState();
 }
 
-class _CentroViajesAppState extends State<CentroViajesApp> {
+class CentroViajesAppState extends State<CentroViajesApp> {
   final TokenManager tokenManager = TokenManager();
   final cron = Cron();
 

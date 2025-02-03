@@ -24,7 +24,7 @@ class BtnCurrentLocation extends StatelessWidget {
             final userLocation = locationBloc.state.lastKnownLocation;
 
             if ( userLocation == null ) {
-                final snack = CustomSnackbar( message: 'No hay ubicación' );
+                final snack = CustomSnackbar( null, message: 'No hay ubicación' );
                 ScaffoldMessenger.of(context).showSnackBar(snack);
                 return;
             }

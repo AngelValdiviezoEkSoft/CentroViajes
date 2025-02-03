@@ -52,6 +52,7 @@ class _PlanificacionActividadClienteScreenState extends State<PlanificacionActiv
 
             return Scaffold(
                   appBar: EcvAppBarWidget(
+                    null,
                   'Planificación de actividad',//AppLocalizations.of(context)!.iniciarSesion,
                   oColorLetra: AppLightColors().gray800SecondaryText,
                   onPressed: () {

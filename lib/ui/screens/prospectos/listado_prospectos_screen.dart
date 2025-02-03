@@ -87,6 +87,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
     String resInt = await ValidacionesUtils().validaInternet();
 
     showDialog(
+      //ignore:use_build_context_synchronously
       context: context,
       barrierDismissible: false,
       builder: (context) => SimpleDialog(
@@ -132,6 +133,16 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
           if(prospectosFiltrados.isEmpty){
 
             for(int i = 0; i < apiResponse.data.length; i++){
+              if(apiResponse.data[i].contactName != null && apiResponse.data[i].contactName!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
+                prospectosFiltrados.add(apiResponse.data[i]);
+              }
+            }
+
+          }
+
+          if(prospectosFiltrados.isEmpty){
+
+            for(int i = 0; i < apiResponse.data.length; i++){
               if(apiResponse.data[i].emailFrom != null && apiResponse.data[i].emailFrom!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
                 prospectosFiltrados.add(apiResponse.data[i]);
               }
@@ -152,6 +163,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
         prospectosFiltrados = apiResponse.data;
       }
 
+      //ignore:use_build_context_synchronously
       context.pop();
 
       // Refresca los datos llamando a la misma función de carga
@@ -160,10 +172,12 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
       });
     } else {
 
+      //ignore:use_build_context_synchronously
       context.pop();
 
       showDialog(
         barrierDismissible: false,
+        //ignore:use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
           return ContentAlertDialog(
@@ -244,11 +258,20 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                 .toList();
 
                 if(prospectosFiltrados.isEmpty){
+
+                  for(int i = 0; i < apiResponse.data.length; i++){
+                    if(apiResponse.data[i].contactName != null && apiResponse.data[i].contactName!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
+                      prospectosFiltrados.add(apiResponse.data[i]);
+                    }
+                  }
+
+                }
+
+                if(prospectosFiltrados.isEmpty){
                   prospectosFiltrados = apiResponse.data
                   .where((producto) =>
                     producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
-                  )
-                  .toList();
+                  ).toList();
                 }
               } else {
                 if(prospectosFiltrados.isEmpty && (terminoBusqueda.contains('+') || terminoBusqueda.contains('0'))){
@@ -403,7 +426,18 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                   motion: const ScrollMotion(),
                                     children: [
                                       SlidableAction(
-                                        onPressed: (context) => context.push(Rutas().rutaPlanificacionActividades),
+                                        onPressed: (context) 
+                                        {
+                                          objDatumCrmLead = prospectosFiltrados[index];
+
+                                          //ignore: use_build_context_synchronously
+                                          FocusScope.of(context).unfocus();
+
+                                          terminoBusqueda = '';
+                                          filtroPrspTxt = TextEditingController();
+
+                                          context.push(Rutas().rutaPlanificacionActividades);
+                                        },
                                         backgroundColor: objColorsApp.celeste,
                                         foregroundColor: Colors.white,
                                         icon: Icons.call_outlined,

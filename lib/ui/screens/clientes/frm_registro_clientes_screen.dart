@@ -11,7 +11,7 @@ bool estadoTrx = false;
 //ignore: must_be_immutable
 class FrmRegistroClientesScreen extends StatefulWidget {
 
-  FrmRegistroClientesScreen({Key? key, oAdministracionMontosResponse})
+  FrmRegistroClientesScreen(Key? key, {oAdministracionMontosResponse})
       : super(key: key) {
     if (oAdministracionMontosResponse != null) {
       /*
@@ -65,6 +65,7 @@ class FrmRegistroClientesScreenState extends State<FrmRegistroClientesScreen> {
               Scaffold(
                   backgroundColor: Colors.white,                  
                   appBar: const EcvAppBarWidget(
+                    null,
                     'Registro de cliente',
                     oColorLetra: Colors.black,
                     backgorundAppBarColor: Color(0xffF6F6F6),

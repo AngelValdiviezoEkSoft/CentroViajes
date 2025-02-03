@@ -50,11 +50,12 @@ class ScaleTextWidget extends StatelessWidget {
 
   final Widget? child;
 
-  const ScaleTextWidget({
+  const ScaleTextWidget(
     Key? key,
-    @required this.scale,
-    @required this.child,
-  }) : super(key: key);
+    {    
+      @required this.scale,
+      @required this.child,
+    }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

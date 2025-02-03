@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:cvs_ec_app/common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:cvs_ec_app/config/config.dart';
 

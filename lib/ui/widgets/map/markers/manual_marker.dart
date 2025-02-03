@@ -54,7 +54,7 @@ class ManualMarkerBody extends StatelessWidget {
           const Positioned(
             top: 90,
             left: 20,
-            child: BtnBackManualMarker()
+            child: BtnBackManualMarker(null)
           ),
 
           Center(
@@ -140,9 +140,9 @@ class ManualMarkerBody extends StatelessWidget {
 }
 
 class BtnBackManualMarker extends StatelessWidget {
-  const BtnBackManualMarker({
+  const BtnBackManualMarker(
     Key? key,
-  }) : super(key: key);
+  ) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

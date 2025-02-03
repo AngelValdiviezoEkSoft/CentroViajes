@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -73,20 +72,21 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
 
       //print('Bytes vista: $bodyBytes');
       
-      final bytes = File(objFoto.path).readAsBytesSync();
-      String fotoTmp = base64Encode(bytes);
+      //final bytes = File(objFoto.path).readAsBytesSync();
+      //String fotoTmp = base64Encode(bytes);
 
       //print('Base 64 de la foto: $fotoTmp');
 
       primerNombre = "Angel";//objPrspValido?.nombres.split(' ')[0] ?? '';
       
       rutaNuevaFotoPerfil = objFoto.path;
-      
+      /*
       FotoPerfilModel objFotoPerfilNueva = FotoPerfilModel(
         base64: fotoTmp,
         extension: rutaFotoPerfil.split('.')[rutaFotoPerfil.split('.').length - 1],//'png',
         nombre: 'foto_perfil_$primerNombre'
       );
+      */
       
       setState(() {});
     }
@@ -370,6 +370,7 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                         */
                                       );
                                       if (croppedFile != null) {
+                                        /*
                                         final bytes = File(croppedFile.path).readAsBytesSync();
                                         String img64 = base64Encode(bytes);
                                         
@@ -378,6 +379,7 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                           extension: 'png',
                                           nombre: 'foto_perfil_$primerNombre'
                                         );
+                                        */
                         
                                         rutaNuevaFotoPerfil = croppedFile.path;
                                         
@@ -479,14 +481,17 @@ class _FrmEditPerfilScreenState extends State<FrmEditPerfilScreen> {
                                         */
                                       );
                                       if (croppedFile != null) {
+                                        /*
                                         final bytes = File(croppedFile.path).readAsBytesSync();
                                         String img64 = base64Encode(bytes);
+                                        
                               
                                         FotoPerfilModel objFotoPerfilNueva = FotoPerfilModel(
                                           base64: img64,
                                           extension: 'png',
                                           nombre: 'foto_perfil_$primerNombre'
                                         );
+                                        */
                               
                                         validandoFoto = false;
                         

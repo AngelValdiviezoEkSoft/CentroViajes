@@ -11,8 +11,9 @@ class MapView extends StatelessWidget {
   final Set<Marker> markers;
   final Set<Circle> circleLlegada;
 
-  const MapView({ 
-    Key? key, 
+  const MapView(
+    Key? key,
+    {     
     required this.initialLocation, 
     required this.llegadaLocation,
     //required this.polylines, 

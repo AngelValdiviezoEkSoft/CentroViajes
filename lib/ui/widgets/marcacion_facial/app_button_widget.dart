@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
-  AppButton(
+  const AppButton(
+    Key? key,
       {this.onPressed,
       this.text,
       this.color = const Color(0xFF0F0BDB),
       this.icon = const Icon(
         Icons.add,
         color: Colors.white,
-      )});
+      )}) : super(key: key);
+
   final void Function()? onPressed;
   final String? text;
   final Icon icon;

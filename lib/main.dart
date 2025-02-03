@@ -48,7 +48,7 @@ void main() async {
               locked: true
             )
           ),
-          child: CentroViajesApp()
+          child: const CentroViajesApp(null)
         )
       ),
     )

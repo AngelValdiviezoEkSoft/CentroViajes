@@ -21,7 +21,7 @@ String tokenDevice = '';
 //ignore: use_key_in_widget_constructors
 class AuthScreen extends StatelessWidget {
 
-  AuthScreen({Key? key}) : super(key: key) {
+  AuthScreen(Key? key) : super(key: key) {
     //getAcountType();
   }
 
@@ -50,7 +50,7 @@ class AuthScreen extends StatelessWidget {
                 children: [
                   ChangeNotifierProvider(
                     create: (_) => AuthService(),
-                    child: LoginScreen(),
+                    child: const LoginScreen(null),
                   )
                 ],
               ),
@@ -64,6 +64,8 @@ class AuthScreen extends StatelessWidget {
 
 class LoginScreen extends StatelessWidget {
   
+  const LoginScreen(Key? key) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
 
@@ -263,9 +265,11 @@ class LoginScreen extends StatelessWidget {
                         var resp = await AuthService().login(objAuthRequest);
 
                         if(resp == 'NI'){
+                          //ignore: use_build_context_synchronously
                           context.pop();
 
                           showDialog(
+                            //ignore: use_build_context_synchronously
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
@@ -977,6 +981,7 @@ void accesoBiometricos(context) {
                       ),
                     )),
                 TextButtonCvs(
+                  null,
                   onPress: () {
                     Navigator.pop(context);
                   },
@@ -1138,6 +1143,9 @@ class _InputAuth extends StatelessWidget {
 }
 
 class MyCustomBox extends StatelessWidget {
+
+  const MyCustomBox(Key? key) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Center(

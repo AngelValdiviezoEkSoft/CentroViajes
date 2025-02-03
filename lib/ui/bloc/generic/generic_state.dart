@@ -175,7 +175,7 @@ class GenericState extends Equatable {
       ); 
   }
   
-  readCombosCreateProspectos() async {
+  readCombosGen() async {
     
     String cmbCamp = await storage.read(key: 'cmbCampania') ?? '';
     String cmbOrigen = await storage.read(key: 'cmbOrigen') ?? '';

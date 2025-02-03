@@ -153,128 +153,133 @@ class CrmLeadAppModel {
 }
 
 class CrmLeadDatumAppModel {
-    int? id;
-    List<CombosAppModel> activityIds;
-    CombosAppModel campaignId;
-    String? contactName;
-    CombosAppModel countryId;
-    DateTime dateOpen;
-    double? dayClose;
-    String? emailFrom;
-    double? expectedRevenue;
-    CombosAppModel lostReasonId;
-    CombosAppModel mediumId;
-    String? name;
-    CombosAppModel partnerId;
-    String? phone;
-    String? priority;
-    CombosAppModel sourceId;
-    CombosAppModel stageId;
-    CombosAppModel stateId;
-    List<CombosAppModel> tagIds;
-    CombosAppModel title;
-    String? type;
-    CombosAppModel userId;
-    
-    String? referred;
-    String? street;
-    double? probability;
-    DateTime? dateClose;
-    DateTime? dateDeadline;
+  int? id;
+  List<CombosAppModel> activityIds;
+  CombosAppModel campaignId;
+  String? contactName;
+  CombosAppModel countryId;
+  DateTime dateOpen;
+  double? dayClose;
+  String? emailFrom;
+  double? expectedRevenue;
+  CombosAppModel lostReasonId;
+  CombosAppModel mediumId;
+  String? name;
+  CombosAppModel partnerId;
+  String? phone;
+  String? priority;
+  CombosAppModel sourceId;
+  CombosAppModel stageId;
+  CombosAppModel stateId;
+  List<CombosAppModel> tagIds;
+  CombosAppModel title;
+  String? type;
+  CombosAppModel userId;
+  
+  String? referred;
+  String? street;
+  double? probability;
+  DateTime? dateClose;
+  DateTime? dateDeadline;
+  String? description;
 
-    CrmLeadDatumAppModel({
-        required this.id,
-        required this.activityIds,
-        required this.campaignId,
-        required this.contactName,
-        required this.countryId,
-        required this.dateOpen,
-        required this.dayClose,
-        required this.emailFrom,
-        required this.expectedRevenue,
-        required this.lostReasonId,
-        required this.mediumId,
-        required this.name,
-        required this.partnerId,
-        required this.phone,
-        required this.priority,
-        required this.sourceId,
-        required this.stageId,
-        required this.stateId,
-        required this.tagIds,
-        required this.title,
-        required this.type,
-        required this.userId,
-        required this.referred,
-        required this.street,
-        required this.probability,
-        required this.dateClose,
-        required this.dateDeadline
-    });
+  CrmLeadDatumAppModel({
+      required this.id,
+      required this.activityIds,
+      required this.campaignId,
+      required this.contactName,
+      required this.countryId,
+      required this.dateOpen,
+      required this.dayClose,
+      required this.emailFrom,
+      required this.expectedRevenue,
+      required this.lostReasonId,
+      required this.mediumId,
+      required this.name,
+      required this.partnerId,
+      required this.phone,
+      required this.priority,
+      required this.sourceId,
+      required this.stageId,
+      required this.stateId,
+      required this.tagIds,
+      required this.title,
+      required this.type,
+      required this.userId,
+      required this.referred,
+      required this.street,
+      required this.probability,
+      required this.dateClose,
+      required this.dateDeadline,
+      this.description,
+  });
 
-    factory CrmLeadDatumAppModel.fromRawJson(String str) => CrmLeadDatumAppModel.fromJson(json.decode(str));
+  factory CrmLeadDatumAppModel.fromRawJson(String str) => CrmLeadDatumAppModel.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory CrmLeadDatumAppModel.fromJson(Map<String, dynamic> json) => CrmLeadDatumAppModel(
-        id: json["id"] ?? 0,
-        activityIds: List<CombosAppModel>.from(json["activity_ids"].map((x) => CombosAppModel.fromJson(x))),
-        campaignId: CombosAppModel.fromJson(json["campaign_id"]),
-        contactName: json["contact_name"] ?? '',
-        countryId: CombosAppModel.fromJson(json["country_id"]),
-        dateOpen: json["date_open"] != null ? DateTime.parse(json["date_open"]) : DateTime.now(),
-        dayClose: json["day_close"] ?? 0,
-        emailFrom: json["email_from"] ?? '',
-        expectedRevenue: json["expected_revenue"] ?? 0,
-        lostReasonId: CombosAppModel.fromJson(json["lost_reason_id"]),
-        mediumId: CombosAppModel.fromJson(json["medium_id"]),
-        name: json["name"] ?? '',
-        partnerId: CombosAppModel.fromJson(json["partner_id"]),
-        phone: json["phone"] ?? '',
-        priority: json["priority"] ?? '',
-        sourceId: CombosAppModel.fromJson(json["source_id"]),
-        stageId: CombosAppModel.fromJson(json["stage_id"]),
-        stateId: CombosAppModel.fromJson(json["state_id"]),
-        tagIds: List<CombosAppModel>.from(json["tag_ids"].map((x) => CombosAppModel.fromJson(x))),
-        title: CombosAppModel.fromJson(json["title"]),
-        type: json["type"] ?? '',
-        userId: CombosAppModel.fromJson(json["user_id"]),
-        referred: json["referred"] ?? '',
-        street: json["street"] ?? '',
-        dateClose: json["date_closed"] == null ? null : DateTime.parse(json["date_closed"]),
-        dateDeadline: json['date_deadline'] == null ? DateTime.now() : DateTime.parse(json['date_deadline']),
-        probability: json["probability"] ?? 0,
-    );
+  factory CrmLeadDatumAppModel.fromJson(Map<String, dynamic> json) => CrmLeadDatumAppModel(
+    id: json["id"] ?? 0,
+    activityIds: List<CombosAppModel>.from(json["activity_ids"].map((x) => CombosAppModel.fromJson(x))),
+    campaignId: CombosAppModel.fromJson(json["campaign_id"]),
+    contactName: json["contact_name"] ?? '',
+    countryId: CombosAppModel.fromJson(json["country_id"]),
+    dateOpen: json["date_open"] != null ? DateTime.parse(json["date_open"]) : DateTime.now(),
+    dayClose: json["day_close"] ?? 0,
+    emailFrom: json["email_from"] ?? '',
+    expectedRevenue: json["expected_revenue"] ?? 0,
+    lostReasonId: CombosAppModel.fromJson(json["lost_reason_id"]),
+    mediumId: CombosAppModel.fromJson(json["medium_id"]),
+    name: json["name"] ?? '',
+    partnerId: CombosAppModel.fromJson(json["partner_id"]),
+    phone: json["phone"] ?? '',
+    priority: json["priority"] ?? '',
+    sourceId: CombosAppModel.fromJson(json["source_id"]),
+    stageId: CombosAppModel.fromJson(json["stage_id"]),
+    stateId: CombosAppModel.fromJson(json["state_id"]),
+    tagIds: List<CombosAppModel>.from(json["tag_ids"].map((x) => CombosAppModel.fromJson(x))),
+    title: CombosAppModel.fromJson(json["title"]),
+    type: json["type"] ?? '',
+    userId: CombosAppModel.fromJson(json["user_id"]),
+    referred: json["referred"] ?? '',
+    street: json["street"] ?? '',
+    dateClose: json["date_closed"] == null ? null : DateTime.parse(json["date_closed"]),
+    dateDeadline: json['date_deadline'] == null ? DateTime.now() : DateTime.parse(json['date_deadline']),
+    probability: json["probability"] ?? 0,
+    description: json["description"],
+);
 
-    Map<String, dynamic> toJson() => {
-        "id": id,
-        "activity_ids": List<dynamic>.from(activityIds.map((x) => x.toJson())),
-        "campaign_id": campaignId.toJson(),
-        "contact_name": contactName,
-        "country_id": countryId.toJson(),
-        "date_open": dateOpen.toIso8601String(),
-        "day_close": dayClose,
-        "email_from": emailFrom,
-        "expected_revenue": expectedRevenue,
-        "lost_reason_id": lostReasonId.toJson(),
-        "medium_id": mediumId.toJson(),
-        "name": name,
-        "partner_id": partnerId.toJson(),
-        "phone": phone,
-        "priority": priority,
-        "source_id": sourceId.toJson(),
-        "stage_id": stageId.toJson(),
-        "state_id": stateId.toJson(),
-        "tag_ids": List<dynamic>.from(tagIds.map((x) => x.toJson())),
-        "title": title.toJson(),
-        "type": type,
-        "user_id": userId.toJson(),
-        "referred": referred,
-        "street": street,
-        'date_Close': dateClose?.toIso8601String(),
-        'probability': probability,
-        'date_deadline': dateDeadline?.toIso8601String(),
-    };
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "activity_ids": List<dynamic>.from(activityIds.map((x) => x.toJson())),
+    "campaign_id": campaignId.toJson(),
+    "contact_name": contactName,
+    "country_id": countryId.toJson(),
+    "date_open": dateOpen.toIso8601String(),
+    "day_close": dayClose,
+    "email_from": emailFrom,
+    "expected_revenue": expectedRevenue,
+    "lost_reason_id": lostReasonId.toJson(),
+    "medium_id": mediumId.toJson(),
+    "name": name,
+    "partner_id": partnerId.toJson(),
+    "phone": phone,
+    "priority": priority,
+    "source_id": sourceId.toJson(),
+    "stage_id": stageId.toJson(),
+    "state_id": stateId.toJson(),
+    "tag_ids": List<dynamic>.from(tagIds.map((x) => x.toJson())),
+    "title": title.toJson(),
+    "type": type,
+    "user_id": userId.toJson(),
+    "referred": referred,
+    "street": street,
+    'date_Close': dateClose?.toIso8601String(),
+    'probability': probability,
+    'date_deadline': dateDeadline?.toIso8601String(),
+    'description': description,
+  };
+
 }
 
 class CombosAppModel {

@@ -11,7 +11,7 @@ import 'package:local_auth/local_auth.dart';
 //import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 
-ClientModelResponse? _selectVendedorGen;
+ClientModelResponse? selectVendedorGen;
 late TextEditingController motivoTxt;
 
 class ReasignaClienteScreen extends StatefulWidget {
@@ -37,7 +37,7 @@ class _ReasignaClienteScreenState extends State<ReasignaClienteScreen> {
   @override
   Widget build(BuildContext context) {
 
-    ClientModelResponse? _selectVendedor;
+    ClientModelResponse? selectVendedor;
     //ColorsApp objColorsApp = ColorsApp();
 
     //ScrollController scrollListaClt = ScrollController();
@@ -69,10 +69,11 @@ class _ReasignaClienteScreenState extends State<ReasignaClienteScreen> {
 
                 List<ClientModelResponse> lstCLientes = snapshot.data as List<ClientModelResponse>;
 
-                //_selectVendedor = lstCLientes.first;
+                //selectVendedor = lstCLientes.first;
 
                 return Scaffold(
                   appBar: EcvAppBarWidget(
+                    null,
                   'Reasignación de vendedor',//AppLocalizations.of(context)!.iniciarSesion,
                   oColorLetra: AppLightColors().gray800SecondaryText,
                   onPressed: () {
@@ -97,7 +98,7 @@ class _ReasignaClienteScreenState extends State<ReasignaClienteScreen> {
                               height: size.height * 0.075,
                               child: DropdownButton<ClientModelResponse>(
                                 hint: const Text('Selecciona un vendedor'),
-                                value: _selectVendedor,
+                                value: selectVendedor,
                                 items: lstCLientes.map((ClientModelResponse item) {
                                   return DropdownMenuItem<ClientModelResponse>(
                                     value: item,
@@ -106,8 +107,8 @@ class _ReasignaClienteScreenState extends State<ReasignaClienteScreen> {
                                 }).toList(),
                                 onChanged: (ClientModelResponse? newValue) {
                                   setState(() {
-                                    _selectVendedor = newValue; // Actualiza el cliente seleccionado
-                                    _selectVendedorGen = _selectVendedor;
+                                    selectVendedor = newValue; // Actualiza el cliente seleccionado
+                                    selectVendedorGen = selectVendedor;
                                     //print(newValue?.primerNombre);
                                   });
                                 },

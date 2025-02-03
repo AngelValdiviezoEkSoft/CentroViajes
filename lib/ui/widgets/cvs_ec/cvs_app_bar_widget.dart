@@ -17,8 +17,9 @@ class EcvAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   const EcvAppBarWidget(
-    this.text, {
     Key? key,
+    this.text, {
+    
     this.goToHome = false,
     this.goToLogin = false,
     this.isLeadingButonShowed = true,

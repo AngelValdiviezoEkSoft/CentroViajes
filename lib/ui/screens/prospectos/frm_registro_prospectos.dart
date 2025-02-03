@@ -119,7 +119,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
         builder: (context,state) {
           
           return FutureBuilder(
-            future: state.readCombosCreateProspectos(),
+            future: state.readCombosGen(),
             builder: (context, snapshot) {
               
               if(!snapshot.hasData) {
@@ -393,6 +393,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                             if(resInt.isEmpty){
 
                                               showDialog(
+                                                //ignore: use_build_context_synchronously
                                               context: context,
                                               barrierDismissible: false,
                                               builder: (context) => SimpleDialog(
@@ -412,6 +413,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               //ignore: use_build_context_synchronously
                                               FocusScope.of(context).unfocus();
 
+                                              //ignore: use_build_context_synchronously
                                               context.pop();
 
                                               if(resp == null){
@@ -1681,11 +1683,13 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                     int estado = objRsp.result.estado;
                                     String gifRespuesta = 'assets/gifs/exito.gif';
                     
+                                    //ignore: use_build_context_synchronously
                                     context.pop();
                     
                                     if(objRsp.mensaje.isNotEmpty){
                                 
                                       showDialog(
+                                        //ignore: use_build_context_synchronously
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
@@ -1737,11 +1741,13 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                       gifRespuesta = 'assets/gifs/gifErrorBlanco.gif';
                                     }
                     
-                                    
+                                    //ignore:use_build_context_synchronously
                                     context.pop();
+                                    //ignore:use_build_context_synchronously
                                     context.pop();
                     
                                     showDialog(
+                                      //ignore:use_build_context_synchronously
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(

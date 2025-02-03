@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 class EnConstruccionScreen extends StatefulWidget {
 
-  const EnConstruccionScreen({Key? key}) : super (key: key);
+  const EnConstruccionScreen(Key? key) : super (key: key);
 
   @override
   EnConstruccionScreenState createState() => EnConstruccionScreenState();

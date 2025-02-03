@@ -15,6 +15,7 @@ bool comienzaEditarFechaCierre = false;
 bool comienzaEditarCorreo = false;
 bool comienzaEditarDireccion = false;
 bool comienzaEditarNombres = false;
+bool comienzaEditarNombresContacto = false;
 bool comienzaEditarRecomendacion = false;
 bool comienzaEditarProbabilidad = false;
 bool comienzaEditarIngEsp = false;
@@ -74,6 +75,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
     comienzaEditarCorreo = false;
     comienzaEditarDireccion = false;
     comienzaEditarNombres = false;
+    comienzaEditarNombresContacto = false;
     comienzaEditarRecomendacion = false;
     comienzaEditarProbabilidad = false;
     comienzaEditarIngEsp = false;
@@ -190,7 +192,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
         builder: (context,state) {
           
           return FutureBuilder(
-            future: state.readCombosCreateProspectos(),
+            future: state.readCombosGen(),
             builder: (context, snapshot) {
               
               if(!snapshot.hasData) {
@@ -229,7 +231,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                     emailEditTxt.text = objDatumCrmLeadEdit!.emailFrom;
                   }
 
-                  if(!comienzaEditarNombres){
+                  if(!comienzaEditarNombresContacto){
                     //nombresEditTxt.text = objDatumCrmLeadEdit!.name;
                     nombresEditTxt.text = objDatumCrmLeadEdit!.contactName ?? '';
                   }
@@ -567,9 +569,9 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                                 textAlign: TextAlign.left,
                                                 onEditingComplete: () {
                                                   FocusScope.of(context).unfocus();
-                                                  //FocusScope.of(context).requestFocus(numTelfAfilAkiNode);
+                                                  
                                                   setState(() {
-                                                    comienzaEditarNombres = true;
+                                                    comienzaEditarNombresContacto = true;
                                                   });
                                                 },
                                                 onChanged: (value) {
@@ -578,7 +580,7 @@ class _FrmEditProspectoScreenState extends State<FrmEditProspectoScreen> {
                                                 onTapOutside: (event) {
                                                   FocusScope.of(context).unfocus();
                                                   setState(() {
-                                                    comienzaEditarNombres = true;
+                                                    comienzaEditarNombresContacto = true;
                                                   });
                                                 },
                                               ),

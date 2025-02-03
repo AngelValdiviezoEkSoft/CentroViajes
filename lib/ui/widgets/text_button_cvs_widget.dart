@@ -7,8 +7,10 @@ class TextButtonCvs extends StatelessWidget {
   final Color? borderColor;
   final VoidCallback? onPress;
 
-  const TextButtonCvs({
+  const TextButtonCvs(
     Key? key,
+    {
+    
     required this.text,
     this.colorBoton,
     this.borderColor,

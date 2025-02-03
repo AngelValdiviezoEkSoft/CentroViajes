@@ -5,7 +5,7 @@ class VerificacionState extends Equatable {
 
   final int varObtieneToken;
   
-  VerificacionState(
+  const VerificacionState(
   {
     varObtieneToken = 0
   }) : varObtieneToken = varObtieneToken ?? 0;

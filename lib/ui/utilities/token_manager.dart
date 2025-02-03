@@ -5,6 +5,7 @@ import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 class TokenManager {
   //Timer? _timer;
 
@@ -44,8 +45,8 @@ class TokenManager {
       final expiration = obj.result.tockenValidDate;
 
       //imeiCod = '82345604002'; //BORRAR LUEGO - PARA CELULAR
-      //imeiCod = '82345604090'; //BORRAR LUEGO - PARA CELULAR PRUEBAS
-      //imeiCod = '8234560489'; //BORRAR LUEGO - PARA EMULADOR
+      //imeiCod = '82345604000001'; //BORRAR LUEGO - PARA CELULAR PRUEBAS
+      imeiCod = '82345604101'; //BORRAR LUEGO - PARA EMULADOR
 
       //VALIDACIÓN DE TOKEN
       

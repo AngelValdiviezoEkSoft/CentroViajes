@@ -1,9 +1,6 @@
 import 'dart:io';
-import 'package:cvs_ec_app/config/environments/environments.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
-import 'package:cvs_ec_app/ui/themes/theme.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
-import 'package:cvs_ec_app/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:go_router/go_router.dart';
@@ -282,8 +279,8 @@ class Welcome2Screen extends StatelessWidget {
           Position position = await getLocation();
     
           //imeiCod = '82345604002'; //BORRAR LUEGO - PARA CELULAR
-          //imeiCod = '82345604090'; //BORRAR LUEGO - PARA CELULAR PRUEBAS
-          //imeiCod = '8234560489'; //BORRAR LUEGO - PARA EMULADOR
+          //imeiCod = '82345604000001'; //BORRAR LUEGO - PARA CELULAR PRUEBAS
+          imeiCod = '82345604101'; //BORRAR LUEGO - PARA EMULADOR
     
           RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(
             server: serverTxt.text,
@@ -295,16 +292,19 @@ class Welcome2Screen extends StatelessWidget {
           );
     
           RegisterDeviceResponseModel respuesta = await AuthService().doneRegister(objRegisterMobileRequestModel);
+          
+          //ignore: use_build_context_synchronously
           context.pop();
     
-          if(respuesta.result.estado == 200){   
+          if(respuesta.result.estado == 200){
             rutaServerWelcome = '';
+            //ignore: use_build_context_synchronously
             context.push(objRutasGen.rutaDefault);
           }
-          else{ 
-
+          else{
             showDialog(
               barrierDismissible: false,
+              //ignore: use_build_context_synchronously
               context: context,
               builder: (BuildContext context) {
                 return ContentAlertDialog(
@@ -325,10 +325,12 @@ class Welcome2Screen extends StatelessWidget {
           }
         }
         catch(ex){
+          //ignore: use_build_context_synchronously
           context.pop();
         
-            showDialog(
+          showDialog(
               barrierDismissible: false,
+              //ignore: use_build_context_synchronously
               context: context,
               builder: (BuildContext context) {
                 return ContentAlertDialog(

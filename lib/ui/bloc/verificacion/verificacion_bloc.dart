@@ -16,7 +16,7 @@ class VerificacionBloc extends Bloc<VerificacionEvent, VerificacionState> {
 
   bool tieneFeatureNotificacion = false;
 
-  VerificacionBloc() : super(VerificacionState(varObtieneToken: 0)) {
+  VerificacionBloc() : super(const VerificacionState(varObtieneToken: 0)) {
     on<OnNewAutenticacionEvent>(_onReInitPosition);
     on<GetNewAutenticacionEvent>(_onNewUser);
   }

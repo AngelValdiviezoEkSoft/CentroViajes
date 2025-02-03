@@ -1,7 +1,7 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cvs_ec_app/config/config.dart';
-import 'package:cvs_ec_app/domain/domain.dart';
+//import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/ui/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -178,38 +178,38 @@ class ListaNotificaciones extends StatelessWidget {
     //bool boolMuestraNotificacionesTrComp = false;//Provider.of<NotificacionesService>(context,listen: false).muestraNotificacionesTramComp;
     //bool boolMuestraNotificacionesTrInfo = false;//Provider.of<NotificacionesService>(context,listen: false).muestraNotificacionesTramInfo;
 
-
+/*
     final int varNumNotificacionesTrAp = 0;//Provider.of<NotificacionesService>(context,listen: false).contNotificacionesTramApr;
     final int varNumNotificacionesTrProc = 0;//Provider.of<NotificacionesService>(context,listen: false).contNotificacionesTramProc;
     final int varNumNotificacionesComp = 0;//Provider.of<NotificacionesService>(context,listen: false).contNotificacionesCompras;
     final int varNumNotificacionesInfo = 0;//Provider.of<NotificacionesService>(context,listen: false).contNotificacionesInformativo;
-    
+    */
     int numNot = 0;
 
     final sizeLstNot = MediaQuery.of(context).size;
     initializeDateFormatting('es'); 
     
     //ItemBoton varObjBoton = ItemBoton('','','',1,icon, '', '','', '', color1, color2,false,false,'','','','','','', () => {},);
-    List<ItemBoton> itemsNot = [];
+    //List<ItemBoton> itemsNot = [];
 
   if(varIdNotificacionLst == 1) {
     numNot = 0;
-    numNot = varNumNotificacionesTrAp;
+    //numNot = varNumNotificacionesTrAp;
   }
 
   if(varIdNotificacionLst == 2) {
     numNot = 0;
-    numNot = varNumNotificacionesTrProc;
+    //numNot = varNumNotificacionesTrProc;
   }
   
   if(varIdNotificacionLst == 3) {
     numNot = 0;
-    numNot = varNumNotificacionesComp;
+    //numNot = varNumNotificacionesComp;
   }
   
   if(varIdNotificacionLst == 4) {
     numNot = 0;
-    numNot = varNumNotificacionesInfo;
+    //numNot = varNumNotificacionesInfo;
   }
 
   return Container(

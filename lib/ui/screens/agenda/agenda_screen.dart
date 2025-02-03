@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-DateTime _selectedDay = DateTime.now();
-DateTime _focusedDay = DateTime.now();
+DateTime selectedDayGen = DateTime.now();
+DateTime focusedDayGen = DateTime.now();
 //int tabAccionesCal = 0;
 List<bool> isSelected = [false,true ]; // 'Mes' está seleccionado inicialmente
 
 
 class AgendaScreen extends StatefulWidget {
   
+  const AgendaScreen(Key? key) : super(key: key);
+
   @override
   State<AgendaScreen> createState() => AgendaScreenState();
 
@@ -21,20 +23,20 @@ class AgendaScreenState extends State<AgendaScreen>  {
   Widget build(BuildContext context) {
 
     final size = MediaQuery.of(context).size;
-    CalendarFormat _calendarFormat = CalendarFormat.week;
+    CalendarFormat calendarFormat = CalendarFormat.week;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Agenda"),
+        title: const Text("Agenda"),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             context.pop();
           },
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
             onPressed: () {
               // Acción del botón de refrescar
             },
@@ -60,8 +62,8 @@ class AgendaScreenState extends State<AgendaScreen>  {
                   children: [
                     Row(
                       children: [
-                        _buildToggleButton("Mes", false),
-                        _buildToggleButton("Semana", true),
+                        buildToggleButton("Mes", false),
+                        buildToggleButton("Semana", true),
                       ],
                     ),
                     Icon(Icons.calendar_today),
@@ -79,6 +81,14 @@ class AgendaScreenState extends State<AgendaScreen>  {
             selectedBorderColor: Colors.purple,
             selectedColor: Colors.white,
             borderRadius: BorderRadius.circular(20),
+            onPressed: (int index) {
+              setState(() {
+                for (int i = 0; i < isSelected.length; i++) {
+                  isSelected[i] = i == index;
+                }
+              });
+            },
+            isSelected: isSelected,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -103,14 +113,7 @@ class AgendaScreenState extends State<AgendaScreen>  {
                 ),
               ),
             ],
-            onPressed: (int index) {
-              setState(() {
-                for (int i = 0; i < isSelected.length; i++) {
-                  isSelected[i] = i == index;
-                }
-              });
-            },
-            isSelected: isSelected,
+            
           ),
               
               if(isSelected[1])
@@ -119,17 +122,17 @@ class AgendaScreenState extends State<AgendaScreen>  {
                 height: size.height * 0.2,
                 color: Colors.transparent,
                 child: TableCalendar(     
-                  calendarFormat: _calendarFormat,
+                  calendarFormat: calendarFormat,
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.now(),
-                  focusedDay: _focusedDay,
+                  focusedDay: focusedDayGen,
                   selectedDayPredicate: (day) {
-                    return _focusedDay == day;
+                    return focusedDayGen == day;
                   },
                   onDaySelected: (selectedDay, focusedDay) {
                     setState(() {
-                      _selectedDay = selectedDay;
-                      _focusedDay = focusedDay; // update `_focusedDay` here as well
+                      selectedDayGen = selectedDay;
+                      focusedDayGen = focusedDay; // update `focusedDayGen` here as well
                     });
                   }
                 )
@@ -141,17 +144,17 @@ class AgendaScreenState extends State<AgendaScreen>  {
                 height: size.height * 0.39,
                 color: Colors.transparent,
                 child: TableCalendar(     
-                  //calendarFormat: _calendarFormat,
+                  //calendarFormat: calendarFormat,
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.now(),
-                  focusedDay: _focusedDay,
+                  focusedDay: focusedDayGen,
                   selectedDayPredicate: (day) {
-                    return _focusedDay == day;
+                    return focusedDayGen == day;
                   },
                   onDaySelected: (selectedDay, focusedDay) {
                     setState(() {
-                      _selectedDay = selectedDay;
-                      _focusedDay = focusedDay; // update `_focusedDay` here as well
+                      selectedDayGen = selectedDay;
+                      focusedDayGen = focusedDay; // update `focusedDayGen` here as well
                     });
                   }
                 )
@@ -164,7 +167,7 @@ class AgendaScreenState extends State<AgendaScreen>  {
                 child: TextField(
                   decoration: InputDecoration(
                     labelText: 'Buscar agendas por código, nombre, RUC...',
-                    prefixIcon: Icon(Icons.search),
+                    prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -193,7 +196,7 @@ class AgendaScreenState extends State<AgendaScreen>  {
   }
 
   // Widget para los botones de Mes/Semana
-  Widget _buildToggleButton(String text, bool isSelected) {
+  Widget buildToggleButton(String text, bool isSelected) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: ElevatedButton(
@@ -224,15 +227,15 @@ class AgendaScreenState extends State<AgendaScreen>  {
         child: ListTile(
           leading: CircleAvatar(
             backgroundColor: Colors.grey[300],
-            child: Icon(Icons.person),
+            child: const Icon(Icons.person),
           ),
-          title: Text('Randy Rudolph'),
+          title: const Text('Randy Rudolph'),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //Text('RUC/C: 095011183001', style: TextStyle(fontSize: 12)),
               RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   children: [
                     TextSpan(
                       text: 'RUC/C:',
@@ -255,7 +258,7 @@ class AgendaScreenState extends State<AgendaScreen>  {
               //Text('COD: 59345', style: TextStyle(fontSize: 12)),
 
               RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   children: [
                     TextSpan(
                       text: 'COD:',
@@ -276,11 +279,11 @@ class AgendaScreenState extends State<AgendaScreen>  {
               ),
 
 
-              Text('Tipo de Agenda: Llamada', style: TextStyle(fontSize: 12)),
-              Text('Activo', style: TextStyle(fontSize: 12, color: Colors.green)),
+              const Text('Tipo de Agenda: Llamada', style: TextStyle(fontSize: 12)),
+              const Text('Activo', style: TextStyle(fontSize: 12, color: Colors.green)),
             ],
           ),
-          trailing: Column(
+          trailing: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('10:20 AM', style: TextStyle(fontWeight: FontWeight.bold)),

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //late Timer _timer;
@@ -233,6 +234,16 @@ class AuthService extends ChangeNotifier {
       }
 
       final models = [
+        /*
+        {
+          "model": EnvironmentsProd().modMailAct,//"mail.activity",
+          "filters": [
+            ["date_deadline","=",DateFormat('yyyy-MM-dd', 'es').format(DateTime.now())],
+            ["res_id","=",25],
+            ["res_model_id","=",501]
+          ]
+        },
+        */
         {
           "model": EnvironmentsProd().modProsp,//"crm.lead",
           "filters": []
@@ -256,14 +267,13 @@ class AuthService extends ChangeNotifier {
         {
           "model": EnvironmentsProd().modActiv,//"mail.activity.type",
           "filters": [
-            //"|",["res_model","=","crm.lead"]
             ["res_model","=",false]
           ]
         },
         {
           "model": EnvironmentsProd().modPaise,//"res.country",
           "filters": []
-        },
+        },        
       ];
 
       await storage.write(key: 'RespuestaLogin', value: response.body);
@@ -271,8 +281,8 @@ class AuthService extends ChangeNotifier {
       await DataInicialService().readModelosApp(models);
       
       return response.body;
-    } catch (_) {
-
+    } catch (ex) {
+      print('Test Error1: $ex');
     }
   }
 

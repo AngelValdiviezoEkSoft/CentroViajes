@@ -22,4 +22,5 @@ class EnvironmentsProd {
   final String modMedio = 'utm.medium';
   final String modActiv = 'mail.activity.type';
   final String modPaise = 'res.country';
+  final String modMailAct = 'mail.activity';
 }

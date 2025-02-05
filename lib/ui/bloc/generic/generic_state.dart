@@ -182,8 +182,9 @@ class GenericState extends Equatable {
     String cmbMedia = await storage.read(key: 'cmbMedia') ?? '';
     String cmbAct = await storage.read(key: 'cmbActividades') ?? '';
     String cmbPais = await storage.read(key: 'cmbPaises') ?? '';
+    String cmbLstAct = await storage.read(key: 'cmbLstActividades') ?? '';
 
-    return "$cmbCamp---$cmbOrigen---$cmbMedia---$cmbAct---$cmbPais";
+    return "$cmbCamp---$cmbOrigen---$cmbMedia---$cmbAct---$cmbPais---$cmbLstAct";
   }
 
   readDatosPerfil() async {    

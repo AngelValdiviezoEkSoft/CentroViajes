@@ -60,6 +60,7 @@ class DataAppModel {
     UtmAppModel utmMedium;
     MailActivityTypeAppModel mailActivityType;
     ResCountryAppModel resCountry;
+    MailActivityAppModel mailActivity;
 
     DataAppModel({
         required this.crmLead,
@@ -69,6 +70,7 @@ class DataAppModel {
         required this.utmMedium,
         required this.mailActivityType,
         required this.resCountry,
+        required this.mailActivity
     });
 
     factory DataAppModel.fromRawJson(String str) => DataAppModel.fromJson(json.decode(str));
@@ -111,16 +113,21 @@ class DataAppModel {
             ResCountryAppModel.fromJson(json["res.country"]) 
             : 
             ResCountryAppModel(data: [], length: 0, fields: ResCountryFieldsAppModel(code: '', name: '', stateIds: '')),
+        mailActivity: json['mail.activity'] != null ?
+          MailActivityAppModel.fromJson(json["mail.activity"])
+          :
+          MailActivityAppModel(data: [], length: 0, fields: MailActivityFieldsAppModel(code: '', name: '', stateIds: ''))
     );
 
     Map<String, dynamic> toJson() => {
-        "crm.lead": crmLead.toJson(),
-        "res.partner": resPartner.toJson(),
-        "utm.campaign": utmCampaign.toJson(),
-        "utm.source": utmSource.toJson(),
-        "utm.medium": utmMedium.toJson(),
-        "mail.activity.type": mailActivityType.toJson(),
-        "res.country": resCountry.toJson(),
+      "crm.lead": crmLead.toJson(),
+      "res.partner": resPartner.toJson(),
+      "utm.campaign": utmCampaign.toJson(),
+      "utm.source": utmSource.toJson(),
+      "utm.medium": utmMedium.toJson(),
+      "mail.activity.type": mailActivityType.toJson(),
+      "res.country": resCountry.toJson(),
+      "mail.activity": mailActivity.toJson()
     };
 }
 
@@ -951,5 +958,102 @@ class UtmMediumFields {
 
     Map<String, dynamic> toJson() => {
         "name": name,
+    };
+}
+
+class MailActivityAppModel {
+    int length;
+    MailActivityFieldsAppModel fields;
+    List<MailActivityDatumAppModel> data;
+
+    MailActivityAppModel({
+        required this.length,
+        required this.fields,
+        required this.data,
+    });
+
+    factory MailActivityAppModel.fromRawJson(String str) => MailActivityAppModel.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory MailActivityAppModel.fromJson(Map<String, dynamic> json) => MailActivityAppModel(
+        length: json["length"],
+        fields: MailActivityFieldsAppModel.fromJson(json["fields"]),
+        data: List<MailActivityDatumAppModel>.from(json["data"].map((x) => MailActivityDatumAppModel.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "length": length,
+        "fields": fields.toJson(),
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    };
+}
+
+class MailActivityDatumAppModel {
+    int? id;
+    String? dateDadline;
+    int? resId;
+    String? resModel;
+
+    CombosAppModel activityTypeId;
+    CombosAppModel userId;
+
+    MailActivityDatumAppModel({
+        required this.id,
+        required this.dateDadline,
+        required this.resId,
+        required this.resModel,
+        required this.activityTypeId,
+        required this.userId,
+    });
+
+    factory MailActivityDatumAppModel.fromRawJson(String str) => MailActivityDatumAppModel.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory MailActivityDatumAppModel.fromJson(Map<String, dynamic> json) => MailActivityDatumAppModel(
+        id: json["id"] ?? 0,
+        dateDadline: json["date_deadline"] ?? '',
+        resId: json["res_id"] ?? 0,
+        resModel: json['res_model'] ?? '',
+        activityTypeId: CombosAppModel.fromJson(json["activity_type_id"]),//List<CombosAppModel>.from(json["activity_type_id"].map((x) => CombosAppModel.fromJson(x))),
+        userId: CombosAppModel.fromJson(json["user_id"]),//List<CombosAppModel>.from(json["user_id"].map((x) => CombosAppModel.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "date_deadline": dateDadline,
+        "res_id": resId,
+        "res_model": resModel,
+        "activity_type_id": activityTypeId.toJson(),//List<dynamic>.from(activityTypeId.map((x) => x.toJson())),
+        "user_id": userId.toJson()//List<dynamic>.from(userId.map((x) => x.toJson())),
+    };
+}
+
+class MailActivityFieldsAppModel {
+    String? code;
+    String? name;
+    String? stateIds;
+
+    MailActivityFieldsAppModel({
+        required this.code,
+        required this.name,
+        required this.stateIds,
+    });
+
+    factory MailActivityFieldsAppModel.fromRawJson(String str) => MailActivityFieldsAppModel.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory MailActivityFieldsAppModel.fromJson(Map<String, dynamic> json) => MailActivityFieldsAppModel(
+        code: json["code"] ?? '',
+        name: json["name"] ?? '',
+        stateIds: json["state_ids"] ?? '',
+    );
+
+    Map<String, dynamic> toJson() => {
+        "code": code,
+        "name": name,
+        "state_ids": stateIds,
     };
 }

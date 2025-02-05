@@ -144,7 +144,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                     origen: rspCombos.split('---')[1],
                     medias: rspCombos.split('---')[2],
                     actividades: rspCombos.split('---')[3],
-                    paises: rspCombos.split('---')[4]
+                    paises: rspCombos.split('---')[4],
+                    lstActividades: ''
                   );
 
                   var objCamp = json.decode(objTmp.campanias);

@@ -177,11 +177,11 @@ class GenericService extends ChangeNotifier {
       await getMultiModelosGen(objReq, lstModels);
     }
 
-    //print('Lst gen: ${response.body}');
+    print('Lst gen: ${response.body}');
 
     var rsp = AppResponseModel.fromRawJson(response.body);
 
-    //print('Lst Prsp: ${json.encode(rsp.result.data.crmLead)}');
+    //print('Lst Prsp: ${json.encode(rsp.result.data.crmLead)}'); 
 
     await storage.write(key: 'RespuestaProspectos', value: json.encode(rsp.result.data.crmLead));
     await storage.write(key: 'RespuestaClientes', value: json.encode(rsp.result.data.resPartner));
@@ -191,6 +191,7 @@ class GenericService extends ChangeNotifier {
     await storage.write(key: 'cmbMedia', value: json.encode(rsp.result.data.utmMedium));
     await storage.write(key: 'cmbActividades', value: json.encode(rsp.result.data.mailActivityType));
     await storage.write(key: 'cmbPaises', value: json.encode(rsp.result.data.resCountry));
+    await storage.write(key: 'cmbLstActividades', value: json.encode(rsp.result.data.mailActivity));
 
     return response.body;
     

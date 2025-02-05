@@ -2,15 +2,26 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+Timer? _timer;
+int _segundos = 0; // Tiempo en segundos
+bool _corriendo = false;
+
+DateTime selectedDayGenPlanAct = DateTime.now();
+DateTime focusedDayGenPlanAct = DateTime.now();
+List<DateTime> _dates = [];
+int contLst = 0;
 //import 'package:one_clock/one_clock.dart';
+String actPlanSelect = '';
 
 late TextEditingController fechaActividadContTxt;
 late TextEditingController descripcionActTxt;
@@ -29,6 +40,8 @@ class PlanActState extends State<PlanificacionActividades> {
   @override
   void initState() {
     super.initState();
+
+    contLst = 0;
     notasActTxt = TextEditingController();
     fechaActividadContTxt = TextEditingController();
     descripcionActTxt = TextEditingController();
@@ -62,14 +75,15 @@ class PlanActState extends State<PlanificacionActividades> {
             String rspCombos = snapshot.data as String;
 
             ProspectoCombosModel objTmp = ProspectoCombosModel(
-              campanias: rspCombos.split('---')[0],
-              origen: rspCombos.split('---')[1],
-              medias: rspCombos.split('---')[2],
-              actividades: rspCombos.split('---')[3],
-              paises: rspCombos.split('---')[4]
+              campanias: '',//rspCombos.split('---')[0],
+              origen: '',//rspCombos.split('---')[1],
+              medias: '',//rspCombos.split('---')[2],
+              actividades: '',//rspCombos.split('---')[3],
+              paises: '',//rspCombos.split('---')[4],
+              lstActividades: rspCombos.split('---')[5],
             );
 
-            var objAct = json.decode(objTmp.actividades);
+            var objAct = json.decode(objTmp.lstActividades);
 
             var objAct3 = objAct['data'];
 
@@ -381,7 +395,6 @@ class PlanActState extends State<PlanificacionActividades> {
                                                       ),
                                                     );
                                     
-
                                                     ActividadRegistroResponseModel objResp = await ActivitiesService().registroActividades(objReqst);
 
                                                     String respuestaReg = objResp.result.mensaje;
@@ -719,9 +732,344 @@ class PlanAct extends StatefulWidget {
 
 class PlanActStateTwo extends State<PlanAct> {
 
-  Timer? _timer;
-  int _segundos = 0; // Tiempo en segundos
-  bool _corriendo = false;
+  ColorsApp objColorsApp = ColorsApp();
+
+  @override
+  void initState() {
+    super.initState();
+    //_corriendo = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    ScrollController scrollListaClt = ScrollController();
+  
+    return BlocBuilder<GenericBloc, GenericState>(
+      builder: (context,state) {
+        return FutureBuilder(
+          future: state.readCombosGen(),
+          builder: (context, snapshot) {
+
+            if(!snapshot.hasData) {
+              return Scaffold(
+                backgroundColor: Colors.white,
+                body: Center(
+                  child: Image.asset(
+                    "assets/gifs/gif_carga.gif",
+                    height: size.width * 0.85,//150.0,
+                    width: size.width * 0.85,//150.0,
+                  ),
+                ),
+              );
+            }
+
+            if(snapshot.data != null) {
+
+              String rspCombos = snapshot.data as String;
+
+              ProspectoCombosModel objTmp = ProspectoCombosModel(
+                campanias: '',//rspCombos.split('---')[0],
+                origen: '',//rspCombos.split('---')[1],
+                medias: '',//rspCombos.split('---')[2],
+                actividades: '',//rspCombos.split('---')[3],
+                paises: '',//rspCombos.split('---')[4],
+                lstActividades: rspCombos.split('---')[5],
+              );
+
+              var objCamp = json.decode(objTmp.lstActividades);
+
+              var objCamp3 = objCamp['data'];
+
+              List<Map<String, dynamic>> mappedObjCamp3 = List<Map<String, dynamic>>.from(objCamp3);
+
+              List<String> lstActividades = mappedObjCamp3
+              .map((item) => item["activity_type_id"]["name"]?.toString() ?? '')
+              .toList();
+
+              if(actPlanSelect.isEmpty){                      
+                actPlanSelect = lstActividades.first;
+              }
+
+              contLst = lstActividades.length;
+
+              return Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: size.width *0.95,
+                          height: size.height * 0.39,
+                          color: Colors.transparent,
+                          child: CalendarDatePicker2(
+                            config: CalendarDatePicker2Config(
+                              calendarType: CalendarDatePicker2Type.range,
+                              lastDate: DateTime.now()
+                            ),
+
+                            value: _dates,
+                            onValueChanged: (dates) => _dates = dates,
+                          )                          
+                        ),
+                        /*
+                        Container(
+                          color: Colors.transparent,
+                          width: size.width,
+                          height: size.height * 0.07,
+                          child: DropdownButtonFormField<String>(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Agendado para hoy',
+                              labelStyle: TextStyle(color: Color(0xFF5DC38C))
+                            ),
+                            value: actPlanSelect,
+                            items: lstActividades.map((activityPrsp) =>
+                              DropdownMenuItem(
+                                value: activityPrsp,
+                                child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),                          
+                              )
+                            ).toList(),
+                            onChanged: (String? newValue) {                        
+                              setState(() {
+                                actPlanSelect = newValue ?? '';
+                              });
+                            },
+                          ),
+                        ),
+                        */
+
+                        //SizedBox(height: size.height * 0.009),
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              labelText: 'Buscar actividades',
+                              prefixIcon: const Icon(Icons.search),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        //SizedBox(height: size.height * 0.05),
+                        
+                      ],
+                    ),
+                  ),
+
+                  Container(
+                    color: Colors.transparent,
+                    width: size.width,
+                    height: size.height * 0.65,
+                    child: ListView.builder(
+                      controller: scrollListaClt,
+                      itemCount: contLst,
+                      itemBuilder: ( _, int index ) {
+
+                        return Slidable(
+                          //key: ValueKey(lstActividades[index].id),
+                          startActionPane: const ActionPane(
+                            motion: ScrollMotion(),
+                              children: [
+                                BtnSlidableAction(null),
+                              ]
+                          ),
+                          child:  Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                            child: Card(
+                              elevation: 1,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.grey[300],
+                                  child: const Icon(Icons.person),
+                                ),
+                                title: Text(lstActividades[index]),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    //Text('RUC/C: 095011183001', style: TextStyle(fontSize: 12)),
+                                    RichText(
+                                      text: const TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'RUC/C:',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: '095011183001',
+                                            style: TextStyle(
+                                              color: Colors.blue,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    //Text('COD: 59345', style: TextStyle(fontSize: 12)),
+
+                                    RichText(
+                                      text: const TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'COD:',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: '59345',
+                                            style: TextStyle(
+                                              color: Colors.blue,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+
+                                    const Text('Tipo de Agenda: Llamada', style: TextStyle(fontSize: 12)),
+                                    const Text('Activo', style: TextStyle(fontSize: 12, color: Colors.green)),
+                                  ],
+                                ),
+                                trailing: const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('10:20 AM', style: TextStyle(fontWeight: FontWeight.bold)),
+                                    Icon(Icons.phone, color: Colors.grey),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        );
+                      
+                      },
+                    ),
+                  ),
+
+/*
+                  Container(
+                    width: size.width *0.95,
+                    height: isSelected[1] ? size.height * 0.55 : size.height * 0.4,
+                    color: Colors.transparent,
+                    child: ListView.builder(
+                      itemCount: 5, // Número de elementos en la lista
+                      itemBuilder: (context, index) {
+                        return _buildAgendaItem();
+                      },
+                    ),
+                  ),
+                    */
+
+
+
+                  /*
+                  const SizedBox(height: 32),
+                  
+                  Container(
+                    width: size.width * 0.99,
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Container(
+                        width: size.width * 0.95,
+                        height: size.height * 0.11,
+                        color: Colors.transparent,
+                        child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  formatearTiempo(_segundos),
+                                  style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                                ),
+                              
+                              ],
+                            ),
+                          ),
+                      )
+                    ),
+                  ),
+              
+                  const SizedBox(height: 16),
+                  
+                  Container(
+                    color: Colors.transparent,
+                    width: size.width * 0.92,
+                    child: TextFormField(     
+                                
+                      inputFormatters: [
+                        EmojiInputFormatter()
+                      ],
+                      cursorColor: AppLightColors().primary,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      style: AppTextStyles.bodyRegular(width: size.width),
+                      decoration: const InputDecoration(
+                        label: Text('Notas'),
+                        border: OutlineInputBorder(),
+                        hintText: 'Notas de la visita o llamada para registrar la acción realizada.',
+                      ),
+              
+                      controller: notasActTxt,
+                      autocorrect: false,
+                      keyboardType: TextInputType.text,
+                      minLines: 1,
+                      maxLines: 4,
+                      autofocus: false,
+                      maxLength: 150,
+                      textAlign: TextAlign.left,
+                      onEditingComplete: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      onChanged: (value) {
+                        
+                      },
+                      onTapOutside: (event) {
+                        FocusScope.of(context).unfocus();
+                      },
+                    ),
+                  ),
+                
+                  */
+                ],
+              );
+          
+            }
+
+            return Container();
+          }
+        );
+      }
+    );
+  }
+}
+
+class BtnSlidableAction extends StatefulWidget {
+  const BtnSlidableAction(Key? key) : super (key: key);
+  @override
+  State<BtnSlidableAction> createState() => BtnSlidableActionState();
+}
+
+class BtnSlidableActionState extends State<BtnSlidableAction> {
+
+  ColorsApp objColorsApp = ColorsApp();
 
   void iniciarCronometro() {
     if (!_corriendo) {
@@ -756,177 +1104,245 @@ class PlanActStateTwo extends State<PlanAct> {
     return '${horas.toString().padLeft(2, '0')}:${minutos.toString().padLeft(2, '0')}:${segs.toString().padLeft(2, '0')}';
   }
 
+  
   @override
   Widget build(BuildContext context) {
+
     final size = MediaQuery.of(context).size;
-  
-        return Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.green[200],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Row(
+
+    return SlidableAction(
+      onPressed: (context) {
+        
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Registro detalle de actividad"),
+              content: Form(
+                //key: _formKey,
+                child: Container(
+                  color: Colors.transparent,
+                  height: size.height * 0.3,
+                  child: Column(
                     children: [
-                      Icon(Icons.check_circle, color: Colors.green),
-                      SizedBox(width: 8),
-                      Text('Agendado para hoy', style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          iniciarCronometro();
-                        },
-                        icon: const Icon(Icons.login),
-                        label: const Text('Llegada'),
-                        //style: ElevatedButton.styleFrom(primary: Color(0xFF5F2EEA)),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Registro de salida'),
-                                content: const Column(
-                                  mainAxisSize: MainAxisSize.min,
+                      
+                      Container(
+                        width: size.width * 0.99,
+                        color: Colors.transparent,
+                        child: Center(
+                          child: Container(
+                            width: size.width * 0.95,
+                            height: size.height * 0.11,
+                            color: Colors.transparent,
+                            child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Desea registrar la salida y cerrar la'
-                                      'visita del cliente',
+                                      formatearTiempo(_segundos),
+                                      style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
                                     ),
+                                  
                                   ],
                                 ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      //context.pop();
-                                      Navigator.pop(context);
-                                      
-                                      //Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      'NO',
-                                      style: TextStyle(color: Colors.blue[200]),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      // Acción para solicitar revisión
-                                      Navigator.of(context).pop();
-
-                                      detenerCronometro();
-                                      
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      'Sí',
-                                      style: TextStyle(color: Colors.blue[200]),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        icon: const Icon(Icons.logout),
-                        label: const Text('Salida'),
-                        //style: ElevatedButton.styleFrom(primary: Color(0xFF5F2EEA)),
+                              ),
+                          )
+                        ),
                       ),
+                  
+                      Container(
+                        color: Colors.transparent,
+                        width: size.width * 0.92,
+                        child: TextFormField(     
+                                    
+                          inputFormatters: [
+                            EmojiInputFormatter()
+                          ],
+                          cursorColor: AppLightColors().primary,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          style: AppTextStyles.bodyRegular(width: size.width),
+                          decoration: const InputDecoration(
+                            label: Text('Notas'),
+                            border: OutlineInputBorder(),
+                            hintText: 'Notas de la visita o llamada para registrar la acción realizada.',
+                          ),
+                  
+                          controller: notasActTxt,
+                          autocorrect: false,
+                          keyboardType: TextInputType.text,
+                          minLines: 1,
+                          maxLines: 4,
+                          autofocus: false,
+                          maxLength: 150,
+                          textAlign: TextAlign.left,
+                          onEditingComplete: () {
+                            FocusScope.of(context).unfocus();
+                          },
+                          onChanged: (value) {
+                            
+                          },
+                          onTapOutside: (event) {
+                            FocusScope.of(context).unfocus();
+                          },
+                        ),
+                      ),
+                    
+                    
                     ],
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            /*
-            Container(
-              width: size.width * 0.99,
-              color: Colors.transparent,
-              child: Center(
-                child: DigitalClock.light(
-                  textScaleFactor: 2.5,
-                  datetime: DateTime.now(),
-                  isLive: true,
-                  digitalClockTextColor: const Color(0xFF5F2EEA),
-                  //decoration: BoxDecoration(),
-                ),
-              ),
-            ),
-            */
-            Container(
-              width: size.width * 0.99,
-              color: Colors.transparent,
-              child: Center(
-                child: Container(
-                  width: size.width * 0.95,
-                  height: size.height * 0.11,
-                  color: Colors.transparent,
-                  child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            formatearTiempo(_segundos),
-                            style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-                          ),
-                        
-                        ],
-                      ),
-                    ),
                 )
               ),
-            ),
-
-            const SizedBox(height: 16),
-            
-            Container(
-              color: Colors.transparent,
-              width: size.width * 0.92,
-              child: TextFormField(     
-                           
-                inputFormatters: [
-                  EmojiInputFormatter()
-                ],
-                cursorColor: AppLightColors().primary,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                style: AppTextStyles.bodyRegular(width: size.width),
-                decoration: const InputDecoration(
-                  label: Text('Notas'),
-                  border: OutlineInputBorder(),
-                  hintText: 'Notas de la visita o llamada para registrar la acción realizada.',
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("Cancelar"),
                 ),
-
-                controller: notasActTxt,
-                autocorrect: false,
-                keyboardType: TextInputType.text,
-                minLines: 1,
-                maxLines: 4,
-                autofocus: false,
-                maxLength: 150,
-                textAlign: TextAlign.left,
-                onEditingComplete: () {
-                  FocusScope.of(context).unfocus();
-                },
-                onChanged: (value) {
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Registro de salida'),
+                          content: const Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Desea registrar la salida y cerrar la'
+                                'visita del cliente',
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                //context.pop();
+                                Navigator.pop(context);
+                                
+                                //Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                'NO',
+                                style: TextStyle(color: Colors.blue[200]),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Acción para solicitar revisión
+                                Navigator.of(context).pop();
+                                  
+                                detenerCronometro();
+                                
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                'Sí',
+                                style: TextStyle(color: Colors.blue[200]),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   
-                },
-                onTapOutside: (event) {
-                  FocusScope.of(context).unfocus();
-                },
-              ),
-            ),
-            
-          ],
+                  },
+                  child: const Text("Salida"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    iniciarCronometro();
+                  },
+                  child: const Text("Llegada"),
+                ),
+              ],
+            );
+          },
         );
+      },
+      backgroundColor: objColorsApp.celeste,
+      foregroundColor: Colors.white,
+      icon: Icons.call_outlined,
+      label: 'Actividades',
+    );
   }
+
 }
+
+Widget _buildAgendaItem() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+      child: Card(
+        elevation: 1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.grey[300],
+            child: const Icon(Icons.person),
+          ),
+          title: const Text('Randy Rudolph'),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //Text('RUC/C: 095011183001', style: TextStyle(fontSize: 12)),
+              RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'RUC/C:',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '095011183001',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              //Text('COD: 59345', style: TextStyle(fontSize: 12)),
+
+              RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'COD:',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '59345',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+
+              const Text('Tipo de Agenda: Llamada', style: TextStyle(fontSize: 12)),
+              const Text('Activo', style: TextStyle(fontSize: 12, color: Colors.green)),
+            ],
+          ),
+          trailing: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('10:20 AM', style: TextStyle(fontWeight: FontWeight.bold)),
+              Icon(Icons.phone, color: Colors.grey),
+            ],
+          ),
+        ),
+      ),
+    );
+  }

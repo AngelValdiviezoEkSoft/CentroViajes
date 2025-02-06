@@ -78,7 +78,7 @@ class GenericService extends ChangeNotifier {
 
     return obj;    
   }
-  
+
   getMultiModelos(ConsultaMultiModelRequestModel objReq, String modelo) async {
 
     String ruta = '';
@@ -177,7 +177,7 @@ class GenericService extends ChangeNotifier {
       await getMultiModelosGen(objReq, lstModels);
     }
 
-    print('Lst gen: ${response.body}');
+    //print('Lst gen: ${response.body}');
 
     var rsp = AppResponseModel.fromRawJson(response.body);
 

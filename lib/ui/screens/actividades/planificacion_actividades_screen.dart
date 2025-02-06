@@ -748,7 +748,7 @@ class PlanActStateTwo extends State<PlanAct> {
     return BlocBuilder<GenericBloc, GenericState>(
       builder: (context,state) {
         return FutureBuilder(
-          future: state.readCombosGen(),
+          future: ActivitiesService().getActivitiesById(objDatumCrmLead?.id ?? 0),
           builder: (context, snapshot) {
 
             if(!snapshot.hasData) {
@@ -766,8 +766,9 @@ class PlanActStateTwo extends State<PlanAct> {
 
             if(snapshot.data != null) {
 
-              String rspCombos = snapshot.data as String;
+              ActivitiesResponseModel rspAct = snapshot.data as ActivitiesResponseModel;
 
+/*
               ProspectoCombosModel objTmp = ProspectoCombosModel(
                 campanias: '',//rspCombos.split('---')[0],
                 origen: '',//rspCombos.split('---')[1],
@@ -790,8 +791,9 @@ class PlanActStateTwo extends State<PlanAct> {
               if(actPlanSelect.isEmpty){                      
                 actPlanSelect = lstActividades.first;
               }
+              */
 
-              contLst = lstActividades.length;
+              contLst = rspAct.length;
 
               return Column(
                 children: [
@@ -813,7 +815,6 @@ class PlanActStateTwo extends State<PlanAct> {
                               calendarType: CalendarDatePicker2Type.range,
                               lastDate: DateTime.now()
                             ),
-
                             value: _dates,
                             onValueChanged: (dates) => _dates = dates,
                           )                          
@@ -877,10 +878,167 @@ class PlanActStateTwo extends State<PlanAct> {
 
                         return Slidable(
                           //key: ValueKey(lstActividades[index].id),
-                          startActionPane: const ActionPane(
-                            motion: ScrollMotion(),
+                          startActionPane: ActionPane(
+                            motion: const ScrollMotion(),
                               children: [
-                                BtnSlidableAction(null),
+                                SlidableAction(
+                                  onPressed: (context) {
+                                    
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text("Registro detalle de actividad"),
+                                          content: Form(
+                                            //key: _formKey,
+                                            child: Container(
+                                              color: Colors.transparent,
+                                              height: size.height * 0.3,
+                                              child: Column(
+                                                children: [
+                                                  
+                                                  Container(
+                                                    width: size.width * 0.99,
+                                                    color: Colors.transparent,
+                                                    child: Center(
+                                                      child: Container(
+                                                        width: size.width * 0.95,
+                                                        height: size.height * 0.11,
+                                                        color: Colors.transparent,
+                                                        child: const Center(
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                Text(
+                                                                  //formatearTiempo(_segundos),
+                                                                  '00:00:00',
+                                                                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                                                                ),
+                                                              
+                                                              ],
+                                                            ),
+                                                          ),
+                                                      )
+                                                    ),
+                                                  ),
+                                              
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    width: size.width * 0.92,
+                                                    child: TextFormField(     
+                                                                
+                                                      inputFormatters: [
+                                                        EmojiInputFormatter()
+                                                      ],
+                                                      cursorColor: AppLightColors().primary,
+                                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                      style: AppTextStyles.bodyRegular(width: size.width),
+                                                      decoration: const InputDecoration(
+                                                        label: Text('Notas'),
+                                                        border: OutlineInputBorder(),
+                                                        hintText: 'Notas de la visita o llamada para registrar la acción realizada.',
+                                                      ),
+                                              
+                                                      controller: notasActTxt,
+                                                      autocorrect: false,
+                                                      keyboardType: TextInputType.text,
+                                                      minLines: 1,
+                                                      maxLines: 4,
+                                                      autofocus: false,
+                                                      maxLength: 150,
+                                                      textAlign: TextAlign.left,
+                                                      onEditingComplete: () {
+                                                        FocusScope.of(context).unfocus();
+                                                      },
+                                                      onChanged: (value) {
+                                                        
+                                                      },
+                                                      onTapOutside: (event) {
+                                                        FocusScope.of(context).unfocus();
+                                                      },
+                                                    ),
+                                                  ),
+                                                
+                                                
+                                                ],
+                                              ),
+                                            )
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.of(context).pop(),
+                                              child: const Text("Cancelar"),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return AlertDialog(
+                                                      title: const Text('Registro de salida'),
+                                                      content: const Column(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Text(
+                                                            'Desea registrar la salida y cerrar la'
+                                                            'visita del cliente',
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            //context.pop();
+                                                            Navigator.pop(context);
+                                                            
+                                                            //Navigator.of(context).pop();
+                                                          },
+                                                          child: Text(
+                                                            'NO',
+                                                            style: TextStyle(color: Colors.blue[200]),
+                                                          ),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            // Acción para solicitar revisión
+                                                            Navigator.of(context).pop();
+                                                              
+                                                            //detenerCronometro();
+                                                            rspAct.data[index].id;
+                                                            print('Test grabado: ${rspAct.data[index].id}');
+
+                                                            
+                                                            Navigator.of(context).pop();
+                                                          },
+                                                          child: Text(
+                                                            'Sí',
+                                                            style: TextStyle(color: Colors.blue[200]),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              
+                                              },
+                                              child: const Text("Salida"),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                //iniciarCronometro();
+                                              },
+                                              child: const Text("Llegada"),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  backgroundColor: objColorsApp.celeste,
+                                  foregroundColor: Colors.white,
+                                  icon: Icons.call_outlined,
+                                  label: 'Actividades',
+                                )
                               ]
                           ),
                           child:  Padding(
@@ -895,24 +1053,24 @@ class PlanActStateTwo extends State<PlanAct> {
                                   backgroundColor: Colors.grey[300],
                                   child: const Icon(Icons.person),
                                 ),
-                                title: Text(lstActividades[index]),
+                                title: Text(rspAct.data[index].activityTypeId.name),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     //Text('RUC/C: 095011183001', style: TextStyle(fontSize: 12)),
                                     RichText(
-                                      text: const TextSpan(
+                                      text: TextSpan(
                                         children: [
-                                          TextSpan(
-                                            text: 'RUC/C:',
+                                          const TextSpan(
+                                            text: 'Date Dead Line:',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 12,
                                             ),
                                           ),
                                           TextSpan(
-                                            text: '095011183001',
-                                            style: TextStyle(
+                                            text: DateFormat('yyyy-MM-dd', 'es').format(rspAct.data[index].dateDeadline),
+                                            style: const TextStyle(
                                               color: Colors.blue,
                                               fontSize: 12,
                                             ),
@@ -922,9 +1080,10 @@ class PlanActStateTwo extends State<PlanAct> {
                                     ),
 
                                     //Text('COD: 59345', style: TextStyle(fontSize: 12)),
+                                    /*
 
                                     RichText(
-                                      text: const TextSpan(
+                                      text: TextSpan(
                                         children: [
                                           TextSpan(
                                             text: 'COD:',
@@ -934,7 +1093,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: '59345',
+                                            text: rspAct.data[index].,
                                             style: TextStyle(
                                               color: Colors.blue,
                                               fontSize: 12,
@@ -947,8 +1106,10 @@ class PlanActStateTwo extends State<PlanAct> {
 
                                     const Text('Tipo de Agenda: Llamada', style: TextStyle(fontSize: 12)),
                                     const Text('Activo', style: TextStyle(fontSize: 12, color: Colors.green)),
+                                    */
                                   ],
                                 ),
+                                /*
                                 trailing: const Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -956,6 +1117,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                     Icon(Icons.phone, color: Colors.grey),
                                   ],
                                 ),
+                                */
                               ),
                             ),
                           )
@@ -1231,7 +1393,7 @@ class BtnSlidableActionState extends State<BtnSlidableAction> {
                                 // Acción para solicitar revisión
                                 Navigator.of(context).pop();
                                   
-                                detenerCronometro();
+                                //detenerCronometro();
                                 
                                 Navigator.of(context).pop();
                               },

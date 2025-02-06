@@ -281,8 +281,8 @@ class AuthService extends ChangeNotifier {
       await DataInicialService().readModelosApp(models);
       
       return response.body;
-    } catch (ex) {
-      print('Test Error1: $ex');
+    } catch (_) {
+      //print('Test Error1: $ex');
     }
   }
 

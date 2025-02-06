@@ -71,6 +71,71 @@ class ActivitiesService extends ChangeNotifier{
     
   }
 
+  getActivitiesById(id) async {
+    try{
+
+      //var codImei = await storageCamp.read(key: 'codImei') ?? '';
+
+      var objReg = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
+      var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+      var objLog = await storageCamp.read(key: 'RespuestaLogin') ?? '';
+      var objLogDecode = json.decode(objLog);
+
+      List<MultiModel> lstMultiModel = [];
+
+      lstMultiModel.add(
+        MultiModel(model: 'mail.activity')
+      );
+
+      final models = [
+        {
+          "model": EnvironmentsProd().modMailAct,
+          "filters": [
+            //["date_deadline","=",DateFormat('yyyy-MM-dd', 'es').format(DateTime.now())],
+            ["res_id","=",id],
+            ["res_model_id","=",501]
+          ]
+        },
+      ];
+
+      await DataInicialService().readModelosApp(models);
+
+      String cmbLstAct = await storageCamp.read(key: 'cmbLstActividades') ?? '';
+
+/*
+      var lstMemoriaActividades = cmbLstAct;
+
+      var objCamp = json.decode(lstMemoriaActividades);
+      */
+
+      //var objCamp3 = objCamp['data'];
+
+      //print('Lista Act: $objCamp');
+
+      ActivitiesResponseModel objActividades = ActivitiesResponseModel.fromRawJson(cmbLstAct);
+      
+      return objActividades;
+    }
+    catch(ex){
+      print('Test: $ex');
+    }
+    /*
+    on SocketException catch (_) {
+      Fluttertoast.showToast(
+        msg: objMensajesProspectoService.mensajeFallaInternet,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+      );  
+    }
+    */
+  }
+
+
   registroActividades(ActivitiesTypeRequestModel objActividad) async {
     String internet = await ValidacionesUtils().validaInternet();
     

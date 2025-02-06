@@ -47,8 +47,8 @@ class DataInicialService extends ChangeNotifier{
       await GenericService().getMultiModelosGen(objReq, modelo);
       
     }
-    catch(ex){
-      print('Test DataInit $ex');
+    catch(_){
+      //print('Test DataInit $ex');
     }
   }
   

@@ -768,31 +768,6 @@ class PlanActStateTwo extends State<PlanAct> {
 
               ActivitiesResponseModel rspAct = snapshot.data as ActivitiesResponseModel;
 
-/*
-              ProspectoCombosModel objTmp = ProspectoCombosModel(
-                campanias: '',//rspCombos.split('---')[0],
-                origen: '',//rspCombos.split('---')[1],
-                medias: '',//rspCombos.split('---')[2],
-                actividades: '',//rspCombos.split('---')[3],
-                paises: '',//rspCombos.split('---')[4],
-                lstActividades: rspCombos.split('---')[5],
-              );
-
-              var objCamp = json.decode(objTmp.lstActividades);
-
-              var objCamp3 = objCamp['data'];
-
-              List<Map<String, dynamic>> mappedObjCamp3 = List<Map<String, dynamic>>.from(objCamp3);
-
-              List<String> lstActividades = mappedObjCamp3
-              .map((item) => item["activity_type_id"]["name"]?.toString() ?? '')
-              .toList();
-
-              if(actPlanSelect.isEmpty){                      
-                actPlanSelect = lstActividades.first;
-              }
-              */
-
               contLst = rspAct.length;
 
               return Column(
@@ -816,7 +791,15 @@ class PlanActStateTwo extends State<PlanAct> {
                               lastDate: DateTime.now()
                             ),
                             value: _dates,
-                            onValueChanged: (dates) => _dates = dates,
+                            onValueChanged: (dates) async {
+                              _dates = dates;
+
+                              ActivitiesResponseModel objRsp = await ActivitiesService().getActivitiesByRangoFechas(dates);
+
+                              setState(() {
+                                rspAct = objRsp;
+                              });
+                            }
                           )                          
                         ),
                         /*
@@ -925,8 +908,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                                   Container(
                                                     color: Colors.transparent,
                                                     width: size.width * 0.92,
-                                                    child: TextFormField(     
-                                                                
+                                                    child: TextFormField(
                                                       inputFormatters: [
                                                         EmojiInputFormatter()
                                                       ],
@@ -937,8 +919,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                                         label: Text('Notas'),
                                                         border: OutlineInputBorder(),
                                                         hintText: 'Notas de la visita o llamada para registrar la acción realizada.',
-                                                      ),
-                                              
+                                                      ),                                              
                                                       controller: notasActTxt,
                                                       autocorrect: false,
                                                       keyboardType: TextInputType.text,
@@ -957,9 +938,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                                         FocusScope.of(context).unfocus();
                                                       },
                                                     ),
-                                                  ),
-                                                
-                                                
+                                                  ),                                                
                                                 ],
                                               ),
                                             )
@@ -999,13 +978,31 @@ class PlanActStateTwo extends State<PlanAct> {
                                                           ),
                                                         ),
                                                         TextButton(
-                                                          onPressed: () {
+                                                          onPressed: () async {
                                                             // Acción para solicitar revisión
                                                             Navigator.of(context).pop();
                                                               
                                                             //detenerCronometro();
-                                                            rspAct.data[index].id;
-                                                            print('Test grabado: ${rspAct.data[index].id}');
+                                                            //rspAct.data[index].id;
+                                                            //print('Test grabado: ${rspAct.data[index].id}');
+
+                                                            ActivitiesTypeRequestModel objSave = ActivitiesTypeRequestModel(
+                                                              active: true,
+                                                              createDate: DateTime.parse(fechaActividadContTxt.text),
+                                                              createUid: 0,
+                                                              displayName: objDatumCrmLead?.contactName ?? '',
+                                                              previousActivityTypeId: 0,
+                                                              note: descripcionActTxt.text,
+                                                              activityTypeId: rspAct.data[index].activityTypeId.id,
+                                                              dateDeadline: rspAct.data[index].dateDeadline,
+                                                              userId: objDatumCrmLead?.userId!.id ?? 0,
+                                                              userCreateId: objDatumCrmLead?.userId!.id ?? 0,
+                                                              resId: objDatumCrmLead?.id ?? 0,
+                                                            );
+
+                                                            //NOTA: SOLO FALTA VERIFICAR QUE SE GRABE CORRECTAMENTE
+
+                                                            await ActivitiesService().cierreActividadesX(objSave);
 
                                                             
                                                             Navigator.of(context).pop();

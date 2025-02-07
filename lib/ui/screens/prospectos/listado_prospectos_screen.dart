@@ -356,7 +356,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                           onChanged: (value) {
                             actualizaListaPrp = false;
                             terminoBusqueda = value;
-                            refreshDataByFiltro(value, objRsp);                            
+                            refreshDataByFiltro(value, objRsp);
                           },
                           onEditingComplete: () {
                             FocusScope.of(context).unfocus();
@@ -731,7 +731,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
       body: BlocBuilder<GenericBloc, GenericState>(
         builder: (context,state) {
 
-           Future<void> refreshDataByFiltro(String filtro, String objMemoria) async {            
+          Future<void> refreshDataByFiltro(String filtro, String objMemoria) async {            
             prospectosFiltrados = [];
 
             CrmLead apiResponse = CrmLead.fromJson(objMemoria);
@@ -773,7 +773,6 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
             }
 
           }
-
 
           return FutureBuilder(
             future: ProspectoTypeService().getProspectos(),

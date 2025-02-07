@@ -46,7 +46,7 @@ class TokenManager {
 
       //imeiCod = '82345604002'; //BORRAR LUEGO - PARA CELULAR
       //imeiCod = '82345604000001'; //BORRAR LUEGO - PARA CELULAR PRUEBAS
-      imeiCod = '82345604103'; //BORRAR LUEGO - PARA EMULADOR
+      //imeiCod = '82345604103'; //BORRAR LUEGO - PARA EMULADOR
 
       //VALIDACIÓN DE TOKEN
       

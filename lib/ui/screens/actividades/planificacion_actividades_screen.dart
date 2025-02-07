@@ -16,6 +16,9 @@ Timer? _timer;
 int _segundos = 0; // Tiempo en segundos
 bool _corriendo = false;
 
+String terminoBusquedaAct = '';
+bool actualizaListaAct= false;
+
 DateTime selectedDayGenPlanAct = DateTime.now();
 DateTime focusedDayGenPlanAct = DateTime.now();
 List<DateTime> _dates = [];
@@ -28,6 +31,8 @@ late TextEditingController descripcionActTxt;
 
 int tabAcciones = 0;
 late TextEditingController notasActTxt;
+
+List<DatumActivitiesResponse> actividadesFiltradas = [];
 
 class PlanificacionActividades extends StatefulWidget {
   const PlanificacionActividades(Key? key) : super (key: key);
@@ -45,6 +50,9 @@ class PlanActState extends State<PlanificacionActividades> {
     notasActTxt = TextEditingController();
     fechaActividadContTxt = TextEditingController();
     descripcionActTxt = TextEditingController();
+    terminoBusquedaAct = '';
+    actualizaListaAct= false;
+    actividadesFiltradas = [];
   }
 
   @override
@@ -378,6 +386,7 @@ class PlanActState extends State<PlanificacionActividades> {
                                                       userId: objDatumCrmLead?.userId!.id ?? 0,
                                                       userCreateId: objDatumCrmLead?.userId!.id ?? 0,
                                                       resId: objDatumCrmLead?.id ?? 0,
+                                                      actId: 0
                                                     );
 
                                                     showDialog(
@@ -768,7 +777,38 @@ class PlanActStateTwo extends State<PlanAct> {
 
               ActivitiesResponseModel rspAct = snapshot.data as ActivitiesResponseModel;
 
-              contLst = rspAct.length;
+              if(!actualizaListaAct)
+              {
+                contLst = rspAct.length;
+                actividadesFiltradas = rspAct.data;
+              }
+
+              Future<void> refreshDataByFiltro(String filtro) async {            
+                actividadesFiltradas = [];
+
+                //CrmLead apiResponse = CrmLead.fromJson(objMemoria);
+
+                if(terminoBusquedaAct.isNotEmpty){
+                  
+                  actividadesFiltradas = rspAct.data
+                  .where(
+                    (producto) => producto.activityTypeId.name.toLowerCase().contains(terminoBusquedaAct.toLowerCase()))
+                  .toList();
+
+                  contLst = 0;
+
+                  contLst = actividadesFiltradas.length;
+                } else{
+                  actividadesFiltradas = rspAct.data;
+                  actualizaListaAct = false;
+                }            
+
+                if(terminoBusquedaAct.isNotEmpty && actualizaListaAct) {
+                  setState(() {});
+                }
+
+              }
+
 
               return Column(
                 children: [
@@ -794,10 +834,20 @@ class PlanActStateTwo extends State<PlanAct> {
                             onValueChanged: (dates) async {
                               _dates = dates;
 
-                              ActivitiesResponseModel objRsp = await ActivitiesService().getActivitiesByRangoFechas(dates);
+                              if(dates.length == 1)
+                              {
+                                return;
+                              }
+
+                              ActivitiesResponseModel objRsp = await ActivitiesService().getActivitiesByRangoFechas(dates, objDatumCrmLead?.id ?? 0);
+
+                              actividadesFiltradas = [];
+                              actividadesFiltradas = objRsp.data;
 
                               setState(() {
                                 rspAct = objRsp;
+                                actualizaListaAct = true;
+                                contLst = actividadesFiltradas.length;
                               });
                             }
                           )                          
@@ -834,6 +884,20 @@ class PlanActStateTwo extends State<PlanAct> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 2.0),
                           child: TextField(
+                            inputFormatters: [
+                              EmojiInputFormatter()
+                            ],
+                            onChanged: (value) {
+                              actualizaListaAct = true;
+                              terminoBusquedaAct = value;
+                              refreshDataByFiltro(value);
+                            },
+                            onEditingComplete: () {
+                              FocusScope.of(context).unfocus();
+                              setState(() {
+                                actualizaListaAct = false;
+                              });
+                            },
                             decoration: InputDecoration(
                               labelText: 'Buscar actividades',
                               prefixIcon: const Icon(Icons.search),
@@ -865,8 +929,7 @@ class PlanActStateTwo extends State<PlanAct> {
                             motion: const ScrollMotion(),
                               children: [
                                 SlidableAction(
-                                  onPressed: (context) {
-                                    
+                                  onPressed: (context) {                                    
                                     showDialog(
                                       context: context,
                                       builder: (context) {
@@ -938,7 +1001,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                                         FocusScope.of(context).unfocus();
                                                       },
                                                     ),
-                                                  ),                                                
+                                                  ),
                                                 ],
                                               ),
                                             )
@@ -959,7 +1022,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                                         mainAxisSize: MainAxisSize.min,
                                                         children: [
                                                           Text(
-                                                            'Desea registrar la salida y cerrar la'
+                                                            'Desea registrar la salida y cerrar la '
                                                             'visita del cliente',
                                                           ),
                                                         ],
@@ -981,6 +1044,30 @@ class PlanActStateTwo extends State<PlanAct> {
                                                           onPressed: () async {
                                                             // Acción para solicitar revisión
                                                             Navigator.of(context).pop();
+
+                                                            if(notasActTxt.text.isEmpty){
+                                                              showDialog(
+                                                                barrierDismissible: false,
+                                                                context: context,
+                                                                builder: (BuildContext context) {
+                                                                  return ContentAlertDialog(
+                                                                    onPressed: () {
+                                                                      Navigator.of(context).pop();
+                                                                    },
+                                                                    onPressedCont: () {
+                                                                      Navigator.of(context).pop();
+                                                                    },
+                                                                    tipoAlerta: TipoAlerta().alertAccion,
+                                                                    numLineasTitulo: 2,
+                                                                    numLineasMensaje: 2,
+                                                                    titulo: 'Error',
+                                                                    mensajeAlerta: 'Ingrese sus notas para poder cerrar esta actividad.'
+                                                                  );
+                                                                },
+                                                              );
+                                            
+                                                              return;
+                                                            }
                                                               
                                                             //detenerCronometro();
                                                             //rspAct.data[index].id;
@@ -988,7 +1075,7 @@ class PlanActStateTwo extends State<PlanAct> {
 
                                                             ActivitiesTypeRequestModel objSave = ActivitiesTypeRequestModel(
                                                               active: true,
-                                                              createDate: DateTime.parse(fechaActividadContTxt.text),
+                                                              createDate: DateTime.now(),//DateTime.parse(fechaActividadContTxt.text),
                                                               createUid: 0,
                                                               displayName: objDatumCrmLead?.contactName ?? '',
                                                               previousActivityTypeId: 0,
@@ -998,14 +1085,63 @@ class PlanActStateTwo extends State<PlanAct> {
                                                               userId: objDatumCrmLead?.userId!.id ?? 0,
                                                               userCreateId: objDatumCrmLead?.userId!.id ?? 0,
                                                               resId: objDatumCrmLead?.id ?? 0,
+                                                              actId: rspAct.data[index].id
                                                             );
 
                                                             //NOTA: SOLO FALTA VERIFICAR QUE SE GRABE CORRECTAMENTE
 
-                                                            await ActivitiesService().cierreActividadesX(objSave);
+                                                            //await ActivitiesService().cierreActividadesXId(objSave);
 
-                                                            
                                                             Navigator.of(context).pop();
+                                                            Navigator.of(context).pop();
+
+                                                             showDialog(
+                                                              //ignore: use_build_context_synchronously
+                                                              context: context,
+                                                              builder: (BuildContext context) {
+                                                                return AlertDialog(
+                                                                  title: Container(
+                                                                    color: Colors.transparent,
+                                                                    height: size.height * 0.17,
+                                                                    child: Column(
+                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                      children: [
+                                                                        
+                                                                        Container(
+                                                                          color: Colors.transparent,
+                                                                          height: size.height * 0.09,
+                                                                          child: Image.asset('assets/gifs/exito.gif'),
+                                                                        ),
+                                          
+                                                                        Container(
+                                                                          color: Colors.transparent,
+                                                                          width: size.width * 0.95,
+                                                                          height: size.height * 0.08,
+                                                                          alignment: Alignment.center,
+                                                                          child: AutoSizeText(
+                                                                            'Actividad cerrada exitosamente',
+                                                                            maxLines: 2,
+                                                                            minFontSize: 2,
+                                                                          ),
+                                                                        )
+                                                                      ],
+                                                                    )
+                                                                  ),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: () {
+                                                                        Navigator.of(context).pop();
+                                                                      },
+                                                                      child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            );
+                                                          
+                                                            
+                                                            
+                                                            //Navigator.of(context).pop();
                                                           },
                                                           child: Text(
                                                             'Sí',
@@ -1018,23 +1154,26 @@ class PlanActStateTwo extends State<PlanAct> {
                                                 );
                                               
                                               },
-                                              child: const Text("Salida"),
+                                              //child: const Text("Salida"),
+                                              child: const Text("Cerrar Actividad"),
                                             ),
+                                            /*
                                             ElevatedButton(
                                               onPressed: () {
                                                 //iniciarCronometro();
                                               },
                                               child: const Text("Llegada"),
                                             ),
+                                            */
                                           ],
                                         );
                                       },
                                     );
                                   },
-                                  backgroundColor: objColorsApp.celeste,
+                                  backgroundColor: objColorsApp.fucsia,
                                   foregroundColor: Colors.white,
-                                  icon: Icons.call_outlined,
-                                  label: 'Actividades',
+                                  icon: Icons.account_circle,
+                                  label: 'Cierre de Actividades',
                                 )
                               ]
                           ),
@@ -1050,7 +1189,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                   backgroundColor: Colors.grey[300],
                                   child: const Icon(Icons.person),
                                 ),
-                                title: Text(rspAct.data[index].activityTypeId.name),
+                                title: Text(actividadesFiltradas[index].activityTypeId.name),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -1066,7 +1205,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: DateFormat('yyyy-MM-dd', 'es').format(rspAct.data[index].dateDeadline),
+                                            text: DateFormat('yyyy-MM-dd', 'es').format(actividadesFiltradas[index].dateDeadline),
                                             style: const TextStyle(
                                               color: Colors.blue,
                                               fontSize: 12,
@@ -1138,8 +1277,6 @@ class PlanActStateTwo extends State<PlanAct> {
                   ),
                     */
 
-
-
                   /*
                   const SizedBox(height: 32),
                   
@@ -1207,6 +1344,7 @@ class PlanActStateTwo extends State<PlanAct> {
                   ),
                 
                   */
+
                 ],
               );
           
@@ -1368,7 +1506,7 @@ class BtnSlidableActionState extends State<BtnSlidableAction> {
                             children: [
                               Text(
                                 'Desea registrar la salida y cerrar la'
-                                'visita del cliente',
+                                ' visita del cliente',
                               ),
                             ],
                           ),
@@ -1391,6 +1529,7 @@ class BtnSlidableActionState extends State<BtnSlidableAction> {
                                 Navigator.of(context).pop();
                                   
                                 //detenerCronometro();
+                                
                                 
                                 Navigator.of(context).pop();
                               },

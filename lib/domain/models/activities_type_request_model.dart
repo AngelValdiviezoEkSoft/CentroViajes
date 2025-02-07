@@ -2,6 +2,7 @@ import 'dart:convert';
 
 class ActivitiesTypeRequestModel {
     int resId;
+    int actId;
     int createUid;
     int userId;
     int userCreateId;
@@ -15,6 +16,7 @@ class ActivitiesTypeRequestModel {
 
     ActivitiesTypeRequestModel({
       required this.resId,
+      required this.actId,
       required this.userId,
         required this.createUid,
         required this.createDate,
@@ -33,6 +35,7 @@ class ActivitiesTypeRequestModel {
 
     factory ActivitiesTypeRequestModel.fromMap(Map<String, dynamic> json) => ActivitiesTypeRequestModel(
       resId: json["resId"],
+      actId: json["actId"],
         userId: json["user_id"],
         createUid: json["create_uid"],        
         createDate: json["create_date"] == null ? null : DateTime.parse(json["create_date"]),
@@ -48,6 +51,7 @@ class ActivitiesTypeRequestModel {
     factory ActivitiesTypeRequestModel.fromMap2(Map<String, dynamic> json) {
 
       return ActivitiesTypeRequestModel(
+        actId: json["actId"],
         resId: json["resId"],
         userCreateId: json['user_id'],
         userId: json['user_id'],
@@ -64,6 +68,7 @@ class ActivitiesTypeRequestModel {
 
     Map<String, dynamic> toJson2() {
     return {
+      'actId': actId,
       'userCreateId': userCreateId,
       'user_id': userId,
       'create_uid': createUid,
@@ -78,6 +83,7 @@ class ActivitiesTypeRequestModel {
   }
 
     Map<String, dynamic> toMap() => {
+      'actId': actId,
       'userCreateId': userCreateId,
       'user_id': userId,
       'create_uid': createUid,

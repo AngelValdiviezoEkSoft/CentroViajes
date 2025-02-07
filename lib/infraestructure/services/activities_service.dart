@@ -74,14 +74,6 @@ class ActivitiesService extends ChangeNotifier{
   getActivitiesById(id) async {
     try{
 
-      //var codImei = await storageCamp.read(key: 'codImei') ?? '';
-
-      var objReg = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
-      var obj = RegisterDeviceResponseModel.fromJson(objReg);
-
-      var objLog = await storageCamp.read(key: 'RespuestaLogin') ?? '';
-      var objLogDecode = json.decode(objLog);
-
       List<MultiModel> lstMultiModel = [];
 
       lstMultiModel.add(
@@ -99,19 +91,74 @@ class ActivitiesService extends ChangeNotifier{
         },
       ];
 
-      await DataInicialService().readModelosApp(models);
+      var codImei = await storageProspecto.read(key: 'codImei') ?? '';
+
+      var objReg = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
+      var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+      var objLog = await storageProspecto.read(key: 'RespuestaLogin') ?? '';
+      var objLogDecode = json.decode(objLog);
+
+      ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
+        jsonrpc: EnvironmentsProd().jsonrpc,
+        params: ParamsMultiModels(
+          bearer: obj.result.bearer,
+          company: objLogDecode['result']['current_company'],
+          imei: codImei,
+          key: obj.result.key,
+          tocken: obj.result.tocken,
+          tockenValidDate: obj.result.tockenValidDate,
+          uid: objLogDecode['result']['uid'],
+          models: []
+        )
+      );
+
+      String ruta = '';
+      final objStr = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
+      
+      if(objStr.isNotEmpty)
+      {  
+        var obj = RegisterDeviceResponseModel.fromJson(objStr);
+        ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/data/multi/models';
+      }
+
+      String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
+
+      final requestBody = {
+        "jsonrpc": EnvironmentsProd().jsonrpc,
+        "params": {
+          "key": objReq.params.key,
+          "tocken": objReq.params.tocken,
+          "imei": objReq.params.imei,
+          "uid": objReq.params.uid,
+          "company": objReq.params.company,
+          "bearer": objReq.params.bearer,
+          "tocken_valid_date": tockenValidDate,
+          "models": models
+        }
+      };
+
+      final headers = {
+        "Content-Type": EnvironmentsProd().contentType//"application/json",
+      };
+
+      final response = await http.post(
+        Uri.parse(ruta),
+        headers: headers,
+        body: jsonEncode(requestBody), 
+      );
+      
+      //var rspValidacion = json.decode(response.body);
+
+    //print('Lst gen: ${response.body}');
+
+      var rsp = AppResponseModel.fromRawJson(response.body);
+
+
+      await storageCamp.write(key: 'cmbLstActividades', value: json.encode(rsp.result.data.mailActivity));
+
 
       String cmbLstAct = await storageCamp.read(key: 'cmbLstActividades') ?? '';
-
-/*
-      var lstMemoriaActividades = cmbLstAct;
-
-      var objCamp = json.decode(lstMemoriaActividades);
-      */
-
-      //var objCamp3 = objCamp['data'];
-
-      //print('Lista Act: $objCamp');
 
       ActivitiesResponseModel objActividades = ActivitiesResponseModel.fromRawJson(cmbLstAct);
       
@@ -135,13 +182,15 @@ class ActivitiesService extends ChangeNotifier{
     */
   }
 
-  getActivitiesByRangoFechas(fechas) async {
+  getActivitiesByRangoFechas(fechas, resId) async {
     try{
+      /*
       var objReg = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
       var obj = RegisterDeviceResponseModel.fromJson(objReg);
 
       var objLog = await storageCamp.read(key: 'RespuestaLogin') ?? '';
       var objLogDecode = json.decode(objLog);
+      */
 
       List<MultiModel> lstMultiModel = [];
 
@@ -152,13 +201,80 @@ class ActivitiesService extends ChangeNotifier{
       final models = [
         {
           "model": EnvironmentsProd().modMailAct,
-          "filters": [
-            ["date_deadline","=",fechas]//DateFormat('yyyy-MM-dd', 'es').format(DateTime.now())],            
+          "filters": [            
+            ["date_deadline",">=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],
+            ["date_deadline","<=",DateFormat('yyyy-MM-dd', 'es').format(fechas[1])],
+            ["res_model_id", "=", 501],
+            ["res_id", "=", resId]
           ]
         },
       ];
 
-      await DataInicialService().readModelosApp(models);
+      var codImei = await storageProspecto.read(key: 'codImei') ?? '';
+
+      var objReg = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
+      var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+      var objLog = await storageProspecto.read(key: 'RespuestaLogin') ?? '';
+      var objLogDecode = json.decode(objLog);
+
+      ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
+        jsonrpc: EnvironmentsProd().jsonrpc,
+        params: ParamsMultiModels(
+          bearer: obj.result.bearer,
+          company: objLogDecode['result']['current_company'],
+          imei: codImei,
+          key: obj.result.key,
+          tocken: obj.result.tocken,
+          tockenValidDate: obj.result.tockenValidDate,
+          uid: objLogDecode['result']['uid'],
+          models: []
+        )
+      );
+
+      String ruta = '';
+      final objStr = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
+      
+      if(objStr.isNotEmpty)
+      {  
+        var obj = RegisterDeviceResponseModel.fromJson(objStr);
+        ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/data/multi/models';
+      }
+
+      String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
+
+      final requestBody = {
+        "jsonrpc": EnvironmentsProd().jsonrpc,
+        "params": {
+          "key": objReq.params.key,
+          "tocken": objReq.params.tocken,
+          "imei": objReq.params.imei,
+          "uid": objReq.params.uid,
+          "company": objReq.params.company,
+          "bearer": objReq.params.bearer,
+          "tocken_valid_date": tockenValidDate,
+          "models": models
+        }
+      };
+
+      final headers = {
+        "Content-Type": EnvironmentsProd().contentType//"application/json",
+      };
+
+      final response = await http.post(
+        Uri.parse(ruta),
+        headers: headers,
+        body: jsonEncode(requestBody), 
+      );
+      
+      //var rspValidacion = json.decode(response.body);
+
+    //print('Lst gen: ${response.body}');
+
+      var rsp = AppResponseModel.fromRawJson(response.body);
+
+
+      await storageCamp.write(key: 'cmbLstActividades', value: json.encode(rsp.result.data.mailActivity));
 
       String cmbLstAct = await storageCamp.read(key: 'cmbLstActividades') ?? '';
 
@@ -166,8 +282,8 @@ class ActivitiesService extends ChangeNotifier{
       
       return objActividades;
     }
-    catch(ex){
-      print('Test: $ex');
+    catch(_){
+      //print('Test: $ex');
     }
   }
 
@@ -325,7 +441,7 @@ class ActivitiesService extends ChangeNotifier{
 
   }
 
-  cierreActividadesX(ActivitiesTypeRequestModel objActividad) async {
+  cierreActividadesXId(ActivitiesTypeRequestModel objActividad) async {
     String internet = await ValidacionesUtils().validaInternet();
     
     //VALIDACIÓN DE INTERNET
@@ -375,19 +491,20 @@ class ActivitiesService extends ChangeNotifier{
             "company": objReq.params.company,
             "bearer": objReq.params.bearer,
             "tocken_valid_date": tockenValidDate,
-            "create": {
+            "write": {
               "date_deadline": DateFormat('yyyy-MM-dd', 'es').format(objActividad.dateDeadline!),//date_deadline
-              "create_date": DateFormat('yyyy-MM-dd', 'es').format(objActividad.createDate!),
-              "create_uid": objReq.params.uid,//objActividad.createUid,          
-              "active": true,
-              "previous_activity_type_id": objActividad.previousActivityTypeId,
-              "display_name": objActividad.displayName,
-              "activity_type_id": objActividad.activityTypeId,
+              //"create_date": DateFormat('yyyy-MM-dd', 'es').format(objActividad.createDate!),
+              //"create_uid": objReq.params.uid,//objActividad.createUid,          
+              //"active": true,
+              //"previous_activity_type_id": objActividad.previousActivityTypeId,
+              //"display_name": objActividad.displayName,
+              //"activity_type_id": objActividad.activityTypeId,
               "res_model_id": 501,
               "user_id": objActividad.userId,
               "res_id": objActividad.resId,
               "summary": objActividad.note,
-              "note": objActividad.note
+              "note": objActividad.note,
+              "id": objActividad.actId
             },
           }
         };
@@ -402,7 +519,7 @@ class ActivitiesService extends ChangeNotifier{
         if(objStr.isNotEmpty)
         {
           var obj = RegisterDeviceResponseModel.fromJson(objStr);
-          ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/create/mail.activity/model';
+          ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/write/mail.activity/model';
         }
 
         final response = await http.post(

@@ -723,7 +723,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
             IconButton(
               icon: const Icon(Icons.calendar_month, color: Colors.black),
               onPressed: () {
-                context.push(objRutasGen.rutaAgenda);
+                //context.push(objRutasGen.rutaAgenda);
               },
             ),
           ],

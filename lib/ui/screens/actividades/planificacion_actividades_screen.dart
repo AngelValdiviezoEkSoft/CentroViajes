@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+//import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/infraestructure/infraestructure.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
@@ -12,6 +12,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+List<String> lstActividades = [];
+int idProspecto = 0;
 Timer? _timer;
 int _segundos = 0; // Tiempo en segundos
 bool _corriendo = false;
@@ -21,7 +23,7 @@ bool actualizaListaAct= false;
 
 DateTime selectedDayGenPlanAct = DateTime.now();
 DateTime focusedDayGenPlanAct = DateTime.now();
-List<DateTime> _dates = [];
+//List<DateTime> _dates = [];
 int contLst = 0;
 //import 'package:one_clock/one_clock.dart';
 String actPlanSelect = '';
@@ -53,6 +55,10 @@ class PlanActState extends State<PlanificacionActividades> {
     terminoBusquedaAct = '';
     actualizaListaAct= false;
     actividadesFiltradas = [];
+    idProspecto = 0;
+    lstActividades = [];
+    _segundos = 0;
+    _corriendo = false;
   }
 
   @override
@@ -97,9 +103,13 @@ class PlanActState extends State<PlanificacionActividades> {
 
             List<Map<String, dynamic>> mappedObjAct3 = List<Map<String, dynamic>>.from(objAct3);
 
-            List<String> lstActividades = mappedObjAct3
-            .map((item) => item["name"]?.toString() ?? '')
+            lstActividades = mappedObjAct3
+            .map((item) => item["activity_type_id"]["name"]?.toString() ?? '')
             .toList();
+
+            if(actPlanSelect.isEmpty){
+              actPlanSelect = lstActividades.first;
+            }
 
             return Scaffold(
               appBar: AppBar(
@@ -741,6 +751,32 @@ class PlanAct extends StatefulWidget {
 
 class PlanActStateTwo extends State<PlanAct> {
 
+  void iniciarCronometro() {
+    if (!_corriendo) {
+      _corriendo = true;
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        setState(() {
+          _segundos++;
+        });
+      });
+    }
+  }
+
+  void detenerCronometro() {
+    if (_corriendo) {
+      _timer?.cancel();
+      _corriendo = false;
+    }
+  }
+
+  void reiniciarCronometro() {
+    _timer?.cancel();
+    setState(() {
+      _segundos = 0;
+      _corriendo = false;
+    });
+  }
+
   ColorsApp objColorsApp = ColorsApp();
 
   @override
@@ -752,12 +788,13 @@ class PlanActStateTwo extends State<PlanAct> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    ScrollController scrollListaClt = ScrollController();
+    //ScrollController scrollListaClt = ScrollController();
   
     return BlocBuilder<GenericBloc, GenericState>(
       builder: (context,state) {
+        
         return FutureBuilder(
-          future: ActivitiesService().getActivitiesById(objDatumCrmLead?.id ?? 0),
+          future: ActivitiesService().getActivitiesById(objDatumCrmLead?.id ?? idProspecto),
           builder: (context, snapshot) {
 
             if(!snapshot.hasData) {
@@ -809,6 +846,12 @@ class PlanActStateTwo extends State<PlanAct> {
 
               }
 
+              String formatearTiempo(int segundos) {
+                int horas = segundos ~/ 3600;
+                int minutos = (segundos % 3600) ~/ 60;
+                int segs = segundos % 60;
+                return '${horas.toString().padLeft(2, '0')}:${minutos.toString().padLeft(2, '0')}:${segs.toString().padLeft(2, '0')}';
+              }
 
               return Column(
                 children: [
@@ -821,6 +864,7 @@ class PlanActStateTwo extends State<PlanAct> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        /*
                         Container(
                           width: size.width *0.95,
                           height: size.height * 0.39,
@@ -852,11 +896,12 @@ class PlanActStateTwo extends State<PlanAct> {
                             }
                           )                          
                         ),
-                        /*
+                        */
+
                         Container(
                           color: Colors.transparent,
                           width: size.width,
-                          height: size.height * 0.07,
+                          height: size.height * 0.07,                          
                           child: DropdownButtonFormField<String>(
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
@@ -877,10 +922,338 @@ class PlanActStateTwo extends State<PlanAct> {
                             },
                           ),
                         ),
-                        */
 
-                        //SizedBox(height: size.height * 0.009),
+                        Container(
+                          width: size.width * 0.95,
+                          height: size.height * 0.07,
+                          color: Colors.transparent,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  iniciarCronometro();
+                                },
+                                child: Container(
+                                  width: size.width * 0.45,
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.indigo, // Color similar al de la imagen
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.exit_to_app, color: Colors.white),
+                                      SizedBox(width: 8.0),
+                                      Text(
+                                        "Llegada",
+                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(width: 8.0),
+                                      Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+                                    ],
+                                  ),
+                                ),
+                              ),
 
+                              GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('Registro de salida'),
+                                        content: const Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              'Desea registrar la salida y cerrar la'
+                                              ' visita del cliente',
+                                            ),
+                                          ],
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              //context.pop();
+                                              Navigator.pop(context);
+                                              
+                                              //Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              'NO',
+                                              style: TextStyle(color: Colors.blue[200]),
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              // Acción para solicitar revisión
+                                              Navigator.of(context).pop();
+                                                
+                                              detenerCronometro();
+                                              
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              'Sí',
+                                              style: TextStyle(color: Colors.blue[200]),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                
+                                },
+                                child: Container(
+                                  width: size.width * 0.45,
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.indigo, // Color similar al de la imagen
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.exit_to_app, color: Colors.white),
+                                      SizedBox(width: 8.0),
+                                      Text(
+                                        "Salida",
+                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(width: 8.0),
+                                      Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              /*
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text("Cancelar"),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('Registro de salida'),
+                                        content: const Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              'Desea registrar la salida y cerrar la '
+                                              'visita del cliente',
+                                            ),
+                                          ],
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              //context.pop();
+                                              Navigator.pop(context);
+                                              
+                                              //Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              'NO',
+                                              style: TextStyle(color: Colors.blue[200]),
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              // Acción para solicitar revisión
+                                              Navigator.of(context).pop();
+
+                                              if(notasActTxt.text.isEmpty){
+                                                showDialog(
+                                                  barrierDismissible: false,
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return ContentAlertDialog(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      onPressedCont: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      tipoAlerta: TipoAlerta().alertAccion,
+                                                      numLineasTitulo: 2,
+                                                      numLineasMensaje: 2,
+                                                      titulo: 'Error',
+                                                      mensajeAlerta: 'Ingrese sus notas para poder cerrar esta actividad.'
+                                                    );
+                                                  },
+                                                );
+                              
+                                                return;
+                                              }
+                                                
+                                              //detenerCronometro();
+                                              //rspAct.data[index].id;
+                                              //print('Test grabado: ${rspAct.data[index].id}');
+                                              /*
+
+                                              ActivitiesTypeRequestModel objSave = ActivitiesTypeRequestModel(
+                                                active: true,
+                                                createDate: DateTime.now(),//DateTime.parse(fechaActividadContTxt.text),
+                                                createUid: 0,
+                                                displayName: objDatumCrmLead?.contactName ?? '',
+                                                previousActivityTypeId: 0,
+                                                note: descripcionActTxt.text,
+                                                activityTypeId: rspAct.data[index].activityTypeId.id,
+                                                dateDeadline: rspAct.data[index].dateDeadline,
+                                                userId: objDatumCrmLead?.userId!.id ?? 0,
+                                                userCreateId: objDatumCrmLead?.userId!.id ?? 0,
+                                                resId: objDatumCrmLead?.id ?? 0,
+                                                actId: rspAct.data[index].id
+                                              );
+                                              */
+
+                                              //NOTA: SOLO FALTA VERIFICAR QUE SE GRABE CORRECTAMENTE
+
+                                              //await ActivitiesService().cierreActividadesXId(objSave);
+
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).pop();
+
+                                              showDialog(
+                                                //ignore: use_build_context_synchronously
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Container(
+                                                      color: Colors.transparent,
+                                                      height: size.height * 0.17,
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          
+                                                          Container(
+                                                            color: Colors.transparent,
+                                                            height: size.height * 0.09,
+                                                            child: Image.asset('assets/gifs/exito.gif'),
+                                                          ),
+                            
+                                                          Container(
+                                                            color: Colors.transparent,
+                                                            width: size.width * 0.95,
+                                                            height: size.height * 0.08,
+                                                            alignment: Alignment.center,
+                                                            child: const AutoSizeText(
+                                                              'Actividad cerrada exitosamente',
+                                                              maxLines: 2,
+                                                              minFontSize: 2,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            
+                                              
+                                              
+                                              //Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              'Sí',
+                                              style: TextStyle(color: Colors.blue[200]),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                
+                                },
+                                //child: const Text("Salida"),
+                                child: const Text("Cerrar Actividad"),
+                              ),
+                              
+                              ElevatedButton(
+                                onPressed: () {
+                                  //iniciarCronometro();
+                                },
+                                child: const Text("Llegada"),
+                              ),
+                              */       
+                            ],
+                          ),
+                        ),
+
+                        Container(
+                          width: size.width * 0.99,
+                          color: Colors.transparent,
+                          child: Center(
+                            child: Container(
+                              width: size.width * 0.95,
+                              height: size.height * 0.11,
+                              color: Colors.transparent,
+                              child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        formatearTiempo(_segundos),                                                                  
+                                        style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                                      ),
+                                    
+                                    ],
+                                  ),
+                                ),
+                            )
+                          ),
+                        ),
+                    
+                        Container(
+                          color: Colors.transparent,
+                          width: size.width * 0.92,
+                          child: TextFormField(
+                            inputFormatters: [
+                              EmojiInputFormatter()
+                            ],
+                            cursorColor: AppLightColors().primary,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            style: AppTextStyles.bodyRegular(width: size.width),
+                            decoration: const InputDecoration(
+                              label: Text('Notas'),
+                              border: OutlineInputBorder(),
+                              hintText: 'Notas de la visita o llamada para registrar la acción realizada.',
+                            ),                                              
+                            controller: notasActTxt,
+                            autocorrect: false,
+                            keyboardType: TextInputType.text,
+                            minLines: 1,
+                            maxLines: 4,
+                            autofocus: false,
+                            maxLength: 150,
+                            textAlign: TextAlign.left,
+                            onEditingComplete: () {
+                              FocusScope.of(context).unfocus();
+                            },
+                            onChanged: (value) {
+                              
+                            },
+                            onTapOutside: (event) {
+                              FocusScope.of(context).unfocus();
+                            },
+                          ),
+                        ),
+                      
+                        SizedBox(height: size.height * 0.009),
+/*
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 2.0),
                           child: TextField(
@@ -907,13 +1280,13 @@ class PlanActStateTwo extends State<PlanAct> {
                             ),
                           ),
                         ),
-
+*/
                         //SizedBox(height: size.height * 0.05),
                         
                       ],
                     ),
                   ),
-
+/*
                   Container(
                     color: Colors.transparent,
                     width: size.width,
@@ -943,228 +1316,13 @@ class PlanActStateTwo extends State<PlanAct> {
                                               child: Column(
                                                 children: [
                                                   
-                                                  Container(
-                                                    width: size.width * 0.99,
-                                                    color: Colors.transparent,
-                                                    child: Center(
-                                                      child: Container(
-                                                        width: size.width * 0.95,
-                                                        height: size.height * 0.11,
-                                                        color: Colors.transparent,
-                                                        child: const Center(
-                                                            child: Column(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              children: [
-                                                                Text(
-                                                                  //formatearTiempo(_segundos),
-                                                                  '00:00:00',
-                                                                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-                                                                ),
-                                                              
-                                                              ],
-                                                            ),
-                                                          ),
-                                                      )
-                                                    ),
-                                                  ),
-                                              
-                                                  Container(
-                                                    color: Colors.transparent,
-                                                    width: size.width * 0.92,
-                                                    child: TextFormField(
-                                                      inputFormatters: [
-                                                        EmojiInputFormatter()
-                                                      ],
-                                                      cursorColor: AppLightColors().primary,
-                                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                      style: AppTextStyles.bodyRegular(width: size.width),
-                                                      decoration: const InputDecoration(
-                                                        label: Text('Notas'),
-                                                        border: OutlineInputBorder(),
-                                                        hintText: 'Notas de la visita o llamada para registrar la acción realizada.',
-                                                      ),                                              
-                                                      controller: notasActTxt,
-                                                      autocorrect: false,
-                                                      keyboardType: TextInputType.text,
-                                                      minLines: 1,
-                                                      maxLines: 4,
-                                                      autofocus: false,
-                                                      maxLength: 150,
-                                                      textAlign: TextAlign.left,
-                                                      onEditingComplete: () {
-                                                        FocusScope.of(context).unfocus();
-                                                      },
-                                                      onChanged: (value) {
-                                                        
-                                                      },
-                                                      onTapOutside: (event) {
-                                                        FocusScope.of(context).unfocus();
-                                                      },
-                                                    ),
-                                                  ),
+                                                
                                                 ],
                                               ),
                                             )
                                           ),
                                           actions: [
-                                            TextButton(
-                                              onPressed: () => Navigator.of(context).pop(),
-                                              child: const Text("Cancelar"),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return AlertDialog(
-                                                      title: const Text('Registro de salida'),
-                                                      content: const Column(
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        children: [
-                                                          Text(
-                                                            'Desea registrar la salida y cerrar la '
-                                                            'visita del cliente',
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            //context.pop();
-                                                            Navigator.pop(context);
-                                                            
-                                                            //Navigator.of(context).pop();
-                                                          },
-                                                          child: Text(
-                                                            'NO',
-                                                            style: TextStyle(color: Colors.blue[200]),
-                                                          ),
-                                                        ),
-                                                        TextButton(
-                                                          onPressed: () async {
-                                                            // Acción para solicitar revisión
-                                                            Navigator.of(context).pop();
-
-                                                            if(notasActTxt.text.isEmpty){
-                                                              showDialog(
-                                                                barrierDismissible: false,
-                                                                context: context,
-                                                                builder: (BuildContext context) {
-                                                                  return ContentAlertDialog(
-                                                                    onPressed: () {
-                                                                      Navigator.of(context).pop();
-                                                                    },
-                                                                    onPressedCont: () {
-                                                                      Navigator.of(context).pop();
-                                                                    },
-                                                                    tipoAlerta: TipoAlerta().alertAccion,
-                                                                    numLineasTitulo: 2,
-                                                                    numLineasMensaje: 2,
-                                                                    titulo: 'Error',
-                                                                    mensajeAlerta: 'Ingrese sus notas para poder cerrar esta actividad.'
-                                                                  );
-                                                                },
-                                                              );
                                             
-                                                              return;
-                                                            }
-                                                              
-                                                            //detenerCronometro();
-                                                            //rspAct.data[index].id;
-                                                            //print('Test grabado: ${rspAct.data[index].id}');
-
-                                                            ActivitiesTypeRequestModel objSave = ActivitiesTypeRequestModel(
-                                                              active: true,
-                                                              createDate: DateTime.now(),//DateTime.parse(fechaActividadContTxt.text),
-                                                              createUid: 0,
-                                                              displayName: objDatumCrmLead?.contactName ?? '',
-                                                              previousActivityTypeId: 0,
-                                                              note: descripcionActTxt.text,
-                                                              activityTypeId: rspAct.data[index].activityTypeId.id,
-                                                              dateDeadline: rspAct.data[index].dateDeadline,
-                                                              userId: objDatumCrmLead?.userId!.id ?? 0,
-                                                              userCreateId: objDatumCrmLead?.userId!.id ?? 0,
-                                                              resId: objDatumCrmLead?.id ?? 0,
-                                                              actId: rspAct.data[index].id
-                                                            );
-
-                                                            //NOTA: SOLO FALTA VERIFICAR QUE SE GRABE CORRECTAMENTE
-
-                                                            //await ActivitiesService().cierreActividadesXId(objSave);
-
-                                                            Navigator.of(context).pop();
-                                                            Navigator.of(context).pop();
-
-                                                             showDialog(
-                                                              //ignore: use_build_context_synchronously
-                                                              context: context,
-                                                              builder: (BuildContext context) {
-                                                                return AlertDialog(
-                                                                  title: Container(
-                                                                    color: Colors.transparent,
-                                                                    height: size.height * 0.17,
-                                                                    child: Column(
-                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                      children: [
-                                                                        
-                                                                        Container(
-                                                                          color: Colors.transparent,
-                                                                          height: size.height * 0.09,
-                                                                          child: Image.asset('assets/gifs/exito.gif'),
-                                                                        ),
-                                          
-                                                                        Container(
-                                                                          color: Colors.transparent,
-                                                                          width: size.width * 0.95,
-                                                                          height: size.height * 0.08,
-                                                                          alignment: Alignment.center,
-                                                                          child: AutoSizeText(
-                                                                            'Actividad cerrada exitosamente',
-                                                                            maxLines: 2,
-                                                                            minFontSize: 2,
-                                                                          ),
-                                                                        )
-                                                                      ],
-                                                                    )
-                                                                  ),
-                                                                  actions: [
-                                                                    TextButton(
-                                                                      onPressed: () {
-                                                                        Navigator.of(context).pop();
-                                                                      },
-                                                                      child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              },
-                                                            );
-                                                          
-                                                            
-                                                            
-                                                            //Navigator.of(context).pop();
-                                                          },
-                                                          child: Text(
-                                                            'Sí',
-                                                            style: TextStyle(color: Colors.blue[200]),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              
-                                              },
-                                              //child: const Text("Salida"),
-                                              child: const Text("Cerrar Actividad"),
-                                            ),
-                                            /*
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                //iniciarCronometro();
-                                              },
-                                              child: const Text("Llegada"),
-                                            ),
-                                            */
                                           ],
                                         );
                                       },
@@ -1262,7 +1420,7 @@ class PlanActStateTwo extends State<PlanAct> {
                       },
                     ),
                   ),
-
+*/
 /*
                   Container(
                     width: size.width *0.95,

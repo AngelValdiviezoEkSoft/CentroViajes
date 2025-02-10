@@ -20,7 +20,6 @@ class CentroViajesAppState extends State<CentroViajesApp> {
   @override
   void initState() {
     super.initState();
-    
     // Configura una tarea que se ejecuta cada minuto.
     // cron.schedule(Schedule.parse('*/6 * * * * *'), () {
     //   setState(() {

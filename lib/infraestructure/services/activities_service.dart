@@ -22,22 +22,33 @@ class ActivitiesService extends ChangeNotifier{
   getActivities() async {
     try{
 
-      var codImei = await storageCamp.read(key: 'codImei') ?? '';
-
-      var objReg = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
-      var obj = RegisterDeviceResponseModel.fromJson(objReg);
-
-      var objLog = await storageCamp.read(key: 'RespuestaLogin') ?? '';
-      var objLogDecode = json.decode(objLog);
-
       List<MultiModel> lstMultiModel = [];
 
       lstMultiModel.add(
-        MultiModel(model: 'mail.activity.type')
+        MultiModel(model: 'mail.activity')
       );
 
+      final models = [
+        {
+          "model": EnvironmentsProd().modMailAct,
+          "filters": [
+            //["date_deadline","=",DateFormat('yyyy-MM-dd', 'es').format(DateTime.now())],
+            //["res_id","=",id],
+            ["res_model_id","=",501]
+          ]
+        },
+      ];
+
+      var codImei = await storageProspecto.read(key: 'codImei') ?? '';
+
+      var objReg = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
+      var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+      var objLog = await storageProspecto.read(key: 'RespuestaLogin') ?? '';
+      var objLogDecode = json.decode(objLog);
+
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-        jsonrpc: '2.0',
+        jsonrpc: EnvironmentsProd().jsonrpc,
         params: ParamsMultiModels(
           bearer: obj.result.bearer,
           company: objLogDecode['result']['current_company'],
@@ -46,17 +57,61 @@ class ActivitiesService extends ChangeNotifier{
           tocken: obj.result.tocken,
           tockenValidDate: obj.result.tockenValidDate,
           uid: objLogDecode['result']['uid'],
-          models: lstMultiModel
+          models: []
         )
       );
 
-      tokenManager.startTokenCheck();
-
-      var rsp = await GenericService().getMultiModelos(objReq, "mail.activity.type");
+      String ruta = '';
+      final objStr = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
       
-      return rsp;
+      if(objStr.isNotEmpty)
+      {  
+        var obj = RegisterDeviceResponseModel.fromJson(objStr);
+        ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/data/multi/models';
+      }
+
+      String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
+
+      final requestBody = {
+        "jsonrpc": EnvironmentsProd().jsonrpc,
+        "params": {
+          "key": objReq.params.key,
+          "tocken": objReq.params.tocken,
+          "imei": objReq.params.imei,
+          "uid": objReq.params.uid,
+          "company": objReq.params.company,
+          "bearer": objReq.params.bearer,
+          "tocken_valid_date": tockenValidDate,
+          "models": models
+        }
+      };
+
+      final headers = {
+        "Content-Type": EnvironmentsProd().contentType//"application/json",
+      };
+
+      final response = await http.post(
+        Uri.parse(ruta),
+        headers: headers,
+        body: jsonEncode(requestBody), 
+      );
+      
+      //var rspValidacion = json.decode(response.body);
+
+    //print('Lst gen: ${response.body}');
+
+      var rsp = AppResponseModel.fromRawJson(response.body);
+
+
+      await storageCamp.write(key: 'cmbLstActividades', value: json.encode(rsp.result.data.mailActivity));
+
+
+      String cmbLstAct = await storageCamp.read(key: 'cmbLstActividades') ?? '';
+
+      ActivitiesResponseModel objActividades = ActivitiesResponseModel.fromRawJson(cmbLstAct);
+      
+      return objActividades;
     }
-    
     on SocketException catch (_) {
       Fluttertoast.showToast(
         msg: objMensajesProspectoService.mensajeFallaInternet,
@@ -68,11 +123,16 @@ class ActivitiesService extends ChangeNotifier{
         fontSize: 16.0
       );  
     }
-    
   }
 
   getActivitiesById(id) async {
     try{
+
+      if(id == 0){
+        var strMem = await storageAct.read(key: 'idMem') ?? '';
+
+        id = int.parse(strMem);
+      }
 
       List<MultiModel> lstMultiModel = [];
 
@@ -164,10 +224,6 @@ class ActivitiesService extends ChangeNotifier{
       
       return objActividades;
     }
-    catch(_){
-      //print('Test: $ex');
-    }
-    /*
     on SocketException catch (_) {
       Fluttertoast.showToast(
         msg: objMensajesProspectoService.mensajeFallaInternet,
@@ -179,7 +235,111 @@ class ActivitiesService extends ChangeNotifier{
         fontSize: 16.0
       );  
     }
-    */
+  }
+
+  getActivitiesByFecha(fecha) async {
+    try{
+
+      List<MultiModel> lstMultiModel = [];
+
+      lstMultiModel.add(
+        MultiModel(model: 'mail.activity')
+      );
+
+      final models = [
+        {
+          "model": EnvironmentsProd().modMailAct,
+          "filters": [
+            ["date_deadline","=",fecha],            
+            ["res_model_id","=",501]
+          ]
+        },
+      ];
+
+      var codImei = await storageProspecto.read(key: 'codImei') ?? '';
+
+      var objReg = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
+      var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+      var objLog = await storageProspecto.read(key: 'RespuestaLogin') ?? '';
+      var objLogDecode = json.decode(objLog);
+
+      ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
+        jsonrpc: EnvironmentsProd().jsonrpc,
+        params: ParamsMultiModels(
+          bearer: obj.result.bearer,
+          company: objLogDecode['result']['current_company'],
+          imei: codImei,
+          key: obj.result.key,
+          tocken: obj.result.tocken,
+          tockenValidDate: obj.result.tockenValidDate,
+          uid: objLogDecode['result']['uid'],
+          models: []
+        )
+      );
+
+      String ruta = '';
+      final objStr = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
+      
+      if(objStr.isNotEmpty)
+      {  
+        var obj = RegisterDeviceResponseModel.fromJson(objStr);
+        ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/data/multi/models';
+      }
+
+      String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
+
+      final requestBody = {
+        "jsonrpc": EnvironmentsProd().jsonrpc,
+        "params": {
+          "key": objReq.params.key,
+          "tocken": objReq.params.tocken,
+          "imei": objReq.params.imei,
+          "uid": objReq.params.uid,
+          "company": objReq.params.company,
+          "bearer": objReq.params.bearer,
+          "tocken_valid_date": tockenValidDate,
+          "models": models
+        }
+      };
+
+      final headers = {
+        "Content-Type": EnvironmentsProd().contentType//"application/json",
+      };
+
+      final response = await http.post(
+        Uri.parse(ruta),
+        headers: headers,
+        body: jsonEncode(requestBody), 
+      );
+      
+      //var rspValidacion = json.decode(response.body);
+
+    //print('Lst gen: ${response.body}');
+
+      var rsp = AppResponseModel.fromRawJson(response.body);
+
+
+      await storageCamp.write(key: 'cmbLstActividades', value: json.encode(rsp.result.data.mailActivity));
+
+
+      String cmbLstAct = await storageCamp.read(key: 'cmbLstActividades') ?? '';
+
+      ActivitiesResponseModel objActividades = ActivitiesResponseModel.fromRawJson(cmbLstAct);
+      
+      return objActividades;
+    }
+    on SocketException catch (_) {
+      Fluttertoast.showToast(
+        msg: objMensajesProspectoService.mensajeFallaInternet,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+      );  
+    }
   }
 
   getActivitiesByRangoFechas(fechas, resId) async {
@@ -198,17 +358,37 @@ class ActivitiesService extends ChangeNotifier{
         MultiModel(model: 'mail.activity')
       );
 
-      final models = [
-        {
+      var models = [];
+
+      try{
+        models = [
+          {
           "model": EnvironmentsProd().modMailAct,
           "filters": [            
-            ["date_deadline",">=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],
+            ["date_deadline",">=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],            
             ["date_deadline","<=",DateFormat('yyyy-MM-dd', 'es').format(fechas[1])],
             ["res_model_id", "=", 501],
+            if(resId > 0)
             ["res_id", "=", resId]
           ]
         },
       ];
+      }
+      catch(_)
+      {
+        models = [
+            {
+            "model": EnvironmentsProd().modMailAct,
+            "filters": [            
+              ["date_deadline","=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],            
+              ["res_model_id", "=", 501],
+              if(resId > 0)
+              ["res_id", "=", resId]
+            ]
+          },
+        ];
+      }
+        
 
       var codImei = await storageProspecto.read(key: 'codImei') ?? '';
 

@@ -1,3 +1,4 @@
+export 'package:cvs_ec_app/domain/models/activities_page_model.dart';
 
 export 'package:cvs_ec_app/domain/models/activities_response_model.dart';
 

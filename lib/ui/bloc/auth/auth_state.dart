@@ -13,6 +13,8 @@ abstract class AuthState extends Equatable {
 
       var rspReg = await storage.read(key: 'RespuestaRegistro') ?? '';
       var rspLog = await storage.read(key: 'RespuestaLogin') ?? '';
+      await storage.write(key: 'fecMem', value: '');
+      await storage.write(key: 'idMem', value: '');
 
       if(rspReg.isEmpty && rspLog.isEmpty){
         rspFinal = '';

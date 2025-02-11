@@ -344,13 +344,6 @@ class ActivitiesService extends ChangeNotifier{
 
   getActivitiesByRangoFechas(fechas, resId) async {
     try{
-      /*
-      var objReg = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
-      var obj = RegisterDeviceResponseModel.fromJson(objReg);
-
-      var objLog = await storageCamp.read(key: 'RespuestaLogin') ?? '';
-      var objLogDecode = json.decode(objLog);
-      */
 
       List<MultiModel> lstMultiModel = [];
 
@@ -358,37 +351,82 @@ class ActivitiesService extends ChangeNotifier{
         MultiModel(model: 'mail.activity')
       );
 
+      if(resId == 0){        
+        var idMem = await storageProspecto.read(key: 'idMem') ?? '';
+
+        if(idMem.isNotEmpty){
+          resId = int.parse(idMem);
+        }        
+      }
+
       var models = [];
 
-      try{
+      if(fechas == 'mem'){
+        var fecMem = await storageProspecto.read(key: 'fecMem') ?? '';
+
+        if(fecMem.isNotEmpty){
+          DateTime fecha = DateTime.parse(fecMem);
+          fechas = null;
+          fechas = [];
+          fechas.add(fecha);
+        } else {
+          fechas = null;
+        }
+      } else {
+        var fecMem = await storageProspecto.read(key: 'fecMem') ?? '';
+
+        if(fecMem.isNotEmpty){
+          DateTime fecha = DateTime.parse(fecMem);
+
+          fechas = null;
+          fechas = [];
+
+          fechas.add(fecha);
+        }
+      }
+
+      if(fechas == null){
         models = [
           {
-          "model": EnvironmentsProd().modMailAct,
-          "filters": [            
-            ["date_deadline",">=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],            
-            ["date_deadline","<=",DateFormat('yyyy-MM-dd', 'es').format(fechas[1])],
-            ["res_model_id", "=", 501],
-            if(resId > 0)
-            ["res_id", "=", resId]
-          ]
-        },
-      ];
-      }
-      catch(_)
-      {
-        models = [
-            {
             "model": EnvironmentsProd().modMailAct,
             "filters": [            
-              ["date_deadline","=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],            
+              ["date_deadline","=",DateFormat('yyyy-MM-dd', 'es').format(DateTime.now())],            
               ["res_model_id", "=", 501],
               if(resId > 0)
               ["res_id", "=", resId]
             ]
           },
         ];
-      }
-        
+      } else {
+        try{
+          models = [
+            {
+            "model": EnvironmentsProd().modMailAct,
+            "filters": [            
+              ["date_deadline",">=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],            
+              ["date_deadline","<=",DateFormat('yyyy-MM-dd', 'es').format(fechas[1])],
+              ["res_model_id", "=", 501],
+              if(resId > 0)
+              ["res_id", "=", resId]
+            ]
+          },
+        ];
+        }
+        catch(_)
+        {
+          models = [
+              {
+              "model": EnvironmentsProd().modMailAct,
+              "filters": [            
+                ["date_deadline","=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],            
+                ["res_model_id", "=", 501],
+                if(resId > 0)
+                ["res_id", "=", resId]
+              ]
+            },
+          ];
+        }
+      }  
 
       var codImei = await storageProspecto.read(key: 'codImei') ?? '';
 
@@ -447,23 +485,103 @@ class ActivitiesService extends ChangeNotifier{
         body: jsonEncode(requestBody), 
       );
       
-      //var rspValidacion = json.decode(response.body);
-
-    //print('Lst gen: ${response.body}');
-
       var rsp = AppResponseModel.fromRawJson(response.body);
 
-
-      await storageCamp.write(key: 'cmbLstActividades', value: json.encode(rsp.result.data.mailActivity));
-
-      String cmbLstAct = await storageCamp.read(key: 'cmbLstActividades') ?? '';
+      String cmbLstAct = json.encode(rsp.result.data.mailActivity);//await storageCamp.read(key: 'cmbLstActividades') ?? '';
 
       ActivitiesResponseModel objActividades = ActivitiesResponseModel.fromRawJson(cmbLstAct);
+
+      var lstProsp = await storageCamp.read(key: 'RespuestaProspectos') ?? '';
+
+      var objLogDecode2 = json.decode(lstProsp);      
+
+      CrmLeadAppModel apiResponse = CrmLeadAppModel.fromJson(objLogDecode2);
+
+      CrmLeadDatumAppModel? objFin;
       
-      return objActividades;
+      for(int i = 0; i < apiResponse.data.length; i++){
+        if(apiResponse.data[i].id == resId){
+          //prospectosFiltrados.add(apiResponse.data[i]);
+          objFin = apiResponse.data[i];
+        }
+      }
+
+      DatumCrmLead objDatumCrmLeadFin = DatumCrmLead(
+        activityIds: [],//objFin!.activityIds,
+        campaignId: CampaignId(
+          id: objFin?.campaignId.id ?? 0,
+          name: objFin?.campaignId.name ?? ''
+        ),
+        countryId: StructCombos(
+          id: objFin?.countryId.id ?? 0,
+          name: objFin?.countryId.name ?? ''
+        ),
+        dayClose: 0,//objFin.dateClose,
+        emailFrom: objFin?.emailFrom ?? '',
+        expectedRevenue: objFin?.expectedRevenue ?? 0,
+        id: objFin?.id ?? 0,
+        lostReasonId: CampaignId(
+          id: objFin?.lostReasonId.id ?? 0,
+          name: objFin?.lostReasonId.name ?? ''
+        ),
+        mediumId: StructCombos(
+          id: objFin?.mediumId.id ?? 0,
+          name: objFin?.mediumId.name ?? ''
+        ),
+        name: objFin?.name ?? '',
+        partnerId: StructCombos(
+          id: objFin?.partnerId.id ?? 0,
+          name: objFin?.partnerId.name ?? ''
+        ),
+        priority: objFin?.priority ?? '',
+        sourceId: StructCombos(
+          id: objFin?.sourceId.id ?? 0,
+          name: objFin?.sourceId.name ?? ''
+        ),
+        stageId: StructCombos(
+          id: objFin?.stageId.id ?? 0,
+          name: objFin?.stageId.name ?? ''
+        ),
+        stateId: StructCombos(
+          id: objFin?.stateId.id ?? 0,
+          name: objFin?.stateId.name ?? ''
+        ),
+        tagIds: objFin?.tagIds ?? [],
+        title: CampaignId(
+          id: objFin?.title.id ?? 0,
+          name: objFin?.title.name ?? ''
+        ),
+        type: objFin?.type ?? '',
+        //city: objFin!.cit
+        contactName: objFin?.contactName,
+        dateClose: objFin?.dateClose,
+        dateDeadline: objFin?.dateDeadline,
+        dateOpen: objFin?.dateOpen,
+        description: objFin?.description,
+        //emailCc: objFin!.em
+        mobile: '',
+        city: '',
+        emailCc: '',
+        partnerName: objFin?.partnerId.name ?? '',
+        phone: objFin?.phone,
+        probability: objFin?.probability,
+        referred: objFin?.referred,
+        street: objFin?.street,
+        userId: StructCombos(
+          id: objFin?.userId.id ?? 0,
+          name: objFin?.userId.name ?? ''
+        ),
+      );
+
+      ActivitiesPageModel objRspFinal = ActivitiesPageModel(
+        activities: objActividades,
+        lead: objDatumCrmLeadFin
+      );
+      
+      return objRspFinal;
     }
-    catch(_){
-      //print('Test: $ex');
+    catch(ex){
+     print('Test: $ex');
     }
   }
 

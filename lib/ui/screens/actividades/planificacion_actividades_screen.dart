@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
+//import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 //import 'package:calendar_date_picker2/calendar_date_picker2.dart';
@@ -12,10 +12,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+List<DatumActivitiesResponse> actividadesFilAgendaPlan = [];
 List<String> lstActividades = [];
 int idProspecto = 0;
 Timer? _timer;
-int _segundos = 0; // Tiempo en segundos
+int _segundos = 0;
 bool _corriendo = false;
 
 String terminoBusquedaAct = '';
@@ -23,7 +24,7 @@ bool actualizaListaAct= false;
 
 DateTime selectedDayGenPlanAct = DateTime.now();
 DateTime focusedDayGenPlanAct = DateTime.now();
-//List<DateTime> _dates = [];
+//List<DateTime> listaFechas = [];
 int contLst = 0;
 //import 'package:one_clock/one_clock.dart';
 String actPlanSelect = '';
@@ -59,6 +60,7 @@ class PlanActState extends State<PlanificacionActividades> {
     lstActividades = [];
     _segundos = 0;
     _corriendo = false;
+    actividadesFilAgendaPlan = [];
   }
 
   @override
@@ -70,7 +72,7 @@ class PlanActState extends State<PlanificacionActividades> {
     return BlocBuilder<GenericBloc, GenericState>(
         builder: (context,state) {
         return FutureBuilder(
-          future: state.readCombosGen(),
+          future: ActivitiesService().getActivitiesByRangoFechas( null, objDatumCrmLead?.id ?? 0),
           builder: (context, snapshot) {
 
             if(!snapshot.hasData) {
@@ -85,6 +87,14 @@ class PlanActState extends State<PlanificacionActividades> {
                 ),
               );
             }
+
+            ActivitiesPageModel rspAct = snapshot.data as ActivitiesPageModel;
+
+            actividadesFilAgendaPlan = rspAct.activities.data;
+            lstActividades = [];
+            objDatumCrmLead = rspAct.lead;
+
+            /*
 
             String rspCombos = snapshot.data as String;
 
@@ -102,12 +112,19 @@ class PlanActState extends State<PlanificacionActividades> {
             var objAct3 = objAct['data'];
 
             List<Map<String, dynamic>> mappedObjAct3 = List<Map<String, dynamic>>.from(objAct3);
+            */
 
-            lstActividades = mappedObjAct3
+            for(int i = 0; i < actividadesFilAgendaPlan.length; i++){
+              lstActividades.add(actividadesFilAgendaPlan[i].activityTypeId.name);
+            }
+
+            /*
+            mappedObjAct3
             .map((item) => item["activity_type_id"]["name"]?.toString() ?? '')
             .toList();
+            */
 
-            if(actPlanSelect.isEmpty){
+            if(actPlanSelect.isEmpty && lstActividades.isNotEmpty){
               actPlanSelect = lstActividades.first;
             }
 
@@ -127,8 +144,6 @@ class PlanActState extends State<PlanificacionActividades> {
                 actions: [
                   GestureDetector(
                       onTap: () {
-                        //context.push(objRutasGen.rutaAgenda);
-            
                         showModalBottomSheet(
                             shape: RoundedRectangleBorder(
                               borderRadius:
@@ -353,12 +368,14 @@ class PlanActState extends State<PlanificacionActividades> {
                                                     }
 
                                                     int activityTypeIdFrm = 0;
+                                                    /*
 
                                                     for (var elemento in mappedObjAct3) {
                                                       if (elemento['name'] == campSelect) {
                                                         activityTypeIdFrm = elemento['id'];
                                                       }
                                                     }
+                                                    */
 
                                                     if(activityTypeIdFrm == 0){
                                                       showDialog(
@@ -696,6 +713,7 @@ class PlanActState extends State<PlanificacionActividades> {
                 ),
               ),
             );
+          
           }
         );
       }
@@ -941,17 +959,17 @@ class PlanActStateTwo extends State<PlanAct> {
                                     color: Colors.indigo, // Color similar al de la imagen
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
-                                  child: const Row(
+                                  child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Icon(Icons.exit_to_app, color: Colors.white),
-                                      SizedBox(width: 8.0),
-                                      Text(
+                                      const Icon(Icons.exit_to_app, color: Colors.white),
+                                      SizedBox(width: size.width * 0.01),
+                                      const Text(
                                         "Llegada",
                                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(width: 8.0),
-                                      Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+                                      SizedBox(width: size.width * 0.155),
+                                      const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
                                     ],
                                   ),
                                 ),
@@ -969,7 +987,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                           children: [
                                             Text(
                                               'Desea registrar la salida y cerrar la'
-                                              ' visita del cliente',
+                                              ' visita de este cliente?',
                                             ),
                                           ],
                                         ),
@@ -1013,17 +1031,17 @@ class PlanActStateTwo extends State<PlanAct> {
                                     color: Colors.indigo, // Color similar al de la imagen
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
-                                  child: const Row(
+                                  child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Icon(Icons.exit_to_app, color: Colors.white),
-                                      SizedBox(width: 8.0),
-                                      Text(
+                                      const Icon(Icons.exit_to_app, color: Colors.white),
+                                      SizedBox(width: size.width * 0.01),
+                                      const Text(
                                         "Salida",
                                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(width: 8.0),
-                                      Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+                                      SizedBox(width: size.width * 0.175),
+                                      const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
                                     ],
                                   ),
                                 ),

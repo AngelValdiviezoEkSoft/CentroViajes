@@ -41,6 +41,8 @@ class AgendaScreenState extends State<AgendaScreen>  {
     actividadesFilAgenda = [];
     contLstAgenda = 0;
     isSelected = [false,true ];
+    selectedDayGen = DateTime.now();
+    focusedDayGen = DateTime.now();
   }
 
   @override

@@ -21,6 +21,7 @@ class Rutas{
   String rutaEditProsp = '/editProsp';
   String rutaMap = '/mapas';
   String rutaOnBoarding = '/onBoarding';
+  String rutaInformative = '/informative';
 
   //imágenes 
   String rutaImagenes = 'assets/images/';

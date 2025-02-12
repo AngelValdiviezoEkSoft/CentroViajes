@@ -11,6 +11,10 @@ final objRutas = Rutas();
 final GoRouter appRouter = GoRouter(
   routes: [//
     GoRoute(
+      path: objRutas.rutaInformative,
+      builder: (context, state) => const InformativeScreen(null),      
+    ),
+    GoRoute(
       path: objRutas.rutaDefault,
       builder: (context, state) => BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {

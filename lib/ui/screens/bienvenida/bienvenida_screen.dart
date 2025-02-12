@@ -278,8 +278,8 @@ class Welcome2Screen extends StatelessWidget {
     
           Position position = await getLocation();
     
-          //imeiCod = '82345604002'; //BORRAR LUEGO - PARA CELULAR
-          //imeiCod = '82345604000001'; //BORRAR LUEGO - PARA CELULAR PRUEBAS
+          imeiCod = '82345604003'; //BORRAR LUEGO - PARA CELULAR
+          //imeiCod = '82345604000002Luis'; //BORRAR LUEGO - PARA CELULAR PRUEBAS
           //imeiCod = '82345604113'; //BORRAR LUEGO - PARA EMULADOR
     
           RegisterMobileRequestModel objRegisterMobileRequestModel = RegisterMobileRequestModel(

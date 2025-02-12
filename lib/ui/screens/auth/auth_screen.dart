@@ -445,6 +445,29 @@ class LoginScreen extends StatelessWidget {
               ),
             
               SizedBox(height: size.height * 0.05),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 115.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    context.push(Rutas().rutaInformative);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple[200],
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  child: const Text(
+                    'Información',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+
+            SizedBox(height: AppSpacing.space01()),
             ],
           ),
         ),
@@ -635,35 +658,9 @@ class _LoginFormState extends State<_LoginForm> {
                             ),
                           ),
                           SizedBox(height: AppSpacing.space03()),
+                          
                           GestureDetector(
                               onTap: () async {
-                                /*
-                                if (authService.isValidForm()) {
-                                  LoginModel loginModel = LoginModel(
-                                      username: authService.email,
-                                      password: base64.encode(
-                                          utf8.encode(authService.passWord)));
-                                  performLogin(context, loginModel);
-                                  Preferences.maiEemail = authService.email;
-                                } else {
-                                  // ignore: use_build_context_synchronously
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return DialogPlux(
-                                        title: AppLocalizations.of(context)!
-                                            .advertencia,
-                                        message: AppLocalizations.of(context)!
-                                            .asegureseCompeltarCampos,
-                                        numMessageLines: 3,
-                                        onPressedPrimaryButton: () {
-                                          Navigator.pop(context);
-                                        },
-                                      );
-                                    },
-                                  );
-                                }
-                                */
                                 context.push(Rutas().rutaHome);
                               },
                               child: ButtonCvsWidget(
@@ -674,6 +671,7 @@ class _LoginFormState extends State<_LoginForm> {
                                     color: AppLightColors().white),
                               )),
                           SizedBox(height: AppSpacing.space01()),
+
                           Column(
                             children: [
                               SizedBox(

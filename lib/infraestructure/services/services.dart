@@ -1,3 +1,4 @@
+export 'package:cvs_ec_app/infraestructure/services/informative_service.dart';
 
 export 'package:cvs_ec_app/infraestructure/services/direcciones_service.dart';
 

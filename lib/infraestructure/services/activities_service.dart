@@ -426,7 +426,7 @@ class ActivitiesService extends ChangeNotifier{
             },
           ];
         }
-      }  
+      }
 
       var codImei = await storageProspecto.read(key: 'codImei') ?? '';
 
@@ -486,6 +486,8 @@ class ActivitiesService extends ChangeNotifier{
       );
       
       var rsp = AppResponseModel.fromRawJson(response.body);
+
+      print('Test: ${response.body}');
 
       String cmbLstAct = json.encode(rsp.result.data.mailActivity);//await storageCamp.read(key: 'cmbLstActividades') ?? '';
 
@@ -647,7 +649,8 @@ class ActivitiesService extends ChangeNotifier{
               "user_id": objActividad.userId,
               "res_id": objActividad.resId,
               "summary": objActividad.note,
-              "note": objActividad.note
+              "note": objActividad.note,
+              //"working_time": objActividad.workingTime,
             },
           }
         };
@@ -802,7 +805,8 @@ class ActivitiesService extends ChangeNotifier{
               "res_id": objActividad.resId,
               "summary": objActividad.note,
               "note": objActividad.note,
-              "id": objActividad.actId
+              "id": objActividad.actId,
+              "working_time": objActividad.workingTime,
             },
           }
         };

@@ -39,12 +39,12 @@ class AuthScreen extends StatelessWidget {
             width: size.width,//double.infinity,
             height: size.height * 0.98,//* 1.3
             decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.purple.shade100, Colors.purple.shade300],
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.purple.shade100, Colors.purple.shade300],
+              ),
             ),
-          ),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -77,12 +77,12 @@ class LoginScreen extends StatelessWidget {
         width: size.width,//double.infinity,
         height: size.height * 0.98,//* 1.3
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-              end: Alignment.topRight,   // Inicia desde la parte superior derecha
-              begin: Alignment.bottomLeft,
-              colors: [Colors.blue.shade600, Colors.blue.shade600, Colors.white, Colors.white],
-            ),
+          gradient: LinearGradient(
+            end: Alignment.topRight,   // Inicia desde la parte superior derecha
+            begin: Alignment.bottomLeft,
+            colors: [Colors.blue.shade600, Colors.blue.shade600, Colors.white, Colors.white],
           ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -445,7 +445,7 @@ class LoginScreen extends StatelessWidget {
               ),
             
               SizedBox(height: size.height * 0.05),
-
+/*
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 115.0),
                 child: ElevatedButton(
@@ -468,6 +468,7 @@ class LoginScreen extends StatelessWidget {
               ),
 
             SizedBox(height: AppSpacing.space01()),
+            */
             ],
           ),
         ),

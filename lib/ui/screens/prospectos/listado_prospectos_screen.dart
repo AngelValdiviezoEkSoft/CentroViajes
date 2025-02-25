@@ -328,7 +328,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                   refreshDataByFiltro('', objRsp);
                   
                   listaVaciaPrp = false;
-                  //pagingController.appendPage(prospectosFiltrados, 1);
+                  
                 } else {
                   listaVaciaPrp = true;
                 }
@@ -436,7 +436,8 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                                           terminoBusqueda = '';
                                           filtroPrspTxt = TextEditingController();
 
-                                          context.push(Rutas().rutaPlanificacionActividades);
+                                          //context.push(Rutas().rutaPlanificacionActividades);
+                                          context.push(Rutas().rutaPlanActivConActiv);
                                         },
                                         backgroundColor: objColorsApp.celeste,
                                         foregroundColor: Colors.white,

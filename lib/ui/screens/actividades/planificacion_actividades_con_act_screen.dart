@@ -12,64 +12,59 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-bool muestraTextoParaHoy = false;
-List<MailActivityTypeDatumAppModel> actividadesFilAgendaPlan = [];
-List<String> lstActividades = [];
-int idProspecto = 0;
-Timer? _timer;
-int _segundos = 0;
-bool _corriendo = false;
+int activitySelected = 0;
+List<MailActivityTypeDatumAppModel> actividadesFilAgendaPlanAct = [];
+List<String> lstActividadesAct = [];
+int idProspectoAct = 0;
+Timer? _timerAct;
+int _segundosAct = 0;
+bool _corriendoAct = false;
 
-String terminoBusquedaAct = '';
-bool actualizaListaAct= false;
-
-DateTime selectedDayGenPlanAct = DateTime.now();
-DateTime focusedDayGenPlanAct = DateTime.now();
-//List<DateTime> listaFechas = [];
-int contLst = 0;
+String terminoBusquedaActiv = '';
+bool actualizaListaActiv= false;
+int contLstActiv = 0;
 //import 'package:one_clock/one_clock.dart';
-String actPlanSelect = '';
+String actPlanSelectAct = '';
 
-late TextEditingController fechaActividadContTxt;
-late TextEditingController descripcionActTxt;
+late TextEditingController fechaActividadContTxtAct;
+late TextEditingController descripcionActTxtAct;
 
-int tabAcciones = 0;
-late TextEditingController notasActTxt;
+int tabAccionesAct = 0;
+late TextEditingController notasActTxtAct;
 
-List<DatumActivitiesResponse> actividadesFiltradas = [];
+List<DatumActivitiesResponse> actividadesFiltradasAct = [];
 
-class PlanificacionActividades extends StatefulWidget {
-  const PlanificacionActividades(Key? key) : super (key: key);
+class PlanificacionActividadesConActividadScreen extends StatefulWidget {
+  const PlanificacionActividadesConActividadScreen(Key? key) : super (key: key);
   @override
-  State<PlanificacionActividades> createState() => PlanActState();
+  State<PlanificacionActividadesConActividadScreen> createState() => PlanActivState();
 }
 
-class PlanActState extends State<PlanificacionActividades> {
+class PlanActivState extends State<PlanificacionActividadesConActividadScreen> {
 
   @override
   void initState() {
     super.initState();
 
-    muestraTextoParaHoy = false;
-    contLst = 0;
-    notasActTxt = TextEditingController();
-    fechaActividadContTxt = TextEditingController();
-    descripcionActTxt = TextEditingController();
-    terminoBusquedaAct = '';
-    actualizaListaAct= false;
-    actividadesFiltradas = [];
-    idProspecto = 0;
-    lstActividades = [];
-    _segundos = 0;
-    _corriendo = false;
-    actividadesFilAgendaPlan = [];
+    contLstActiv = 0;
+    notasActTxtAct = TextEditingController();
+    fechaActividadContTxtAct = TextEditingController();
+    descripcionActTxtAct = TextEditingController();
+    terminoBusquedaActiv = '';
+    actualizaListaActiv= false;
+    actividadesFiltradasAct = [];
+    idProspectoAct = 0;
+    lstActividadesAct = [];
+    _segundosAct = 0;
+    _corriendoAct = false;
+    actividadesFilAgendaPlanAct = [];
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final planAct = BlocProvider.of<GenericBloc>(context);
+    final planActiv = BlocProvider.of<GenericBloc>(context);
 
     return BlocBuilder<GenericBloc, GenericState>(
         builder: (context,state) {
@@ -92,9 +87,9 @@ class PlanActState extends State<PlanificacionActividades> {
 
             ActivitiesPageModel rspAct = snapshot.data as ActivitiesPageModel;
 
-            //actividadesFilAgendaPlan = rspAct.activities.data;
-            actividadesFilAgendaPlan = rspAct.objMailAct.data;
-            lstActividades = [];
+            //actividadesFilAgendaPlanAct = rspAct.activities.data;
+            actividadesFilAgendaPlanAct = rspAct.objMailAct.data;
+            lstActividadesAct = [];
             objDatumCrmLead = rspAct.lead;
 
             /*
@@ -107,18 +102,18 @@ class PlanActState extends State<PlanificacionActividades> {
               medias: '',//rspCombos.split('---')[2],
               actividades: '',//rspCombos.split('---')[3],
               paises: '',//rspCombos.split('---')[4],
-              lstActividades: rspCombos.split('---')[5],
+              lstActividadesAct: rspCombos.split('---')[5],
             );
 
-            var objAct = json.decode(objTmp.lstActividades);
+            var objAct = json.decode(objTmp.lstActividadesAct);
 
             var objAct3 = objAct['data'];
 
             List<Map<String, dynamic>> mappedObjAct3 = List<Map<String, dynamic>>.from(objAct3);
             */
 
-            for(int i = 0; i < actividadesFilAgendaPlan.length; i++){
-              lstActividades.add(actividadesFilAgendaPlan[i].name ?? '');
+            for(int i = 0; i < actividadesFilAgendaPlanAct.length; i++){
+              lstActividadesAct.add(actividadesFilAgendaPlanAct[i].name ?? '');
             }
 
             /*
@@ -127,13 +122,8 @@ class PlanActState extends State<PlanificacionActividades> {
             .toList();
             */
 
-            if(actPlanSelect.isEmpty && lstActividades.isNotEmpty){
-              actPlanSelect = lstActividades.first;
-            }
-            //if()
-
-            if(objActividadEscogida != null && DateFormat('yyyy-MM-dd', 'es').format(objActividadEscogida!.dateDeadline) == DateFormat('yyyy-MM-dd', 'es').format(DateTime.now())){
-              muestraTextoParaHoy = true;
+            if(actPlanSelectAct.isEmpty && lstActividadesAct.isNotEmpty){
+              actPlanSelectAct = lstActividadesAct.first;
             }
 
             return Scaffold(
@@ -237,7 +227,7 @@ class PlanActState extends State<PlanificacionActividades> {
                                                   labelText: 'Seleccione el tipo de actividad...',
                                                 ),
                                                 //value: campSelect,
-                                                items: lstActividades.map((activityPrsp) =>
+                                                items: lstActividadesAct.map((activityPrsp) =>
                                                   DropdownMenuItem(
                                                       value: activityPrsp,
                                                       child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),                                              
@@ -253,7 +243,7 @@ class PlanActState extends State<PlanificacionActividades> {
                                             ),
                                             const SizedBox(height: 16),
                                             TextFormField(
-                                              controller: fechaActividadContTxt,
+                                              controller: fechaActividadContTxtAct,
                                               readOnly: true,
                                               decoration: const InputDecoration(
                                                 labelText: 'Seleccione la fecha...',
@@ -269,28 +259,28 @@ class PlanActState extends State<PlanificacionActividades> {
                                                   lastDate: DateTime(2100),
                                                 );
                                                 if (pickedDate != null) {
-                                                  fechaActividadContTxt.text = DateFormat('yyyy-MM-dd', 'es').format(pickedDate);                                                        
+                                                  fechaActividadContTxtAct.text = DateFormat('yyyy-MM-dd', 'es').format(pickedDate);                                                        
                                                 }
                                               },
                                             ),
                                             const SizedBox(height: 16),
                                             TextFormField(
-                                              controller: descripcionActTxt,
+                                              controller: descripcionActTxtAct,
                                               onChanged: (value) {
-                                                planAct.setHeightModalPlanAct(
+                                                planActiv.setHeightModalPlanAct(
                                                     0.92);
                                               },
                                               onTap: () {
-                                                planAct.setHeightModalPlanAct(
+                                                planActiv.setHeightModalPlanAct(
                                                     0.92);
                                               },
                                               onEditingComplete: () {
-                                                planAct.setHeightModalPlanAct(
+                                                planActiv.setHeightModalPlanAct(
                                                     0.65);
                                                 FocusScope.of(context).unfocus();
                                               },
                                               onTapOutside: (event) {
-                                                planAct.setHeightModalPlanAct(
+                                                planActiv.setHeightModalPlanAct(
                                                     0.65);
                                                 FocusScope.of(context).unfocus();
                                               },
@@ -327,7 +317,7 @@ class PlanActState extends State<PlanificacionActividades> {
                                                 ElevatedButton(
                                                   onPressed: () async {
 
-                                                    if(fechaActividadContTxt.text.isEmpty){
+                                                    if(fechaActividadContTxtAct.text.isEmpty){
                                                       showDialog(
                                                         barrierDismissible: false,
                                                         context: context,
@@ -351,7 +341,7 @@ class PlanActState extends State<PlanificacionActividades> {
                                                       return;
                                                     }
 
-                                                    if(descripcionActTxt.text.isEmpty){
+                                                    if(descripcionActTxtAct.text.isEmpty){
                                                       showDialog(
                                                         barrierDismissible: false,
                                                         context: context,
@@ -403,15 +393,15 @@ class PlanActState extends State<PlanificacionActividades> {
                                                       return;
                                                     }
 
-                                                    double tiempo = double.parse(_segundos.toString());
+                                                    double tiempo = double.parse(_segundosAct.toString());
                                                     
                                                     ActivitiesTypeRequestModel objReqst = ActivitiesTypeRequestModel(
                                                       active: true,
-                                                      createDate: DateTime.parse(fechaActividadContTxt.text),
+                                                      createDate: DateTime.parse(fechaActividadContTxtAct.text),
                                                       createUid: 0,
                                                       displayName: objDatumCrmLead?.contactName ?? '',
                                                       previousActivityTypeId: 0,
-                                                      note: descripcionActTxt.text,
+                                                      note: descripcionActTxtAct.text,
                                                       activityTypeId: activityTypeIdFrm,
                                                       dateDeadline: objDatumCrmLead?.dateDeadline ?? DateTime.now(),
                                                       userId: objDatumCrmLead?.userId!.id ?? 0,
@@ -619,27 +609,27 @@ class PlanActState extends State<PlanificacionActividades> {
                             children: [
                               Expanded(
                                 child: Container(
-                                  color: tabAcciones == 0
+                                  color: tabAccionesAct == 0
                                       ? Colors.white
                                       : Colors.blue.shade800,
                                   child: Center(
                                     child: TextButton(
                                       onPressed: () {
-                                        tabAcciones = 0;
+                                        tabAccionesAct = 0;
                                         setState(() {});
                                       },
                                       child: Column(
                                         children: [
                                           Icon(
                                             Icons.info_outline,
-                                            color: tabAcciones == 0
+                                            color: tabAccionesAct == 0
                                                 ? Colors.blue.shade800
                                                 : Colors.white,
                                           ),
                                           Text(
                                             'Acciones',
                                             style: TextStyle(
-                                              color: tabAcciones == 0
+                                              color: tabAccionesAct == 0
                                                   ? Colors.blue.shade800
                                                   : Colors.white,
                                               fontWeight: FontWeight.bold,
@@ -653,20 +643,20 @@ class PlanActState extends State<PlanificacionActividades> {
                               ),
                               Expanded(
                                 child: Container(
-                                  color: tabAcciones == 1
+                                  color: tabAccionesAct == 1
                                       ? Colors.white
                                       : Colors.blue.shade800,
                                   child: Center(
                                     child: TextButton(
                                       onPressed: () {
-                                        tabAcciones = 1;
+                                        tabAccionesAct = 1;
                                         setState(() {});
                                       },
                                       child: Column(
                                         children: [
                                           Icon(
                                             Icons.grid_on_outlined,
-                                            color: tabAcciones == 1
+                                            color: tabAccionesAct == 1
                                                 ? Colors.blue.shade800
                                                 : Colors.white,
                                           ),
@@ -674,7 +664,7 @@ class PlanActState extends State<PlanificacionActividades> {
                                             'Detalles',
                                             style: TextStyle(
                                               //color: Colors.purple.shade700,
-                                              color: tabAcciones == 1
+                                              color: tabAccionesAct == 1
                                                   ? Colors.blue.shade800
                                                   : Colors.white,
                                               fontWeight: FontWeight.bold,
@@ -691,29 +681,29 @@ class PlanActState extends State<PlanificacionActividades> {
                         ],
                       ),
                     ),
-                    if (tabAcciones == 0) const PlanAct(null),
-                    if (tabAcciones == 1)
+                    if (tabAccionesAct == 0) const PlanActiv(null),
+                    if (tabAccionesAct == 1)
                       // Información General
                       sectionTitle(Icons.info, "Información General"),
-                    if (tabAcciones == 1) infoRow("Razón Social", "Randy Rudolph"),
-                    if (tabAcciones == 1)
-                      infoRow("Nombre Comercial", "[partner -> business_name]"),
-                    if (tabAcciones == 1) infoRow("Clasificación", "Randy Rudolph"),
-                    if (tabAcciones == 1) infoRow("Canal", "Randy Rudolph"),
-                    if (tabAcciones == 1) infoRow("Dirección", objDatumCrmLead?.street ?? '-----'),
-                    if (tabAcciones == 1)
+                    if (tabAccionesAct == 1) infoRowAct("Razón Social", "Randy Rudolph"),
+                    if (tabAccionesAct == 1)
+                      infoRowAct("Nombre Comercial", "[partner -> business_name]"),
+                    if (tabAccionesAct == 1) infoRowAct("Clasificación", "Randy Rudolph"),
+                    if (tabAccionesAct == 1) infoRowAct("Canal", "Randy Rudolph"),
+                    if (tabAccionesAct == 1) infoRowAct("Dirección", objDatumCrmLead?.street ?? '-----'),
+                    if (tabAccionesAct == 1)
                       // Territorio
-                      sectionTitle(Icons.place, "Territorio"),
-                    if (tabAcciones == 1) infoRow("Estado", objDatumCrmLead?.stageId.name ?? '-----'),
-                    if (tabAcciones == 1) infoRow("Ciudad", "Guayaquil"),
-                    if (tabAcciones == 1) infoRow("Cantón", "Tarquí"),
-                    if (tabAcciones == 1) infoRow("Región", "Costa"),
-                    if (tabAcciones == 1) infoRow("Lugar", "Norte"),
-                    if (tabAcciones == 1)
+                      sectionTitleAct(Icons.place, "Territorio"),
+                    if (tabAccionesAct == 1) infoRowAct("Estado", objDatumCrmLead?.stageId.name ?? '-----'),
+                    if (tabAccionesAct == 1) infoRowAct("Ciudad", "Guayaquil"),
+                    if (tabAccionesAct == 1) infoRowAct("Cantón", "Tarquí"),
+                    if (tabAccionesAct == 1) infoRowAct("Región", "Costa"),
+                    if (tabAccionesAct == 1) infoRowAct("Lugar", "Norte"),
+                    if (tabAccionesAct == 1)
                       // Precios y Ventas
-                      sectionTitle(Icons.monetization_on, "Precios y Ventas"),
-                    if (tabAcciones == 1) infoRow("Ingreso esperado", "\$${objDatumCrmLead?.expectedRevenue}"),
-                    if (tabAcciones == 1) infoRow("Probabilidad", "${objDatumCrmLead?.probability}%"),
+                      sectionTitleAct(Icons.monetization_on, "Precios y Ventas"),
+                    if (tabAccionesAct == 1) infoRowAct("Ingreso esperado", "\$${objDatumCrmLead?.expectedRevenue}"),
+                    if (tabAccionesAct == 1) infoRowAct("Probabilidad", "${objDatumCrmLead?.probability}%"),
                   ],
                 ),
               ),
@@ -726,7 +716,7 @@ class PlanActState extends State<PlanificacionActividades> {
   }
 }
 
-Widget sectionTitle(IconData icon, String title) {
+Widget sectionTitleAct(IconData icon, String title) {
   return Container(
     padding: const EdgeInsets.all(10.0),
     color: Colors.blue.shade900,
@@ -748,7 +738,7 @@ Widget sectionTitle(IconData icon, String title) {
   );
 }
 
-Widget infoRow(String label, String value) {
+Widget infoRowAct(String label, String value) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
     child: Row(
@@ -764,39 +754,39 @@ Widget infoRow(String label, String value) {
   );
 }
 
-class PlanAct extends StatefulWidget {
+class PlanActiv extends StatefulWidget {
 
-  const PlanAct(Key? key) : super(key: key);
+  const PlanActiv(Key? key) : super(key: key);
 
   @override
-  PlanActStateTwo createState() => PlanActStateTwo();
+  PlanActivStateTwo createState() => PlanActivStateTwo();
 }
 
-class PlanActStateTwo extends State<PlanAct> {
+class PlanActivStateTwo extends State<PlanActiv> {
 
   void iniciarCronometro() {
-    if (!_corriendo) {
-      _corriendo = true;
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    if (!_corriendoAct) {
+      _corriendoAct = true;
+      _timerAct = Timer.periodic(const Duration(seconds: 1), (timer) {
         setState(() {
-          _segundos++;
+          _segundosAct++;
         });
       });
     }
   }
 
   void detenerCronometro() {
-    if (_corriendo) {
-      _timer?.cancel();
-      _corriendo = false;
+    if (_corriendoAct) {
+      _timerAct?.cancel();
+      _corriendoAct = false;
     }
   }
 
   void reiniciarCronometro() {
-    _timer?.cancel();
+    _timerAct?.cancel();
     setState(() {
-      _segundos = 0;
-      _corriendo = false;
+      _segundosAct = 0;
+      _corriendoAct = false;
     });
   }
 
@@ -816,7 +806,7 @@ class PlanActStateTwo extends State<PlanAct> {
       builder: (context,state) {
         
         return FutureBuilder(
-          future: ActivitiesService().getActivitiesById(objDatumCrmLead?.id ?? idProspecto),
+          future: ActivitiesService().getActivitiesById(objDatumCrmLead?.id ?? idProspectoAct),
           builder: (context, snapshot) {
 
             if(!snapshot.hasData) {
@@ -836,33 +826,33 @@ class PlanActStateTwo extends State<PlanAct> {
 
               ActivitiesResponseModel rspAct = snapshot.data as ActivitiesResponseModel;
 
-              if(!actualizaListaAct)
+              if(!actualizaListaActiv)
               {
-                contLst = rspAct.length;
-                actividadesFiltradas = rspAct.data;
+                contLstActiv = rspAct.length;
+                actividadesFiltradasAct = rspAct.data;
               }
 
               Future<void> refreshDataByFiltro(String filtro) async {            
-                actividadesFiltradas = [];
+                actividadesFiltradasAct = [];
 
                 //CrmLead apiResponse = CrmLead.fromJson(objMemoria);
 
-                if(terminoBusquedaAct.isNotEmpty){
+                if(terminoBusquedaActiv.isNotEmpty){
                   
-                  actividadesFiltradas = rspAct.data
+                  actividadesFiltradasAct = rspAct.data
                   .where(
-                    (producto) => producto.activityTypeId.name.toLowerCase().contains(terminoBusquedaAct.toLowerCase()))
+                    (producto) => producto.activityTypeId.name.toLowerCase().contains(terminoBusquedaActiv.toLowerCase()))
                   .toList();
 
-                  contLst = 0;
+                  contLstActiv = 0;
 
-                  contLst = actividadesFiltradas.length;
+                  contLstActiv = actividadesFiltradasAct.length;
                 } else{
-                  actividadesFiltradas = rspAct.data;
-                  actualizaListaAct = false;
+                  actividadesFiltradasAct = rspAct.data;
+                  actualizaListaActiv = false;
                 }            
 
-                if(terminoBusquedaAct.isNotEmpty && actualizaListaAct) {
+                if(terminoBusquedaActiv.isNotEmpty && actualizaListaActiv) {
                   setState(() {});
                 }
 
@@ -907,19 +897,18 @@ class PlanActStateTwo extends State<PlanAct> {
 
                               ActivitiesResponseModel objRsp = await ActivitiesService().getActivitiesByRangoFechas(dates, objDatumCrmLead?.id ?? 0);
 
-                              actividadesFiltradas = [];
-                              actividadesFiltradas = objRsp.data;
+                              actividadesFiltradasAct = [];
+                              actividadesFiltradasAct = objRsp.data;
 
                               setState(() {
                                 rspAct = objRsp;
-                                actualizaListaAct = true;
-                                contLst = actividadesFiltradas.length;
+                                actualizaListaActiv = true;
+                                contLstActiv = actividadesFiltradasAct.length;
                               });
                             }
                           )                          
                         ),
                         */
-
 /*
                         Container(
                           color: Colors.transparent,
@@ -931,8 +920,8 @@ class PlanActStateTwo extends State<PlanAct> {
                               labelText: 'Agendado para hoy',
                               labelStyle: TextStyle(color: Color(0xFF5DC38C))
                             ),
-                            value: actPlanSelect,
-                            items: lstActividades.map((activityPrsp) =>
+                            value: actPlanSelectAct,
+                            items: lstActividadesAct.map((activityPrsp) =>
                               DropdownMenuItem(
                                 value: activityPrsp,
                                 child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),                          
@@ -940,20 +929,12 @@ class PlanActStateTwo extends State<PlanAct> {
                             ).toList(),
                             onChanged: (String? newValue) {                        
                               setState(() {
-                                actPlanSelect = newValue ?? '';
+                                actPlanSelectAct = newValue ?? '';
                               });
                             },
                           ),
                         ),
-*/
-
-                        if(muestraTextoParaHoy)
-                        Container(
-                          width: size.width * 0.95,
-                          height: size.height * 0.07,
-                          color: Colors.transparent,
-                          child: const Text('Agendado para hoy', style: TextStyle(color: Colors.green, fontSize: 25, fontWeight: FontWeight.bold),),
-                        ),
+                        */
 
                         Container(
                           width: size.width * 0.95,
@@ -1023,9 +1004,9 @@ class PlanActStateTwo extends State<PlanAct> {
 
                                               int idACt = 0;
 
-                                              for(int i = 0; i < actividadesFilAgendaPlan.length; i++){
-                                                if(actPlanSelect == actividadesFilAgendaPlan[i].name){
-                                                  idACt = actividadesFilAgendaPlan[i].id ?? 0;
+                                              for(int i = 0; i < actividadesFilAgendaPlanAct.length; i++){
+                                                if(actPlanSelectAct == actividadesFilAgendaPlanAct[i].name){
+                                                  idACt = actividadesFilAgendaPlanAct[i].id ?? 0;
                                                 }
                                               }
 
@@ -1033,21 +1014,21 @@ class PlanActStateTwo extends State<PlanAct> {
                                                 
                                               detenerCronometro();
 
-                                              double tiempo = double.parse(_segundos.toString());
+                                              double tiempo = double.parse(_segundosAct.toString());
                                               
                                               ActivitiesTypeRequestModel objReqst = ActivitiesTypeRequestModel(
                                                 active: true,
-                                                createDate: DateTime.now(),//DateTime.parse(fechaActividadContTxt.text),
+                                                createDate: DateTime.now(),//DateTime.parse(fechaActividadContTxtAct.text),
                                                 createUid: 0,
                                                 displayName: objDatumCrmLead?.contactName ?? '',
                                                 previousActivityTypeId: 0,
-                                                note: descripcionActTxt.text,
-                                                activityTypeId: idACt,//activityTypeIdFrm,
+                                                note: descripcionActTxtAct.text,
+                                                activityTypeId: idACt,
                                                 dateDeadline: objDatumCrmLead?.dateDeadline ?? DateTime.now(),
                                                 userId: objDatumCrmLead?.userId!.id ?? 0,
                                                 userCreateId: objDatumCrmLead?.userId!.id ?? 0,
                                                 resId: objDatumCrmLead?.id ?? 0,
-                                                actId: idActividadSeleccionada,
+                                                actId: activitySelected,
                                                 workingTime: tiempo
                                               );
 
@@ -1157,7 +1138,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                         "Salida",
                                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(width: size.width * 0.165),
+                                      SizedBox(width: size.width * 0.16),
                                       const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
                                     ],
                                   ),
@@ -1180,7 +1161,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        formatearTiempo(_segundos),                                                                  
+                                        formatearTiempo(_segundosAct),                                                                  
                                         style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
                                       ),
                                     
@@ -1206,7 +1187,7 @@ class PlanActStateTwo extends State<PlanAct> {
                               border: OutlineInputBorder(),
                               hintText: 'Notas de la visita o llamada para registrar la acción realizada.',
                             ),                                              
-                            controller: notasActTxt,
+                            controller: notasActTxtAct,
                             autocorrect: false,
                             keyboardType: TextInputType.text,
                             minLines: 1,
@@ -1235,14 +1216,14 @@ class PlanActStateTwo extends State<PlanAct> {
                               EmojiInputFormatter()
                             ],
                             onChanged: (value) {
-                              actualizaListaAct = true;
-                              terminoBusquedaAct = value;
+                              actualizaListaActiv = true;
+                              terminoBusquedaActiv = value;
                               refreshDataByFiltro(value);
                             },
                             onEditingComplete: () {
                               FocusScope.of(context).unfocus();
                               setState(() {
-                                actualizaListaAct = false;
+                                actualizaListaActiv = false;
                               });
                             },
                             decoration: InputDecoration(
@@ -1274,39 +1255,39 @@ class PlanActStateTwo extends State<PlanAct> {
   }
 }
 
-class BtnSlidableAction extends StatefulWidget {
-  const BtnSlidableAction(Key? key) : super (key: key);
+class BtnSlidableActionActiv extends StatefulWidget {
+  const BtnSlidableActionActiv(Key? key) : super (key: key);
   @override
-  State<BtnSlidableAction> createState() => BtnSlidableActionState();
+  State<BtnSlidableActionActiv> createState() => BtnSlidableActionActivState();
 }
 
-class BtnSlidableActionState extends State<BtnSlidableAction> {
+class BtnSlidableActionActivState extends State<BtnSlidableActionActiv> {
 
   ColorsApp objColorsApp = ColorsApp();
 
   void iniciarCronometro() {
-    if (!_corriendo) {
-      _corriendo = true;
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    if (!_corriendoAct) {
+      _corriendoAct = true;
+      _timerAct = Timer.periodic(const Duration(seconds: 1), (timer) {
         setState(() {
-          _segundos++;
+          _segundosAct++;
         });
       });
     }
   }
 
   void detenerCronometro() {
-    if (_corriendo) {
-      _timer?.cancel();
-      _corriendo = false;
+    if (_corriendoAct) {
+      _timerAct?.cancel();
+      _corriendoAct = false;
     }
   }
 
   void reiniciarCronometro() {
-    _timer?.cancel();
+    _timerAct?.cancel();
     setState(() {
-      _segundos = 0;
-      _corriendo = false;
+      _segundosAct = 0;
+      _corriendoAct = false;
     });
   }
 
@@ -1352,7 +1333,7 @@ class BtnSlidableActionState extends State<BtnSlidableAction> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      formatearTiempo(_segundos),
+                                      formatearTiempo(_segundosAct),
                                       style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
                                     ),
                                   
@@ -1380,7 +1361,7 @@ class BtnSlidableActionState extends State<BtnSlidableAction> {
                             hintText: 'Notas de la visita o llamada para registrar la acción realizada.',
                           ),
                   
-                          controller: notasActTxt,
+                          controller: notasActTxtAct,
                           autocorrect: false,
                           keyboardType: TextInputType.text,
                           minLines: 1,

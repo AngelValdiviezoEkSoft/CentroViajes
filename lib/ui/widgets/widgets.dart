@@ -1,3 +1,6 @@
+
+export 'package:cvs_ec_app/ui/widgets/indicator_point_widget.dart';
+
 export 'package:cvs_ec_app/ui/widgets/map/map.dart';
 
 export 'package:cvs_ec_app/ui/widgets/default_text_button_widget.dart';

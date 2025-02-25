@@ -11,6 +11,10 @@ final objRutas = Rutas();
 final GoRouter appRouter = GoRouter(
   routes: [//
     GoRoute(
+      path: objRutas.rutaPlanActivConActiv,
+      builder: (context, state) => const PlanificacionActividadesConActividadScreen(null),      
+    ),
+    GoRoute(
       path: objRutas.rutaInformative,
       builder: (context, state) => const InformativeScreen(null),      
     ),

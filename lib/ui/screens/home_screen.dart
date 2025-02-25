@@ -20,21 +20,6 @@ bool permiteGestion = false;
 
 class HomeScreen extends StatefulWidget {
   
-  /*
-  HomeScreen(Key? key, String numIdent) : super (key: key) {
-    numeroIdentificacion = numIdent;
-  }
-  
-  @override
-  Widget build(BuildContext context) {
-
-    return Center(
-      child: FrmHomeScreen(),
-    );
-  }
-  */
-
-  
   const HomeScreen(Key? key) : super (key: key);
 
   @override
@@ -46,9 +31,6 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
 
   int varPosicionMostrar = 0;
-  //List<NotificacionesModels> varLstNotificaciones = [];
-
-  //HomeScreenState({Key? key}) : super (key: key);
 
   @override
   void initState(){
@@ -207,28 +189,28 @@ class HomeScreenState extends State<HomeScreen> {
                         ),
                         actions: [
                               
-                              Container(
-                  color: Colors.transparent,
-                  width: size.width * 0.65,
-                  height: size.height * 0.055,
-                  child:   DropdownButton<String>(
-                      hint: const Icon(Icons.flip_camera_android_rounded), // Ícono del ComboBox
-                      value: compSelect,
-                      onChanged: (String? newValue) {
-                        //compSelect = newValue ?? '';
-                        setState(() {
-                          compSelect = newValue ?? '';
-                        });
-                      },
-                      items: lstComp
-                      .map((activityPrsp) =>
-                          DropdownMenuItem(
-                            value: activityPrsp,
-                            child: Text(activityPrsp),
-                          ))
-                      .toList(),
-                    ),
+                          Container(
+                            color: Colors.transparent,
+                            width: size.width * 0.65,
+                            height: size.height * 0.055,
+                            child:   DropdownButton<String>(
+                                hint: const Icon(Icons.flip_camera_android_rounded), // Ícono del ComboBox
+                                value: compSelect,
+                                onChanged: (String? newValue) {
+                                  //compSelect = newValue ?? '';
+                                  setState(() {
+                                    compSelect = newValue ?? '';
+                                  });
+                                },
+                                items: lstComp
+                                .map((activityPrsp) =>
+                                    DropdownMenuItem(
+                                      value: activityPrsp,
+                                      child: Text(activityPrsp),
+                                    ))
+                                .toList(),
                               ),
+                          ),
                               IconButton(
                   icon: const Icon(Icons.notifications_active, color: Colors.black),
                   onPressed: () {},

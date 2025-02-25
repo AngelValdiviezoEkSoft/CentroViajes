@@ -148,7 +148,10 @@ class CrmLeadAppModel {
 
     factory CrmLeadAppModel.fromJson(Map<String, dynamic> json) => CrmLeadAppModel(
         length: json["length"],
-        fields: CrmLeadFieldsAppModel.fromJson(json["fields"]),
+        fields: json["fields"] != null ?
+        CrmLeadFieldsAppModel.fromJson(json["fields"])
+        :CrmLeadFieldsAppModel(activityIds: '', campaignId: '', city: '', contactName: '', countryId: '', dateClosed: '', dateDeadline: '', dateOpen: '', dayClose: '', description: '', emailCc: '', emailFrom: '', expectedRevenue: '', function: '', lostReasonId: '', 
+        mediumId: '', mobile: '', name: '', partnerId: '', partnerName: '', phone: '', priority: '', referred: '', sourceId: '', stageId: '', stateId: '', street: '', tagIds: '', title: '', type: '', userId: ''),
         data: List<CrmLeadDatumAppModel>.from(json["data"].map((x) => CrmLeadDatumAppModel.fromJson(x))),
     );
 
@@ -227,27 +230,40 @@ class CrmLeadDatumAppModel {
 
   factory CrmLeadDatumAppModel.fromJson(Map<String, dynamic> json) => CrmLeadDatumAppModel(
     id: json["id"] ?? 0,
-    activityIds: List<CombosAppModel>.from(json["activity_ids"].map((x) => CombosAppModel.fromJson(x))),
-    campaignId: CombosAppModel.fromJson(json["campaign_id"]),
+    activityIds: json["activity_ids"]!= null ?
+    List<CombosAppModel>.from(json["activity_ids"].map((x) => CombosAppModel.fromJson(x)))
+    : [],
+    campaignId: json["campaign_id"] != null 
+    ? CombosAppModel.fromJson(json["campaign_id"])
+    : CombosAppModel(id: 0, name: ''),
     contactName: json["contact_name"] ?? '',
-    countryId: CombosAppModel.fromJson(json["country_id"]),
+    countryId: json["country_id"] != null ? CombosAppModel.fromJson(json["country_id"])
+    : CombosAppModel(id: 0, name: ''),
     dateOpen: json["date_open"] != null ? DateTime.parse(json["date_open"]) : DateTime.now(),
     dayClose: json["day_close"] ?? 0,
     emailFrom: json["email_from"] ?? '',
     expectedRevenue: json["expected_revenue"] ?? 0,
-    lostReasonId: CombosAppModel.fromJson(json["lost_reason_id"]),
-    mediumId: CombosAppModel.fromJson(json["medium_id"]),
+    lostReasonId: json["lost_reason_id"] != null ? CombosAppModel.fromJson(json["lost_reason_id"])
+    : CombosAppModel(id: 0, name: ''),
+    mediumId: json["medium_id"] != null ? CombosAppModel.fromJson(json["medium_id"])
+    : CombosAppModel(id: 0, name: ''),
     name: json["name"] ?? '',
-    partnerId: CombosAppModel.fromJson(json["partner_id"]),
+    partnerId: json["partner_id"] != null ? CombosAppModel.fromJson(json["partner_id"])
+    : CombosAppModel(id: 0, name: ''),
     phone: json["phone"] ?? '',
     priority: json["priority"] ?? '',
-    sourceId: CombosAppModel.fromJson(json["source_id"]),
-    stageId: CombosAppModel.fromJson(json["stage_id"]),
-    stateId: CombosAppModel.fromJson(json["state_id"]),
-    tagIds: List<CombosAppModel>.from(json["tag_ids"].map((x) => CombosAppModel.fromJson(x))),
-    title: CombosAppModel.fromJson(json["title"]),
+    sourceId: json["source_id"] != null ? CombosAppModel.fromJson(json["source_id"])
+    : CombosAppModel(id: 0, name: ''),
+    stageId: json["stage_id"] != null ? CombosAppModel.fromJson(json["stage_id"])
+    : CombosAppModel(id: 0, name: ''),
+    stateId: json["state_id"] != null ? CombosAppModel.fromJson(json["state_id"])
+    : CombosAppModel(id: 0, name: ''),
+    tagIds: json["tag_ids"] != null ? List<CombosAppModel>.from(json["tag_ids"].map((x) => CombosAppModel.fromJson(x))) : [],
+    title: json["title"] != null ? CombosAppModel.fromJson(json["title"])
+    : CombosAppModel(id: 0, name: ''),
     type: json["type"] ?? '',
-    userId: CombosAppModel.fromJson(json["user_id"]),
+    userId: json["user_id"] != null ? CombosAppModel.fromJson(json["user_id"])
+    : CombosAppModel(id: 0, name: ''),
     referred: json["referred"] ?? '',
     street: json["street"] ?? '',
     dateClose: json["date_closed"] == null ? null : DateTime.parse(json["date_closed"]),
@@ -470,8 +486,10 @@ class MailActivityTypeAppModel {
 
     factory MailActivityTypeAppModel.fromJson(Map<String, dynamic> json) => MailActivityTypeAppModel(
         length: json["length"],
-        fields: MailActivityTypeFieldsAppModel.fromJson(json["fields"]),
-        data: List<MailActivityTypeDatumAppModel>.from(json["data"].map((x) => MailActivityTypeDatumAppModel.fromJson(x))),
+        fields: json["fields"] != null ? MailActivityTypeFieldsAppModel.fromJson(json["fields"])
+        : MailActivityTypeFieldsAppModel(category: '', decorationType: '', defaultNote: '', delayCount: '', delayFrom: '', icon: '', name: '', resModel: '', sequence: '', 
+        summary: ''),
+        data: json["data"] != null ? List<MailActivityTypeDatumAppModel>.from(json["data"].map((x) => MailActivityTypeDatumAppModel.fromJson(x))) : [],
     );
 
     Map<String, dynamic> toJson() => {
@@ -488,6 +506,7 @@ class MailActivityTypeDatumAppModel {
     String? delayFrom;
     String? icon;
     String? name;
+    String? summary;
     int? sequence;
 
     MailActivityTypeDatumAppModel({
@@ -498,6 +517,7 @@ class MailActivityTypeDatumAppModel {
         required this.icon,
         required this.name,
         required this.sequence,
+        required this.summary
     });
 
     factory MailActivityTypeDatumAppModel.fromRawJson(String str) => MailActivityTypeDatumAppModel.fromJson(json.decode(str));
@@ -511,6 +531,7 @@ class MailActivityTypeDatumAppModel {
         delayFrom: json["delay_from"] ?? '',
         icon: json["icon"] ?? '',
         name: json["name"] ?? '',
+        summary: json["summary"] ?? '',
         sequence: json["sequence"] ?? 0,
     );
 
@@ -522,6 +543,7 @@ class MailActivityTypeDatumAppModel {
         "icon": icon,
         "name": name,
         "sequence": sequence,
+        "summary": summary
     };
 }
 
@@ -597,9 +619,10 @@ class ResCountryAppModel {
     String toRawJson() => json.encode(toJson());
 
     factory ResCountryAppModel.fromJson(Map<String, dynamic> json) => ResCountryAppModel(
-        length: json["length"],
-        fields: ResCountryFieldsAppModel.fromJson(json["fields"]),
-        data: List<ResCountryDatumAppModel>.from(json["data"].map((x) => ResCountryDatumAppModel.fromJson(x))),
+        length: json["length"] ?? 0,
+        fields: json["fields"] != null ? ResCountryFieldsAppModel.fromJson(json["fields"])
+        : ResCountryFieldsAppModel(code: '',name: '',stateIds: ''),
+        data: json["data"] != null ? List<ResCountryDatumAppModel>.from(json["data"].map((x) => ResCountryDatumAppModel.fromJson(x))) : [],
     );
 
     Map<String, dynamic> toJson() => {
@@ -630,7 +653,7 @@ class ResCountryDatumAppModel {
         id: json["id"] ?? 0,
         code: json["code"] ?? '',
         name: json["name"] ?? '',
-        stateIds: List<CombosAppModel>.from(json["state_ids"].map((x) => CombosAppModel.fromJson(x))),
+        stateIds: json["state_ids"] != null ? List<CombosAppModel>.from(json["state_ids"].map((x) => CombosAppModel.fromJson(x))) : [],
     );
 
     Map<String, dynamic> toJson() => {
@@ -686,8 +709,9 @@ class ResPartnerAppModel {
 
     factory ResPartnerAppModel.fromJson(Map<String, dynamic> json) => ResPartnerAppModel(
         length: json["length"],
-        fields: ResPartnerFieldsAppModel.fromJson(json["fields"]),
-        data: List<ResPartnerDatumAppModel>.from(json["data"].map((x) => ResPartnerDatumAppModel.fromJson(x))),
+        fields: json["fields"] != null ? ResPartnerFieldsAppModel.fromJson(json["fields"]):
+        ResPartnerFieldsAppModel(accountRepresentedCompanyIds: '', barcode: '', categoryId: '', channelIds: '', childIds: '', cityId: '', companyType: '',countryId: '', date: '', email: '', name: ''),
+        data: json["data"] != null ? List<ResPartnerDatumAppModel>.from(json["data"].map((x) => ResPartnerDatumAppModel.fromJson(x))) : [],
     );
 
     Map<String, dynamic> toJson() => {
@@ -734,15 +758,20 @@ class ResPartnerDatumAppModel {
 
     factory ResPartnerDatumAppModel.fromJson(Map<String, dynamic> json) => ResPartnerDatumAppModel(
         id: json["id"] ?? 0,
-        accountRepresentedCompanyIds: List<dynamic>.from(json["account_represented_company_ids"].map((x) => x)),
-        categoryId: List<dynamic>.from(json["category_id"].map((x) => x)),
-        channelIds: List<dynamic>.from(json["channel_ids"].map((x) => x)),
-        childIds: List<dynamic>.from(json["child_ids"].map((x) => x)),
-        cityId: CombosAppModel.fromJson(json["city_id"]),
+        accountRepresentedCompanyIds: json["account_represented_company_ids"] != null ? List<dynamic>.from(json["account_represented_company_ids"].map((x) => x))
+        : [],
+        categoryId: json["category_id"] != null ? List<dynamic>.from(json["category_id"].map((x) => x))
+        : [],
+        channelIds: json["channel_ids"] != null ? List<dynamic>.from(json["channel_ids"].map((x) => x))
+        : [],
+        childIds: json["child_ids"]!= null ? List<dynamic>.from(json["child_ids"].map((x) => x))
+        : [],
+        cityId: json["city_id"] != null ? CombosAppModel.fromJson(json["city_id"])
+        : CombosAppModel(id: 0, name: ''),
         companyType: json["company_type"] ?? '',
-        countryId: CombosAppModel.fromJson(json["country_id"]),
+        countryId: json["country_id"] != null ? CombosAppModel.fromJson(json["country_id"])
+        : CombosAppModel(id: 0, name: ''),
         email: json["email"] ?? '',
-
         mobile: json["mobile"] ?? '',
         name: json["name"] ?? '',
         ref: json["ref"] ?? '',
@@ -842,8 +871,9 @@ class UtmCampaignAppModel {
 
     factory UtmCampaignAppModel.fromJson(Map<String, dynamic> json) => UtmCampaignAppModel(
         length: json["length"],
-        fields: UtmCampaignFieldsAppModel.fromJson(json["fields"]),
-        data: List<UtmCampaignDatumAppModel>.from(json["data"].map((x) => UtmCampaignDatumAppModel.fromJson(x))),
+        fields: json["fields"]!= null ? UtmCampaignFieldsAppModel.fromJson(json["fields"])
+        : UtmCampaignFieldsAppModel(active: '', name: '',title: ''),
+        data: json["data"] != null ? List<UtmCampaignDatumAppModel>.from(json["data"].map((x) => UtmCampaignDatumAppModel.fromJson(x))) : [],
     );
 
     Map<String, dynamic> toJson() => {
@@ -930,8 +960,9 @@ class UtmAppModel {
 
     factory UtmAppModel.fromJson(Map<String, dynamic> json) => UtmAppModel(
         length: json["length"],
-        fields: UtmMediumFields.fromJson(json["fields"]),
-        data: List<CombosAppModel>.from(json["data"].map((x) => CombosAppModel.fromJson(x))),
+        fields: json["fields"] != null ? UtmMediumFields.fromJson(json["fields"])
+        : UtmMediumFields(name: ''),
+        data: json["data"] != null ? List<CombosAppModel>.from(json["data"].map((x) => CombosAppModel.fromJson(x))) : [],
     );
 
     Map<String, dynamic> toJson() => {
@@ -978,7 +1009,8 @@ class MailActivityAppModel {
 
     factory MailActivityAppModel.fromJson(Map<String, dynamic> json) => MailActivityAppModel(
         length: json["length"],
-        fields: MailActivityFieldsAppModel.fromJson(json["fields"]),
+        fields: json["fields"] != null ? MailActivityFieldsAppModel.fromJson(json["fields"])
+        : MailActivityFieldsAppModel(code: '',name: '', stateIds: ''),
         data: List<MailActivityDatumAppModel>.from(json["data"].map((x) => MailActivityDatumAppModel.fromJson(x))),
     );
 
@@ -994,6 +1026,7 @@ class MailActivityDatumAppModel {
     String? dateDadline;
     int? resId;
     String? resModel;
+    String? summary;
 
     CombosAppModel activityTypeId;
     CombosAppModel userId;
@@ -1005,6 +1038,7 @@ class MailActivityDatumAppModel {
         required this.resModel,
         required this.activityTypeId,
         required this.userId,
+        required this.summary
     });
 
     factory MailActivityDatumAppModel.fromRawJson(String str) => MailActivityDatumAppModel.fromJson(json.decode(str));
@@ -1013,11 +1047,16 @@ class MailActivityDatumAppModel {
 
     factory MailActivityDatumAppModel.fromJson(Map<String, dynamic> json) => MailActivityDatumAppModel(
         id: json["id"] ?? 0,
+        summary: json["summary"] ?? '',
         dateDadline: json["date_deadline"] ?? '',
         resId: json["res_id"] ?? 0,
         resModel: json['res_model'] ?? '',
-        activityTypeId: CombosAppModel.fromJson(json["activity_type_id"]),//List<CombosAppModel>.from(json["activity_type_id"].map((x) => CombosAppModel.fromJson(x))),
-        userId: CombosAppModel.fromJson(json["user_id"]),//List<CombosAppModel>.from(json["user_id"].map((x) => CombosAppModel.fromJson(x))),
+        activityTypeId: json["activity_type_id"] != null ? 
+        CombosAppModel.fromJson(json["activity_type_id"])
+        : CombosAppModel(id: 0, name: ''),
+        userId: json["user_id"] != null ?
+        CombosAppModel.fromJson(json["user_id"])
+        : CombosAppModel(id: 0, name: ''),
     );
 
     Map<String, dynamic> toJson() => {
@@ -1026,7 +1065,8 @@ class MailActivityDatumAppModel {
         "res_id": resId,
         "res_model": resModel,
         "activity_type_id": activityTypeId.toJson(),//List<dynamic>.from(activityTypeId.map((x) => x.toJson())),
-        "user_id": userId.toJson()//List<dynamic>.from(userId.map((x) => x.toJson())),
+        "user_id": userId.toJson(),
+        "summary":summary
     };
 }
 

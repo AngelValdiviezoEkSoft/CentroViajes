@@ -487,7 +487,7 @@ class ActivitiesService extends ChangeNotifier{
       
       var rsp = AppResponseModel.fromRawJson(response.body);
 
-      print('Test: ${response.body}');
+      //print('Test: ${response.body}');
 
       String cmbLstAct = json.encode(rsp.result.data.mailActivity);//await storageCamp.read(key: 'cmbLstActividades') ?? '';
 
@@ -575,15 +575,20 @@ class ActivitiesService extends ChangeNotifier{
         ),
       );
 
+      var cmbAct = await storageCamp.read(key: 'cmbActividades') ?? '';
+
+      MailActivityTypeAppModel  objFinAct = MailActivityTypeAppModel.fromRawJson(cmbAct);
+
       ActivitiesPageModel objRspFinal = ActivitiesPageModel(
         activities: objActividades,
-        lead: objDatumCrmLeadFin
+        lead: objDatumCrmLeadFin,
+        objMailAct: objFinAct
       );
       
       return objRspFinal;
     }
-    catch(ex){
-     print('Test: $ex');
+    catch(_){
+     //print('Test: $ex');
     }
   }
 
@@ -792,20 +797,14 @@ class ActivitiesService extends ChangeNotifier{
             "company": objReq.params.company,
             "bearer": objReq.params.bearer,
             "tocken_valid_date": tockenValidDate,
+            "id": objActividad.actId,
             "write": {
-              "date_deadline": DateFormat('yyyy-MM-dd', 'es').format(objActividad.dateDeadline!),//date_deadline
-              //"create_date": DateFormat('yyyy-MM-dd', 'es').format(objActividad.createDate!),
-              //"create_uid": objReq.params.uid,//objActividad.createUid,          
-              //"active": true,
-              //"previous_activity_type_id": objActividad.previousActivityTypeId,
-              //"display_name": objActividad.displayName,
-              //"activity_type_id": objActividad.activityTypeId,
+              "date_deadline": DateFormat('yyyy-MM-dd', 'es').format(objActividad.dateDeadline!),              
               "res_model_id": 501,
               "user_id": objActividad.userId,
               "res_id": objActividad.resId,
               "summary": objActividad.note,
-              "note": objActividad.note,
-              "id": objActividad.actId,
+              "note": objActividad.note,              
               "working_time": objActividad.workingTime,
             },
           }

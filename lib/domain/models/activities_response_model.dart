@@ -30,11 +30,12 @@ class ActivitiesResponseModel {
 
 class DatumActivitiesResponse {
     int id;
-    DateTime dateDeadline;
+    DateTime dateDeadline;    
     int resId;
     String resModel;
     IdActivities activityTypeId;
     IdActivities userId;
+    String? summary;
 
     DatumActivitiesResponse({
         required this.id,
@@ -43,6 +44,7 @@ class DatumActivitiesResponse {
         required this.resModel,
         required this.activityTypeId,
         required this.userId,
+        required this.summary
     });
 
     factory DatumActivitiesResponse.fromRawJson(String str) => DatumActivitiesResponse.fromJson(json.decode(str));
@@ -56,6 +58,7 @@ class DatumActivitiesResponse {
         resModel: json["res_model"],
         activityTypeId: IdActivities.fromJson(json["activity_type_id"]),
         userId: IdActivities.fromJson(json["user_id"]),
+        summary: json["summary"] ?? ''
     );
 
     Map<String, dynamic> toJson() => {
@@ -65,6 +68,7 @@ class DatumActivitiesResponse {
         "res_model": resModel,
         "activity_type_id": activityTypeId.toJson(),
         "user_id": userId.toJson(),
+        "summary": summary
     };
 }
 

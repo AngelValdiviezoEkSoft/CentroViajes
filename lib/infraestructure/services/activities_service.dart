@@ -829,56 +829,30 @@ class ActivitiesService extends ChangeNotifier{
           body: jsonEncode(requestBody), 
         );
 
-        print('respuesta: ${response.body}');
-      
-        var rspValidacion = json.decode(response.body);
+        String rspMsm = '';
+        int cod = 0;
 
-        if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenExpirado)){
-          await tokenManager.checkTokenExpiration();
-          await registroActividades(objActividad);
-        } 
+        CierreActividadesResponseModel objCierre = CierreActividadesResponseModel.fromRawJson(response.body);
 
-        var objRspPrsp = await storageProspecto.read(key: 'RegistraActividad') ?? '';
+        if(objCierre.result.mensaje.toLowerCase().contains('record does not exist or has been deleted')){
+          rspMsm = 'Actividad cerrada exitosamente';
+          cod = 200;
+        }
 
-        ActividadRegistroResponseModel objLead = ActividadRegistroResponseModel(
+        ActividadRegistroResponseModel objRsp = ActividadRegistroResponseModel(
           id: 0,
           jsonrpc: '',
           result: ResultActividad(
             data: [],
-            estado: 0,
-            mensaje: ''
+            estado: cod,
+            mensaje: rspMsm
           )
         );
 
-        if(objRspPrsp.isNotEmpty){
-          objLead = ActividadRegistroResponseModel.fromRawJson(objRspPrsp);
-
-          objLead.result.data.length = objLead.result.data.length;
-        }
-
-        var objRespuestaFinal = ActividadRegistroResponseModel.fromRawJson(response.body);
-
-        for(int i = 0; i < objLead.result.data.length; i++)
-        {
-          Datum objCrmLeadDatumAppModel = Datum(
-            activityTypeId: objLead.result.data[i].activityTypeId,
-            dateDeadline: objLead.result.data[i].dateDeadline,
-            id: objLead.result.data[i].id,
-            resId: objLead.result.data[i].resId,
-            resModel: objLead.result.data[i].resModel,
-            userId: objLead.result.data[i].userId
-          );
-
-          objRespuestaFinal.result.data.add(objCrmLeadDatumAppModel);
-
-        }
-
-        await storageProspecto.write(key: 'RegistraActividad', value: jsonEncode(objRespuestaFinal.toJson()));
-
-        return objRespuestaFinal;
+        return objRsp;
       } 
-      catch(ex){
-        print('Error al grabar: $ex');
+      catch(_){
+        //print('Error al grabar: $ex');
       }
     } else {
       await storageProspecto.write(key: 'RegistraActividad', value: jsonEncode(objActividad.toJson()));

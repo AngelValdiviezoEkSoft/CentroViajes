@@ -136,7 +136,51 @@ class PlanActivState extends State<PlanificacionActividadesConActividadScreen> {
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                   onPressed: () {
-                    context.pop();
+
+                    if(_segundosAct > 0){
+                      
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Registro de salida'),
+                            content: const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '¿Está seguro de realizar esta acción?',
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  //context.pop();
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'NO',
+                                  style: TextStyle(color: Colors.blue[200]),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'Sí',
+                                  style: TextStyle(color: Colors.blue[200]),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+                      return;
+                    }
+
                   },
                 ),
                 actions: [
@@ -990,9 +1034,7 @@ class PlanActivStateTwo extends State<PlanActiv> {
                                           TextButton(
                                             onPressed: () {
                                               //context.pop();
-                                              Navigator.pop(context);
-                                              
-                                              //Navigator.of(context).pop();
+                                              Navigator.pop(context);                                              
                                             },
                                             child: Text(
                                               'NO',
@@ -1001,6 +1043,53 @@ class PlanActivStateTwo extends State<PlanActiv> {
                                           ),
                                           TextButton(
                                             onPressed: () async {
+
+                                              if(_segundosAct == 0){
+                                                showDialog(
+                                                //ignore:use_build_context_synchronously
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Container(
+                                                      color: Colors.transparent,
+                                                      height: size.height * 0.17,
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          
+                                                          Container(
+                                                            color: Colors.transparent,
+                                                            height: size.height * 0.09,
+                                                            child: Image.asset('assets/gifs/gifErrorBlanco.gif'),
+                                                          ),
+                              
+                                                          Container(
+                                                            color: Colors.transparent,
+                                                            width: size.width * 0.95,
+                                                            height: size.height * 0.08,
+                                                            alignment: Alignment.center,
+                                                            child: const AutoSizeText(
+                                                              'Debe marcar la llegada de la actividad.',
+                                                              maxLines: 2,
+                                                              minFontSize: 2,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                                return;
+                                              }
 
                                               int idACt = 0;
 
@@ -1053,9 +1142,6 @@ class PlanActivStateTwo extends State<PlanActiv> {
                                               int estado = objResp.result.estado;
                                               String gifRespuesta = '';
 
-                                              //ignore: use_build_context_synchronously
-                                              context.pop();
-
                                               if(estado == 200){
                                                 gifRespuesta = 'assets/gifs/exito.gif';
                                               } else {
@@ -1063,13 +1149,11 @@ class PlanActivStateTwo extends State<PlanActiv> {
                                               }
 
                                               //ignore:use_build_context_synchronously
-                                              context.pop();
-                                              //ignore:use_build_context_synchronously
-                                              context.pop();
+                                              Navigator.of(contextPrincipalGen!).pop();
                               
                                               showDialog(
                                                 //ignore:use_build_context_synchronously
-                                                context: context,
+                                                context: contextPrincipalGen!,
                                                 builder: (BuildContext context) {
                                                   return AlertDialog(
                                                     title: Container(
@@ -1102,7 +1186,8 @@ class PlanActivStateTwo extends State<PlanActiv> {
                                                     actions: [
                                                       TextButton(
                                                         onPressed: () {
-                                                          Navigator.of(context).pop();
+                                                          Navigator.of(contextPrincipalGen!).pop();
+                                                          Navigator.of(contextPrincipalGen!).pop();
                                                         },
                                                         child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
                                                       ),

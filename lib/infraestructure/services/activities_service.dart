@@ -581,56 +581,13 @@ class ActivitiesService extends ChangeNotifier{
 
       final lstEncr = await storageCamp.read(key: 'LstActividadesAbiertasCerradas') ?? '';
 
-      if(lstEncr.isEmpty){
-        objActividades.data.add(
-          DatumActivitiesResponse(
-            activityTypeId: IdActivities (id: 1, name: 'Tipo Actividad 1'),
-            dateDeadline: DateTime.now(),
-            id: 1,
-            resId: 1,
-            resModel: '',
-            summary: 'Test 1',
-            userId: IdActivities (id: 1, name: 'User 1'),
-            cerrado: true
-          )
-        );
-
-        objActividades.data.add(
-          DatumActivitiesResponse(
-            activityTypeId: IdActivities (id: 2, name: 'Tipo Actividad 2'),
-            dateDeadline: DateTime.now(),
-            id: 2,
-            resId: 2,
-            resModel: '',
-            summary: 'Test 2',
-            userId: IdActivities (id: 2, name: 'User 2'),
-            cerrado: true
-          )
-        );
-
-        objActividades.data.add(
-          DatumActivitiesResponse(
-            activityTypeId: IdActivities (id: 3, name: 'Tipo Actividad 3'),
-            dateDeadline: DateTime.now(),
-            id: 3,
-            resId: 3,
-            resModel: '',
-            summary: 'Test 3',
-            userId: IdActivities (id: 3, name: 'User 3'),
-            cerrado: true
-          )
-        );
-
-        await storageCamp.write(key: 'LstActividadesAbiertasCerradas', value: jsonEncode(objActividades.toJson()));
-        
-      } else {
+      if(lstEncr.isNotEmpty){
         ActivitiesResponseModel  objMem = ActivitiesResponseModel .fromRawJson(lstEncr);
 
         for(int i = 0; i < objMem.data.length; i++){
-          objActividades.data.add(objMem.data[i]);
+          objActividades.data.add(objMem.data[i]);         
         }
-
-      }
+      }      
 
       
       ActivitiesPageModel objRspFinal = ActivitiesPageModel(
@@ -857,7 +814,7 @@ class ActivitiesService extends ChangeNotifier{
               "res_model_id": 501,
               "user_id": objActividad.userId,
               "res_id": objActividad.resId,
-              "summary": objActividad.note,
+              "summary": objActividad.summary,
               "note": objActividad.note,              
               "working_time": objActividad.workingTime,
             },
@@ -905,22 +862,45 @@ class ActivitiesService extends ChangeNotifier{
 
         final lstEncr = await storageCamp.read(key: 'LstActividadesAbiertasCerradas') ?? '';
 
-        ActivitiesResponseModel  objMem = ActivitiesResponseModel .fromRawJson(lstEncr);
+        if(lstEncr.isNotEmpty){
+          ActivitiesResponseModel  objMem = ActivitiesResponseModel.fromRawJson(lstEncr);
 
-        objMem.data.add(
-          DatumActivitiesResponse(
-            activityTypeId: IdActivities (id: objMem.data.length, name: 'Test ${objMem.data.length}'),
-            dateDeadline: DateTime.now(),
-            id: objActividad.actId,
-            resId: objActividad.resId,
-            resModel: 'Test ${objMem.data.length}',
-            summary: objActividad.summary,
-            userId: IdActivities (id: objMem.data.length, name: 'Test ${objMem.data.length}'),
-            cerrado: true
-          )
-        );
+          objMem.data.add(
+            DatumActivitiesResponse(
+              activityTypeId: IdActivities (id: objMem.data.length, name: 'Test ${objMem.data.length}'),
+              dateDeadline: DateTime.now(),
+              id: objActividad.actId,
+              resId: objActividad.resId,
+              resModel: 'Test ${objMem.data.length}',
+              summary: objActividad.summary,
+              userId: IdActivities (id: objMem.data.length, name: 'Test ${objMem.data.length}'),
+              cerrado: true
+            )
+          );
 
-        await storageCamp.write(key: 'LstActividadesAbiertasCerradas', value: jsonEncode(objMem.toJson()));
+          await storageCamp.write(key: 'LstActividadesAbiertasCerradas', value: jsonEncode(objMem.toJson()));
+        }
+        else {
+
+          ActivitiesResponseModel  objMem = ActivitiesResponseModel(
+            data: [
+              DatumActivitiesResponse(
+                activityTypeId: IdActivities (id: 1, name: 'Test 1'),
+                dateDeadline: DateTime.now(),
+                id: objActividad.actId,
+                resId: objActividad.resId,
+                resModel: 'Test 1',
+                summary: objActividad.summary,
+                userId: IdActivities (id: 1, name: 'Test 1'),
+                cerrado: true
+              )
+            ],
+            length: 0,
+            fields: FieldsActivities(code: '', name: '',stateIds: '')
+          );
+
+          await storageCamp.write(key: 'LstActividadesAbiertasCerradas', value: jsonEncode(objMem.toJson()));
+        }
 
         return objRsp;
       } 

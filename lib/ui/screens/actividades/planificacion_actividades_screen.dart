@@ -1131,7 +1131,7 @@ class PlanActStateTwo extends State<PlanAct> {
                                                 createUid: 0,
                                                 displayName: objDatumCrmLead?.contactName ?? '',
                                                 previousActivityTypeId: 0,
-                                                note: descripcionActTxt.text,
+                                                note: notasActTxt.text,
                                                 activityTypeId: idACt,//activityTypeIdFrm,
                                                 dateDeadline: objDatumCrmLead?.dateDeadline ?? DateTime.now(),
                                                 userId: objDatumCrmLead?.userId!.id ?? 0,

@@ -409,9 +409,13 @@ class PlanActivState extends State<PlanificacionActividadesConActividadScreen> {
                                                       return;
                                                     }
 
-                                                    int activityTypeIdFrm = 2;
+                                                    int activityTypeIdFrm = 0;
 
-
+                                                    for(int i = 0; i < actividadesFilAgendaPlanAct.length; i++){
+                                                      if(campSelect == actividadesFilAgendaPlanAct[i].name){
+                                                        activityTypeIdFrm = actividadesFilAgendaPlanAct[i].id ?? 0;
+                                                      }
+                                                    }
                                                     
                                                     if(activityTypeIdFrm == 0){
                                                       showDialog(
@@ -952,32 +956,6 @@ class PlanActivStateTwo extends State<PlanActiv> {
                               });
                             }
                           )                          
-                        ),
-                        */
-/*
-                        Container(
-                          color: Colors.transparent,
-                          width: size.width,
-                          height: size.height * 0.07,                          
-                          child: DropdownButtonFormField<String>(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Agendado para hoy',
-                              labelStyle: TextStyle(color: Color(0xFF5DC38C))
-                            ),
-                            value: actPlanSelectAct,
-                            items: lstActividadesAct.map((activityPrsp) =>
-                              DropdownMenuItem(
-                                value: activityPrsp,
-                                child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),                          
-                              )
-                            ).toList(),
-                            onChanged: (String? newValue) {                        
-                              setState(() {
-                                actPlanSelectAct = newValue ?? '';
-                              });
-                            },
-                          ),
                         ),
                         */
 

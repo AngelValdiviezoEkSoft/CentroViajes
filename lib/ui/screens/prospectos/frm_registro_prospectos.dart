@@ -90,6 +90,12 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
     celularValido = false;
     validandoCell = false;
     paisSelect = 'Ecuador';
+
+    campSelect = '';
+    mediaSelect = '';
+    originSelect = '';
+    actSelect = '';
+    telefonoPrsp = '';
   }
 
   @override

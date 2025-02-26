@@ -579,12 +579,66 @@ class ActivitiesService extends ChangeNotifier{
 
       MailActivityTypeAppModel  objFinAct = MailActivityTypeAppModel.fromRawJson(cmbAct);
 
+      final lstEncr = await storageCamp.read(key: 'LstActividadesAbiertasCerradas') ?? '';
+
+      if(lstEncr.isEmpty){
+        objActividades.data.add(
+          DatumActivitiesResponse(
+            activityTypeId: IdActivities (id: 1, name: 'Tipo Actividad 1'),
+            dateDeadline: DateTime.now(),
+            id: 1,
+            resId: 1,
+            resModel: '',
+            summary: 'Test 1',
+            userId: IdActivities (id: 1, name: 'User 1'),
+            cerrado: true
+          )
+        );
+
+        objActividades.data.add(
+          DatumActivitiesResponse(
+            activityTypeId: IdActivities (id: 2, name: 'Tipo Actividad 2'),
+            dateDeadline: DateTime.now(),
+            id: 2,
+            resId: 2,
+            resModel: '',
+            summary: 'Test 2',
+            userId: IdActivities (id: 2, name: 'User 2'),
+            cerrado: true
+          )
+        );
+
+        objActividades.data.add(
+          DatumActivitiesResponse(
+            activityTypeId: IdActivities (id: 3, name: 'Tipo Actividad 3'),
+            dateDeadline: DateTime.now(),
+            id: 3,
+            resId: 3,
+            resModel: '',
+            summary: 'Test 3',
+            userId: IdActivities (id: 3, name: 'User 3'),
+            cerrado: true
+          )
+        );
+
+        await storageCamp.write(key: 'LstActividadesAbiertasCerradas', value: jsonEncode(objActividades.toJson()));
+        
+      } else {
+        ActivitiesResponseModel  objMem = ActivitiesResponseModel .fromRawJson(lstEncr);
+
+        for(int i = 0; i < objMem.data.length; i++){
+          objActividades.data.add(objMem.data[i]);
+        }
+
+      }
+
+      
       ActivitiesPageModel objRspFinal = ActivitiesPageModel(
         activities: objActividades,
         lead: objDatumCrmLeadFin,
         objMailAct: objFinAct
       );
-      
+
       return objRspFinal;
     }
     catch(_){
@@ -727,8 +781,8 @@ class ActivitiesService extends ChangeNotifier{
 
         return objRespuestaFinal;
       } 
-      catch(ex){
-        print('Error al grabar: $ex');
+      catch(_){
+        //print('Error al grabar: $ex');
       }
     } else {
       await storageProspecto.write(key: 'RegistraActividad', value: jsonEncode(objActividad.toJson()));
@@ -848,6 +902,25 @@ class ActivitiesService extends ChangeNotifier{
             mensaje: rspMsm
           )
         );
+
+        final lstEncr = await storageCamp.read(key: 'LstActividadesAbiertasCerradas') ?? '';
+
+        ActivitiesResponseModel  objMem = ActivitiesResponseModel .fromRawJson(lstEncr);
+
+        objMem.data.add(
+          DatumActivitiesResponse(
+            activityTypeId: IdActivities (id: objMem.data.length, name: 'Test ${objMem.data.length}'),
+            dateDeadline: DateTime.now(),
+            id: objActividad.actId,
+            resId: objActividad.resId,
+            resModel: 'Test ${objMem.data.length}',
+            summary: objActividad.summary,
+            userId: IdActivities (id: objMem.data.length, name: 'Test ${objMem.data.length}'),
+            cerrado: true
+          )
+        );
+
+        await storageCamp.write(key: 'LstActividadesAbiertasCerradas', value: jsonEncode(objMem.toJson()));
 
         return objRsp;
       } 

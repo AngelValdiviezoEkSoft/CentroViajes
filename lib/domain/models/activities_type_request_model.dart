@@ -12,6 +12,7 @@ class ActivitiesTypeRequestModel {
     DateTime? dateDeadline;
     int previousActivityTypeId;
     String note;
+    String summary;
     int activityTypeId;
     double workingTime;
 
@@ -28,7 +29,8 @@ class ActivitiesTypeRequestModel {
         required this.activityTypeId,
         required this.dateDeadline,
         required this.userCreateId,
-        required this.workingTime
+        required this.workingTime,
+        required this.summary
     });
 
     factory ActivitiesTypeRequestModel.fromJson(String str) => ActivitiesTypeRequestModel.fromMap(json.decode(str));
@@ -48,12 +50,14 @@ class ActivitiesTypeRequestModel {
         note: json["note"],
         activityTypeId: json["activity_type_id"],
         userCreateId: json["activity_type_id"],
-        workingTime: 0
+        workingTime: 0,
+        summary: json["summary"] ?? ''
     );
 
     factory ActivitiesTypeRequestModel.fromMap2(Map<String, dynamic> json) {
 
       return ActivitiesTypeRequestModel(
+        summary: json["summary"] ?? '',
         actId: json["actId"],
         resId: json["resId"],
         userCreateId: json['user_id'],
@@ -83,7 +87,8 @@ class ActivitiesTypeRequestModel {
       'display_name': displayName,
       'note': note,
       'activity_type_id': activityTypeId,
-      'workingTime': workingTime
+      'workingTime': workingTime,
+      'summary': summary
     };
   }
 
@@ -99,6 +104,7 @@ class ActivitiesTypeRequestModel {
       'display_name': displayName,
       'note': note,
       'activity_type_id': activityTypeId,
-      'workingTime': workingTime
+      'workingTime': workingTime,
+      'summary': summary
     };
 }

@@ -332,6 +332,31 @@ class AgendaScreenState extends State<AgendaScreen>  {
                                 children: [
                                   SlidableAction(
                                     onPressed: (cont) async {
+
+                                      if(actividadesFilAgenda[index].cerrado){
+                                        showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return ContentAlertDialog(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              onPressedCont: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              tipoAlerta: TipoAlerta().alertAccion,
+                                              numLineasTitulo: 2,
+                                              numLineasMensaje: 2,
+                                              titulo: 'Error',
+                                              mensajeAlerta: 'Esta actividad ya fue cerrada.'
+                                            );
+                                          },
+                                        );
+                      
+                                        return;
+                                      }
+
                                       const storage = FlutterSecureStorage();
   
                                       await storage.write(key: 'idMem', value: actividadesFilAgenda[index].resId.toString());
@@ -359,13 +384,14 @@ class AgendaScreenState extends State<AgendaScreen>  {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
+                                color: actividadesFilAgenda[index].cerrado ? Colors.grey[300] : Colors.white,
                                 child: ListTile(
                                   leading: CircleAvatar(
-                                    backgroundColor: Colors.grey[300],
+                                    backgroundColor: actividadesFilAgenda[index].cerrado ? Colors.black45 : Colors.grey[300],
                                     child: Stack(
                                         children: [
                                           const Icon(Icons.person),
-                                          if(DateFormat('yyyy-MM-dd', 'es').format(actividadesFilAgenda[index].dateDeadline) == DateFormat('yyyy-MM-dd', 'es').format(DateTime.now()))
+                                          if(!actividadesFilAgenda[index].cerrado && DateFormat('yyyy-MM-dd', 'es').format(actividadesFilAgenda[index].dateDeadline) == DateFormat('yyyy-MM-dd', 'es').format(DateTime.now()))
                                           Positioned(
                                             top: size.height * 0.01,
                                             left: size.width * 0.02,

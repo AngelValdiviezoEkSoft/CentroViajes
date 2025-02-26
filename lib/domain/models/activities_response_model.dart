@@ -36,6 +36,7 @@ class DatumActivitiesResponse {
     IdActivities activityTypeId;
     IdActivities userId;
     String? summary;
+    bool cerrado;
 
     DatumActivitiesResponse({
         required this.id,
@@ -44,7 +45,8 @@ class DatumActivitiesResponse {
         required this.resModel,
         required this.activityTypeId,
         required this.userId,
-        required this.summary
+        required this.summary,
+        required this.cerrado
     });
 
     factory DatumActivitiesResponse.fromRawJson(String str) => DatumActivitiesResponse.fromJson(json.decode(str));
@@ -58,7 +60,8 @@ class DatumActivitiesResponse {
         resModel: json["res_model"],
         activityTypeId: IdActivities.fromJson(json["activity_type_id"]),
         userId: IdActivities.fromJson(json["user_id"]),
-        summary: json["summary"] ?? ''
+        summary: json["summary"] ?? '',
+        cerrado: json["cerrado"] ?? false
     );
 
     Map<String, dynamic> toJson() => {
@@ -68,7 +71,8 @@ class DatumActivitiesResponse {
         "res_model": resModel,
         "activity_type_id": activityTypeId.toJson(),
         "user_id": userId.toJson(),
-        "summary": summary
+        "summary": summary,
+        "cerrado": cerrado
     };
 }
 

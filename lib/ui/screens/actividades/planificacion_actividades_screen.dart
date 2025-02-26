@@ -417,9 +417,8 @@ class PlanActState extends State<PlanificacionActividades> {
                                                       return;
                                                     }
 
+                                                    /*
                                                     int activityTypeIdFrm = 2;
-
-
                                                     
                                                     if(activityTypeIdFrm == 0){
                                                       showDialog(
@@ -444,6 +443,7 @@ class PlanActState extends State<PlanificacionActividades> {
                                     
                                                       return;
                                                     }
+                                                    */
 
                                                     double tiempo = double.parse(_segundos.toString());
                                                     
@@ -454,13 +454,14 @@ class PlanActState extends State<PlanificacionActividades> {
                                                       displayName: objDatumCrmLead?.contactName ?? '',
                                                       previousActivityTypeId: 0,
                                                       note: descripcionActTxt.text,
-                                                      activityTypeId: activityTypeIdFrm,
+                                                      activityTypeId: 0,//activityTypeIdFrm,
                                                       dateDeadline: objDatumCrmLead?.dateDeadline ?? DateTime.now(),
                                                       userId: objDatumCrmLead?.userId!.id ?? 0,
                                                       userCreateId: objDatumCrmLead?.userId!.id ?? 0,
                                                       resId: objDatumCrmLead?.id ?? 0,
                                                       actId: 0,
-                                                      workingTime: tiempo
+                                                      workingTime: tiempo,
+                                                      summary: objActividadEscogida?.summary ?? ''
                                                     );
 
                                                     showDialog(
@@ -1137,7 +1138,8 @@ class PlanActStateTwo extends State<PlanAct> {
                                                 userCreateId: objDatumCrmLead?.userId!.id ?? 0,
                                                 resId: objDatumCrmLead?.id ?? 0,
                                                 actId: idActividadSeleccionada,
-                                                workingTime: tiempo
+                                                workingTime: tiempo,
+                                                summary: objActividadEscogida?.summary ?? ''
                                               );
 
                                               showDialog(

@@ -452,7 +452,8 @@ class PlanActivState extends State<PlanificacionActividadesConActividadScreen> {
                                                       userCreateId: objDatumCrmLead?.userId!.id ?? 0,
                                                       resId: objDatumCrmLead?.id ?? 0,
                                                       actId: 0,
-                                                      workingTime: tiempo
+                                                      workingTime: tiempo,
+                                                      summary: ''
                                                     );
 
                                                     showDialog(
@@ -1118,7 +1119,8 @@ class PlanActivStateTwo extends State<PlanActiv> {
                                                 userCreateId: objDatumCrmLead?.userId!.id ?? 0,
                                                 resId: objDatumCrmLead?.id ?? 0,
                                                 actId: activitySelected,
-                                                workingTime: tiempo
+                                                workingTime: tiempo,
+                                                summary: ''
                                               );
 
                                               showDialog(

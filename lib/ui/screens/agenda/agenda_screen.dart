@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+late TextEditingController filtroAgendaTxt;
 DatumActivitiesResponse? objActividadEscogida;
 int idActividadSeleccionada = 0;
 List<DateTime> _dates = [];
@@ -47,6 +48,7 @@ class AgendaScreenState extends State<AgendaScreen>  {
     isSelected = [false,true ];
     selectedDayGen = DateTime.now();
     focusedDayGen = DateTime.now();
+    filtroAgendaTxt = TextEditingController();
   }
 
   @override
@@ -87,14 +89,35 @@ class AgendaScreenState extends State<AgendaScreen>  {
           Future<void> refreshDataByFiltro(String filtro) async {            
             actividadesFilAgenda = [];
 
-            //CrmLead apiResponse = CrmLead.fromJson(objMemoria);
-
-            if(terminoBusquedaActAgenda.isNotEmpty){
+            if(filtro.isNotEmpty){
               
-              actividadesFilAgenda = rspAct.activities.data
-              .where(
-                (producto) => producto.activityTypeId.name.toLowerCase().contains(terminoBusquedaActAgenda.toLowerCase()))
-              .toList();
+              for(int i = 0; i < rspAct.activities.data.length; i++){
+                if(rspAct.activities.data[i].summary != null && 
+                rspAct.activities.data[i].summary!.toLowerCase().contains(filtro.toLowerCase()) 
+                || (rspAct.activities.data[i].activityTypeId.name.toLowerCase().contains(filtro.toLowerCase()))){
+                  actividadesFilAgenda.add(rspAct.activities.data[i]);
+                }
+              }
+
+/*
+              if(actividadesFilAgenda.isEmpty){
+                for(int i = 0; i < rspAct.activities.data.length; i++){
+                  if(rspAct.activities.data[i].summary != null && 
+                  rspAct.activities.data[i].summary!.toLowerCase().contains(filtro.toLowerCase())
+                  ){
+                    actividadesFilAgenda.add(rspAct.activities.data[i]);
+                  }
+                }
+              }
+
+              if(actividadesFilAgenda.isEmpty){
+                for(int i = 0; i < rspAct.activities.data.length; i++){
+                  if(rspAct.activities.data[i].activityTypeId.name.toLowerCase().contains(filtro.toLowerCase())){
+                    actividadesFilAgenda.add(rspAct.activities.data[i]);
+                  }
+                }
+              }
+              */
 
               contLstAgenda = 0;
 
@@ -104,9 +127,7 @@ class AgendaScreenState extends State<AgendaScreen>  {
               actualizaListaActAgenda = false;
             }            
 
-            if(terminoBusquedaActAgenda.isNotEmpty && actualizaListaActAgenda) {
-              setState(() {});
-            }
+            setState(() {});
 
           }
 
@@ -293,21 +314,35 @@ class AgendaScreenState extends State<AgendaScreen>  {
                     
                     SizedBox(height: size.height * 0.008),
 
-                    if(contLstAgenda > 0)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: TextField(
+                        controller: filtroAgendaTxt,
                         onChanged: (value) {
                           actualizaListaActAgenda = true;
-                          terminoBusquedaActAgenda = value;
-                          refreshDataByFiltro(value);
+                          terminoBusquedaActAgenda = value;                          
+                        },
+                        onEditingComplete: () {
+                          refreshDataByFiltro(filtroAgendaTxt.text);
+                          FocusScope.of(context).unfocus();
                         },
                         decoration: InputDecoration(
-                          labelText: 'Buscar agendas por nombre.',
+                          labelText: 'Buscar agendas por nombre o tipo de actividad.',
                           prefixIcon: const Icon(Icons.search),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                filtroAgendaTxt.text = '';
+                                terminoBusquedaActAgenda = '';
+                                refreshDataByFiltro('');
+                              },
+                              icon: Icon(Icons.cancel,
+                                  size: 24,
+                                  color: AppLightColors()
+                                      .gray900PrimaryText),
+                            ),
                         ),
                       ),
                     ),
@@ -404,8 +439,7 @@ class AgendaScreenState extends State<AgendaScreen>  {
                                           )
                                         ]
                                       ),
-                                  ),//
-                                  //title: Text(actividadesFilAgenda[index].activityTypeId.name),
+                                  ),
                                   title: Text(actividadesFilAgenda[index].summary ?? ''),
                                   subtitle: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -415,7 +449,7 @@ class AgendaScreenState extends State<AgendaScreen>  {
                                         text: TextSpan(
                                           children: [
                                             const TextSpan(
-                                              text: 'Tipo de actividad:',
+                                              text: 'Tipo de agenda:',
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 12,
@@ -436,7 +470,7 @@ class AgendaScreenState extends State<AgendaScreen>  {
                                         text: TextSpan(
                                           children: [
                                             const TextSpan(
-                                              text: 'Date Dead Line:',
+                                              text: 'Fecha planificada:',
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 12,
@@ -499,7 +533,7 @@ class AgendaScreenState extends State<AgendaScreen>  {
                           ),
                         ],
                       ), 
-                    )
+                    ),
 
                     /*
                     // Lista de agendas
@@ -516,6 +550,9 @@ class AgendaScreenState extends State<AgendaScreen>  {
                     ),
                     */
                 
+                    SizedBox(
+                      height: size.height * 0.08,
+                    )
                   ],
                 ),
               ),

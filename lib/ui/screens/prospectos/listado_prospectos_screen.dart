@@ -252,19 +252,30 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
             if(terminoBusqueda.isNotEmpty){
               
               if(!terminoBusqueda.contains('+') && !terminoBusqueda.contains('0')){
-                prospectosFiltrados = apiResponse.data
-                .where(
-                  (producto) => producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
-                .toList();
+                
+                for(int i = 0; i < apiResponse.data.length; i++){
+                  if(apiResponse.data[i].emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase()) 
+                  || apiResponse.data[i].name.toLowerCase().contains(terminoBusqueda.toLowerCase()) 
+                  || (apiResponse.data[i].contactName != null && apiResponse.data[i].contactName!.toLowerCase().contains(terminoBusqueda.toLowerCase()))){
+                    prospectosFiltrados.add(apiResponse.data[i]);
+                  }
+                }
+
+/*
+                if(prospectosFiltrados.isEmpty){
+                  prospectosFiltrados = apiResponse.data
+                  .where(
+                    (producto) => 
+                      producto.name.toLowerCase().contains(terminoBusqueda.toLowerCase()))
+                  .toList();
+                }
 
                 if(prospectosFiltrados.isEmpty){
-
                   for(int i = 0; i < apiResponse.data.length; i++){
                     if(apiResponse.data[i].contactName != null && apiResponse.data[i].contactName!.toLowerCase().contains(terminoBusqueda.toLowerCase())){
                       prospectosFiltrados.add(apiResponse.data[i]);
                     }
                   }
-
                 }
 
                 if(prospectosFiltrados.isEmpty){
@@ -273,6 +284,7 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                     producto.emailFrom.toLowerCase().contains(terminoBusqueda.toLowerCase())
                   ).toList();
                 }
+                */
               } else {
                 if(prospectosFiltrados.isEmpty && (terminoBusqueda.contains('+') || terminoBusqueda.contains('0'))){
                   for(int i = 0; i < apiResponse.data.length; i++){
@@ -348,10 +360,24 @@ class _ListaProspectosScreenState extends State<ListaProspectosScreen> {
                             EmojiInputFormatter()
                           ],
                           controller: filtroPrspTxt,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Buscar prospectos por nombre, correo o celular',
                             border: InputBorder.none,
-                            prefixIcon: Icon(Icons.search, color: Colors.grey),
+                            prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                terminoBusqueda = '';
+                                filtroPrspTxt.text = '';
+                                refreshDataByFiltro('', objRsp);
+                                setState(() {
+                                  
+                                });
+                              },
+                              icon: Icon(Icons.cancel,
+                                  size: 24,
+                                  color: AppLightColors()
+                                      .gray900PrimaryText),
+                            ),
                           ),
                           onChanged: (value) {
                             actualizaListaPrp = false;

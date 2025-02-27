@@ -221,9 +221,21 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
               if(!filtro.contains('+') && !filtro.contains('0')){                      
 
                 for(int i = 0; i < apiResponse.data.length; i++){
-                  if(apiResponse.data[i].name != null && apiResponse.data[i].name!.toLowerCase().contains(filtro.toLowerCase())){
+                  if((apiResponse.data[i].email != null && apiResponse.data[i].email!.toLowerCase().contains(filtro.toLowerCase())) || (apiResponse.data[i].name != null && apiResponse.data[i].name!.toLowerCase().contains(filtro.toLowerCase()))){
                     clientesFiltrados.add(apiResponse.data[i]);
                   }
+                }
+
+                /*
+
+                if(clientesFiltrados.isEmpty){
+
+                  for(int i = 0; i < apiResponse.data.length; i++){
+                    if(apiResponse.data[i].name != null && apiResponse.data[i].name!.toLowerCase().contains(filtro.toLowerCase())){
+                      clientesFiltrados.add(apiResponse.data[i]);
+                    }
+                  }
+
                 }
 
                 if(clientesFiltrados.isEmpty){
@@ -235,6 +247,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                   }
 
                 }
+                */
               } else {
                 if(clientesFiltrados.isEmpty) {
 
@@ -294,13 +307,24 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                         color: Colors.white,
                         width: size.width * 0.98,
                         child: TextField(
+                          controller: filtroCliTxt,
                           inputFormatters: [
                             EmojiInputFormatter()
                           ],
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Buscar clientes por nombre, correo o celular',
                             border: InputBorder.none,
-                            prefixIcon: Icon(Icons.search, color: Colors.grey),
+                            prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                filtroCliTxt.text = '';
+                                refreshDataByFiltro('', objRsp);
+                              },
+                              icon: Icon(Icons.cancel,
+                                  size: 24,
+                                  color: AppLightColors()
+                                      .gray900PrimaryText),
+                            ),
                           ),
                           onChanged: (value) {
                             actualizaListaCli = false;

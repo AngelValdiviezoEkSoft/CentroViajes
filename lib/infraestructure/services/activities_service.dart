@@ -385,7 +385,12 @@ class ActivitiesService extends ChangeNotifier{
         }
       }
 
+      String fechaBusqueda = '';
+
       if(fechas == null){
+
+        fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(DateTime.now());
+
         models = [
           {
             "model": EnvironmentsProd().modMailAct,
@@ -399,6 +404,8 @@ class ActivitiesService extends ChangeNotifier{
         ];
       } else {
         try{
+          fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(fechas[1]);
+
           models = [
             {
             "model": EnvironmentsProd().modMailAct,
@@ -414,6 +421,8 @@ class ActivitiesService extends ChangeNotifier{
         }
         catch(_)
         {
+          fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(fechas[0]);
+
           models = [
               {
               "model": EnvironmentsProd().modMailAct,
@@ -476,7 +485,7 @@ class ActivitiesService extends ChangeNotifier{
       };
 
       final headers = {
-        "Content-Type": EnvironmentsProd().contentType//"application/json",
+        "Content-Type": EnvironmentsProd().contentType
       };
 
       final response = await http.post(
@@ -585,10 +594,13 @@ class ActivitiesService extends ChangeNotifier{
         ActivitiesResponseModel  objMem = ActivitiesResponseModel .fromRawJson(lstEncr);
 
         for(int i = 0; i < objMem.data.length; i++){
-          objActividades.data.add(objMem.data[i]);         
-        }
-      }      
+          String fec = DateFormat('yyyy-MM-dd').format(objMem.data[i].dateDeadline);
 
+          if(fec == fechaBusqueda){
+            objActividades.data.add(objMem.data[i]);
+          }
+        }
+      }
       
       ActivitiesPageModel objRspFinal = ActivitiesPageModel(
         activities: objActividades,
@@ -874,7 +886,8 @@ class ActivitiesService extends ChangeNotifier{
               resModel: 'Test ${objMem.data.length}',
               summary: objActividad.summary,
               userId: IdActivities (id: objMem.data.length, name: 'Test ${objMem.data.length}'),
-              cerrado: true
+              cerrado: true,
+              //contactName: ''
             )
           );
 
@@ -892,7 +905,8 @@ class ActivitiesService extends ChangeNotifier{
                 resModel: 'Test 1',
                 summary: objActividad.summary,
                 userId: IdActivities (id: 1, name: 'Test 1'),
-                cerrado: true
+                cerrado: true,
+                //contactName: ''
               )
             ],
             length: 0,

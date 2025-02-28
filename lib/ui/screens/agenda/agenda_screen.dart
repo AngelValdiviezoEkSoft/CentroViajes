@@ -159,24 +159,6 @@ class AgendaScreenState extends State<AgendaScreen>  {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    // Selector de Mes o Semana
-                    /*
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              buildToggleButton("Mes", false),
-                              buildToggleButton("Semana", true),
-                            ],
-                          ),
-                          Icon(Icons.calendar_today),
-                        ],
-                      ),
-                    ),
-                    */
                     
                     SizedBox(height:  size.height * 0.02,),
           
@@ -222,41 +204,6 @@ class AgendaScreenState extends State<AgendaScreen>  {
                       
                     ),
                     
-                    if(isSelected[1])
-                    Container(
-                      width: size.width *0.95,
-                      height: size.height * 0.2,
-                      color: Colors.transparent,
-                      child: TableCalendar(     
-                        calendarFormat: calendarFormat,
-                        firstDay: DateTime.utc(2010, 10, 16),
-                        lastDay: DateTime.now(),
-                        focusedDay: focusedDayGen,
-                        selectedDayPredicate: (day) {
-                          return focusedDayGen == day;
-                        },
-                        onDaySelected: (selectedDay, focusedDay) async {
-                          
-                          _dates = [];
-                          _dates.add(selectedDay);
-
-                          ActivitiesPageModel objRsp = await ActivitiesService().getActivitiesByRangoFechas(_dates, objDatumCrmLead?.id ?? 0);
-
-                          actividadesFilAgenda = [];
-                          actividadesFilAgenda = objRsp.activities.data;
-
-                          setState(() {                                                    
-                            rspAct = objRsp;
-                            actualizaListaActAgenda = true;
-                            contLstAgenda = actividadesFilAgenda.length;
-
-                            selectedDayGen = selectedDay;
-                            focusedDayGen = focusedDay; // update `focusedDayGen` here as well
-                          });
-                        }
-                      )
-                    ),
-                    
                     if(isSelected[0])
                     Container(
                       width: size.width *0.95,
@@ -289,31 +236,47 @@ class AgendaScreenState extends State<AgendaScreen>  {
                         }
                       )                          
                     ),
-                    /*
+
+                    
+                    if(isSelected[1])
                     Container(
                       width: size.width *0.95,
-                      height: size.height * 0.39,
+                      height: size.height * 0.2,
                       color: Colors.transparent,
                       child: TableCalendar(     
-                        //calendarFormat: calendarFormat,
+                        headerStyle: const HeaderStyle(formatButtonVisible: false),
+                        calendarFormat: calendarFormat,
                         firstDay: DateTime.utc(2010, 10, 16),
                         lastDay: DateTime.now(),
                         focusedDay: focusedDayGen,
                         selectedDayPredicate: (day) {
                           return focusedDayGen == day;
                         },
-                        onDaySelected: (selectedDay, focusedDay) {
-                          setState(() {
+                        onDaySelected: (selectedDay, focusedDay) async {
+                          
+                          _dates = [];
+                          _dates.add(selectedDay);
+
+                          ActivitiesPageModel objRsp = await ActivitiesService().getActivitiesByRangoFechas(_dates, objDatumCrmLead?.id ?? 0);
+
+                          actividadesFilAgenda = [];
+                          actividadesFilAgenda = objRsp.activities.data;
+
+                          setState(() {                                                    
+                            rspAct = objRsp;
+                            actualizaListaActAgenda = true;
+                            contLstAgenda = actividadesFilAgenda.length;
+
                             selectedDayGen = selectedDay;
                             focusedDayGen = focusedDay; // update `focusedDayGen` here as well
                           });
                         }
                       )
                     ),
-                    */
                     
                     SizedBox(height: size.height * 0.008),
 
+                    if(contLstAgenda > 0)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: TextField(
@@ -323,7 +286,10 @@ class AgendaScreenState extends State<AgendaScreen>  {
                           terminoBusquedaActAgenda = value;                          
                         },
                         onEditingComplete: () {
-                          refreshDataByFiltro(filtroAgendaTxt.text);
+                          if(filtroAgendaTxt.text.isNotEmpty){
+                            refreshDataByFiltro(filtroAgendaTxt.text);
+                          }
+                          
                           FocusScope.of(context).unfocus();
                         },
                         decoration: InputDecoration(
@@ -347,14 +313,13 @@ class AgendaScreenState extends State<AgendaScreen>  {
                       ),
                     ),
 
-                    //if(contLstAgenda > 0)
                     SizedBox(height: size.height * 0.007),
 
                     if(contLstAgenda > 0)
                     Container(
                       color: Colors.transparent,
                       width: size.width,
-                      height: size.height * 0.55,
+                      height: isSelected[1] ? size.height * 0.53 : size.height * 0.33,
                       child: ListView.builder(
                         controller: scrollListaClt,
                         itemCount: contLstAgenda,
@@ -500,23 +465,14 @@ class AgendaScreenState extends State<AgendaScreen>  {
 
                     if(contLstAgenda == 0)
                     Container(
-                      width: size.width,
-                      height: size.height,
+                      width: size.width * 0.9,
+                      height: isSelected[1] ? size.height * 0.5 : size.height * 0.2,
                       color: Colors.transparent,
-                      /*
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/upsSolicitudes.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        color: Colors.transparent
-                      ),
-                      */
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(height: size.height * 0.58,),
+                          /*
                           Container(
                             color: Colors.transparent,
                             width: size.width * 0.95,
@@ -524,34 +480,20 @@ class AgendaScreenState extends State<AgendaScreen>  {
                             alignment: Alignment.center,
                             child: AutoSizeText('¡HEY!', style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'AristotelicaDisplayDemiBoldTrial',color: objColorsApp.naranjaIntenso,), maxLines: 1,  presetFontSizes: const [58,56,54,52,50,48,46,44,42,40,38,36,34,32,30,28,26,24,22,20,18,16,14,12,10]),
                           ),
+                          */
                           Container(
                             color: Colors.transparent,
                             width: size.width * 0.95,
                             height: size.height * 0.09,
                             alignment: Alignment.topCenter,
-                            child: const AutoSizeText('No existen actividades agendadas para la fecha actual', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold,), maxLines: 2,  presetFontSizes: [42,40,38,36,34,32,30,28,26,24,22,20,18,16,14,12,10]),
+                            child: const AutoSizeText('No existen actividades agendadas para la fecha seleccionada', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold,), maxLines: 2,  presetFontSizes: [42,40,38,36,34,32,30,28,26,24,22,20,18,16,14,12,10]),
                           ),
                         ],
                       ), 
                     ),
 
-                    /*
-                    // Lista de agendas
-                    Container(
-                      width: size.width *0.95,
-                      height: isSelected[1] ? size.height * 0.55 : size.height * 0.4,
-                      color: Colors.transparent,
-                      child: ListView.builder(
-                        itemCount: 5, // Número de elementos en la lista
-                        itemBuilder: (context, index) {
-                          return _buildAgendaItem();
-                        },
-                      ),
-                    ),
-                    */
-                
                     SizedBox(
-                      height: size.height * 0.08,
+                      height: size.height * 0.02,
                     )
                   ],
                 ),

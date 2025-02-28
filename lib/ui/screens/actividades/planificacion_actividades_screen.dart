@@ -83,8 +83,8 @@ class PlanActState extends State<PlanificacionActividades> {
                 body: Center(
                   child: Image.asset(
                     "assets/gifs/gif_carga.gif",
-                    height: size.width * 0.85,//150.0,
-                    width: size.width * 0.85,//150.0,
+                    height: size.width * 0.85,
+                    width: size.width * 0.85,
                   ),
                 ),
               );
@@ -874,8 +874,8 @@ class PlanActStateTwo extends State<PlanAct> {
                 body: Center(
                   child: Image.asset(
                     "assets/gifs/gif_carga.gif",
-                    height: size.width * 0.85,//150.0,
-                    width: size.width * 0.85,//150.0,
+                    height: size.width * 0.85,
+                    width: size.width * 0.85,
                   ),
                 ),
               );
@@ -1301,17 +1301,13 @@ class PlanActStateTwo extends State<PlanAct> {
                             ),                                              
                             controller: notasActTxt,
                             autocorrect: false,
-                            keyboardType: TextInputType.text,
+                            keyboardType: TextInputType.multiline,
                             minLines: 1,
                             maxLines: 4,
                             autofocus: false,
-                            maxLength: 150,
                             textAlign: TextAlign.left,
                             onEditingComplete: () {
                               FocusScope.of(context).unfocus();
-                            },
-                            onChanged: (value) {
-                              
                             },
                             onTapOutside: (event) {
                               FocusScope.of(context).unfocus();
@@ -1478,14 +1474,10 @@ class BtnSlidableActionState extends State<BtnSlidableAction> {
                           keyboardType: TextInputType.text,
                           minLines: 1,
                           maxLines: 4,
-                          autofocus: false,
-                          maxLength: 150,
+                          autofocus: false,                          
                           textAlign: TextAlign.left,
                           onEditingComplete: () {
                             FocusScope.of(context).unfocus();
-                          },
-                          onChanged: (value) {
-                            
                           },
                           onTapOutside: (event) {
                             FocusScope.of(context).unfocus();

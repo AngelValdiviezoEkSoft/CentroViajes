@@ -1260,11 +1260,10 @@ class PlanActivStateTwo extends State<PlanActiv> {
                             ),                                              
                             controller: notasActTxtAct,
                             autocorrect: false,
-                            keyboardType: TextInputType.text,
+                            keyboardType: TextInputType.multiline,
                             minLines: 1,
                             maxLines: 4,
                             autofocus: false,
-                            maxLength: 150,
                             textAlign: TextAlign.left,
                             onEditingComplete: () {
                               FocusScope.of(context).unfocus();

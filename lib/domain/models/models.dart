@@ -1,3 +1,6 @@
+
+export 'package:cvs_ec_app/domain/models/mail_message_response_model.dart';
+
 export 'package:cvs_ec_app/domain/models/cierre_actividad_response.dart';
 
 export 'package:cvs_ec_app/domain/models/activities_page_model.dart';

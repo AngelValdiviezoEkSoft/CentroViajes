@@ -13,6 +13,8 @@ const storageAct = FlutterSecureStorage();
 
 class ActivitiesService extends ChangeNotifier{
 
+  static final jsonRpc = EnvironmentsProd().jsonrpc;
+
   final TokenManager tokenManager = TokenManager();
 
   final String endPoint = CadenaConexion().apiEndpoint;
@@ -48,7 +50,7 @@ class ActivitiesService extends ChangeNotifier{
       var objLogDecode = json.decode(objLog);
 
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-        jsonrpc: EnvironmentsProd().jsonrpc,
+        jsonrpc: jsonRpc,
         params: ParamsMultiModels(
           bearer: obj.result.bearer,
           company: objLogDecode['result']['current_company'],
@@ -73,7 +75,7 @@ class ActivitiesService extends ChangeNotifier{
       String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 
       final requestBody = {
-        "jsonrpc": EnvironmentsProd().jsonrpc,
+        "jsonrpc": jsonRpc,
         "params": {
           "key": objReq.params.key,
           "tocken": objReq.params.tocken,
@@ -160,7 +162,7 @@ class ActivitiesService extends ChangeNotifier{
       var objLogDecode = json.decode(objLog);
 
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-        jsonrpc: EnvironmentsProd().jsonrpc,
+        jsonrpc: jsonRpc,
         params: ParamsMultiModels(
           bearer: obj.result.bearer,
           company: objLogDecode['result']['current_company'],
@@ -185,7 +187,7 @@ class ActivitiesService extends ChangeNotifier{
       String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 
       final requestBody = {
-        "jsonrpc": EnvironmentsProd().jsonrpc,
+        "jsonrpc": jsonRpc,
         "params": {
           "key": objReq.params.key,
           "tocken": objReq.params.tocken,
@@ -265,7 +267,7 @@ class ActivitiesService extends ChangeNotifier{
       var objLogDecode = json.decode(objLog);
 
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-        jsonrpc: EnvironmentsProd().jsonrpc,
+        jsonrpc: jsonRpc,
         params: ParamsMultiModels(
           bearer: obj.result.bearer,
           company: objLogDecode['result']['current_company'],
@@ -290,7 +292,7 @@ class ActivitiesService extends ChangeNotifier{
       String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 
       final requestBody = {
-        "jsonrpc": EnvironmentsProd().jsonrpc,
+        "jsonrpc": jsonRpc,
         "params": {
           "key": objReq.params.key,
           "tocken": objReq.params.tocken,
@@ -344,6 +346,7 @@ class ActivitiesService extends ChangeNotifier{
 
   getActivitiesByRangoFechas(fechas, resId) async {
     try{
+      String modeloConsulta = EnvironmentsProd().modMailAct;
 
       List<MultiModel> lstMultiModel = [];
 
@@ -386,14 +389,14 @@ class ActivitiesService extends ChangeNotifier{
       }
 
       String fechaBusqueda = '';
-
+      
       if(fechas == null){
 
         fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(DateTime.now());
 
         models = [
           {
-            "model": EnvironmentsProd().modMailAct,
+            "model": modeloConsulta,
             "filters": [            
               ["date_deadline","=",DateFormat('yyyy-MM-dd', 'es').format(DateTime.now())],            
               ["res_model_id", "=", 501],
@@ -408,7 +411,7 @@ class ActivitiesService extends ChangeNotifier{
 
           models = [
             {
-            "model": EnvironmentsProd().modMailAct,
+            "model": modeloConsulta,
             "filters": [            
               ["date_deadline",">=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],            
               ["date_deadline","<=",DateFormat('yyyy-MM-dd', 'es').format(fechas[1])],
@@ -425,7 +428,7 @@ class ActivitiesService extends ChangeNotifier{
 
           models = [
               {
-              "model": EnvironmentsProd().modMailAct,
+              "model": modeloConsulta,
               "filters": [            
                 ["date_deadline","=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],            
                 ["res_model_id", "=", 501],
@@ -446,7 +449,7 @@ class ActivitiesService extends ChangeNotifier{
       var objLogDecode = json.decode(objLog);
 
       ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-        jsonrpc: EnvironmentsProd().jsonrpc,
+        jsonrpc: jsonRpc,
         params: ParamsMultiModels(
           bearer: obj.result.bearer,
           company: objLogDecode['result']['current_company'],
@@ -471,7 +474,7 @@ class ActivitiesService extends ChangeNotifier{
       String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 
       final requestBody = {
-        "jsonrpc": EnvironmentsProd().jsonrpc,
+        "jsonrpc": jsonRpc,
         "params": {
           "key": objReq.params.key,
           "tocken": objReq.params.tocken,
@@ -512,13 +515,12 @@ class ActivitiesService extends ChangeNotifier{
       
       for(int i = 0; i < apiResponse.data.length; i++){
         if(apiResponse.data[i].id == resId){
-          //prospectosFiltrados.add(apiResponse.data[i]);
           objFin = apiResponse.data[i];
         }
       }
 
       DatumCrmLead objDatumCrmLeadFin = DatumCrmLead(
-        activityIds: [],//objFin!.activityIds,
+        activityIds: [],
         campaignId: CampaignId(
           id: objFin?.campaignId.id ?? 0,
           name: objFin?.campaignId.name ?? ''
@@ -601,11 +603,41 @@ class ActivitiesService extends ChangeNotifier{
           }
         }
       }
+
+      if(objActividades.data.isNotEmpty){
+        MailMessageResponseModel objRsp = await getActivitiesCerradasByRangoFechas(fechas, resId);
+        //print('Test: ${}');
+        if(objRsp.result.data.mailMessage.length > 0){
+          //objActividades.dataMessage = objRsp.result.data.mailMessage.data;
+          for(int i = 0; i < objRsp.result.data.mailMessage.data.length; i++)
+          {
+              objActividades.data.add(
+                DatumActivitiesResponse(
+                  activityTypeId: IdActivities(
+                    id: objRsp.result.data.mailMessage.data[i].mailActivityTypeId.id,
+                    name: objRsp.result.data.mailMessage.data[i].mailActivityTypeId.name
+                  ),
+                  cerrado: true,
+                  dateDeadline: objRsp.result.data.mailMessage.data[i].dateDeadLine,
+                  id: objRsp.result.data.mailMessage.data[i].id,
+                  resId: objRsp.result.data.mailMessage.data[i].resId,
+                  resModel: 'Mail.Message',
+                  summary: objRsp.result.data.mailMessage.data[i].description,
+                  userId: IdActivities(
+                    id: 0,
+                    name: '',
+                  )
+                )
+              );
+          }
+        }        
+
+      }
       
       ActivitiesPageModel objRspFinal = ActivitiesPageModel(
         activities: objActividades,
         lead: objDatumCrmLeadFin,
-        objMailAct: objFinAct
+        objMailAct: objFinAct,
       );
 
       return objRspFinal;
@@ -614,6 +646,158 @@ class ActivitiesService extends ChangeNotifier{
      //print('Test: $ex');
     }
   }
+
+  getActivitiesCerradasByRangoFechas(fechas, resId) async {
+    try{
+
+      String modeloConsulta = EnvironmentsProd().modMailMessage;
+
+      if(resId == 0){        
+        var idMem = await storageProspecto.read(key: 'idMem') ?? '';
+
+        if(idMem.isNotEmpty){
+          resId = int.parse(idMem);
+        }        
+      }
+
+      var models = [];
+
+      if(fechas == 'mem'){
+        var fecMem = await storageProspecto.read(key: 'fecMem') ?? '';
+
+        if(fecMem.isNotEmpty){
+          DateTime fecha = DateTime.parse(fecMem);
+          fechas = null;
+          fechas = [];
+          fechas.add(fecha);
+        } else {
+          fechas = null;
+        }
+      } else {
+        var fecMem = await storageProspecto.read(key: 'fecMem') ?? '';
+
+        if(fecMem.isNotEmpty){
+          DateTime fecha = DateTime.parse(fecMem);
+
+          fechas = null;
+          fechas = [];
+
+          fechas.add(fecha);
+        }
+      }
+
+      String fechaBusqueda = '';
+
+      if(fechas == null){
+
+        fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(DateTime.now());
+
+        models = [
+          {
+            "model": modeloConsulta,
+            "filters": [
+              ["activity_due_date","=",DateFormat('yyyy-MM-dd', 'es').format(DateTime.now())],
+            ]
+          },
+        ];
+      } else {
+        try{
+          fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(fechas[1]);
+
+          models = [
+            {
+            "model": modeloConsulta,
+            "filters": [            
+              ["activity_due_date",">=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],            
+              ["activity_due_date","<=",DateFormat('yyyy-MM-dd', 'es').format(fechas[1])],              
+            ]
+          },
+        ];
+        }
+        catch(_)
+        {
+          fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(fechas[0]);
+
+          models = [
+              {
+              "model": modeloConsulta,
+              "filters": [            
+                ["activity_due_date",">=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],
+                ["activity_due_date","<=",DateFormat('yyyy-MM-dd', 'es').format(fechas[0])],
+              ]
+            },
+          ];
+        }
+      }
+
+      var codImei = await storageProspecto.read(key: 'codImei') ?? '';
+
+      var objReg = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
+      var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+      var objLog = await storageProspecto.read(key: 'RespuestaLogin') ?? '';
+      var objLogDecode = json.decode(objLog);
+
+      ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
+        jsonrpc: jsonRpc,
+        params: ParamsMultiModels(
+          bearer: obj.result.bearer,
+          company: objLogDecode['result']['current_company'],
+          imei: codImei,
+          key: obj.result.key,
+          tocken: obj.result.tocken,
+          tockenValidDate: obj.result.tockenValidDate,
+          uid: objLogDecode['result']['uid'],
+          models: []
+        )
+      );
+
+      String ruta = '';
+      final objStr = await storageCamp.read(key: 'RespuestaRegistro') ?? '';
+      
+      if(objStr.isNotEmpty)
+      {  
+        var obj = RegisterDeviceResponseModel.fromJson(objStr);
+        ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/data/multi/models';
+      }
+
+      String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
+
+      final requestBody = {
+        "jsonrpc": jsonRpc,
+        "params": {
+          "key": objReq.params.key,
+          "tocken": objReq.params.tocken,
+          "imei": objReq.params.imei,
+          "uid": objReq.params.uid,
+          "company": objReq.params.company,
+          "bearer": objReq.params.bearer,
+          "tocken_valid_date": tockenValidDate,
+          "models": models
+        }
+      };
+
+      final headers = {
+        "Content-Type": EnvironmentsProd().contentType
+      };
+
+      final response = await http.post(
+        Uri.parse(ruta),
+        headers: headers,
+        body: jsonEncode(requestBody), 
+      );
+
+      print('Test: ${response.body}');
+      
+      var rsp = MailMessageResponseModel.fromRawJson(response.body);
+
+      return rsp;
+    }
+    catch(ex){
+     print('Test: $ex');
+    }
+  }
+
 
   registroActividades(ActivitiesTypeRequestModel objActividad) async {
     String internet = await ValidacionesUtils().validaInternet();
@@ -640,7 +824,7 @@ class ActivitiesService extends ChangeNotifier{
         );
 
         ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-          jsonrpc: EnvironmentsProd().jsonrpc,
+          jsonrpc: jsonRpc,
           params: ParamsMultiModels(
             bearer: obj.result.bearer,
             company: objLogDecode['result']['current_company'],
@@ -656,7 +840,7 @@ class ActivitiesService extends ChangeNotifier{
         String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 
         final requestBody = {
-          "jsonrpc": EnvironmentsProd().jsonrpc,
+          "jsonrpc": jsonRpc,
           "params": {
             "key": objReq.params.key,
             "tocken": objReq.params.tocken,
@@ -795,7 +979,7 @@ class ActivitiesService extends ChangeNotifier{
         );
 
         ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
-          jsonrpc: EnvironmentsProd().jsonrpc,
+          jsonrpc: jsonRpc,
           params: ParamsMultiModels(
             bearer: obj.result.bearer,
             company: objLogDecode['result']['current_company'],
@@ -811,7 +995,7 @@ class ActivitiesService extends ChangeNotifier{
         String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
 
         final requestBody = {
-          "jsonrpc": EnvironmentsProd().jsonrpc,
+          "jsonrpc": jsonRpc,
           "params": {
             "key": objReq.params.key,
             "tocken": objReq.params.tocken,
@@ -895,7 +1079,7 @@ class ActivitiesService extends ChangeNotifier{
         }
         else {
 
-          ActivitiesResponseModel  objMem = ActivitiesResponseModel(
+          ActivitiesResponseModel  objMem = ActivitiesResponseModel(            
             data: [
               DatumActivitiesResponse(
                 activityTypeId: IdActivities (id: 1, name: 'Test 1'),

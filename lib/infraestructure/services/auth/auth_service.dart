@@ -220,7 +220,7 @@ class AuthService extends ChangeNotifier {
         body: jsonEncode(body),
       );
 
-      //print('Test: ${response.body}');
+      print('Test: ${response.body}');
       
       var rspValidacion = json.decode(response.body);
 
@@ -274,7 +274,7 @@ class AuthService extends ChangeNotifier {
         {
           "model": EnvironmentsProd().modPaise,//"res.country",
           "filters": []
-        },        
+        },
       ];
 
       await storage.write(key: 'RespuestaLogin', value: response.body);

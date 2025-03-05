@@ -1,14 +1,18 @@
 import 'dart:convert';
 
+//import 'package:cvs_ec_app/domain/domain.dart';
+
 class ActivitiesResponseModel {
     int length;
     FieldsActivities fields;
     List<DatumActivitiesResponse> data;
+    //List<DatumMailMessage> dataMessage;
 
     ActivitiesResponseModel({
         required this.length,
         required this.fields,
         required this.data,
+        //required this.dataMessage
     });
 
     factory ActivitiesResponseModel.fromRawJson(String str) => ActivitiesResponseModel.fromJson(json.decode(str));
@@ -19,12 +23,14 @@ class ActivitiesResponseModel {
         length: json["length"] ?? 0,
         fields: FieldsActivities.fromJson(json["fields"]),
         data: List<DatumActivitiesResponse>.from(json["data"].map((x) => DatumActivitiesResponse.fromJson(x))),
+        //dataMessage: []
     );
 
     Map<String, dynamic> toJson() => {
         "length": length,
         "fields": fields.toJson(),
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        //"dataMessage": List<dynamic>.from(dataMessage.map((x) => x.toJson())),
     };
 }
 

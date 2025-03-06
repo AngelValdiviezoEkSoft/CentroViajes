@@ -592,7 +592,10 @@ class ActivitiesService extends ChangeNotifier{
 
       final lstEncr = await storageCamp.read(key: 'LstActividadesAbiertasCerradas') ?? '';
 
-      if(lstEncr.isNotEmpty){
+      String internet = await ValidacionesUtils().validaInternet();
+    
+
+      if(lstEncr.isNotEmpty && internet.isNotEmpty){
         ActivitiesResponseModel  objMem = ActivitiesResponseModel .fromRawJson(lstEncr);
 
         for(int i = 0; i < objMem.data.length; i++){
@@ -604,11 +607,11 @@ class ActivitiesService extends ChangeNotifier{
         }
       }
 
-      if(objActividades.data.isNotEmpty){
+      if(internet.isEmpty){
         MailMessageResponseModel objRsp = await getActivitiesCerradasByRangoFechas(fechas, resId);
-        //print('Test: ${}');
+        
         if(objRsp.result.data.mailMessage.length > 0){
-          //objActividades.dataMessage = objRsp.result.data.mailMessage.data;
+          
           for(int i = 0; i < objRsp.result.data.mailMessage.data.length; i++)
           {
               objActividades.data.add(
@@ -1006,12 +1009,12 @@ class ActivitiesService extends ChangeNotifier{
             "tocken_valid_date": tockenValidDate,
             "id": objActividad.actId,
             "write": {
-              "date_deadline": DateFormat('yyyy-MM-dd', 'es').format(objActividad.dateDeadline!),              
+              //"date_deadline": DateFormat('yyyy-MM-dd', 'es').format(objActividad.dateDeadline!),
               "res_model_id": 501,
               "user_id": objActividad.userId,
               "res_id": objActividad.resId,
-              "summary": objActividad.summary,
-              "note": objActividad.note,              
+              //"summary": objActividad.summary,
+              "note": objActividad.note,
               "working_time": objActividad.workingTime,
             },
           }

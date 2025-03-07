@@ -689,11 +689,11 @@ class ActivitiesService extends ChangeNotifier{
         }
       }
 
-      String fechaBusqueda = '';
+      //String fechaBusqueda = '';
 
       if(fechas == null){
 
-        fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(DateTime.now());
+        //fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(DateTime.now());
 
         models = [
           {
@@ -705,7 +705,7 @@ class ActivitiesService extends ChangeNotifier{
         ];
       } else {
         try{
-          fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(fechas[1]);
+          //fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(fechas[1]);
 
           models = [
             {
@@ -719,7 +719,7 @@ class ActivitiesService extends ChangeNotifier{
         }
         catch(_)
         {
-          fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(fechas[0]);
+          //fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(fechas[0]);
 
           models = [
               {
@@ -790,14 +790,14 @@ class ActivitiesService extends ChangeNotifier{
         body: jsonEncode(requestBody), 
       );
 
-      print('Test: ${response.body}');
+      //print('Test: ${response.body}');
       
       var rsp = MailMessageResponseModel.fromRawJson(response.body);
 
       return rsp;
     }
-    catch(ex){
-     print('Test: $ex');
+    catch(_){
+     //print('Test: $ex');
     }
   }
 
@@ -889,7 +889,7 @@ class ActivitiesService extends ChangeNotifier{
           body: jsonEncode(requestBody), 
         );
 
-        print('respuesta: ${response.body}');
+        //print('respuesta: ${response.body}');
       
         var rspValidacion = json.decode(response.body);
 

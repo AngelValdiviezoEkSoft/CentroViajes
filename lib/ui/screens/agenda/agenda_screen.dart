@@ -534,7 +534,7 @@ class AgendaScreenState extends State<AgendaScreen>  {
   }
 
   // Widget para cada elemento de la agenda
-  Widget _buildAgendaItem() {
+  Widget buildAgendaItem() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
       child: Card(

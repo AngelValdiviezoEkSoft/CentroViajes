@@ -184,7 +184,7 @@ class ListaNotificaciones extends StatelessWidget {
     final int varNumNotificacionesComp = 0;//Provider.of<NotificacionesService>(context,listen: false).contNotificacionesCompras;
     final int varNumNotificacionesInfo = 0;//Provider.of<NotificacionesService>(context,listen: false).contNotificacionesInformativo;
     */
-    int numNot = 0;
+    //int numNot = 0;
 
     final sizeLstNot = MediaQuery.of(context).size;
     initializeDateFormatting('es'); 
@@ -193,22 +193,22 @@ class ListaNotificaciones extends StatelessWidget {
     //List<ItemBoton> itemsNot = [];
 
   if(varIdNotificacionLst == 1) {
-    numNot = 0;
+    //numNot = 0;
     //numNot = varNumNotificacionesTrAp;
   }
 
   if(varIdNotificacionLst == 2) {
-    numNot = 0;
+    //numNot = 0;
     //numNot = varNumNotificacionesTrProc;
   }
   
   if(varIdNotificacionLst == 3) {
-    numNot = 0;
+    //numNot = 0;
     //numNot = varNumNotificacionesComp;
   }
   
   if(varIdNotificacionLst == 4) {
-    numNot = 0;
+    //numNot = 0;
     //numNot = varNumNotificacionesInfo;
   }
 

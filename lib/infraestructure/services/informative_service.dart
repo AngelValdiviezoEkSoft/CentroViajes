@@ -98,13 +98,13 @@ class InformativeService extends ChangeNotifier{
         body: jsonEncode(requestBody), 
       );
 
-      print('Resultado: ${response.body}');
+      //print('Resultado: ${response.body}');
       
       var rsp = AppResponseModel.fromRawJson(response.body);
 
       String cmbLstAct = json.encode(rsp.result.data.mailActivity);
 
-      ActivitiesResponseModel objActividades = ActivitiesResponseModel.fromRawJson(cmbLstAct);
+      ActivitiesResponseModel _ = ActivitiesResponseModel.fromRawJson(cmbLstAct);
 
       var lstProsp = await storageCamp.read(key: 'RespuestaProspectos') ?? '';
 

@@ -88,6 +88,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
     String resInt = await ValidacionesUtils().validaInternet();
 
     showDialog(
+      //ignore: use_build_context_synchronously
       context: context,
       barrierDismissible: false,
       builder: (context) => SimpleDialog(
@@ -136,6 +137,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
         clientesFiltrados = apiResponse.result.data.resPartner.data;
       }
 
+      //ignore: use_build_context_synchronously
       context.pop();
 
       setState(() {
@@ -144,10 +146,12 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
 
     } else {
 
+      //ignore: use_build_context_synchronously
       context.pop();
 
       showDialog(
         barrierDismissible: false,
+        //ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
           return ContentAlertDialog(

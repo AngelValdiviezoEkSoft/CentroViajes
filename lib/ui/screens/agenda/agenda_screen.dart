@@ -237,7 +237,6 @@ class AgendaScreenState extends State<AgendaScreen>  {
                       )                          
                     ),
 
-                    
                     if(isSelected[1])
                     Container(
                       width: size.width *0.95,
@@ -276,7 +275,6 @@ class AgendaScreenState extends State<AgendaScreen>  {
                     
                     SizedBox(height: size.height * 0.008),
 
-                    if(contLstAgenda > 0)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: TextField(
@@ -285,11 +283,38 @@ class AgendaScreenState extends State<AgendaScreen>  {
                           actualizaListaActAgenda = true;
                           terminoBusquedaActAgenda = value;                          
                         },
-                        onEditingComplete: () {
+                        onEditingComplete: () async {
+                          
+                          if(isSelected[0]){//MES
+                            if(filtroAgendaTxt.text.isEmpty){
+                              FocusScope.of(context).unfocus();
+                              return;
+                            }
+
+                            if(_dates.length == 1)
+                            {
+                              FocusScope.of(context).unfocus();
+                              return;
+                            }
+                            ActivitiesPageModel objRsp = await ActivitiesService().getActivitiesByRangoFechas(_dates, objDatumCrmLead?.id ?? 0);
+
+                            actividadesFilAgenda = [];
+                            actividadesFilAgenda = objRsp.activities.data;
+
+                            setState(() {
+                              rspAct = objRsp;//.activities;
+                              actualizaListaActAgenda = true;
+                              contLstAgenda = actividadesFilAgenda.length;
+                            });
+
+                            refreshDataByFiltro(filtroAgendaTxt.text);
+                          }
+
                           if(filtroAgendaTxt.text.isNotEmpty){
                             refreshDataByFiltro(filtroAgendaTxt.text);
                           }
                           
+                          //ignore: use_build_context_synchronously
                           FocusScope.of(context).unfocus();
                         },
                         decoration: InputDecoration(
@@ -299,9 +324,30 @@ class AgendaScreenState extends State<AgendaScreen>  {
                             borderRadius: BorderRadius.circular(30),
                           ),
                           suffixIcon: IconButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 filtroAgendaTxt.text = '';
                                 terminoBusquedaActAgenda = '';
+                                
+                                if(isSelected[0]){//MES
+                                  
+                                  if(_dates.length == 1)
+                                  {
+                                    return;
+                                  }
+                                  ActivitiesPageModel objRsp = await ActivitiesService().getActivitiesByRangoFechas(_dates, objDatumCrmLead?.id ?? 0);
+
+                                  actividadesFilAgenda = [];
+                                  actividadesFilAgenda = objRsp.activities.data;
+
+                                  setState(() {
+                                    rspAct = objRsp;//.activities;
+                                    actualizaListaActAgenda = true;
+                                    contLstAgenda = actividadesFilAgenda.length;
+                                  });
+
+                                  return;
+                                }
+                                
                                 refreshDataByFiltro('');
                               },
                               icon: Icon(Icons.cancel,

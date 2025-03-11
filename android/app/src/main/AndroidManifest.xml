@@ -19,7 +19,7 @@ package="com.ekuasoft.cvs_ec_app">
     <application
         android:label="D-One"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/logo_app">
 
         <meta-data android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyBNRevgaESKXBVcIFnEPVBQcTc1i_yqE6k"/>

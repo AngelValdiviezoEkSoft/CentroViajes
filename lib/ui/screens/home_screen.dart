@@ -194,7 +194,7 @@ class HomeScreenState extends State<HomeScreen> {
                               
                           Container(
                             color: Colors.transparent,
-                            width: size.width * 0.65,
+                            width: size.width * 0.69,
                             height: size.height * 0.055,
                             child:   DropdownButton<String>(
                                 hint: const Icon(Icons.flip_camera_android_rounded), // Ícono del ComboBox
@@ -209,7 +209,7 @@ class HomeScreenState extends State<HomeScreen> {
                                 .map((activityPrsp) =>
                                     DropdownMenuItem(
                                       value: activityPrsp,
-                                      child: Text(activityPrsp),
+                                      child: AutoSizeText(activityPrsp, maxLines: 1, style: const TextStyle(fontSize: 12), presetFontSizes: const [15,14,12,10,8,6,4],),
                                     ))
                                 .toList(),
                               ),

@@ -14,18 +14,6 @@ void main() async {
 
   await initializeDateFormatting();
 
-  /*
-  Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-    if (result == ConnectivityResult.mobile) {
-      print("Conectado a una red móvil.");
-    } else if (result == ConnectivityResult.wifi) {
-      print("Conectado a una red Wi-Fi.");
-    } else {
-      print("Sin conexión a internet.");
-    }
-  });
-  */
-
   runApp( 
     MultiBlocProvider(
       providers: [//

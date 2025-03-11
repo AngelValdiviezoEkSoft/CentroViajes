@@ -600,7 +600,6 @@ class PlanActState extends State<PlanificacionActividades> {
                                                       );
                                                     
                                                     },
-                                                    
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                       backgroundColor: const Color(

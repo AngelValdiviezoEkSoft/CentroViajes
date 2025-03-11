@@ -217,7 +217,7 @@ class Welcome2Screen extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 20.0),
           child: GestureDetector(
       onTap: () async {
-    /*
+    
         if(serverTxt.text.isEmpty || keyTxt.text.isEmpty){
           showDialog(
             barrierDismissible: false,
@@ -241,7 +241,6 @@ class Welcome2Screen extends StatelessWidget {
     
           return;
         }
-        */
     
         showDialog(
           context: context,
@@ -278,7 +277,7 @@ class Welcome2Screen extends StatelessWidget {
     
           Position position = await getLocation();
     
-          //imeiCod = '82345604023'; //BORRAR LUEGO - PARA EMULADOR
+          imeiCod = '82345604025'; //BORRAR LUEGO - PARA EMULADOR
           //imeiCod = '82345604000002Luis'; //BORRAR LUEGO - PARA CELULAR PRUEBAS
           //imeiCod = '82345604113'; //BORRAR LUEGO - PARA EMULADOR
     

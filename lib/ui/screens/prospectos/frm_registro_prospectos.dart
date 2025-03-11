@@ -641,8 +641,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               (activityPrsp) =>
                                                 DropdownMenuItem(
                                                   value: activityPrsp,
-                                                  child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
-                                                  //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 1, maxFontSize: 12,),
+                                                  //child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                                  child: AutoSizeText(activityPrsp, presetFontSizes: const [12, 10, 8, 6,4], maxLines: 1, minFontSize: 2, maxFontSize: 12,),
                                                 )
                                               )
                                             .toList(),
@@ -693,8 +693,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                           items: lstCampanias.map((activityPrsp) =>
                                                   DropdownMenuItem(
                                                     value: activityPrsp,
-                                                    child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
-                                                    //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                    //child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                                    child: AutoSizeText(activityPrsp, presetFontSizes: const [12, 10, 8, 6,4], maxLines: 1, minFontSize: 2, maxFontSize: 12,),
                                                   ))
                                               .toList(),
                                           onChanged: (String? newValue) {                        
@@ -744,8 +744,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                               .map((activityPrsp) =>
                                                   DropdownMenuItem(
                                                     value: activityPrsp,
-                                                    child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
-                                                    //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                    //child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                                    child: AutoSizeText(activityPrsp, presetFontSizes: const [10, 8, 6,4], maxLines: 1, minFontSize: 2, maxFontSize: 12,),
                                                   ))
                                               .toList(),
                                           onChanged: (newValue) {
@@ -795,8 +795,8 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                           .map((activityPrsp) =>
                                                               DropdownMenuItem(
                                                                 value: activityPrsp,
-                                                                child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
-                                                                //child: AutoSizeText(activityPrsp, maxLines: 1, minFontSize: 2, maxFontSize: 13,),
+                                                                //child: Text(activityPrsp, overflow: TextOverflow.ellipsis, maxLines: 1, style: const TextStyle(fontSize: 12),),
+                                                                child: AutoSizeText(activityPrsp, presetFontSizes: const [12, 10, 8, 6,4], maxLines: 1, minFontSize: 2, maxFontSize: 12,),
                                                               ))
                                                           .toList(),
                                                       onChanged: (newValue) {
@@ -1171,7 +1171,7 @@ class _FrmRegistroProspectoScreenState extends State<FrmRegistroProspectoScreen>
                                                 ),
                                                 controller: observacionesTxt,
                                                 autocorrect: false,
-                                                keyboardType: TextInputType.text,
+                                                keyboardType: TextInputType.multiline,
                                                 minLines: 1,
                                                 maxLines: 4,
                                                 autofocus: false,

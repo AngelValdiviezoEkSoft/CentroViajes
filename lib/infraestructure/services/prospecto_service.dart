@@ -447,7 +447,7 @@ class ProspectoTypeService extends ChangeNotifier{
           mensaje: '', 
           data: []
         ),
-        mensaje: 'No tiene conexión a internet, ahora tiene datos pendientes de grabar.'
+        mensaje: objMensajesProspectoService.mensajeOffLine
       );
     }
 

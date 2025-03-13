@@ -38,20 +38,20 @@ class ActivitiesTypeRequestModel {
     String toJson() => json.encode(toMap());
 
     factory ActivitiesTypeRequestModel.fromMap(Map<String, dynamic> json) => ActivitiesTypeRequestModel(
-      resId: json["resId"],
-      actId: json["actId"],
-        userId: json["user_id"],
-        createUid: json["create_uid"],        
-        createDate: json["create_date"] == null ? null : DateTime.parse(json["create_date"]),
-        dateDeadline: json['date_deadline'] == null ? DateTime.now() : DateTime.parse(json['date_deadline']),
-        active: json["active"],
-        previousActivityTypeId: json["previous_activity_type_id"],
-        displayName: json["display_name"],
-        note: json["note"],
-        activityTypeId: json["activity_type_id"],
-        userCreateId: json["activity_type_id"],
-        workingTime: 0,
-        summary: json["summary"] ?? ''
+      resId: json["resId"] ?? 0,
+      actId: json["actId"] ?? 0,
+      userId: json["user_id"] ?? 0,
+      createUid: json["create_uid"] ?? 0,
+      createDate: json["create_date"] == null ? null : DateTime.parse(json["create_date"]),
+      dateDeadline: json['date_deadline'] == null ? DateTime.now() : DateTime.parse(json['date_deadline']),
+      active: json["active"] ?? false,
+      previousActivityTypeId: json["previous_activity_type_id"] ?? 0,
+      displayName: json["display_name"] ?? '',
+      note: json["note"] ?? '',
+      activityTypeId: json["activity_type_id"] ?? 0,
+      userCreateId: json["activity_type_id"] ?? 0,
+      workingTime: 0,
+      summary: json["summary"] ?? ''
     );
 
     factory ActivitiesTypeRequestModel.fromMap2(Map<String, dynamic> json) {
@@ -76,12 +76,13 @@ class ActivitiesTypeRequestModel {
 
     Map<String, dynamic> toJson2() {
     return {
+      'resId': resId,
       'actId': actId,
       'userCreateId': userCreateId,
       'user_id': userId,
       'create_uid': createUid,
       'active': active,
-      'createDate': createDate?.toIso8601String(),      
+      'create_date': createDate?.toIso8601String(),      
       'date_deadline': dateDeadline?.toIso8601String(),      
       'previous_activity_type_id': previousActivityTypeId,
       'display_name': displayName,
@@ -93,12 +94,13 @@ class ActivitiesTypeRequestModel {
   }
 
     Map<String, dynamic> toMap() => {
+      'resId': resId,
       'actId': actId,
       'userCreateId': userCreateId,
       'user_id': userId,
       'create_uid': createUid,
       'active': active,
-      'createDate': createDate?.toIso8601String(),
+      'create_date': createDate?.toIso8601String(),
       'date_deadline': dateDeadline?.toIso8601String(),      
       'previous_activity_type_id': previousActivityTypeId,
       'display_name': displayName,

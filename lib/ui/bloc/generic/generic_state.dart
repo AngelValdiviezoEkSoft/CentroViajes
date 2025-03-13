@@ -67,6 +67,7 @@ class GenericState extends Equatable {
 
     try{
       final registraProspecto = await storage.read(key: 'registraProspecto') ?? '';
+      final registraActividad = await storage.read(key: 'RegistraActividad') ?? '';
       
       var connectivityResult = await ValidacionesUtils().validaInternet();
 
@@ -81,6 +82,26 @@ class GenericState extends Equatable {
 
         await ProspectoTypeService().registraProspecto(objGuardar);
         await storage.delete(key: 'registraProspecto');
+
+        rspRegistro = 'G';
+      }
+
+      if(registraActividad.isNotEmpty && connectivityResult.isEmpty){
+
+        var objReg = jsonDecode(registraActividad);
+
+        try{
+          
+          for(int i = 0; i < objReg.length; i++){
+            ActivitiesTypeRequestModel objGuardar = ActivitiesTypeRequestModel.fromJson(objReg[i]);
+            await ActivitiesService().registroActividades(objGuardar);
+          }
+
+        }
+        catch(ex){
+          print('Test: $ex');
+        }
+        await storage.delete(key: 'RegistraActividad');
 
         rspRegistro = 'G';
       }

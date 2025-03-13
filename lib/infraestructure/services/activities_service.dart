@@ -10,6 +10,7 @@ import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:intl/intl.dart';
 
 const storageAct = FlutterSecureStorage();
+final objMensajesAlertasAct = MensajesAlertas();
 
 class ActivitiesService extends ChangeNotifier{
 
@@ -346,6 +347,36 @@ class ActivitiesService extends ChangeNotifier{
 
   getActivitiesByRangoFechas(fechas, resId) async {
     try{
+
+      var connectivityResult = await ValidacionesUtils().validaInternet();
+
+      var cmbAct = await storageCamp.read(key: 'cmbActividades') ?? '';
+
+      MailActivityTypeAppModel  objFinAct = MailActivityTypeAppModel.fromRawJson(cmbAct);
+
+      if(connectivityResult.isNotEmpty){
+        ActivitiesPageModel objRspFinal = ActivitiesPageModel(
+        activities: ActivitiesResponseModel(
+          data: [],
+          fields: FieldsActivities(code: '', name: '', stateIds: ''),
+          length: 0
+        ),
+        lead: DatumCrmLead(
+          activityIds: [], campaignId: CampaignId(id: 0, name: ''), countryId: StructCombos(id: 0, name: ''),
+          dayClose: 0, emailFrom: '', expectedRevenue: 0, id: 0, lostReasonId: CampaignId(id: 0, name: ''),
+          mediumId: StructCombos(id: 0, name: ''), mobile: '', name: '', partnerId: StructCombos(id: 0, name: ''),
+          priority: '', sourceId: StructCombos(id: 0, name: ''), stageId: StructCombos(id: 0, name: ''),
+          stateId: StructCombos(id: 0, name: ''), tagIds: [], title: CampaignId(id: 0, name: ''),
+          type: '', city: '', contactName: '', dateClose: null, dateDeadline: null, dateOpen: null, description: '',
+          emailCc: '', partnerName: '', phone: '', probability: 0, referred: '', street: '',
+          userId: StructCombos(id: 0, name: '')
+        ),
+        objMailAct: objFinAct
+      );
+
+      return objRspFinal;
+      }
+
       String modeloConsulta = EnvironmentsProd().modMailAct;
 
       List<MultiModel> lstMultiModel = [];
@@ -587,10 +618,6 @@ class ActivitiesService extends ChangeNotifier{
           name: objFin?.userId.name ?? ''
         ),
       );
-
-      var cmbAct = await storageCamp.read(key: 'cmbActividades') ?? '';
-
-      MailActivityTypeAppModel  objFinAct = MailActivityTypeAppModel.fromRawJson(cmbAct);
 
       final lstEncr = await storageCamp.read(key: 'LstActividadesAbiertasCerradas') ?? '';
 
@@ -891,15 +918,18 @@ class ActivitiesService extends ChangeNotifier{
           body: jsonEncode(requestBody), 
         );
 
-        //print('respuesta: ${response.body}');
+        print('respuesta: ${response.body}');
       
         var rspValidacion = json.decode(response.body);
 
         if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenExpirado)){
           await tokenManager.checkTokenExpiration();
           await registroActividades(objActividad);
-        } 
+        }
 
+        var objRespuestaFinal = ActividadRegistroResponseModel.fromRawJson(response.body);
+
+/*
         var objRspPrsp = await storageProspecto.read(key: 'RegistraActividad') ?? '';
 
         ActividadRegistroResponseModel objLead = ActividadRegistroResponseModel(
@@ -918,8 +948,6 @@ class ActivitiesService extends ChangeNotifier{
           objLead.result.data.length = objLead.result.data.length;
         }
 
-        var objRespuestaFinal = ActividadRegistroResponseModel.fromRawJson(response.body);
-
         for(int i = 0; i < objLead.result.data.length; i++)
         {
           Datum objCrmLeadDatumAppModel = Datum(
@@ -934,26 +962,44 @@ class ActivitiesService extends ChangeNotifier{
           objRespuestaFinal.result.data.add(objCrmLeadDatumAppModel);
 
         }
+        */
 
-        await storageProspecto.write(key: 'RegistraActividad', value: jsonEncode(objRespuestaFinal.toJson()));
+        //await storageProspecto.write(key: 'RegistraActividad', value: jsonEncode(objRespuestaFinal.toJson()));
 
         return objRespuestaFinal;
       } 
-      catch(_){
-        //print('Error al grabar: $ex');
+      catch(ex){
+        print('Error al grabar: $ex');
       }
     } else {
-      await storageProspecto.write(key: 'RegistraActividad', value: jsonEncode(objActividad.toJson()));
+      List<ActivitiesTypeRequestModel> lstAct = [];
 
-      return ProspectoRegistroResponseModel(
+      final tstAct = await storageProspecto.read(key: 'RegistraActividad') ?? '';
+
+      if(tstAct.isNotEmpty){
+        var varDecod = jsonDecode(tstAct);
+
+        for(int i = 0; i < varDecod.length; i++){
+          ActivitiesTypeRequestModel objGuardar = ActivitiesTypeRequestModel.fromJson(varDecod[i]);
+          lstAct.add(objGuardar);
+        }
+        
+      }
+
+      objActividad.createDate = DateTime.now();
+      
+      lstAct.add(objActividad);
+      
+      await storageProspecto.write(key: 'RegistraActividad', value: jsonEncode(lstAct));
+
+      return ActividadRegistroResponseModel(
         id: 0,
         jsonrpc: '',
-        result: ProspectoRegistroModel(
-          estado: 0, 
-          mensaje: '', 
-          data: []
-        ),
-        mensaje: 'No tiene conexión a internet, ahora tiene datos pendientes de grabar.'
+        result: ResultActividad(
+          data: [],
+          estado: 0,
+          mensaje: objMensajesAlertasAct.mensajeOffLine
+        )
       );
     }
 
@@ -1121,7 +1167,7 @@ class ActivitiesService extends ChangeNotifier{
           mensaje: '', 
           data: []
         ),
-        mensaje: 'No tiene conexión a internet, ahora tiene datos pendientes de grabar.'
+        mensaje: objMensajesAlertasAct.mensajeOffLine
       );
     }
 

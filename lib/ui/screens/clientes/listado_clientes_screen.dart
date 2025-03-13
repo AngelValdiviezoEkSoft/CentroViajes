@@ -31,9 +31,21 @@ class ListaClientesScreen extends StatefulWidget {
 //class MarcacionScreen extends StatelessWidget {
 class _ListaClientesScreenState extends State<ListaClientesScreen> {
 
+  bool showButtonScrool = false;
+
+  final ScrollController scrollListaClt = ScrollController();
+
   final LocalAuthentication auth = LocalAuthentication();
   final PagingController<int, DatumClienteModelData> pagingController = PagingController(firstPageKey: 0);
   late int _pageSize;
+
+  void scrollToTop() {
+    scrollListaClt.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOut,
+    );
+  }
   
   @override
   void initState() {
@@ -48,10 +60,23 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
     pagingController.addPageRequestListener((pageKey) {
       //fetchPage(pageKey);
     });
+
+    scrollListaClt.addListener(() {
+      if (scrollListaClt.offset > 200 && !showButtonScrool) {
+        setState(() {
+          showButtonScrool = true;
+        });
+      } else if (scrollListaClt.offset <= 200 && showButtonScrool) {
+        setState(() {
+          showButtonScrool = false;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
+    scrollListaClt.dispose();
     pagingController.dispose();
     super.dispose();
   }
@@ -177,8 +202,6 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
   Widget build(BuildContext context) {
 
     ColorsApp objColorsApp = ColorsApp();
-
-    ScrollController scrollListaClt = ScrollController();
 
     final size = MediaQuery.of(context).size;
 
@@ -355,7 +378,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                       Container(
                         color: Colors.transparent,
                         width: size.width,
-                        height: size.height * 0.85,
+                        height: size.height * 0.78,
                         child: CustomRefreshIndicator(
                           onRefresh: refreshDataCli,
                           builder: (context, child, controllerOp) {
@@ -371,13 +394,7 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
                                       child: Container(
                                         height: size.height * 0.07,//30,
                                         width: size.width * 0.08,//30,
-                                        color: Colors.transparent,
-                                        /*
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.blueAccent,
-                                        ),
-                                        */
+                                        color: Colors.transparent,                                        
                                         child: const CircularProgressIndicator(
                                           strokeWidth: 1,
                                           valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
@@ -647,6 +664,13 @@ class _ListaClientesScreenState extends State<ListaClientesScreen> {
           );
         }
       ),
+      floatingActionButton: showButtonScrool
+          ? FloatingActionButton(
+              onPressed: scrollToTop,
+              backgroundColor: Colors.black45,
+              child: const Icon(Icons.arrow_upward, color: Colors.white,),
+            )
+          : null,
     );
   }
 }

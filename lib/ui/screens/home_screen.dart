@@ -6,6 +6,7 @@ import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
@@ -175,14 +176,25 @@ class HomeScreenState extends State<HomeScreen> {
                         backgroundColor: Colors.white,
                         elevation: 0,
                         leading: GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+
+                            const storagePerf = FlutterSecureStorage();
+
+                            final rspLogin = await storagePerf.read(key: 'RespuestaLogin') ?? '';
+
+                            //print('Test: $rspLogin');
+                            final jsonLog = json.decode(rspLogin);
+                            nameUserLbl = jsonLog["result"]["partner_display_name"];
+                            emailUserLbl = jsonLog["result"]["email"] ?? 'avg@gmail.com';
+
+                            //ignore: use_build_context_synchronously
                             context.push(objRutasGen.rutaPerfil);
                           },
                           child: const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  'https://via.placeholder.com/150'), // Reemplaza con la URL de la imagen del avatar
+                              backgroundColor: Colors.transparent,
+                              backgroundImage: AssetImage('assets/logo_app_pequenio.png'),
                             ),
                           ),
                         ),
@@ -196,7 +208,7 @@ class HomeScreenState extends State<HomeScreen> {
                             color: Colors.transparent,
                             width: size.width * 0.69,
                             height: size.height * 0.055,
-                            child:   DropdownButton<String>(
+                            child: DropdownButton<String>(
                                 hint: const Icon(Icons.flip_camera_android_rounded), // Ícono del ComboBox
                                 value: compSelect,
                                 onChanged: (String? newValue) {
@@ -209,14 +221,14 @@ class HomeScreenState extends State<HomeScreen> {
                                 .map((activityPrsp) =>
                                     DropdownMenuItem(
                                       value: activityPrsp,
-                                      child: AutoSizeText(activityPrsp, maxLines: 1, style: const TextStyle(fontSize: 12), presetFontSizes: const [15,14,12,10,8,6,4],),
+                                      child: AutoSizeText(activityPrsp, maxLines: 1, style: const TextStyle(fontSize: 11), presetFontSizes: const [14,12,10,8,6,4],),
                                     ))
                                 .toList(),
                               ),
                           ),
                               IconButton(
-                  icon: const Icon(Icons.notifications_active, color: Colors.black),
-                  onPressed: () {},
+                                icon: const Icon(Icons.notifications_active, color: Colors.black),
+                                onPressed: () {},
                               ),
                             ],
                           ),
@@ -235,10 +247,12 @@ class HomeScreenState extends State<HomeScreen> {
                                       child: _buildCard(
                                         title: 'Ventas',
                                         meta: '\$970.20 / Meta',
-                                        amount: '\$500.20',
-                                        progress: 0.55,
+                                        amount: '\$650.20',
+                                        progress: 0.75,
+                                        progressText: '75',
                                         backgroundColor: Colors.blue.shade800,
                                         progressColor: const Color.fromARGB(255, 4, 48, 126),
+                                        colorFondoProg: Colors.white.withOpacity(0.5),
                                         tamanio: size
                                       ),
                                     ),
@@ -254,11 +268,12 @@ class HomeScreenState extends State<HomeScreen> {
                                         meta: '\$970.20 / Meta',
                                         amount: '\$500.20',
                                         progress: 0.55,
+                                        progressText: '55',
                                         backgroundColor: Colors.white,
-                                        //progressColor: Colors.blueAccent,
                                         progressColor: const Color.fromARGB(255, 4, 48, 126),
+                                        colorFondoProg: Colors.black26,
                                         textColor: Colors.black,
-                                        tamanio: size
+                                        tamanio: size                                        
                                       ),
                                     ),
                     
@@ -267,7 +282,7 @@ class HomeScreenState extends State<HomeScreen> {
                                     Container(
                                       color: Colors.transparent,
                                       width: size.width * 0.99,
-                                      height: size.height * 0.55,
+                                      height: size.height * 0.38,
                                       child: Stack(
                                         children: <Widget>[
                                           
@@ -315,7 +330,7 @@ class HomeScreenState extends State<HomeScreen> {
                                           Container(
                                             margin: const EdgeInsets.only( top: 25 ),
                                             width: size.width * 0.99,
-                                            height: size.height * 0.45,
+                                            height: size.height * 0.35,
                                             color: Colors.transparent,
                                             child: ListView(
                                               physics: const BouncingScrollPhysics(),
@@ -358,8 +373,10 @@ class HomeScreenState extends State<HomeScreen> {
     required String meta,
     required String amount,
     required double progress,
+    required String progressText,
     required Color backgroundColor,
     required Color progressColor,
+    required Color colorFondoProg,
     required Size tamanio,
     Color textColor = Colors.white,
   }) {
@@ -461,16 +478,16 @@ class HomeScreenState extends State<HomeScreen> {
                             alignment: Alignment.center,
                             child: CircularProgressIndicator(
                               value: progress,
-                              backgroundColor: Colors.white.withOpacity(0.5),
+                              backgroundColor: colorFondoProg,//Colors.white.withOpacity(0.5),
                               color: progressColor,
                               semanticsLabel: '55%',
                               semanticsValue: '55%',
                             ),
                           ),
                           Positioned(
-                            top: 8,
-                            left: 5,
-                            child: Text('55%', style: TextStyle(color: textColor),)
+                            top: tamanio.height * 0.0135,
+                            left: tamanio.width * 0.0175,
+                            child: Text('$progressText%', style: TextStyle(color: textColor, fontSize: 14),)
                           )
                         ]
                       ),

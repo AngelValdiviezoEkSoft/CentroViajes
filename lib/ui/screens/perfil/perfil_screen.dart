@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 //const storagePerf = FlutterSecureStorage();
+String nameUserLbl = '';
+String emailUserLbl = '';
 
 class PerfilScreen extends StatelessWidget {
 
@@ -41,7 +43,7 @@ class PerfilScreen extends StatelessWidget {
                       ),
                     ),
                     const Positioned(
-                      top: 160,
+                      top: 155,
                       left: 20,
                       child: CircleAvatar(
                         //foregroundColor: Colors.red,
@@ -58,15 +60,15 @@ class PerfilScreen extends StatelessWidget {
                 ),
               ),
           
-              const SizedBox(height: 10),
+              const SizedBox(height: 2),
           
               // Nombre del usuario
               Container(
                 color: Colors.transparent,
                 width: size.width * 0.87,
-                child: const Text(
-                  'Andrew D.',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                child: Text(
+                  nameUserLbl,
+                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               ),
               // Correo electrónico
@@ -74,11 +76,11 @@ class PerfilScreen extends StatelessWidget {
                 color: Colors.transparent,
                 width: size.width * 0.87,
                 child: Text(
-                  'avaldi@gmail.com',
+                  emailUserLbl,
                   style: const TextStyle(fontSize: 18, color: Colors.grey),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 4),
           
               FutureBuilder(
                 future: AuthService().opcionesMenuPorPerfil(context),

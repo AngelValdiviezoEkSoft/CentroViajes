@@ -103,6 +103,7 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
+    - assets/
     - assets/ilustraciones_medium_figma/
     - assets/gifs/
     - assets/mobilefacenet.tflite

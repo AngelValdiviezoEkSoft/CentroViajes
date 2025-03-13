@@ -95,7 +95,10 @@ class PlanActState extends State<PlanificacionActividades> {
             //actividadesFilAgendaPlan = rspAct.activities.data;
             actividadesFilAgendaPlan = rspAct.objMailAct.data;
             lstActividades = [];
-            objDatumCrmLead = rspAct.lead;
+            
+            if(rspAct.activities.fields.code != 'NO_INTERNET'){
+              objDatumCrmLead = rspAct.lead;
+            }            
 
             /*
 

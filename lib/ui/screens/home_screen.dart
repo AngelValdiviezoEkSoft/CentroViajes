@@ -129,6 +129,54 @@ class HomeScreenState extends State<HomeScreen> {
                       });
                     }
 
+                    if(msmInternet == 'EG'){
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Container(
+                              color: Colors.transparent,
+                              height: size.height * 0.17,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  
+                                  Container(
+                                    color: Colors.transparent,
+                                    height: size.height * 0.09,
+                                    child: Image.asset('assets/gifs/gifErrorBlanco.gif'),
+                                  ),
+
+                                  Container(
+                                    color: Colors.transparent,
+                                    width: size.width * 0.95,
+                                    height: size.height * 0.08,
+                                    alignment: Alignment.center,
+                                    child: const AutoSizeText(
+                                      'No se pudo grabar los datos que se encontraban en memoria, intente luego o contáctese con nosotros.',
+                                      maxLines: 2,
+                                      minFontSize: 2,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  msmInternet = "";
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Aceptar', style: TextStyle(color: Colors.blue[200]),),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      });
+                    }
+
                     List<ItemBoton> lstMenu = state.deserializeItemBotonMenuList(objPerm);
 
                     List<String> lstNames = List<String>.from(json.decode(lstTmp));

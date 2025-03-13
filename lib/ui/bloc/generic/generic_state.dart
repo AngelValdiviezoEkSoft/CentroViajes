@@ -94,16 +94,18 @@ class GenericState extends Equatable {
           
           for(int i = 0; i < objReg.length; i++){
             ActivitiesTypeRequestModel objGuardar = ActivitiesTypeRequestModel.fromJson(objReg[i]);
-            await ActivitiesService().registroActividades(objGuardar);
+            await ActivitiesService().registroActividades(objGuardar);            
           }
 
-        }
-        catch(ex){
-          print('Test: $ex');
-        }
-        await storage.delete(key: 'RegistraActividad');
+          await storage.delete(key: 'RegistraActividad');
 
-        rspRegistro = 'G';
+          rspRegistro = 'G';
+        }
+        catch(_){
+          //print('Test: $ex');
+          rspRegistro = 'EG';
+        }
+        
       }
 
       final resp = await storage.read(key: 'RespuestaLogin') ?? '';

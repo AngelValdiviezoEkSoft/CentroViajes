@@ -358,7 +358,7 @@ class ActivitiesService extends ChangeNotifier{
         ActivitiesPageModel objRspFinal = ActivitiesPageModel(
         activities: ActivitiesResponseModel(
           data: [],
-          fields: FieldsActivities(code: '', name: '', stateIds: ''),
+          fields: FieldsActivities(code: 'NO_INTERNET', name: '', stateIds: ''),
           length: 0
         ),
         lead: DatumCrmLead(
@@ -374,7 +374,7 @@ class ActivitiesService extends ChangeNotifier{
         objMailAct: objFinAct
       );
 
-      return objRspFinal;
+        return objRspFinal;
       }
 
       String modeloConsulta = EnvironmentsProd().modMailAct;
@@ -674,8 +674,8 @@ class ActivitiesService extends ChangeNotifier{
 
       return objRspFinal;
     }
-    catch(ex){
-     print('Test: $ex');
+    catch(_){
+     //print('Test: $ex');
     }
   }
 
@@ -968,8 +968,8 @@ class ActivitiesService extends ChangeNotifier{
 
         return objRespuestaFinal;
       } 
-      catch(ex){
-        print('Error al grabar: $ex');
+      catch(_){
+        //print('Error al grabar: $ex');
       }
     } else {
       List<ActivitiesTypeRequestModel> lstAct = [];
@@ -986,8 +986,6 @@ class ActivitiesService extends ChangeNotifier{
         
       }
 
-      objActividad.createDate = DateTime.now();
-      
       lstAct.add(objActividad);
       
       await storageProspecto.write(key: 'RegistraActividad', value: jsonEncode(lstAct));

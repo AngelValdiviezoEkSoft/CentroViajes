@@ -90,7 +90,10 @@ class PlanActivState extends State<PlanificacionActividadesConActividadScreen> {
             //actividadesFilAgendaPlanAct = rspAct.activities.data;
             actividadesFilAgendaPlanAct = rspAct.objMailAct.data;
             lstActividadesAct = [];
-            objDatumCrmLead = rspAct.lead;
+            
+            if(rspAct.activities.fields.code != 'NO_INTERNET'){
+              objDatumCrmLead = rspAct.lead;
+            }
 
             /*
 

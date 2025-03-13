@@ -1003,6 +1003,98 @@ class ActivitiesService extends ChangeNotifier{
 
   }
 
+  registroListadoActividades(List<Map<String, dynamic>> lstActividades) async {
+
+    String internet = await ValidacionesUtils().validaInternet();
+    
+    //VALIDACIÓN DE INTERNET
+    if(internet.isEmpty){
+      
+      try{
+
+        var codImei = await storageProspecto.read(key: 'codImei') ?? '';
+
+        var objReg = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
+        var obj = RegisterDeviceResponseModel.fromJson(objReg);
+
+        var objLog = await storageProspecto.read(key: 'RespuestaLogin') ?? '';
+        var objLogDecode = json.decode(objLog);
+
+        //print('Test DatosLogin: $objLog');
+
+        List<MultiModel> lstMultiModel = [];
+
+        lstMultiModel.add(
+          MultiModel(model: "mail.activity")
+        );
+
+        ConsultaMultiModelRequestModel objReq = ConsultaMultiModelRequestModel(
+          jsonrpc: jsonRpc,
+          params: ParamsMultiModels(
+            bearer: obj.result.bearer,
+            company: objLogDecode['result']['current_company'],
+            imei: codImei,
+            key: obj.result.key,
+            tocken: obj.result.tocken,
+            tockenValidDate: obj.result.tockenValidDate,
+            uid: objLogDecode['result']['uid'],
+            models: lstMultiModel
+          )
+        );
+
+        String tockenValidDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(objReq.params.tockenValidDate);
+
+        final requestBody = {
+          "jsonrpc": jsonRpc,
+          "params": {
+            "key": objReq.params.key,
+            "tocken": objReq.params.tocken,
+            "imei": objReq.params.imei,
+            "uid": objReq.params.uid,
+            "company": objReq.params.company,
+            "bearer": objReq.params.bearer,
+            "tocken_valid_date": tockenValidDate,
+            "create": lstActividades
+          }
+        };
+
+        final headers = {
+          "Content-Type": EnvironmentsProd().contentType
+        };
+
+        String ruta = '';
+        final objStr = await storageProspecto.read(key: 'RespuestaRegistro') ?? '';
+        
+        if(objStr.isNotEmpty)
+        {
+          var obj = RegisterDeviceResponseModel.fromJson(objStr);
+          ruta = '${obj.result.url}/api/v1/${objReq.params.imei}/done/create/mail.activity/model';
+        }
+
+        final response = await http.post(
+          Uri.parse(ruta),
+          headers: headers,
+          body: jsonEncode(requestBody), 
+        );
+      
+        var rspValidacion = json.decode(response.body);
+
+        if(rspValidacion['result']['mensaje'] != null && (rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenNoValido || rspValidacion['result']['mensaje'].toString().trim().toLowerCase() == MensajeValidacion().tockenExpirado)){
+          await tokenManager.checkTokenExpiration();
+          await registroListadoActividades(lstActividades);
+        }
+
+        var objRespuestaFinal = ActividadRegistroResponseModel.fromRawJson(response.body);
+
+        return objRespuestaFinal;
+      } 
+      catch(_){
+        //print('Error al grabar: $ex');
+      }
+    }
+    
+  }
+  
   cierreActividadesXId(ActivitiesTypeRequestModel objActividad) async {
     String internet = await ValidacionesUtils().validaInternet();
     

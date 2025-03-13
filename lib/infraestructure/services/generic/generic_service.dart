@@ -197,7 +197,6 @@ class GenericService extends ChangeNotifier {
     
   }
   
-
   Future<dynamic> opcionesMenuPorPerfil(BuildContext context) async {
     lstOp = [
       OpcionesMenuModel(

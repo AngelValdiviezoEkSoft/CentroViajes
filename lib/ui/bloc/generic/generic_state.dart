@@ -91,11 +91,36 @@ class GenericState extends Equatable {
         var objReg = jsonDecode(registraActividad);
 
         try{
+
+          var objLog = await storageProspecto.read(key: 'RespuestaLogin') ?? '';
+          var objLogDecode = json.decode(objLog);
+
+          List<Map<String, dynamic>> lstMem = [];
           
           for(int i = 0; i < objReg.length; i++){
             ActivitiesTypeRequestModel objGuardar = ActivitiesTypeRequestModel.fromJson(objReg[i]);
-            await ActivitiesService().registroActividades(objGuardar);            
+            //await ActivitiesService().registroActividades(objGuardar);            
+
+            lstMem.add(
+              {
+                "date_deadline": DateFormat('yyyy-MM-dd', 'es').format(objGuardar.dateDeadline!),
+                "create_date": DateFormat('yyyy-MM-dd', 'es').format(objGuardar.createDate!),
+                "create_uid": objLogDecode['result']['uid'],
+                "active": true,
+                "previous_activity_type_id": objGuardar.previousActivityTypeId,
+                "display_name": objGuardar.displayName,
+                "activity_type_id": objGuardar.activityTypeId,
+                "res_model_id": 501,
+                "user_id": objGuardar.userId,
+                "res_id": objGuardar.resId,
+                "summary": objGuardar.note,
+                "note": objGuardar.note,
+              }
+            );
+
           }
+
+          await ActivitiesService().registroListadoActividades(lstMem);
 
           await storage.delete(key: 'RegistraActividad');
 

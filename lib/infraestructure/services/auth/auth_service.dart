@@ -278,6 +278,8 @@ class AuthService extends ChangeNotifier {
       ];
 
       await storage.write(key: 'RespuestaLogin', value: response.body);
+
+      //print('Result Login: ${response.body}');
       
       await DataInicialService().readModelosApp(models);
       

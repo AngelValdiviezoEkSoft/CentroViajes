@@ -11,6 +11,7 @@ class GenericState extends Equatable {
   final String localidadId;
   final String idFormaPago;
   final double heightModalPlanAct;
+  final bool muestraCarga;
 
   const GenericState(
     {
@@ -21,7 +22,8 @@ class GenericState extends Equatable {
       formaPago = 'C',
       localidadId = '',
       idFormaPago = '',
-      heightModalPlanAct = 0.65
+      heightModalPlanAct = 0.65,
+      muestraCarga,
     } 
   ) : positionMenu = positionMenu ?? 0,
       positionFormaPago = positionFormaPago ?? 0,
@@ -30,7 +32,8 @@ class GenericState extends Equatable {
       formaPago = formaPago ?? 'C',
       localidadId = localidadId ?? '',
       idFormaPago = idFormaPago ?? '',
-      heightModalPlanAct = heightModalPlanAct ?? 0.65;
+      heightModalPlanAct = heightModalPlanAct ?? 0.65,
+      muestraCarga = muestraCarga ?? false;
   
 
   GenericState copyWith({
@@ -41,7 +44,8 @@ class GenericState extends Equatable {
     String? formaPago,
     String? localidadId,
     String? idFormaPago,
-    double? heightModalPlanAct
+    double? heightModalPlanAct,
+    bool? muestraCarga
   }) 
   => GenericState(
     positionMenu: positionMenu ?? this.positionMenu,
@@ -51,12 +55,13 @@ class GenericState extends Equatable {
     formaPago: formaPago ?? this.formaPago,
     localidadId: localidadId ?? this.localidadId,
     idFormaPago: idFormaPago ?? this.idFormaPago,
-    heightModalPlanAct: heightModalPlanAct ?? this.heightModalPlanAct
+    heightModalPlanAct: heightModalPlanAct ?? this.heightModalPlanAct,
+    muestraCarga: muestraCarga ?? this.muestraCarga
   );
 
 
   @override
-  List<Object> get props => [positionMenu,positionFormaPago,coordenadasMapa,radioMarcacion,formaPago,localidadId,idFormaPago, heightModalPlanAct];
+  List<Object> get props => [positionMenu,positionFormaPago,coordenadasMapa,radioMarcacion,formaPago,localidadId,idFormaPago, heightModalPlanAct, muestraCarga];
 
   Future<String> readPrincipalPage() async {
 

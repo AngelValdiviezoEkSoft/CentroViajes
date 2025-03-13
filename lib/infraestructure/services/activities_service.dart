@@ -393,6 +393,8 @@ class ActivitiesService extends ChangeNotifier{
       if(fechas == null){
 
         fechaBusqueda = DateFormat('yyyy-MM-dd', 'es').format(DateTime.now());
+        fechas = [];
+        fechas.add(DateTime.now());
 
         models = [
           {
@@ -645,8 +647,8 @@ class ActivitiesService extends ChangeNotifier{
 
       return objRspFinal;
     }
-    catch(_){
-     //print('Test: $ex');
+    catch(ex){
+     print('Test: $ex');
     }
   }
 

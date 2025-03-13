@@ -331,6 +331,7 @@ class LoginScreen extends StatelessWidget {
                           final msmError = data['error']['data']['name'];
 
                           showDialog(
+                            //ignore: use_build_context_synchronously
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(

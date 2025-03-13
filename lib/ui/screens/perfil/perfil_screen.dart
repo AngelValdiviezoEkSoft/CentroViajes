@@ -73,9 +73,9 @@ class PerfilScreen extends StatelessWidget {
               Container(
                 color: Colors.transparent,
                 width: size.width * 0.87,
-                child: const Text(
-                  'andrew@domainname.com',
-                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                child: Text(
+                  'avaldi@gmail.com',
+                  style: const TextStyle(fontSize: 18, color: Colors.grey),
                 ),
               ),
               const SizedBox(height: 10),
@@ -263,6 +263,7 @@ class PerfilScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  /*
                   Center(
                   child: OutlinedButton(
                     onPressed: () {
@@ -291,7 +292,71 @@ class PerfilScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+*/
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        context.pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(20), // Tamaño del botón
+                        backgroundColor: Colors.blue, // Color del botón
+                      ),
+                      child: const Icon(Icons.close, color: Colors.white),
+                    ),
+                  ),
 
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('¿Está seguro que desea cerrar su sesión?'),
+                            
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
+
+                                  await AuthService().logOut();
+
+                                  //ignore:use_build_context_synchronously
+                                  Navigator.of(context).pop();
+
+                                  //ignore:use_build_context_synchronously
+                                  context.push(objRutasGen.rutaBienvenida);
+
+                                },
+                                child: Text('Sí', style: TextStyle(color: Colors.blue[200]),),
+                              ),
+                              TextButton(
+                                onPressed: () {
+
+                                  Navigator.of(context).pop();
+
+                                  //context.push(objRutasGen.rutaBienvenida);
+
+                                },
+                                child: const Text('No', style: TextStyle(color: Colors.black),),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(20), // Tamaño del botón
+                        backgroundColor: Colors.green, // Color del botón
+                      ),
+                      child: const Icon(Icons.logout, color: Colors.white),
+                    ),
+                  ),
+                    
+                    /*
               Center(
                 child: OutlinedButton(
                   onPressed: () {
@@ -400,6 +465,7 @@ class PerfilScreen extends StatelessWidget {
                   
                       ),
                     ),
+                  */
                   ],
                 ),
               ),

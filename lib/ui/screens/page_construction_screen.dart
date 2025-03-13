@@ -104,13 +104,15 @@ class EnConstruccionScreenState extends State<EnConstruccionScreen>{
                         ),
                         child: Container(
                           color: Colors.transparent,
-                          width: sizeScreen.width * 0.33,
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          width: sizeScreen.width * 0.2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Icon(Icons.logout, color: Colors.black,),
-                              Text(
-                                'Regresar',
+                              const Icon(Icons.close, color: Colors.black,),
+                              SizedBox(width: sizeScreen.width * 0.02,),
+                              const Text(
+                                'Salir',
                                 style: TextStyle(color: Colors.black),
                               ),
                             ],

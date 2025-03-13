@@ -52,3 +52,8 @@ class OnNewCambioHeightModalPlanActEvent extends GenericEvent {
   final double height;
   const OnNewCambioHeightModalPlanActEvent(this.height);
 }
+
+class OnNewMuestraCargaEvent extends GenericEvent {
+  final bool muestraCarga;
+  const OnNewMuestraCargaEvent(this.muestraCarga);
+}

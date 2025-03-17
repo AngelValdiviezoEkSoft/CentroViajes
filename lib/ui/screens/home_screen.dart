@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:cvs_ec_app/app/centro_viajes_app.dart';
 import 'package:cvs_ec_app/domain/domain.dart';
 import 'package:cvs_ec_app/ui/ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 BuildContext? contextPrincipalGen;
 DonePermissions? objPermisosGen;
@@ -39,6 +42,18 @@ class HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     contextPrincipalGen = context;
+
+    Connectivity().onConnectivityChanged.listen((_) async {
+      final isConnected = await InternetConnectionChecker().hasConnection;
+      //_controller.sink.add(isConnected);
+      
+
+      setState(() {
+        mostrarBoton = isConnected;
+      });
+
+    });
+    
   }
 
   @override
@@ -274,12 +289,20 @@ class HomeScreenState extends State<HomeScreen> {
                                 .toList(),
                               ),
                           ),
-                              IconButton(
-                                icon: const Icon(Icons.notifications_active, color: Colors.black),
-                                onPressed: () {},
-                              ),
-                            ],
+
+                          if(mostrarBoton)
+                          IconButton(
+                            icon: const Icon(Icons.notifications_active, color: Colors.black),
+                            onPressed: () {},
                           ),
+
+                          if(!mostrarBoton)
+                          IconButton(
+                            icon: const Icon(Icons.wifi_off, color: Colors.black),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
                       body: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Scaffold(

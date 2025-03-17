@@ -1,8 +1,14 @@
+import 'dart:async';
+
 import 'package:cvs_ec_app/config/routes/routes.dart';
 import 'package:cvs_ec_app/ui/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cron/cron.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+
+bool mostrarBoton = false;
 
 class CentroViajesApp extends StatefulWidget {
   
@@ -16,10 +22,37 @@ class CentroViajesApp extends StatefulWidget {
 class CentroViajesAppState extends State<CentroViajesApp> {
   final TokenManager tokenManager = TokenManager();
   final cron = Cron();
+  late Stream<ConnectivityResult> connectivityStream;
+
+  final _controller = StreamController<bool>.broadcast();
+
+  Stream<bool> get connectionStream => _controller.stream;
+
 
   @override
   void initState() {
     super.initState();
+    mostrarBoton = false;
+
+    connectivityStream = Connectivity().onConnectivityChanged;
+/*
+    Connectivity().onConnectivityChanged.listen((_) async {
+      final isConnected = await InternetConnectionChecker().hasConnection;
+      _controller.sink.add(isConnected);
+      
+
+      setState(() {
+        mostrarBoton = isConnected;
+      });
+
+    });
+    */
+
+    //!connectivityResult.contains(ConnectivityResult.mobile) && !connectivityResult.contains(ConnectivityResult.wifi)
+    // Escuchar cambios de red
+    connectivityStream.listen((_) => checkConnection());
+    checkConnection(); // Verificar al inicio
+
     // Configura una tarea que se ejecuta cada minuto.
     // cron.schedule(Schedule.parse('*/6 * * * * *'), () {
     //   setState(() {
@@ -34,7 +67,15 @@ class CentroViajesAppState extends State<CentroViajesApp> {
   void dispose() {
     cron.close();
     tokenManager.stopTokenCheck();
+    _controller.close();
     super.dispose();
+  }
+
+  Future<void> checkConnection() async {
+    bool result = await InternetConnectionChecker().hasConnection;
+    setState(() {
+      mostrarBoton = result;
+    });
   }
 
   @override

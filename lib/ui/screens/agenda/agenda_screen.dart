@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+MensajesAlertas objMensajesAlertasAgenda = MensajesAlertas();
 late TextEditingController filtroAgendaTxt;
 DatumActivitiesResponse? objActividadEscogida;
 int idActividadSeleccionada = 0;
@@ -51,6 +52,72 @@ class AgendaScreenState extends State<AgendaScreen>  {
     selectedDayGen = DateTime.now();
     focusedDayGen = DateTime.now();
     filtroAgendaTxt = TextEditingController();
+  }
+
+  Future<void> refreshDataAgenda() async {
+
+    String resInt = await ValidacionesUtils().validaInternet();
+
+    showDialog(
+      //ignore:use_build_context_synchronously
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => SimpleDialog(
+        alignment: Alignment.center,
+        children: [
+          SimpleDialogCargando(
+            null,
+            mensajeMostrar: 'Estamos consultando',
+            mensajeMostrarDialogCargando: 'el listado de actividades.',
+          ),
+        ]
+      ),
+    );
+
+    if(resInt.isEmpty){
+      //var rspPrsp = await ActivitiesService().getActivitiesByRangoFechas('mem', 0);
+      ActivitiesPageModel rspPrsp = await ActivitiesService().getActivitiesByRangoFechas(_dates.isNotEmpty ? _dates : 'mem', objDatumCrmLead?.id ?? 0);
+
+      //ActivitiesPageModel rspAct = ActivitiesPageModel;
+        
+      contLstAgenda = rspPrsp.activities.data.length;
+      actividadesFilAgenda = rspPrsp.activities.data;
+
+
+      //ignore:use_build_context_synchronously
+      context.pop();
+
+      // Refresca los datos llamando a la misma función de carga
+      setState(() {
+        
+      });
+    } else {
+
+      //ignore:use_build_context_synchronously
+      context.pop();
+
+      showDialog(
+        barrierDismissible: false,
+        //ignore:use_build_context_synchronously
+        context: context,
+        builder: (BuildContext context) {
+          return ContentAlertDialog(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            onPressedCont: () {
+              Navigator.of(context).pop();
+            },
+            tipoAlerta: TipoAlerta().alertAccion,
+            numLineasTitulo: 1,
+            numLineasMensaje: 1,
+            titulo: 'Error',
+            mensajeAlerta: objMensajesAlertasAgenda.mensajeOffLine
+          );
+        },
+      );
+    }
+
   }
 
   @override
@@ -152,8 +219,8 @@ class AgendaScreenState extends State<AgendaScreen>  {
                       actions: [
                         IconButton(
                           icon: const Icon(Icons.refresh),
-                          onPressed: () {
-                            // Acción del botón de refrescar
+                          onPressed: () async {
+                            await refreshDataAgenda();
                           },
                         ),
                       ],

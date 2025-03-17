@@ -2,6 +2,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class ValidacionesUtils extends ChangeNotifier {
   final storageVacaciones = const FlutterSecureStorage();
@@ -84,7 +85,12 @@ class ValidacionesUtils extends ChangeNotifier {
     String respuesta = '';
     var connectivityResult = await (Connectivity().checkConnectivity());
 
-    if(!connectivityResult.contains(ConnectivityResult.mobile) && !connectivityResult.contains(ConnectivityResult.wifi)){
+    bool result = await InternetConnectionChecker().hasConnection;
+    
+    //if (!connectivityResult.contains(ConnectivityResult.mobile) && !connectivityResult.contains(ConnectivityResult.wifi)) {
+    if(!result){
+
+    //if(!connectivityResult.contains(ConnectivityResult.mobile) && !connectivityResult.contains(ConnectivityResult.wifi)){
       respuesta = 'N';
     }
 
